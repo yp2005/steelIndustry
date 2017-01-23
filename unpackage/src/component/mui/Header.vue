@@ -465,7 +465,7 @@ export default {
 
 .buyer {
     color: #FFFFFF !important;
-    background: #f04e30 !important;
+    background: #333 !important;
 }
 .nonetwork {
     top: 45px;
@@ -506,19 +506,6 @@ export default {
 }
 .mui-bar-nav {
     padding: 0;
-}
-.mui-bar-nav:after{
-	content: '';
-	position: relative;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background: #D7D7D7;
-	-webkit-transform: scaleY(.5);
-	transform: scaleY(.5);
-	height: 1px;
-	width: 100%;
-	float: left;
 }
 .mui-bar-nav .mui-input-group .inputRow {
     -webkit-border-radius: 6px;
@@ -656,7 +643,7 @@ export default {
 }
 
 .buyHome.mui-bar-nav {
-    background: #f04e30;
+    background: #333;
 }
 
 .mui-bar-nav .inputRow,
@@ -852,7 +839,7 @@ export default {
 }
 
 .buyHome .mui-icon-home {
-    background: #f04e30;
+    background: #333;
     border: 2px solid #FFFFFF;
 }
 
@@ -861,7 +848,7 @@ export default {
 }
 
 .buyHome.mui-bar-nav {
-    background: #f04e30;
+    background: #333;
     border-bottom: none;
 }
 .buyHome.mui-bar-nav:after,.sellHome.mui-bar-nav:after{
@@ -871,7 +858,7 @@ export default {
 /*买家未登陆之前*/
 
 .buyHomeNoLogin.mui-bar-nav {
-    background: #f04e30;
+    background: #333;
     border-bottom: transparent;
 }
 .buyHomeNoLogin .formInput{
@@ -1031,7 +1018,7 @@ input[type=search]::-webkit-input-placeholder {
 }
 
 .goodsDetails.buyer .header-tabbar .active {
-    color: #f04e30;
+    color: #333;
 }
 
 .goodsDetails .header-tabbar .active.right {

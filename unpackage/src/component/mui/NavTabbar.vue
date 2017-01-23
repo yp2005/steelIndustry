@@ -1,5 +1,7 @@
 <template>
 	<nav class="nav-bar nav-bar-tab {{centerPlus ? 'centerPlusNav' : ''}}">
+		<span class="centerPlusCircle1"></span>
+		<span class="centerPlusCircle2"></span>
 		<a v-if="centerPlus" class="nav-tab-item centerPlus">
 			<span>+</span>
 		</a>
@@ -22,19 +24,19 @@
 				default: [{
 					href: '/home',
 					text: '首页',
-					icon: 'icon-home'
+					icon: 'icon-shouye'
 				}, {
-					href: '/type',
-					text: '分类',
-					icon: 'icon-fenlei'
+					href: '/community',
+					text: '社区',
+					icon: 'icon-community'
 				}, {
-					href: '/order',
-					text: '采购单',
-					icon: 'icon-cart'
+					href: '/calculator',
+					text: '计算器',
+					icon: 'icon-calculator'
 				}, {
 					href: '/mine',
 					text: '我的',
-					icon: 'icon-wode'
+					icon: 'icon-gerenzhongxin'
 				}]
 			},
 			index: { // 导航当前切换的位置
@@ -77,38 +79,14 @@
 				if(option.self.index === option.index) {
 					return;
 				}
-				//          plus.navigator.setStatusBarBackground('#FFFFFF');
-				//          plus.navigator.setStatusBarStyle('UIStatusBarStyleDefault');
 				if(option.self.hrefes[option.index].text === '首页') {
-					// 如果是供应商，跳转到卖家首页
-					if(muiUtils.getLoginUserInfo() && muiUtils.getLoginUserInfo().user_type === 2) {
-						option.self.hdstyle.homeSwitchButton.display = true;
-						option.self.typeclass = 'buyHome';
-					} else {
-						option.self.hdstyle.homeSwitchButton.display = 'none';
-						option.self.typeclass = 'buyHomeNoLogin';
-					}
-					option.self.hdstyle.title.display = 'none';
-					option.self.hdstyle.searchBar.display = true;
-					option.self.hdstyle.rightButton.display = 'none';
-					option.self.hdstyle.rightBarcodeBtn.display = true;
 					option.self.showHeader = true;
 				}
-				if(option.self.hrefes[option.index].text === '分类') {
-					option.self.hdstyle.homeSwitchButton.display = 'none';
-					option.self.hdstyle.title.display = 'none';
-					option.self.hdstyle.searchBar.display = true;
-					option.self.hdstyle.rightButton.display = 'none';
-					option.self.hdstyle.rightBarcodeBtn.display = 'none';
+				if(option.self.hrefes[option.index].text === '社区') {
 					option.self.showHeader = true;
 					option.self.typeclass = 'base';
 				}
-				if(option.self.hrefes[option.index].text === '采购单') {
-					option.self.hdstyle.homeSwitchButton.display = 'none';
-					option.self.hdstyle.title.display = true;
-					option.self.hdstyle.searchBar.display = 'none';
-					option.self.hdstyle.rightButton.display = true;
-					option.self.hdstyle.rightBarcodeBtn.display = 'none';
+				if(option.self.hrefes[option.index].text === '计算器') {
 					option.self.showHeader = true;
 					option.self.typeclass = 'base';
 				}
@@ -207,21 +185,44 @@
 		height: 50px;
 		width: 50px;
 		margin-left: -25px;
-		border: 1px solid;
+		background-color: #ddd;
 		border-radius: 25px;
+		z-index: 2;
 	}
 	
 	.nav-bar-tab .nav-tab-item.centerPlus span {
 		color: #fff;
-		background-color: #007aff;
+		background-color: #333;
 		width: 40px;
 		height: 40px;
 		border-radius: 20px;
-		margin-top: 4px;
-		margin-left: 4px;
+		margin-top: 5px;
+		margin-left: 5px;
 		font-size: 30px;
 		text-align: center;
 		padding-top: 4px;
+	}
+	
+	.nav-bar-tab span.centerPlusCircle2 {
+		position: absolute;
+		left: 50%;
+		top: -15px;
+		height: 70px;
+		width: 70px;
+		margin-left: -35px;
+		border-radius: 35px;
+		border-top: solid 1px #d7d7d7;
+		background-color: #fff;
+	}
+	.nav-bar-tab span.centerPlusCircle1 {
+		position: absolute;
+		left: 50%;
+		top: 1px;
+		height: 50;
+		width: 74px;
+		margin-left: -37px;
+		background-color: #fff;
+		z-index: 1;
 	}
 	
 	.nav-bar-tab .nav-tab-item .jxddicon {
@@ -238,10 +239,35 @@
 	}
 	
 	.nav-active span {
-		color: #f04e30;
+		color: #333;
 	}
 	
 	.icon-fenlei:before {
 		content: "\e61d";
+	}
+	
+	.icon-community {
+		background: url(../../static/img/community.svg);
+		background-size: 26px 26px;
+		background-repeat: no-repeat;
+	}
+	
+	.icon-communityxuanzhong {
+		background: url(../../static/img/community-xuanzhong.svg);
+		background-size: 26px 26px;
+		background-repeat: no-repeat;
+	}
+	
+	.icon-calculator {
+		background: url(../../static/img/calculator.svg);
+		width: 23px !important;
+		background-size: 23px 26px;
+		background-repeat: no-repeat;
+	}
+	.icon-calculatorxuanzhong {
+		background: url(../../static/img/calculator-xuanzhong.svg);
+		width: 22px !important;
+		background-size: 22px 26px;
+		background-repeat: no-repeat;
 	}
 </style>

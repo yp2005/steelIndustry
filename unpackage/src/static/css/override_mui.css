@@ -1045,3 +1045,9 @@ form.mui-input-group{
 .mui-pciker-rule-ft:after{
 	top: 0;
 }
+.background-color-global {
+	background-color: #333;
+}
+.color-global {
+	color: #333
+}

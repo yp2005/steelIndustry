@@ -3357,7 +3357,11 @@
   "dist/commonpage/index/main.html": {
     "resources": [
       "dist/static/fonts/jxdd.ttf",
-      "dist/static/js/commonpage/index/main.js"
+      "dist/static/js/commonpage/index/main.js",
+      "dist/static/css/commonpage/index/main.css"
+    ],
+    "refer": [
+      "dist/commonpage/search/searchpage.html"
     ]
   },
   "dist/commonpage/index/guide.html": {
@@ -3367,6 +3371,7 @@
       "dist/static/img/guide-2.jpg",
       "dist/static/img/guide-1.jpg",
       "dist/static/js/commonpage/index/guide.js"
-    ]
+    ],
+    "refer": []
   }
 }
