@@ -218,7 +218,7 @@
 		position: absolute;
 		left: 50%;
 		top: 1px;
-		height: 50;
+		height: 50px;
 		width: 74px;
 		margin-left: -37px;
 		background-color: #fff;
