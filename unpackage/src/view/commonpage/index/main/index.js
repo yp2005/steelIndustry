@@ -18,6 +18,9 @@ mui.plusReady(function() {
 
 // head 和 foot所用参数
 let hdstyle = {
+	citySelect: {
+		display: true
+	},
 	title: {
 		display: true
 	}
@@ -29,7 +32,7 @@ let hrefes = [{
 	},
 	{
 		href: '/community',
-		text: '社区',
+		text: '论坛',
 		icon: 'icon-community'
 	}, {
 		href: '/calculator',

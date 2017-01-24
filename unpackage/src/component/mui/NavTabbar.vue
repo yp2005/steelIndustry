@@ -27,7 +27,7 @@
 					icon: 'icon-shouye'
 				}, {
 					href: '/community',
-					text: '社区',
+					text: '论坛',
 					icon: 'icon-community'
 				}, {
 					href: '/calculator',
@@ -81,13 +81,17 @@
 				}
 				if(option.self.hrefes[option.index].text === '首页') {
 					option.self.showHeader = true;
+					option.self.hdstyle.citySelect.display = true;
+					option.self.typeclass = 'base';
 				}
-				if(option.self.hrefes[option.index].text === '社区') {
+				if(option.self.hrefes[option.index].text === '论坛') {
 					option.self.showHeader = true;
+					option.self.hdstyle.citySelect.display = 'none';
 					option.self.typeclass = 'base';
 				}
 				if(option.self.hrefes[option.index].text === '计算器') {
 					option.self.showHeader = true;
+					option.self.hdstyle.citySelect.display = 'none';
 					option.self.typeclass = 'base';
 				}
 				if(option.self.hrefes[option.index].text === '我的') {

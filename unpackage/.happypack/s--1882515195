@@ -33,6 +33,9 @@ mui.plusReady(function () {
 });
 
 var hdstyle = {
+	citySelect: {
+		display: true
+	},
 	title: {
 		display: true
 	}
@@ -43,7 +46,7 @@ var hrefes = [{
 	icon: 'icon-shouye'
 }, {
 	href: '/community',
-	text: '社区',
+	text: '论坛',
 	icon: 'icon-community'
 }, {
 	href: '/calculator',

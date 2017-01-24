@@ -2277,7 +2277,11 @@
 				"resources": [
 					"dist/static/fonts/jxdd.ttf",
 					"dist/static/js/commonpage/index/main.js",
-					"dist/static/css/commonpage/index/main.css"
+					"dist/static/css/commonpage/index/main.css",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/mui.picker.css"
 				],
 				"refer": [
 					"dist/commonpage/search/searchpage.html"
