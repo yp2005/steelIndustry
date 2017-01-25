@@ -1,41 +1,41 @@
 <template>
-    <home v-show="index === 0" v-ref:home></home>
-    <!--<type v-show="index === 1" v-ref:type></type>
-    <order v-show="index === 2" v-ref:order></order>
-    <mine v-show="index === 3" v-ref:mine></mine>-->
+	<home v-show="index === 0" v-ref:home></home>
+	<community v-show="index === 1" v-ref:community></community>
+	<calculator v-show="index === 2" v-ref:calculator></calculator>
+	<mine v-show="index === 3" v-ref:mine></mine>
 </template>
 <script>
-    import home from '../../../bizcomponent/Home';
-    //import type from '../../type/bizcomponent/Type';
-    //import order from '../../order/bizcomponent/Order';
-    //import mine from '../../mine/bizcomponent/Mine';
-    export default {
-        data() {
-            return {
-                index: 0
-            };
-        },
-        watch: {
-            /*index() {
-                if(this.index === 0) {
-                    this.$refs.home.loadData();
-                }
-                else if(this.index === 1) {
-                    this.$refs.type.loadData();
-                }
-                else if(this.index === 2) {
-                    this.$refs.order.loadData();
-                }
-                else if(this.index === 3) {
-                    this.$refs.mine.loadData();
-                }
-            }*/
-        },
-        components: {
-            home,
-            /*type,
-            order,
-            mine*/
-        }
-    }
+	import home from '../../../bizcomponent/Home';
+	import community from '../../../bizcomponent/Community';
+	import calculator from '../../../bizcomponent/Calculator';
+	import mine from '../../../bizcomponent/Mine';
+	export default {
+		data() {
+				return {
+					index: 0
+				};
+			},
+			watch: {
+				index() {
+				    if(this.index === 0) {
+				        this.$refs.home.scroll.scrollTo(0, 0, 0);
+				    }
+				    else if(this.index === 1) {
+				    	this.$refs.community.scroll.scrollTo(0, 0, 0);
+				    }
+				    else if(this.index === 2) {
+				    	this.$refs.calculator.scroll.scrollTo(0, 0, 0);
+				    }
+				    else if(this.index === 3) {
+				    	this.$refs.mine.scroll.scrollTo(0, 0, 0);
+				    }
+				}
+			},
+			components: {
+				home,
+				community,
+				calculator,
+				mine
+			}
+	}
 </script>

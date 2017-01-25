@@ -36,28 +36,28 @@
 			</div>
 			<ul class="mui-table-view mui-grid-view advertisement">
 				<li class="mui-table-view-cell mui-media mui-col-xs-4">
-					广告位
+					<img src="../../static/img/ad.png" />
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4">
-					广告位
+					<img src="../../static/img/ad.png" />
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4">
-					广告位
+					<img src="../../static/img/ad.png" />
 				</li>
 			</ul>
 			
 			<ul class="mui-table-view mui-grid-view advertisement">
 				<li class="mui-table-view-cell mui-media mui-col-xs-6">
-					广告位
+					<img src="../../static/img/ad.png" />
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-6">
-					广告位
+					<img src="../../static/img/ad.png" />
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-6">
-					广告位
+					<img src="../../static/img/ad.png" />
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-6">
-					广告位
+					<img src="../../static/img/ad.png" />
 				</li>
 			</ul>
 		</div>
@@ -70,6 +70,7 @@
 	export default {
 		data: function() {
 			return {
+				scroll: undefined,
 				imageDatas: [{
 					banner_img_url: 'http://img3.imgtn.bdimg.com/it/u=3731927300,2399949167&fm=23&gp=0.jpg',
 					banner_url: 'http://www.baidu.com',
@@ -94,10 +95,7 @@
 				}, {
 					text: '这是第一条测试用的公告这是第一条测试用的公告这是第一条测试用的公告这是第一条测试用的公告这是第一条测试用的公告这是第一条测试用的公告'
 				}]
-			}
-		},
-		filters: {
-
+			};
 		},
 		created: function() {
 
@@ -121,7 +119,7 @@
 					// plus.webview.currentWebview().show('none');
 				}
 			}, 10);
-			mui('.mui-scroll-wrapper.home').scroll({
+			this.scroll = mui('.mui-scroll-wrapper.home').scroll({
 				bounce: true,
 				indicators: false, // 是否显示滚动条
 				deceleration: mui.os.ios ? 0.003 : 0.0009
@@ -266,7 +264,18 @@
 		}
 	}
 	
+	.mui-table-view.mui-grid-view.advertisement {
+		margin-top: 8px;
+		margin-bottom: 8px;
+	}
+	
 	.advertisement li {
 		height: 50px;
+		padding: 6px 12px !important;
+	}
+	
+	.advertisement li img {
+		width: 100%;
+		height: 100%;
 	}
 </style>
