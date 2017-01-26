@@ -72,12 +72,12 @@
 			return {
 				scroll: undefined,
 				imageDatas: [{
-					banner_img_url: 'http://img3.imgtn.bdimg.com/it/u=3731927300,2399949167&fm=23&gp=0.jpg',
+					banner_img_url: 'http://img2.imgtn.bdimg.com/it/u=1942697624,2080778166&fm=23&gp=0.jpg',
 					banner_url: 'http://www.baidu.com',
 					banner_name: '1',
 					banner_order: 1
 				}, {
-					banner_img_url: 'http://img0.imgtn.bdimg.com/it/u=611384384,769476748&fm=23&gp=0.jpg',
+					banner_img_url: 'http://img2.imgtn.bdimg.com/it/u=2114919032,3638938282&fm=23&gp=0.jpg',
 					banner_url: 'http://www.baidu.com',
 					banner_name: '2',
 					banner_order: 2
@@ -105,7 +105,7 @@
 		},
 		methods: {
 			bannerTap(item) {
-				muiUtils.openWindow(item.banner_url);
+				//muiUtils.openWindow(item.banner_url);
 			}
 		},
 		ready: function() {
