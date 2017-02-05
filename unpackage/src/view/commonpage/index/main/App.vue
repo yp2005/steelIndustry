@@ -1,5 +1,5 @@
 <template>
-	<home v-show="index === 0" v-ref:home></home>
+	<home v-show="index === 0" :address="address" v-ref:home></home>
 	<community v-show="index === 1" v-ref:community></community>
 	<calculator v-show="index === 2" v-ref:calculator></calculator>
 	<mine v-show="index === 3" v-ref:mine></mine>
@@ -12,7 +12,15 @@
 	export default {
 		data() {
 				return {
-					index: 0
+					index: 0,
+					address: {
+						province: '北京',
+						provinceid: 1,
+						city: '北京市',
+						cityid: 36,
+						county: null,
+						countyid: null
+					}
 				};
 			},
 			watch: {

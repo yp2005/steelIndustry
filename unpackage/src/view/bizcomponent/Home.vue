@@ -4,25 +4,25 @@
 			<imageslider :images="imageDatas" :item-tap="bannerTap"></imageslider>
 			<ul class="mui-table-view mui-grid-view">
 				<li class="mui-table-view-cell mui-media mui-col-xs-6">
-					<a href="javascript:void(0)" class="device-a">
+					<a href="javascript:void(0)" class="device-a" @tap="open('../../bizpage/device/list.html')">
 						<span class="device"></span>
 						<div class="mui-media-body">找设备</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-6">
-					<a href="javascript:void(0);" class="project-a">
+					<a href="javascript:void(0);" class="project-a" @tap="open('../../bizpage/device/list.html')">
 						<span class="project"></span>
 						<div class="mui-media-body">找工程</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-6">
-					<a href="javascript:void(0)" class="master-a">
+					<a href="javascript:void(0)" class="master-a" @tap="open('../../bizpage/device/list.html')">
 						<span class="master"></span>
 						<div class="mui-media-body">找师傅</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-6">
-					<a href="javascript:void(0);" class="work-a">
+					<a href="javascript:void(0);" class="work-a" @tap="open('../../bizpage/device/list.html')">
 						<span class="work"></span>
 						<div class="mui-media-body">找工作</div>
 					</a>
@@ -97,6 +97,9 @@
 				}]
 			};
 		},
+		props: {
+			address: Object
+		},
 		created: function() {
 
 		},
@@ -106,6 +109,13 @@
 		methods: {
 			bannerTap(item) {
 				//muiUtils.openWindow(item.banner_url);
+			},
+			open(url) {
+				muiUtils.openWindow(url, url, {
+					extras: {
+						address: this.address
+					}
+				});
 			}
 		},
 		ready: function() {

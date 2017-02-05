@@ -294,26 +294,20 @@ const openPreWindow = (options) => {
 
 /**
  * 打开首页
- * @param {string} type 打开的首页类型
- * buyer(买家首页) seller(卖家首页)
  * @public
  */
-const openIndexWindow = (type, options) => {
+const openIndexWindow = (options) => {
     options = options || {};
     let openIndex = options.openIndex || 0;
-    mui.fire(plus.webview.getWebviewById(pageUrl.PAGE_URL.buyer_index.id), 'home_nav', {
+    mui.fire(plus.webview.getWebviewById(pageUrl.PAGE_URL.index.id), 'home_nav', {
         index: openIndex
     });
-    let id = pageUrl.PAGE_URL.buyer_index.id;
-    let url = pageUrl.PAGE_URL.buyer_index.url;
-    if (type === 'seller') {
-        id = pageUrl.PAGE_URL.seller_index.id;
-        url = pageUrl.PAGE_URL.seller_index.url;
-    }
-  // openWindow(url, id);
+    let id = pageUrl.PAGE_URL.index.id;
+    let url = pageUrl.PAGE_URL.index.url;
     setTimeout(function() {
         openWindow(url, id, options);
     }, 300);
+    closeAllOpenPage();
 };
 
 const closWebview = () => {

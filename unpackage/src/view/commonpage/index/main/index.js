@@ -26,23 +26,22 @@ let hdstyle = {
 	}
 };
 let hrefes = [{
-		href: '/home',
-		text: '首页',
-		icon: 'icon-shouye'
-	},
-	{
-		href: '/community',
-		text: '论坛',
-		icon: 'icon-community'
-	}, {
-		href: '/calculator',
-		text: '计算器',
-		icon: 'icon-calculator'
-	}, {
-		href: '/mine',
-		text: '我的',
-		icon: 'icon-gerenzhongxin'
-	}];
+	href: '/home',
+	text: '首页',
+	icon: 'icon-shouye'
+}, {
+	href: '/community',
+	text: '论坛',
+	icon: 'icon-community'
+}, {
+	href: '/calculator',
+	text: '计算器',
+	icon: 'icon-calculator'
+}, {
+	href: '/mine',
+	text: '我的',
+	icon: 'icon-gerenzhongxin'
+}];
 let typeclass = 'base';
 let index = 0;
 let showHeader = true;
@@ -53,7 +52,26 @@ let header = new HeaderVue({
 		hdstyle: hdstyle,
 		typeclass: typeclass,
 		title: hrefes[index].text,
-		showHeader: showHeader
+		showHeader: showHeader,
+		address: {
+			province: '北京',
+			provinceid: 1,
+			city: '北京市',
+			cityid: 36,
+			county: null,
+			countyid: null
+		}
+	},
+	watch: {
+		'address.provinceid': function() {
+			router.app.address = this.address;
+		},
+		'address.cityid': function() {
+			router.app.address = this.address;
+		},
+		'address.countyid': function() {
+			router.app.address = this.address;
+		},
 	},
 	el: 'vheader'
 });

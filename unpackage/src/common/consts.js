@@ -20,12 +20,16 @@ const ERROR_CODE = {
 	SUCCESS: '10000', // 成功
 };
 
+const DEVICE_LIST = 'device_list';
+
 export default {
 	USER_INFO,
-	ERROR_CODE
-
+	ERROR_CODE,
+	DEVICE_LIST
 };
+
 export {
 	USER_INFO,
-	ERROR_CODE
+	ERROR_CODE,
+	DEVICE_LIST
 };

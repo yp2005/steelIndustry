@@ -20,8 +20,7 @@ spinner.start();
 
 // var assetsPath = path.join(config.build.assetsRoot, config.build.assetsSubDirectory);
 /* eslint-disable no-undef*/
-rm('-rf', config.build.assetsRoot + '/buyer/*');
-rm('-rf', config.build.assetsRoot + '/seller/*');
+rm('-rf', config.build.assetsRoot + '/bizpage/*');
 rm('-rf', config.build.assetsRoot + '/commonpage/*');
 rm('-rf', config.build.assetsRoot + '/static/*');
 // mkdir('-p', config.build.assetsRoot);

@@ -303,6 +303,12 @@
 			},
 			menuOptionTap(option) {
 				//跳转页面动作
+				if(option.name === '首页') {
+					muiUtils.openIndexWindow();
+				}
+				else {
+					muiUtils.openWindow(option.url, option.url);
+				}
 				var searchType = document.getElementById('rightMenuOptions');
 				searchType.style.display = 'none';
 				searchType.className = 'mui-popover';
@@ -959,6 +965,13 @@
 		line-height: 1;
 		padding: 12px 12px 0 8px;
 	}
+	
+	/*listPage*/
+	.listPage .formInput {
+		right: 48px;
+		left: 48px;
+	}
+	
 	/*Goods details 商品详情选项卡*/
 	
 	.goodsDetails .goodsTitle {
