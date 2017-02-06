@@ -1,10 +1,10 @@
 {
   "name": "vendors_library",
   "content": {
-    "./node_modules/vue/dist/vue.common.js": 231,
-    "./node_modules/vue-validator/dist/vue-validator.common.js": 232,
-    "./node_modules/vue-router/dist/vue-router.js": 233,
-    "./node_modules/cropper/dist/cropper.js": 234,
-    "./node_modules/jquery/dist/jquery.js": 235
+    "./node_modules/vue/dist/vue.common.js": 198,
+    "./node_modules/vue-validator/dist/vue-validator.common.js": 199,
+    "./node_modules/vue-router/dist/vue-router.js": 200,
+    "./node_modules/cropper/dist/cropper.js": 201,
+    "./node_modules/jquery/dist/jquery.js": 202
   }
 }
