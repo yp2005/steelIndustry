@@ -668,7 +668,11 @@
 					"dist/vendorUtils.dll.js",
 					"dist/vendorVue.dll.js",
 					"dist/static/css/jxdd.css",
-					"dist/static/css/jxddadd.css"
+					"dist/static/css/jxddadd.css",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js"
 				],
 				"refer": [
 					"dist/buyer/homesearch/index.html",

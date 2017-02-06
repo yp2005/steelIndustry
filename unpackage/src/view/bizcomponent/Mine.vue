@@ -5,7 +5,7 @@
 				<div class="portraitImgWrap">
 					<img class="head-portrait" :src="userInfo.avatar">
 				</div>
-				<p>{{userInfo.name || '姓名未填写'}}</p>
+				<p>{{userInfo.name || '姓名未填写'}}<span class="gold">金币<img src="../../static/img/mine/gold.svg">: 5000 </span></p>
 				<p>{{userInfo.mobile_number | telephone}}</p>
 				<span class="jxddicon icon-shezhi44"></span>
 				<div class="authinfo">
@@ -63,6 +63,14 @@
 					<p>
 						<img src="../../static/img/mine/employmentdemand.svg" />
 						<span>用工需求</span>
+						<span class="jxddicon icon-jinru32"></span>
+					</p>
+				</li>
+				
+				<li class="mui-table-view-cell">
+					<p>
+						<img src="../../static/img/mine/gold.svg" />
+						<span>赚金币</span>
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
@@ -128,6 +136,7 @@
 		width: 100%;
 		height: 180px;
 		background-color: #767a92;
+		position: relative;
 	}
 	
 	.header p {
@@ -144,6 +153,18 @@
 	
 	.header p:nth-child(2) {
 		margin-top: 10px;
+	}
+	
+	.header .gold {
+		color: #fcb814;
+		position: absolute;
+		font-size: 13px;
+		margin-left: 15px;
+	}
+	
+	.header .gold img {
+		height: 15px;
+		width: 15px;
 	}
 	
 	.header p:nth-child(3) {
@@ -166,8 +187,9 @@
 	}
 	
 	.header .authinfo img {
-		width: 24px;
-		height: 24px;
+		width: 19px;
+		height: 19px;
+		margin-right: 4px;
 	}
 	
 	.icon-jinru32 {
@@ -226,7 +248,8 @@
 	}
 	
 	.mui-table-view.content-list,
-	.mui-table-view.content-list .mui-table-view-cell:nth-child(4) {
+	.mui-table-view.content-list .mui-table-view-cell:nth-child(4),
+	.mui-table-view.content-list .mui-table-view-cell:nth-child(7) {
 		margin-bottom: 8px;
 	}
 	

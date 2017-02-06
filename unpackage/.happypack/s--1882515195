@@ -67,7 +67,26 @@ var header = new HeaderVue({
 		hdstyle: hdstyle,
 		typeclass: typeclass,
 		title: hrefes[index].text,
-		showHeader: showHeader
+		showHeader: showHeader,
+		address: {
+			province: '北京',
+			provinceid: 1,
+			city: '北京市',
+			cityid: 36,
+			county: null,
+			countyid: null
+		}
+	},
+	watch: {
+		'address.provinceid': function addressProvinceid() {
+			router.app.address = this.address;
+		},
+		'address.cityid': function addressCityid() {
+			router.app.address = this.address;
+		},
+		'address.countyid': function addressCountyid() {
+			router.app.address = this.address;
+		}
 	},
 	el: 'vheader'
 });

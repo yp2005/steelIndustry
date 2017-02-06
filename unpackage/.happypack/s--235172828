@@ -277,22 +277,18 @@ var openPreWindow = function openPreWindow(options) {
     }
 };
 
-var openIndexWindow = function openIndexWindow(type, options) {
+var openIndexWindow = function openIndexWindow(options) {
     options = options || {};
     var openIndex = options.openIndex || 0;
-    mui.fire(plus.webview.getWebviewById(_api2.default.PAGE_URL.buyer_index.id), 'home_nav', {
+    mui.fire(plus.webview.getWebviewById(_api2.default.PAGE_URL.index.id), 'home_nav', {
         index: openIndex
     });
-    var id = _api2.default.PAGE_URL.buyer_index.id;
-    var url = _api2.default.PAGE_URL.buyer_index.url;
-    if (type === 'seller') {
-        id = _api2.default.PAGE_URL.seller_index.id;
-        url = _api2.default.PAGE_URL.seller_index.url;
-    }
-
+    var id = _api2.default.PAGE_URL.index.id;
+    var url = _api2.default.PAGE_URL.index.url;
     setTimeout(function () {
         openWindow(url, id, options);
     }, 300);
+    closeAllOpenPage();
 };
 
 var closWebview = function closWebview() {

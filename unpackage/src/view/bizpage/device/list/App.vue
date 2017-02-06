@@ -1,5 +1,5 @@
 /**
- * @file 设备列表主组件 
+ * @file 店铺列表主组件 
  * @Author yupeng 
  * @private
  */
@@ -20,8 +20,14 @@
 					<div class="storeInfo">
 						<p class="mui-ellipsis">店铺名称店铺名称店铺名称店铺名称店铺名称店铺名称</p>
 						<p>北京 北京市 海淀区</p>
-						<p></p>
-						<p></p>
+						<p>
+							<img src="../../../../static/img/mine/shimingrenzheng.svg">
+							<img src="../../../../static/img/mine/noshimingrenzheng.svg">
+							<img src="../../../../static/img/mine/qiyerenzheng.svg">
+							<img src="../../../../static/img/mine/noqiyerenzheng.svg">
+							<span class="mui-pull-right">距离：9999KM</span>
+						</p>
+						<p><a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
 					</div>
 				</div>
 			</div>
@@ -290,7 +296,7 @@
 		width: 100%;
 	}
 	
-	.mui-scroll-wrapper {
+	.deviceList .mui-scroll-wrapper {
 		top: 45px;
 	}
 	
@@ -338,12 +344,49 @@
 	
 	.oneStore img {
 		float: left;
-		width: 80px;
-		height: 80px;
+		width: 106px;
+		height: 106px;
 	}
 	
 	.oneStore .storeInfo {
-		padding-left: 90px;
+		padding-left: 116px;
 		min-height: 80px;
+	}
+	
+	.oneStore .storeInfo p {
+		font-size: 13px;
+	}
+	
+	.oneStore .storeInfo p:nth-child(1) {
+		color: #000;
+		font-size: 14px;
+	}
+	
+	.oneStore .storeInfo p:nth-child(3) {
+		overflow: hidden;
+		padding: 5px 0;
+	}
+	
+	.oneStore .storeInfo p:nth-child(3) img {
+		width: 19px;
+		height: 19px;
+		margin-right: 4px;
+	}
+	
+	.oneStore .storeInfo p:nth-child(4) a {
+		color: #fff;
+		background-color: #26c6da;
+		line-height: 1;
+		padding: 5px 8px;
+		border-radius: 3px;
+		margin: 5px 0;
+	}
+	
+	.oneStore .storeInfo p:nth-child(4) span {
+		line-height: 1;
+		margin-top: 4px;
+		font-size: 19px;
+		font-weight: 800;
+		color: #777;
 	}
 </style>

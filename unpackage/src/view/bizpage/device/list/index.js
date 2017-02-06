@@ -19,7 +19,7 @@ var header = new HeaderVue({
 			},
 			searchBar: {
 				display: true,
-				placeholder: '搜索设备信息',
+				placeholder: '请输入关键字搜索',
 				modelName: CONSTS.DEVICE_LIST,
 			},
 			rightMenu: {

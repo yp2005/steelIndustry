@@ -16,20 +16,46 @@
 // 用户信息
 const USER_INFO = 'user_info';
 
+// loing前缀
+const PREFIX_LOGIN = 'login';
+
+// forword登录成功后跳转页面
+const LOGIN_FORWORD = 'forword';
+
 const ERROR_CODE = {
 	SUCCESS: '10000', // 成功
 };
 
 const DEVICE_LIST = 'device_list';
 
+const PROJECT_LIST = 'project_list';
+
+const MASTER_LIST = 'master_list';
+
+const WORK_LIST = 'work_list';
+
+const SEARCH_HISTORY_KEY = 'searchhistory';
+
 export default {
 	USER_INFO,
 	ERROR_CODE,
-	DEVICE_LIST
+	DEVICE_LIST,
+	PROJECT_LIST,
+	MASTER_LIST,
+	WORK_LIST,
+	SEARCH_HISTORY_KEY,
+	PREFIX_LOGIN,
+	LOGIN_FORWORD
 };
 
 export {
 	USER_INFO,
 	ERROR_CODE,
-	DEVICE_LIST
+	DEVICE_LIST,
+	PROJECT_LIST,
+	MASTER_LIST,
+	WORK_LIST,
+	SEARCH_HISTORY_KEY,
+	PREFIX_LOGIN,
+	LOGIN_FORWORD
 };
