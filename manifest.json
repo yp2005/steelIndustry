@@ -2288,7 +2288,9 @@
 					"dist/static/css/mui.picker.css"
 				],
 				"refer": [
-					"dist/commonpage/search/searchpage.html"
+					"dist/commonpage/search/searchpage.html",
+					"dist/bizpage/release/index.html",
+					"dist/bizpage/device/list.html"
 				],
 				"priority": 0
 			},
@@ -2326,6 +2328,25 @@
 					"dist/static/js/mui.pullToRefresh.material.js",
 					"dist/static/js/mui.pullToRefresh.js",
 					"dist/static/css/pull_to_refresh.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/bizpage/release/index.html": {
+				"resources": [
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/css/bizpage/release/index.css",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/js/bizpage/release/index.js",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/vendors.dll.js"
 				],
 				"refer": [],
 				"priority": 0

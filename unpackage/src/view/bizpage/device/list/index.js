@@ -22,21 +22,16 @@ var header = new HeaderVue({
 				placeholder: '请输入关键字搜索',
 				modelName: CONSTS.DEVICE_LIST,
 			},
-			rightMenu: {
-				display: true
-			}
+			rightButton: {
+                display: true,
+                text: '首页',
+                onClick: function() {
+                    muiUtils.openIndexWindow();
+                }
+            }
 		},
 		searchValue: '',
-		value: '',
-		menuOptions: [{
-			name: '消息',
-			url: 'message',
-			icon: 'message'
-		}, {
-			name: '首页',
-			url: 'home',
-			icon: 'home'
-		}]
+		value: ''
 	},
 	el: 'vheader',
 	watch: {

@@ -5,8 +5,12 @@
 				<div class="portraitImgWrap">
 					<img class="head-portrait" :src="userInfo.avatar">
 				</div>
-				<p>{{userInfo.name || '姓名未填写'}}<span class="gold">金币<img src="../../static/img/mine/gold.svg">: 5000 </span></p>
-				<p>{{userInfo.mobile_number | telephone}}</p>
+				<p>
+					<span>{{userInfo.name || '姓名未填写'}}</span>
+					<span>{{userInfo.mobile_number}}</span>
+					<!--<span class="gold">金币<img src="../../static/img/mine/gold.svg">: 5000 </span>-->
+				</p>
+				<p>积分: 5000</p>
 				<span class="jxddicon icon-shezhi44"></span>
 				<div class="authinfo">
 					<img src="../../static/img/mine/shimingrenzheng.svg">
@@ -16,13 +20,13 @@
 				</div>
 			</div>
 			<ul class="mui-table-view content-list">
-				<li class="mui-table-view-cell">
+				<!--<li class="mui-table-view-cell">
 					<p>
 						<img src="../../static/img/mine/myinformation.svg" />
 						<span>个人信息</span>
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
-				</li>
+				</li>-->
 				<li class="mui-table-view-cell">
 					<p>
 						<img src="../../static/img/mine/authentication.svg" />
@@ -40,7 +44,7 @@
 				<li class="mui-table-view-cell">
 					<p>
 						<img src="../../static/img/mine/mymessage.svg" />
-						<span>我的消息</span>
+						<span>我的帖子</span>
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
@@ -66,14 +70,21 @@
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
-				
 				<li class="mui-table-view-cell">
+					<p>
+						<img src="../../static/img/mine/project.svg" />
+						<span>我的工程</span>
+						<span class="jxddicon icon-jinru32"></span>
+					</p>
+				</li>
+				
+				<!--<li class="mui-table-view-cell">
 					<p>
 						<img src="../../static/img/mine/gold.svg" />
 						<span>赚金币</span>
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
-				</li>
+				</li>-->
 
 			</ul>
 		</div>
@@ -102,17 +113,6 @@
 		methods: {
 
 		},
-		filters: {
-			telephone(val) {
-				if(val && val.length === 11) {
-					var valArr = val.split('');
-					valArr.splice(3, 5, '*****');
-					val = valArr.join('');
-				}
-				val = val ? val : '';
-				return val;
-			}
-		},
 		ready: function() {
 			this.scroll = mui('.mui-scroll-wrapper.mine').scroll({
 				bounce: true,
@@ -134,7 +134,7 @@
 	.header {
 		padding: 10px 13px 20px 13px;
 		width: 100%;
-		height: 180px;
+		height: 175px;
 		background-color: #767a92;
 		position: relative;
 	}
@@ -151,11 +151,15 @@
 		margin-top: 25px;
 	}
 	
+	.header p:nth-child(1) span:nth-child(1) {
+		padding-right: 15px;
+	}
+	
 	.header p:nth-child(2) {
 		margin-top: 10px;
 	}
 	
-	.header .gold {
+	/*.header .gold {
 		color: #fcb814;
 		position: absolute;
 		font-size: 13px;
@@ -165,10 +169,12 @@
 	.header .gold img {
 		height: 15px;
 		width: 15px;
-	}
+	}*/
 	
 	.header p:nth-child(3) {
 		margin-top: 5px;
+		font-size: 13px;
+		color: #fe7;
 	}
 	
 	.header .jxddicon {
@@ -248,16 +254,15 @@
 	}
 	
 	.mui-table-view.content-list,
-	.mui-table-view.content-list .mui-table-view-cell:nth-child(4),
-	.mui-table-view.content-list .mui-table-view-cell:nth-child(7) {
+	.mui-table-view.content-list .mui-table-view-cell:nth-child(3) {
 		margin-bottom: 8px;
 	}
 	
-	.mui-table-view.content-list .mui-table-view-cell:nth-child(4):after {
+	.mui-table-view.content-list .mui-table-view-cell:nth-child(3):after {
 		left: 0px;
 	}
 	
-	.mui-table-view.content-list .mui-table-view-cell:nth-child(5):before {
+	.mui-table-view.content-list .mui-table-view-cell:nth-child(4):before {
 		content: '';
 		position: absolute;
 		left: 0;

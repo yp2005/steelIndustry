@@ -2,7 +2,7 @@
 	<nav class="nav-bar nav-bar-tab {{centerPlus ? 'centerPlusNav' : ''}}">
 		<span class="centerPlusCircle1"></span>
 		<span class="centerPlusCircle2"></span>
-		<a v-if="centerPlus" class="nav-tab-item centerPlus">
+		<a v-if="centerPlus" class="nav-tab-item centerPlus" @tap="release">
 			<span>+</span>
 		</a>
 		<a v-for="href in hrefes" @tap="switch($index)" class="nav-tab-item {{$index === index ? 'nav-active' : ''}} {{$index === 2 && centerPlus ? 'centerPlusAfter' : ''}}">
@@ -69,6 +69,19 @@
 			});
 		},
 		methods: {
+			release() {
+				muiUtils.openWindow('../../bizpage/release/index.html', '../../bizpage/release/index.html', {
+					styles: {
+                        popGesture: 'none'
+
+                    },
+                    show: {
+                        aniShow: 'slide-in-bottom',
+                        autoShow: true,
+                        duration: 300
+                    }
+				});
+			},
 			switch: function(index) {
 				this.display({
 					index: index,

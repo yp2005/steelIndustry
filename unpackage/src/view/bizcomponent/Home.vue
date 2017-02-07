@@ -34,32 +34,130 @@
 					<p class="mui-ellipsis-2" v-for="message in messages">{{message.text}}</p>
 				</div>
 			</div>
-			<ul class="mui-table-view mui-grid-view advertisement">
-				<li class="mui-table-view-cell mui-media mui-col-xs-4">
-					<img src="../../static/img/ad.png" />
-				</li>
-				<li class="mui-table-view-cell mui-media mui-col-xs-4">
-					<img src="../../static/img/ad.png" />
-				</li>
-				<li class="mui-table-view-cell mui-media mui-col-xs-4">
-					<img src="../../static/img/ad.png" />
-				</li>
-			</ul>
 			
-			<ul class="mui-table-view mui-grid-view advertisement">
-				<li class="mui-table-view-cell mui-media mui-col-xs-6">
-					<img src="../../static/img/ad.png" />
-				</li>
-				<li class="mui-table-view-cell mui-media mui-col-xs-6">
-					<img src="../../static/img/ad.png" />
-				</li>
-				<li class="mui-table-view-cell mui-media mui-col-xs-6">
-					<img src="../../static/img/ad.png" />
-				</li>
-				<li class="mui-table-view-cell mui-media mui-col-xs-6">
-					<img src="../../static/img/ad.png" />
-				</li>
-			</ul>
+			<p class="title">设备推荐</p>
+			<div class="oneStore">
+				<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
+				<div class="storeInfo">
+					<p class="mui-ellipsis">店铺名称店铺名称店铺名称店铺名称店铺名称店铺名称</p>
+					<p>北京 北京市 海淀区</p>
+					<p>
+						<img src="../../static/img/mine/shimingrenzheng.svg">
+						<img src="../../static/img/mine/noshimingrenzheng.svg">
+						<img src="../../static/img/mine/qiyerenzheng.svg">
+						<img src="../../static/img/mine/noqiyerenzheng.svg">
+						<span class="mui-pull-right">距离：9999KM</span>
+					</p>
+					<p><a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
+				</div>
+			</div>
+			<div class="oneStore">
+				<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
+				<div class="storeInfo">
+					<p class="mui-ellipsis">店铺名称店铺名称店铺名称店铺名称店铺名称店铺名称</p>
+					<p>北京 北京市 海淀区</p>
+					<p>
+						<img src="../../static/img/mine/shimingrenzheng.svg">
+						<img src="../../static/img/mine/noshimingrenzheng.svg">
+						<img src="../../static/img/mine/qiyerenzheng.svg">
+						<img src="../../static/img/mine/noqiyerenzheng.svg">
+						<span class="mui-pull-right">距离：9999KM</span>
+					</p>
+					<p><a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
+				</div>
+			</div>
+			<div class="oneStore">
+				<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
+				<div class="storeInfo">
+					<p class="mui-ellipsis">店铺名称店铺名称店铺名称店铺名称店铺名称店铺名称</p>
+					<p>北京 北京市 海淀区</p>
+					<p>
+						<img src="../../static/img/mine/shimingrenzheng.svg">
+						<img src="../../static/img/mine/noshimingrenzheng.svg">
+						<img src="../../static/img/mine/qiyerenzheng.svg">
+						<img src="../../static/img/mine/noqiyerenzheng.svg">
+						<span class="mui-pull-right">距离：9999KM</span>
+					</p>
+					<p><a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
+				</div>
+			</div>
+			<div class="oneStore">
+				<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
+				<div class="storeInfo">
+					<p class="mui-ellipsis">店铺名称店铺名称店铺名称店铺名称店铺名称店铺名称</p>
+					<p>北京 北京市 海淀区</p>
+					<p>
+						<img src="../../static/img/mine/shimingrenzheng.svg">
+						<img src="../../static/img/mine/noshimingrenzheng.svg">
+						<img src="../../static/img/mine/qiyerenzheng.svg">
+						<img src="../../static/img/mine/noqiyerenzheng.svg">
+						<span class="mui-pull-right">距离：9999KM</span>
+					</p>
+					<p><a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
+				</div>
+			</div>
+			
+			<p class="title">热门岗位</p>
+			<div class="oneWork">
+				<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
+				<div class="workStore">
+					<p class="mui-ellipsis">用工需求标题用工需求标题用工需求标题用工需求标题用工需求标题</p>
+					<p>2016-01-10<span class="mui-pull-right">北京 北京市 海淀区</span></p>
+					<p>
+						<img src="../../static/img/mine/shimingrenzheng.svg">
+						<img src="../../static/img/mine/noshimingrenzheng.svg">
+						<img src="../../static/img/mine/qiyerenzheng.svg">
+						<img src="../../static/img/mine/noqiyerenzheng.svg">
+						<span class="mui-pull-right">距离：9999KM</span>
+					</p>
+					<p><a href="javascript:void(0)">立即预约</a><span class="mui-pull-right">...</span></p>
+				</div>
+			</div>
+			<div class="oneWork">
+				<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
+				<div class="workStore">
+					<p class="mui-ellipsis">用工需求标题用工需求标题用工需求标题用工需求标题用工需求标题</p>
+					<p>2016-01-10<span class="mui-pull-right">北京 北京市 海淀区</span></p>
+					<p>
+						<img src="../../static/img/mine/shimingrenzheng.svg">
+						<img src="../../static/img/mine/noshimingrenzheng.svg">
+						<img src="../../static/img/mine/qiyerenzheng.svg">
+						<img src="../../static/img/mine/noqiyerenzheng.svg">
+						<span class="mui-pull-right">距离：9999KM</span>
+					</p>
+					<p><a href="javascript:void(0)">立即预约</a><span class="mui-pull-right">...</span></p>
+				</div>
+			</div>
+			<div class="oneWork">
+				<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
+				<div class="workStore">
+					<p class="mui-ellipsis">用工需求标题用工需求标题用工需求标题用工需求标题用工需求标题</p>
+					<p>2016-01-10<span class="mui-pull-right">北京 北京市 海淀区</span></p>
+					<p>
+						<img src="../../static/img/mine/shimingrenzheng.svg">
+						<img src="../../static/img/mine/noshimingrenzheng.svg">
+						<img src="../../static/img/mine/qiyerenzheng.svg">
+						<img src="../../static/img/mine/noqiyerenzheng.svg">
+						<span class="mui-pull-right">距离：9999KM</span>
+					</p>
+					<p><a href="javascript:void(0)">立即预约</a><span class="mui-pull-right">...</span></p>
+				</div>
+			</div>
+			<div class="oneWork">
+				<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
+				<div class="workStore">
+					<p class="mui-ellipsis">用工需求标题用工需求标题用工需求标题用工需求标题用工需求标题</p>
+					<p>2016-01-10<span class="mui-pull-right">北京 北京市 海淀区</span></p>
+					<p>
+						<img src="../../static/img/mine/shimingrenzheng.svg">
+						<img src="../../static/img/mine/noshimingrenzheng.svg">
+						<img src="../../static/img/mine/qiyerenzheng.svg">
+						<img src="../../static/img/mine/noqiyerenzheng.svg">
+						<span class="mui-pull-right">距离：9999KM</span>
+					</p>
+					<p><a href="javascript:void(0)">立即预约</a><span class="mui-pull-right">...</span></p>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -287,5 +385,123 @@
 	.advertisement li img {
 		width: 100%;
 		height: 100%;
+	}
+	
+	.oneStore {
+		padding: 10px;
+		background-color: #fff;
+		margin-bottom: 2px;
+	}
+	
+	.oneStore img {
+		float: left;
+		width: 106px;
+		height: 106px;
+	}
+	
+	.oneStore .storeInfo {
+		padding-left: 116px;
+		min-height: 80px;
+	}
+	
+	.oneStore .storeInfo p {
+		font-size: 13px;
+	}
+	
+	.oneStore .storeInfo p:nth-child(1) {
+		color: #000;
+		font-size: 14px;
+	}
+	
+	.oneStore .storeInfo p:nth-child(3) {
+		overflow: hidden;
+		padding: 5px 0;
+	}
+	
+	.oneStore .storeInfo p:nth-child(3) img {
+		width: 19px;
+		height: 19px;
+		margin-right: 4px;
+	}
+	
+	.oneStore .storeInfo p:nth-child(4) a {
+		color: #fff;
+		background-color: #26c6da;
+		line-height: 1;
+		padding: 5px 8px;
+		border-radius: 3px;
+		margin: 5px 0;
+	}
+	
+	.oneStore .storeInfo p:nth-child(4) span {
+		line-height: 1;
+		margin-top: 4px;
+		font-size: 19px;
+		font-weight: 800;
+		color: #777;
+	}
+	
+	.oneWork {
+		padding: 10px;
+		background-color: #fff;
+		margin-bottom: 2px;
+	}
+	
+	.oneWork img {
+		float: left;
+		width: 106px;
+		height: 106px;
+	}
+	
+	.oneWork .workStore {
+		padding-left: 116px;
+		min-height: 80px;
+	}
+	
+	.oneWork .workStore p {
+		font-size: 13px;
+	}
+	
+	.oneWork .workStore p:nth-child(1) {
+		color: #000;
+		font-size: 14px;
+	}
+	
+	.oneWork .workStore p:nth-child(3) {
+		overflow: hidden;
+		padding: 5px 0;
+	}
+	
+	.oneWork .workStore p:nth-child(3) img {
+		width: 19px;
+		height: 19px;
+		margin-right: 4px;
+	}
+	
+	.oneWork .workStore p:nth-child(4) a {
+		color: #fff;
+		background-color: #26c6da;
+		line-height: 1;
+		padding: 5px 8px;
+		border-radius: 3px;
+		margin: 5px 0;
+	}
+	
+	.oneWork .workStore p:nth-child(4) span {
+		line-height: 1;
+		margin-top: 4px;
+		font-size: 19px;
+		font-weight: 800;
+		color: #777;
+	}
+	
+	p.title {
+		color: #005D9B;
+		line-height: 30px;
+		margin-top: 8px;
+		margin-bottom: 2px;
+		padding-left: 10px;
+		background-color: #fff;
+		font-size: 15px;
 	}
 </style>
