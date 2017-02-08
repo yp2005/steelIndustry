@@ -7,7 +7,7 @@
 <template>
 	<div class="release">
 		<div class="mui-pull-left">
-			<div class="mingpian">
+			<div class="mingpian" @tap="open('../../bizpage/release/card.html')">
 				<div>
 					<p><img src="../../../../static/img/release/mingpian.svg"></p>
 					<p>发布师傅名片</p>
@@ -61,6 +61,11 @@
 		methods: {
 			close() {
 				plus.webview.currentWebview().close('slide-out-bottom');
+			},
+			open(url) {
+				muiUtils.openWindow(url, url, {
+					isClose: true
+				});
 			}
 		}
 	};
