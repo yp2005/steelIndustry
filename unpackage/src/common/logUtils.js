@@ -12,7 +12,7 @@ import prop from './propUtils';
 // import muiUtils from './muiUtils';
 let logLevel = 0; // 日志级别，0:'log',1:'debug',2:'info',3:'error',4:'warn'
 let logonoff = 0; // 默认是开启日志的
-let writeonoff = 0; // 服务器写日志开关 0-开启 1-关闭
+let writeonoff = 1; // 服务器写日志开关 0-开启 1-关闭
 let writeurl = 'http://192.168.2.61:8888/api/facade/log/write'; // 写日志服务器URL
 /**
  * 日志工具类封装

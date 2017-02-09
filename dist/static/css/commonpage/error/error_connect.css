@@ -1,1 +1,123 @@
-body{height:auto;text-align:center}img[_v-38bd3326]{display:block;width:93px;margin:20% auto 0}p[_v-38bd3326]{font-size:15px;line-height:1;margin-top:16px;color:#999;text-align:center}.button[_v-38bd3326]{width:32%;font-size:14px;font-weight:400;text-decoration:none;text-align:center;height:35px;line-height:35px;color:#f04e30;background-color:#fff;border:1px solid #f04e30;border-radius:4px;margin:20px auto 0}.button[_v-38bd3326]:nth-of-type(2){margin-bottom:0}.button[_v-38bd3326]:active{background-color:#f04e30;color:#fff}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+body{
+	height: auto;
+	text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    img[_v-b71450e8]{
+    	display: block;
+    	width: 93px;
+    	margin: 20% auto 0 auto;
+    }
+    p[_v-b71450e8]{
+    	font-size: 15px;
+		line-height: 1;
+		margin-top: 16px;
+		color: #999999;
+		text-align: center;
+    }
+    .button[_v-b71450e8] {
+        width: 32%;
+        font-size: 14px;
+        font-weight: normal;
+        text-decoration: none;
+        text-align: center;
+        height: 35px;
+        line-height: 35px;
+        color: #f04e30;
+        background-color: #FFFFFF;
+        border: 1px solid #f04e30;
+        border-radius: 4px;
+        margin: 20px auto 0 auto;
+    }
+    .button[_v-b71450e8]:nth-of-type(2){
+    	margin-bottom: 0;
+    }
+    .button[_v-b71450e8]:active {
+        background-color: #f04e30;
+        color: #FFFFFF;
+    }

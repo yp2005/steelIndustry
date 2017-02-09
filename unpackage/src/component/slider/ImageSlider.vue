@@ -114,13 +114,6 @@
 </script>
 
 <style scoped>
-	.mui-slider {
-		height: 150px;
-	}
-	
-	.mui-slider .mui-slider-group .mui-slider-item img {
-		height: 150px;
-	}
 	
 	.mui-slider-indicator.mui-text-right {
 		text-align: center !important;

@@ -2350,6 +2350,41 @@
 				],
 				"refer": [],
 				"priority": 0
+			},
+			"dist/bizpage/project/list.html": {
+				"resources": [
+					"dist/static/js/mui.pullToRefresh.material.js",
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/js/bizpage/project/list.js",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/css/bizpage/project/list.css",
+					"dist/static/js/mui.pullToRefresh.js",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js",
+					"dist/static/css/pull_to_refresh.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/bizpage/device/deviceinfo.html": {
+				"resources": [
+					"dist/static/css/bizpage/device/deviceinfo.css",
+					"dist/static/js/bizpage/device/deviceinfo.js"
+				],
+				"refer": [],
+				"priority": 0
 			}
 		},
 		"idle": {
