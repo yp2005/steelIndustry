@@ -111,7 +111,7 @@ const openWindow = (url, id, options) => {
 /**
  * 根据内存状态设置状态栏样式，非主页页面使用
  */
-const setStatusStyle = () => {
+const setStatusStyle = () => {/*
     if (!plus) {
         return;
     }
@@ -121,7 +121,7 @@ const setStatusStyle = () => {
         plus.navigator.setStatusBarBackground('#f04e30');
     }
     plus.navigator.setStatusBarStyle('UIStatusBarStyleBlackOpaque');
-};
+*/};
 
 /**
  * 根据页面id设置状态栏样式，只有两个主页需要关注
