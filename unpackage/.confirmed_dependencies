@@ -3372,7 +3372,8 @@
 			"dist/commonpage/search/searchpage.html",
 			"dist/bizpage/release/index.html",
 			"dist/bizpage/device/list.html",
-			"dist/bizpage/master/list.html"
+			"dist/bizpage/master/list.html",
+			"dist/bizpage/project/list.html"
 		]
 	},
 	"dist/commonpage/index/guide.html": {
@@ -3425,6 +3426,9 @@
 			"dist/static/css/override_mui.css",
 			"dist/vendorMui.dll.js",
 			"dist/vendors.dll.js"
+		],
+		"refer": [
+			"dist/bizpage/release/card.html"
 		]
 	},
 	"dist/bizpage/master/list.html": {
@@ -3450,6 +3454,67 @@
 			"dist/vendors.dll.js",
 			"dist/static/css/pull_to_refresh.css",
 			"dist/static/css/bizpage/master/list.css"
+		]
+	},
+	"dist/bizpage/release/card.html": {
+		"resources": [
+			"dist/static/js/bizpage/release/card.js",
+			"dist/static/fonts/jxdd.ttf",
+			"dist/static/css/bizpage/release/card.css",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/mui.picker.css"
+		],
+		"refer": [
+			"dist/commonpage/select/type.html"
+		]
+	},
+	"dist/bizpage/project/list.html": {
+		"resources": [
+			"dist/static/js/mui.pullToRefresh.material.js",
+			"dist/static/css/jxdd.css",
+			"dist/static/css/iconfont.css",
+			"dist/static/fonts/jxdd.ttf",
+			"dist/vendorUtils.dll.js",
+			"dist/static/js/vendors.js",
+			"dist/vendorVue.dll.js",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/jxddadd.css",
+			"dist/static/js/bizpage/project/list.js",
+			"dist/static/css/mui.min.css",
+			"dist/static/js/mui.js",
+			"dist/static/css/mui.picker.css",
+			"dist/static/css/bizpage/project/list.css",
+			"dist/static/js/mui.pullToRefresh.js",
+			"dist/static/css/override_mui.css",
+			"dist/vendorMui.dll.js",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js",
+			"dist/vendors.dll.js",
+			"dist/static/css/pull_to_refresh.css"
+		]
+	},
+	"dist/commonpage/select/type.html": {
+		"resources": [
+			"dist/static/css/jxdd.css",
+			"dist/static/css/iconfont.css",
+			"dist/static/fonts/jxdd.ttf",
+			"dist/vendorUtils.dll.js",
+			"dist/static/js/vendors.js",
+			"dist/vendorVue.dll.js",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/jxddadd.css",
+			"dist/static/css/commonpage/select/type.css",
+			"dist/static/css/mui.min.css",
+			"dist/static/js/mui.js",
+			"dist/static/css/mui.picker.css",
+			"dist/static/css/override_mui.css",
+			"dist/vendorMui.dll.js",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js",
+			"dist/vendors.dll.js",
+			"dist/static/js/commonpage/select/type.js"
 		]
 	}
 }

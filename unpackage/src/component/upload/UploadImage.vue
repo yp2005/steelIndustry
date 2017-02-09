@@ -80,6 +80,8 @@
 	var upload_empty = require('../../static/img/upload_empty.jpg');
 	//var empty = require('../../static/img/empty.png');
 	var img_size = 500;
+
+	var isCutG = true;
 	export default {
 		// 定义全局变量
 		data: function() {
@@ -121,22 +123,19 @@
 				type: String,
 				default: '../../static/img/mine/nohp.png'
 			},
-			// imageWidth: {
-			//     type: String,
-			//     default: '66px'
-			// },
-			// imageHeight: {
-			//     type: String,
-			//     default: '66px'
-			// },
 			businessType: {
 				type: String,
 				default: '1'
+			},
+			isCut: {
+				type: Boolean,
+				default: true
 			}
 		},
 		ready: function() {
 			log.log('uploadtype:' + this.uploadtype + ';imagecount:' + this.imagecount);
 			$('#upload_edit_div_' + this.dataid).appendTo($('.mui-content'));
+			isCutG = this.isCut;
 		},
 		watch: {
 			/**
@@ -239,11 +238,11 @@
 							overwrite: true
 						}, function() {
 							path = plus.io.convertLocalFileSystemURL(relativePath);
-							log.log('cropper image save success');
-
+							log.log('cropper image save success:' + path);
 							resolve('file://' + path);
 						}, function() {
 							log.log('cropper image save error!!!');
+							reject();
 						});
 					}, function() {});
 				});
@@ -278,6 +277,8 @@
 						// 去掉关闭动画
 						$('#showEditBg_' + that.dataid).hide();
 					}, 500);
+				}).catch(function () {
+				     log.log("Promise Rejected");
 				});
 			},
 			exitConfirmImg() {
@@ -285,12 +286,35 @@
 				$('#confirmImg').attr('src', '');
 			},
 			confirmImg() {
+				var $image = $('#confirmImg');
+				var readyimg_path = $image.attr('src');
+
+				if(readyimg_path !== '') {
+					files.push({
+						name: 'uploadkey0',
+						path: readyimg_path
+					});
+				}
+
+				// 用户头像上传单独处理
+				let container = null;
+				let index = this.uploadIndex;
+				this['uploadImagePath' + index] = readyimg_path;
+				this['uploadImagePath' + (index + 1)] = upload_empty;
+				this.uploadIndex++;
+				container = mui('#uploadImageProgress' + index + '_' + this.dataid + ' p');
+				if(container && container.progressbar({
+						progress: 0
+					}).show()) {
+					simulateLoading(container, 0);
+				}
+				this.uploadImage(this.pictures, this.callback);
 				$('#confirmImgDiv').hide();
 				$('#confirmImg').attr('src', '');
 			},
 			// 上传图片
 			uploadImage: function(pictures, callback) {
-				var server = api.PUBLIC_API.upload_image;
+				var server = '';
 				// var server = 'http://192.168.2.61:8888/zqb/api/facade/test_upload/upload_image1';
 				log.log('上传图片:' + server);
 				if(files.length <= 0) {
@@ -379,49 +403,59 @@
 				var localurl = entry.toLocalURL();
 				log.log('camera image path:' + localurl);
 				// 判断图片大小压缩比例
-				plus.io.resolveLocalFileSystemURL(localurl, function(entry) {
-					entry.file(function(file) {
-						// 计算需要压缩的比例
-						var size = file.size / 1024;
-						log.log('file size :' + size);
-						if(size > img_size) {
-							// 大于指定大小，进行压缩
-							var dstlocalurl = localurl.replace('.jpg', '_1.jpg');
-							plus.zip.compressImage({
-								src: localurl,
-								dst: dstlocalurl,
-								width: '50%' // 缩小到原来的50%
-							}, function() { // 压缩成功，使用压缩后的图片
-								log.log('camera zip image path:' + dstlocalurl);
-								localurl = dstlocalurl;
-								// 打印图片大小
-								plus.io.resolveLocalFileSystemURL(localurl, function(entry) {
-									entry.file(function(file) {
-										var size = file.size / 1024 + 'kb';
-										log.log('zip file size :' + size);
-									}, function(e) {});
-								});
-
-								$('#readyimg_' + id).attr('src', localurl);
-								// files.push({name:"uploadkey0",path:localurl});
-								cutImg(id, cropperratio);
-								mui('#picture').popover('toggle');
-							}, function(error) { // 压缩失败，使用压缩前的图片
-								log.log('camera zip compress error!!!' + error.stack);
-								$('#readyimg_' + id).attr('src', localurl);
-								// files.push({name:"uploadkey0",path:localurl});
-								cutImg(id, cropperratio);
-								mui('#picture').popover('toggle');
-							});
-						} else {
-							// 小于指定大小，不用压缩
+				if(!isCutG) {
+					plus.io.resolveLocalFileSystemURL(localurl, function(entry) {
+						entry.file(function(file) {
 							$('#readyimg_' + id).attr('src', localurl);
-							// files.push({name:"uploadkey0",path:localurl});
-							cutImg(id, cropperratio);
+							confirmImg(localurl);
 							mui('#picture').popover('toggle');
-						}
-					}, function(e) {});
-				});
+						}, function(e) {});
+					});
+				} else {
+					plus.io.resolveLocalFileSystemURL(localurl, function(entry) {
+						entry.file(function(file) {
+							// 计算需要压缩的比例
+							var size = file.size / 1024;
+							log.log('file size :' + size);
+							if(size > img_size) {
+								// 大于指定大小，进行压缩
+								var dstlocalurl = localurl.replace('.jpg', '_1.jpg');
+								plus.zip.compressImage({
+									src: localurl,
+									dst: dstlocalurl,
+									width: '50%' // 缩小到原来的50%
+								}, function() { // 压缩成功，使用压缩后的图片
+									log.log('camera zip image path:' + dstlocalurl);
+									localurl = dstlocalurl;
+									// 打印图片大小
+									plus.io.resolveLocalFileSystemURL(localurl, function(entry) {
+										entry.file(function(file) {
+											var size = file.size / 1024 + 'kb';
+											log.log('zip file size :' + size);
+										}, function(e) {});
+									});
+
+									$('#readyimg_' + id).attr('src', localurl);
+									// files.push({name:"uploadkey0",path:localurl});
+									cutImg(id, cropperratio);
+									mui('#picture').popover('toggle');
+								}, function(error) { // 压缩失败，使用压缩前的图片
+									log.log('camera zip compress error!!!' + error.stack);
+									$('#readyimg_' + id).attr('src', localurl);
+									// files.push({name:"uploadkey0",path:localurl});
+									cutImg(id, cropperratio);
+									mui('#picture').popover('toggle');
+								});
+							} else {
+								// 小于指定大小，不用压缩
+								$('#readyimg_' + id).attr('src', localurl);
+								// files.push({name:"uploadkey0",path:localurl});
+								cutImg(id, cropperratio);
+								mui('#picture').popover('toggle');
+							}
+						}, function(e) {});
+					});
+				}
 			}, function(e) {});
 		}, function(e) {}, {
 			index: 1,
@@ -435,7 +469,7 @@
 	function choicePic(id, cropperratio) {
 		plus.gallery.pick(function(path) {
 			log.log('select image path:' + path);
-			if(true) {
+			if(!isCutG) {
 				plus.io.resolveLocalFileSystemURL(path, function(entry) {
 					entry.file(function(file) {
 						$('#readyimg_' + id).attr('src', path);
@@ -1025,7 +1059,7 @@
 	}
 	
 	.mui-table-view-cell img {
-		width: 100%;
+		max-width: 100%;
 		max-height: 76px;
 	}
 	
@@ -1047,8 +1081,8 @@
 	}
 	
 	#confirmImgDiv .confirmImgSpan {
-		display:table-cell;
-		vertical-align:middle
+		display: table-cell;
+		vertical-align: middle
 	}
 	
 	#confirmImg {
