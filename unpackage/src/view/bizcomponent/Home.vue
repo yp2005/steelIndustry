@@ -5,25 +5,25 @@
 			<ul class="mui-table-view mui-grid-view">
 				<li class="mui-table-view-cell mui-media mui-col-xs-6">
 					<a href="javascript:void(0)" class="device-a" @tap="open('../../bizpage/device/list.html')">
-						<span class="device"></span>
+						<img class="device" src="../../static/img/device.svg">
 						<div class="mui-media-body">找设备</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-6">
 					<a href="javascript:void(0);" class="project-a" @tap="open('../../bizpage/project/list.html')">
-						<span class="project"></span>
+						<img class="project" src="../../static/img/project.svg">
 						<div class="mui-media-body">找工程</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-6">
 					<a href="javascript:void(0)" class="master-a" @tap="open('../../bizpage/master/list.html')">
-						<span class="master"></span>
+						<img class="master" src="../../static/img/master.svg">
 						<div class="mui-media-body">找师傅</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-6">
 					<a href="javascript:void(0);" class="work-a" @tap="open('../../bizpage/work/list.html')">
-						<span class="work"></span>
+						<img class="work" src="../../static/img/work.svg">
 						<div class="mui-media-body">找工作</div>
 					</a>
 				</li>
@@ -248,25 +248,9 @@
 	.project,
 	.master,
 	.work {
-		background-size: 30px 30px;
-		height: 50px;
-		width: 50px;
-	}
-	
-	.device {
-		background: url(../../static/img/device.svg) 10px 10px no-repeat;
-	}
-	
-	.project {
-		background: url(../../static/img/project.svg) 10px 10px no-repeat;
-	}
-	
-	.master {
-		background: url(../../static/img/master.svg) 10px 10px no-repeat;
-	}
-	
-	.work {
-		background: url(../../static/img/work.svg) 10px 10px no-repeat;
+		height: 60px;
+		width: 60px;
+		padding: 12px;
 	}
 	
 	.mui-table-view-cell>a:not(.mui-btn) {
