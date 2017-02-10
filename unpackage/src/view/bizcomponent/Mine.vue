@@ -11,7 +11,7 @@
 					<!--<span class="gold">金币<img src="../../static/img/mine/gold.svg">: 5000 </span>-->
 				</p>
 				<p>积分: 5000</p>
-				<span class="jxddicon icon-shezhi44"></span>
+				<span class="jxddicon icon-shezhi44" @tap="open('../../commonpage/mine/usersetting.html')"></span>
 				<div class="authinfo">
 					<img src="../../static/img/mine/shimingrenzheng.svg">
 					<img src="../../static/img/mine/noshimingrenzheng.svg">
@@ -29,30 +29,15 @@
 				</li>-->
 				<li class="mui-table-view-cell">
 					<p>
-						<img src="../../static/img/mine/authentication.svg" />
-						<span>认证管理</span>
+						<img src="../../static/img/mine/mycard.svg" />
+						<span>我的名片</span>
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
-				<li class="mui-table-view-cell">
-					<p>
-						<img src="../../static/img/mine/mycollection.svg" />
-						<span>我的收藏</span>
-						<span class="jxddicon icon-jinru32"></span>
-					</p>
-				</li>
-				<li class="mui-table-view-cell">
-					<p>
-						<img src="../../static/img/mine/mymessage.svg" />
-						<span>我的帖子</span>
-						<span class="jxddicon icon-jinru32"></span>
-					</p>
-				</li>
-
 				<li class="mui-table-view-cell">
 					<p>
 						<img src="../../static/img/mine/mycard.svg" />
-						<span>我的名片</span>
+						<span>采购订单</span>
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
@@ -73,11 +58,47 @@
 				<li class="mui-table-view-cell">
 					<p>
 						<img src="../../static/img/mine/project.svg" />
-						<span>我的工程</span>
+						<span>我的帖子</span>
+						<span class="jxddicon icon-jinru32"></span>
+					</p>
+				</li>
+				<li class="mui-table-view-cell">
+					<p>
+						<img src="../../static/img/mine/project.svg" />
+						<span>我的回复</span>
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
 				
+				<li class="mui-table-view-cell">
+					<p>
+						<img src="../../static/img/mine/authentication.svg" />
+						<span>个人信息</span>
+						<span class="jxddicon icon-jinru32"></span>
+					</p>
+				</li>
+				<li class="mui-table-view-cell">
+					<p>
+						<img src="../../static/img/mine/authentication.svg" />
+						<span>认证管理</span>
+						<span class="jxddicon icon-jinru32"></span>
+					</p>
+				</li>
+				<li class="mui-table-view-cell">
+					<p>
+						<img src="../../static/img/mine/mymessage.svg" />
+						<span>保证金管理</span>
+						<span class="jxddicon icon-jinru32"></span>
+					</p>
+				</li>
+				<li class="mui-table-view-cell">
+					<p>
+						<img src="../../static/img/mine/mycollection.svg" />
+						<span>我的收藏</span>
+						<span class="jxddicon icon-jinru32"></span>
+					</p>
+				</li>
+
 				<!--<li class="mui-table-view-cell">
 					<p>
 						<img src="../../static/img/mine/gold.svg" />
@@ -111,7 +132,14 @@
 
 		},
 		methods: {
-
+			open(url) {
+				muiUtils.openWindow(url, url, {
+//					isValidLogin: true,
+					extras: {
+						url: url
+					}
+				});
+			}
 		},
 		ready: function() {
 			this.scroll = mui('.mui-scroll-wrapper.mine').scroll({
@@ -254,15 +282,15 @@
 	}
 	
 	.mui-table-view.content-list,
-	.mui-table-view.content-list .mui-table-view-cell:nth-child(3) {
+	.mui-table-view.content-list .mui-table-view-cell:nth-child(6) {
 		margin-bottom: 8px;
 	}
 	
-	.mui-table-view.content-list .mui-table-view-cell:nth-child(3):after {
+	.mui-table-view.content-list .mui-table-view-cell:nth-child(6):after {
 		left: 0px;
 	}
 	
-	.mui-table-view.content-list .mui-table-view-cell:nth-child(4):before {
+	.mui-table-view.content-list .mui-table-view-cell:nth-child(7):before {
 		content: '';
 		position: absolute;
 		left: 0;

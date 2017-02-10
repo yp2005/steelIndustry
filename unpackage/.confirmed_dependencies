@@ -3516,5 +3516,27 @@
 			"dist/vendors.dll.js",
 			"dist/static/js/commonpage/select/type.js"
 		]
+	},
+	"dist/commonpage/mine/usersetting.html": {
+		"resources": [
+			"dist/static/css/commonpage/mine/usersetting.css",
+			"dist/static/css/iconfont.css",
+			"dist/static/css/jxdd.css",
+			"dist/vendorUtils.dll.js",
+			"dist/vendorMui.dll.js",
+			"dist/static/css/override_mui.css",
+			"dist/static/js/commonpage/mine/usersetting.js",
+			"dist/static/js/vendors.js",
+			"dist/vendorVue.dll.js",
+			"dist/vendors.dll.js",
+			"dist/static/css/jxddadd.css",
+			"dist/static/js/mui.js",
+			"dist/static/css/mui.min.css",
+			"dist/static/fonts/jxdd.ttf",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/mui.picker.css",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js"
+		]
 	}
 }
