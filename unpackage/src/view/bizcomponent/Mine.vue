@@ -77,7 +77,7 @@
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
-				<li class="mui-table-view-cell">
+				<li class="mui-table-view-cell" @tap="open('../../commonpage/mine/authmanager.html')">
 					<p>
 						<img src="../../static/img/mine/authentication.svg" />
 						<span>认证管理</span>
