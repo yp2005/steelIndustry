@@ -119,7 +119,7 @@
 			return {
 				scroll: undefined,
 				userInfo: {
-					name: '余鹏',
+					name: '余鹏', 
 					avatar: require('static/img/mine/nohp.png'),
 					mobile_number: '18710095921'
 				}
