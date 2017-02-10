@@ -7,7 +7,11 @@
 				<div class="title">基本信息</div>
 				<div class="inputRow"><label>联系人</label><input placeholder="请输入姓名(必填)"></div>
 				<div class="inputRow"><label>联系方式</label><input placeholder="请输入您的联系方式(必填)"></div>
-				<div class="inputRow"><label>联系地址</label><input placeholder="请选择联系地址(必填)"></div>
+				<div class="inputRow">
+					<label>联系地址</label>
+					<p v-if="address" class="workType" @tap="selectAddress">{{address.province + ' ' + address.city + ' ' + address.district + ' ' +address.street}}</p>
+					<input v-else placeholder="请选择联系地址(必填)" readonly @tap="selectAddress">
+				</div>
 				<div class="inputRow">
 					<label>工龄</label>
 					<div class="mui-numbox" data-numbox-min='0' data-numbox-max='50'>
@@ -134,7 +138,8 @@
 				cityData: cityData3Lev,
 				cityDataSelected: [],
 				cityDataDis: '',
-				city: undefined
+				city: undefined,
+				address: undefined
 			};
 		},
 		created: function() {
@@ -167,6 +172,14 @@
 						typeData: this.cityData,
 						deep: 3,
 						typeName: '区域',
+						fromPage: '../../bizpage/release/card.html'
+					}
+				});
+			},
+			selectAddress() {
+				muiUtils.openWindow('../../commonpage/map/selectaddress.html', '../../commonpage/map/selectaddress.html', {
+					extras: {
+						address: this.address,
 						fromPage: '../../bizpage/release/card.html'
 					}
 				});
@@ -211,6 +224,9 @@
 					}
 				}
 			});
+			window.addEventListener('addressSelected', function(e) {
+				that.address = e.detail.address;
+			})
 		},
 		components: {
 			upload

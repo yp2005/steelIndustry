@@ -488,4 +488,12 @@
 		background-color: #fff;
 		font-size: 15px;
 	}
+	
+	.mui-slider {
+		height: 150px;
+	}
+	
+	.mui-slider .mui-slider-group .mui-slider-item img {
+		height: 150px;
+	}
 </style>

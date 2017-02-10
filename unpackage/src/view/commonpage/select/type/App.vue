@@ -179,12 +179,13 @@
 	.left:after {
 		content: '';
 		position: absolute;
-		top: -0;
+		top: 0;
 		right: 0;
 		bottom: 0;
 		width: 1px;
 		background-color: #d7d7d7;
 		transform: scaleX(0.5);
+		z-index: 1;
 	}
 	
 	.right {
@@ -201,7 +202,7 @@
 		left: 0;
 		right: 0;
 		bottom: 0;
-		height: 50px;
+		height: 49px;
 		background-color: #fff;
 	}
 	
@@ -323,7 +324,7 @@
 	}
 	
 	.bottom .bright a {
-		line-height: 50px;
+		line-height: 49px;
 		width: 100%;
 		color: #fff;
 		background-color: #26c6da;
