@@ -6,8 +6,8 @@
 					<div class="mui-scroll" style="transform: translate3d(0px, 0px, 0px) translateZ(0px);">
 	                    <ul class="mui-table-view mui-table-view-chevron">
 	                        <li class="mui-table-view-cell">
-	                            <a id="head" class="jxddicon icon-jinru32"><span class="avatar">头像</span>
-	                                <span class="mui-pull-right head">
+	                            <a id="head" class="jxddicon icon-jinru32" style="line-height: 75px;"><span class="avatar">头像</span>
+	                                <span class="mui-pull-right head" style="padding-right: 20px;">
 	                                	<img class="head-img mui-action-preview" :src="userInfo.avatar" @error="loadDefaultImg">
 	                                </span>
 	                            </a>
