@@ -5,27 +5,27 @@
 		<div class="mui-scroll-wrapper releaseCard">
 			<div class="mui-scroll">
 				<div class="title">基本信息</div>
-				<div class="inputRow"><label>联系人</label><input placeholder="请输入姓名(必填)"></div>
-				<div class="inputRow"><label>联系方式</label><input placeholder="请输入您的联系方式(必填)"></div>
+				<div class="inputRow"><label>联系人</label><input type="text" placeholder="请输入姓名(必填)"></div>
+				<div class="inputRow"><label>联系方式</label><input type="text" placeholder="请输入您的联系方式(必填)"></div>
 				<div class="inputRow">
 					<label>联系地址</label>
 					<p v-if="address" class="workType" @tap="selectAddress">{{address.province + ' ' + address.city + ' ' + address.district + ' ' +address.street}}</p>
-					<input v-else placeholder="请选择联系地址(必填)" readonly @tap="selectAddress">
+					<input type="text" v-else placeholder="请选择联系地址(必填)" readonly @tap="selectAddress">
 				</div>
 				<div class="inputRow">
 					<label>工龄</label>
 					<div class="mui-numbox" data-numbox-min='0' data-numbox-max='50'>
 						<button class="mui-btn mui-btn-numbox-minus" type="button">-</button>
-						<input class="mui-input-numbox" type="number">
+						<input type="text" class="mui-input-numbox" type="number">
 						<button class="mui-btn mui-btn-numbox-plus" type="button">+</button>
 					</div>
 				</div>
 				<div class="title">求职信息</div>
-				<div class="inputRow"><label>标题</label><input placeholder="姓名加工种(必填)"></div>
+				<div class="inputRow"><label>标题</label><input type="text" placeholder="姓名加工种(必填)"></div>
 				<div class="inputRow">
 					<label>工种</label>
 					<p v-if="workTypeDis" class="workType" @tap="selectWorkType">{{workTypeDis}}</p>
-					<input v-else placeholder="请选择工种(必填)" v-model="workTypeDis" readonly @tap="selectWorkType">
+					<input type="text" v-else placeholder="请选择工种(必填)" v-model="workTypeDis" readonly @tap="selectWorkType">
 				</div>
 				<div class="inputRow">
 					<label>服务区域</label>
@@ -33,7 +33,7 @@
 						<p>服务城市：{{city.province + ' ' + city.city}}</p>
 						<p><span class="mui-pull-left">服务区域：</span><span>{{cityDataDis}}</span></p>
 					</div>
-					<input v-else v-model="cityDataDis" readonly placeholder="请选择服务区域(必填)" @tap="selectArea">
+					<input type="text" v-else v-model="cityDataDis" readonly placeholder="请选择服务区域(必填)" @tap="selectArea">
 				</div>
 				<div class="inputRow textarea">
 					<label>自我介绍</label>
@@ -254,6 +254,15 @@
 		position: relative;
 		background-color: #fff;
 		overflow: hidden;
+	}
+	
+	.releaseCard .inputRow input[type=text] {
+		line-height: normal;
+		width: inherit;
+		height: inherit;
+		margin: 0;
+		padding: 1px 0px;
+		border: none;
 	}
 	
 	.releaseCard .inputRow:after {

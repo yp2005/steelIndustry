@@ -3,7 +3,7 @@
 		<p><span>城市</span><span @tap="selectAddress">{{address.province + ' ' + address.city + ' ' + address.district}}</span><span class="jxddicon icon-weizhi2xianxing mui-pull-right" @tap="userLocation">我的位置</span></p>
 		<p>
 			<span>详细地址</span>
-			<input v-model="address.street" id="street" @input="streetChange">
+			<input type="text" v-model="address.street" id="street" @input="streetChange">
 			<a class="mui-pull-right" href="javascript:void(0)" @tap="back">确定</a>
 		</p>
 	</div>
@@ -40,9 +40,11 @@
 				this.map.showUserLocation(false);
 				plus.geolocation.getCurrentPosition(function(position) {
 					var point = new plus.maps.Point(position.coords.longitude, position.coords.latitude);
-					that.map.setCenter(point);
+					that.map.centerAndZoom(point, 15);
 					that.marker.setPoint(point);
 					var address = {};
+					address.lng = position.coords.longitude;
+					address.lat = position.coords.latitude;
 					for(var data of that.cityData) {
 						if(position.address.province.indexOf(data.text) != -1) {
 							address.province = data.text;
@@ -71,29 +73,20 @@
 				});
 			},
 			createMarker() {
-				//高德地图坐标为(116.3406445236,39.9630878208), 百度地图坐标为(116.347292,39.968716
 				var that = this;
 				if(this.address) {
-					plus.maps.Map.geocode(that.address.province + that.address.city + that.address.district + that.address.street, {
-						city: that.address.city
-					}, function(event) {
-						that.marker = new plus.maps.Marker(event.coord);
-						that.map.setCenter(event.coord);
-						that.marker.setIcon('../../static/img/location.png');
-						that.marker.setLabel('');
-						var bubble = new plus.maps.Bubble('');
-						that.marker.setBubble(bubble);
-						that.map.addOverlay(that.marker);
-					}, function(e) {});
+					var point = new plus.maps.Point(this.address.lng, this.address.lat);
+					that.marker = new plus.maps.Marker(point);
+					that.map.setCenter(point);
 				}
 				else {
 					this.marker = new plus.maps.Marker(new plus.maps.Point(116.347496, 39.970191));
-					this.marker.setIcon('../../static/img/location.png');
-					this.marker.setLabel('');
-					var bubble = new plus.maps.Bubble('');
-					this.marker.setBubble(bubble);
-					this.map.addOverlay(this.marker);
 				}
+				this.marker.setIcon('');
+				this.marker.setLabel('');
+				var bubble = new plus.maps.Bubble('');
+				this.marker.setBubble(bubble);
+				this.map.addOverlay(this.marker);
 			},
 			selectAddress: function() {
 				var that = this;
@@ -115,8 +108,10 @@
 					}, function(e) {});
 				});
 			},
-			analysisAddress(addressDetail) {
+			analysisAddress(addressDetail, point) {
 				var address = {};
+				address.lng = point.getLng();
+				address.lat = point.getLat();
 				for(var province of this.cityData) {
 					if(addressDetail.indexOf(province.text) != -1) {
 						address.province = province.text;
@@ -149,6 +144,8 @@
 				}, function(event) {
 					that.map.setCenter(event.coord);
 					that.marker.setPoint(event.coord);
+					that.address.lng = event.coord.getLng();
+					that.address.lat = event.coord.getLat();
 				}, function(e) {});
 			},
 			back() {
@@ -157,14 +154,13 @@
 		},
 		ready: function() {
 			var that = this;
-			//高德地图坐标为(116.3974357341,39.9085574220), 百度地图坐标为(116.3975,39.9074)
 			var pcenter = new plus.maps.Point(116.3975, 39.9074);
 			this.map = new plus.maps.Map('map');
 			this.map.centerAndZoom(pcenter, 15);
 			this.map.showZoomControls(true);
 			this.createMarker();
 			!this.address && this.userLocation();
-			this.map.onstatuschanged = function() {
+			/*this.map.onstatuschanged = function() {
 				that.map.getCurrentCenter(function(state, point) {
 					if(0 == state) {
 						that.marker.setPoint(point);
@@ -174,12 +170,12 @@
 						}, function(e) {});
 					}
 				});
-			}
+			}*/
 			this.map.onclick = function(point) {
 				that.marker.setPoint(point);
 				plus.maps.Map.reverseGeocode(point, {}, function(event) {
 					var addressDetail = event.address;
-					that.analysisAddress(addressDetail);
+					that.analysisAddress(addressDetail, point);
 				}, function(e) {});
 			}
 			mui.back = function() {
@@ -240,6 +236,9 @@
 		top: 52px;
 		font-size: 14px;
 		color: #333;
+		height: inherit;
+		line-height: normal;
+		margin: 0;
 	}
 	
 	.mapTop p a {
