@@ -6,7 +6,7 @@
 					<div class="mui-scroll" style="transform: translate3d(0px, 0px, 0px) translateZ(0px);">
 						<ul class="mui-table-view mui-table-view-auth">
 							<li class="mui-table-view-cell mui-media">
-								<a href="javascript:;">
+								<a href="javascript:void(0);" @tap="open('../../commonpage/authmanager/person.html')">
 									<img class="mui-media-object mui-pull-left" :src="picpath">
 									<div class="mui-media-body">
 										实名认证
@@ -19,7 +19,7 @@
 						</ul>
 						<ul class="mui-table-view mui-table-view-auth">
 							<li class="mui-table-view-cell mui-media">
-								<a href="javascript:;">
+								<a href="javascript:void(0);" @tap="open('../../commonpage/authmanager/company.html')">
 									<img class="mui-media-object mui-pull-left" :src="picpath">
 									<div class="mui-media-body">
 										企业认证
@@ -32,7 +32,7 @@
 						</ul>
 						<ul class="mui-table-view mui-table-view-auth">
 							<li class="mui-table-view-cell mui-media">
-								<a href="javascript:;">
+								<a href="javascript:void(0);">
 									<img class="mui-media-object mui-pull-left" :src="picpath">
 									<div class="mui-media-body">
 										认证的好处
@@ -62,7 +62,6 @@
 		data: function() {
 			return {
 				picpath: require('static/img/mine/shimingrenzheng.svg'),
-				cache: 0.00,
 				userInfo: {
 					name: '余鹏',
 					avatar: require('static/img/mine/nohp.png'),
@@ -71,18 +70,13 @@
 			}
 		},
 		methods: {
-			loadDefaultImg: function() {
-				this.userInfo.avatar = require('static/img/mine/nohp.png');
-			},
-			signout: function() {
-				var btnArray = ['取消', '确定'];
-				mui.confirm('你确认退出登录吗？', '退出登录', btnArray, function(e) {
-					if(e.index == 1) {
-//						localStorage.clear();
-//						muiUtils.openPreWindow();
-						mui.toast("退出成功");
-					} else {}
-				})
+			open(url) {
+				muiUtils.openWindow(url, url, {
+//					isValidLogin: true,
+					extras: {
+						url: url
+					}
+				});
 			}
 		},
 		ready: function() {
