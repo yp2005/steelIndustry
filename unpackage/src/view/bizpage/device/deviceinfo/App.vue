@@ -19,7 +19,7 @@
 						</p>
 					</li>
 					<li class="mui-table-view-cell">
-						<p @tap="address">
+						<p @tap="positioning">
 							<span class="jxddicon icon-weizhi2"></span>
 							<span class="text-context">{{address.province + ' ' + address.city + ' ' + address.district + ' ' +address.street}}</span>
 							<span class="jxddicon icon-jinru32"></span>
@@ -134,10 +134,11 @@
 			shoucang: function() {
 				mui.toast('收藏成功！');
 			},
-			address: function() {
+			positioning: function() {
 				muiUtils.openWindow('../../commonpage/map/selectaddress.html', '../../commonpage/map/selectaddress.html', {
 					extras: {
 						address: this.address,
+						isPositioning: true,
 						fromPage: '../../bizpage/device/deviceinfo.html'
 					}
 				});

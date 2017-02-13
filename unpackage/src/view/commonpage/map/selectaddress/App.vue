@@ -3,7 +3,8 @@
 		<p><span>城市</span><span @tap="selectAddress">{{address ? address.province + ' ' + address.city + ' ' + address.district : '请选择'}}</span><span class="jxddicon icon-weizhi2xianxing mui-pull-right" @tap="userLocation">我的位置</span></p>
 		<p>
 			<span>详细地址</span>
-			<input type="text" v-model="address.street" id="street" @input="streetChange">
+			<input v-if="!isPositioning" type="text" v-model="address.street" id="street" @input="streetChange">
+			<span v-else type="text" id="street">{{address.street}}</span>
 			<a class="mui-pull-right" href="javascript:void(0)" @tap="back">确定</a>
 		</p>
 	</div>
@@ -28,6 +29,8 @@
 				marker: null,
 				cityData: cityData3Lev,
 				address: plus.webview.currentWebview().address,
+				// 是否是定位，定位则不能编辑地址
+				isPositioning: plus.webview.currentWebview().isPositioning,
 				fromPage: plus.webview.currentWebview().fromPage
 			};
 		},
