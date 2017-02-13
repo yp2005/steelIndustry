@@ -224,7 +224,7 @@
 				var launchFlag = plus.storage.getItem('launchFlag');
 				if(launchFlag) {
 					plus.navigator.closeSplashscreen();
-					// plus.webview.currentWebview().show('none');
+					plus.webview.currentWebview().show('none');
 				}
 			}, 10);
 			this.scroll = mui('.mui-scroll-wrapper.home').scroll({

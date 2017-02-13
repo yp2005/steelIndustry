@@ -11,6 +11,7 @@
 					<label>联系地址</label>
 					<p v-if="address" class="workType" @tap="selectAddress">{{address.province + ' ' + address.city + ' ' + address.district + ' ' +address.street}}</p>
 					<input type="text" v-else placeholder="请选择联系地址(必填)" readonly @tap="selectAddress">
+					<span class="jxddicon icon-jinru32"></span>
 				</div>
 				<div class="inputRow">
 					<label>工龄</label>
@@ -26,6 +27,7 @@
 					<label>工种</label>
 					<p v-if="workTypeDis" class="workType" @tap="selectWorkType">{{workTypeDis}}</p>
 					<input type="text" v-else placeholder="请选择工种(必填)" v-model="workTypeDis" readonly @tap="selectWorkType">
+					<span class="jxddicon icon-jinru32"></span>
 				</div>
 				<div class="inputRow">
 					<label>服务区域</label>
@@ -34,6 +36,7 @@
 						<p><span class="mui-pull-left">服务区域：</span><span>{{cityDataDis}}</span></p>
 					</div>
 					<input type="text" v-else v-model="cityDataDis" readonly placeholder="请选择服务区域(必填)" @tap="selectArea">
+					<span class="jxddicon icon-jinru32"></span>
 				</div>
 				<div class="inputRow textarea">
 					<label>自我介绍</label>
@@ -256,13 +259,26 @@
 		overflow: hidden;
 	}
 	
-	.releaseCard .inputRow input[type=text] {
+	.releaseCard .inputRow > input[type=text] {
 		line-height: normal;
 		width: inherit;
 		height: inherit;
 		margin: 0;
 		padding: 1px 0px;
 		border: none;
+		position: absolute;
+		top: 15px;
+		left: 80px;
+		right: 40px;
+	}
+	
+	.releaseCard .inputRow > .jxddicon.icon-jinru32 {
+		position: absolute;
+		right: 10px;
+		top: 16px;
+		line-height: 20px;
+		font-size: 20px;
+		color: #999;
 	}
 	
 	.releaseCard .inputRow:after {
@@ -292,6 +308,11 @@
 	.releaseCard .inputRow .area p:nth-child(2) span:nth-child(2),
 	.releaseCard .inputRow .workType {
 		padding-left: 70px;
+	}
+	
+	.releaseCard .inputRow .area,
+	.releaseCard .inputRow .workType {
+		padding-right: 30px;
 	}
 	
 	.releaseCard .inputRow .area p,

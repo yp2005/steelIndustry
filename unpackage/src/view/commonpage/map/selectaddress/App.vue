@@ -1,6 +1,6 @@
 <template>
 	<div class="mapTop">
-		<p><span>城市</span><span @tap="selectAddress">{{address.province + ' ' + address.city + ' ' + address.district}}</span><span class="jxddicon icon-weizhi2xianxing mui-pull-right" @tap="userLocation">我的位置</span></p>
+		<p><span>城市</span><span @tap="selectAddress">{{address ? address.province + ' ' + address.city + ' ' + address.district : '请选择'}}</span><span class="jxddicon icon-weizhi2xianxing mui-pull-right" @tap="userLocation">我的位置</span></p>
 		<p>
 			<span>详细地址</span>
 			<input type="text" v-model="address.street" id="street" @input="streetChange">
@@ -37,8 +37,9 @@
 		methods: {
 			userLocation() {
 				var that = this;
-				this.map.showUserLocation(false);
+				var wt = plus.nativeUI.showWaiting('正在定位...');
 				plus.geolocation.getCurrentPosition(function(position) {
+					wt.close();
 					var point = new plus.maps.Point(position.coords.longitude, position.coords.latitude);
 					that.map.centerAndZoom(point, 15);
 					that.marker.setPoint(point);
@@ -68,7 +69,11 @@
 					}
 					address.street = position.address.street;
 					that.address = address;
-				}, function(e) {}, {
+				}, function(e) {
+					wt.close();
+					mui.toast('获取地址失败，请重试！');
+					that.back();
+				}, {
 					provider: 'baidu'
 				});
 			},
@@ -77,10 +82,10 @@
 				if(this.address) {
 					var point = new plus.maps.Point(this.address.lng, this.address.lat);
 					that.marker = new plus.maps.Marker(point);
-					that.map.setCenter(point);
+					this.map.centerAndZoom(point, 15);
 				}
 				else {
-					this.marker = new plus.maps.Marker(new plus.maps.Point(116.347496, 39.970191));
+					this.marker = new plus.maps.Marker(this.map.getCenter());
 				}
 				this.marker.setIcon('');
 				this.marker.setLabel('');
@@ -154,10 +159,9 @@
 		},
 		ready: function() {
 			var that = this;
-			var pcenter = new plus.maps.Point(116.3975, 39.9074);
 			this.map = new plus.maps.Map('map');
-			this.map.centerAndZoom(pcenter, 15);
 			this.map.showZoomControls(true);
+			this.map.showUserLocation(false);
 			this.createMarker();
 			!this.address && this.userLocation();
 			/*this.map.onstatuschanged = function() {
