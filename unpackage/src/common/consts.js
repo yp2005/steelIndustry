@@ -36,6 +36,8 @@ const WORK_LIST = 'work_list';
 
 const SEARCH_HISTORY_KEY = 'searchhistory';
 
+const IS_SHARED = 'is_shared';
+
 export default {
 	USER_INFO,
 	ERROR_CODE,
@@ -45,7 +47,8 @@ export default {
 	WORK_LIST,
 	SEARCH_HISTORY_KEY,
 	PREFIX_LOGIN,
-	LOGIN_FORWORD
+	LOGIN_FORWORD,
+	IS_SHARED
 };
 
 export {
@@ -57,5 +60,6 @@ export {
 	WORK_LIST,
 	SEARCH_HISTORY_KEY,
 	PREFIX_LOGIN,
-	LOGIN_FORWORD
+	LOGIN_FORWORD,
+	IS_SHARED
 };

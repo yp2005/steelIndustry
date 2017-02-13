@@ -13,22 +13,24 @@
 				<h4 class="mui-table-view-cell">TEP官方旗舰店</h4>
 				<ul class="shop-data-list  am-list">
 					<li class="mui-table-view-cell">
-						<p>
+						<p @tap="shoucang">
 							<span>独家优惠，收藏店铺可获得到店折扣</span>
 							<span class="jxddicon icon-shoucang1"></span>
 						</p>
 					</li>
 					<li class="mui-table-view-cell">
-						<p>
+						<p @tap="address">
 							<span class="jxddicon icon-weizhi2"></span>
-							<span class="text-context">厦门市同安区</span>
+							<span class="text-context">{{address.province + ' ' + address.city + ' ' + address.district + ' ' +address.street}}</span>
 							<span class="jxddicon icon-jinru32"></span>
 						</p>
 					</li>
 					<li class="mui-table-view-cell telphone">
 						<p>
 							<span class="mui-icon mui-icon-phone"></span>
-							<span class="text-context">18106088602</span>
+							
+							<span class="text-context" v-show = "isShared==0" @tap="callTel('15011547881')">18106088602</span>
+							<span class="text-context" v-show = "isShared!=0" @tap="toShare">电话咨询</span>
 							<span class="jxddicon icon-jinru32"></span>
 						</p>
 					</li>
@@ -66,7 +68,7 @@
 				</li>
 				<li class="mui-table-view-cell">
 					<p class="fabu">
-						<a>我要发布店铺<i id="box"></i></a>
+						<span>我要发布店铺<i id="box"></i></span>
 					</p>
 				</li>
 				<div class="list-ad-two">
@@ -81,16 +83,27 @@
 	import muiUtils from 'common/muiUtils';
 	import log from 'common/logUtils';
 	import slider from 'component/slider/ImageSlider';
+	import CONSTS from 'common/consts';
+	import cacheUtils from 'common/cacheUtils';
 
 	export default {
 		data: function() {
+			// 0 分享，非0未分享
+			let isShared = cacheUtils.localStorage(CONSTS.IS_SHARED).get(CONSTS.IS_SHARED);
 			return {
 				// banner
 				imageDatas: [],
 				// 店铺id
 				id: '',
 				// 店铺商品
-				googsList: []
+				googsList: [],
+				isShared: isShared,
+				address: {
+					province: '北京',
+					city: '北京市',
+					district: '海淀区',
+					street: '阜石路甲69号'
+				}
 			}
 		},
 		created: function() {
@@ -118,6 +131,31 @@
 			}];
 		},
 		methods: {
+			shoucang: function() {
+				mui.toast('收藏成功！');
+			},
+			address: function() {
+				muiUtils.openWindow('../../commonpage/map/selectaddress.html', '../../commonpage/map/selectaddress.html', {
+					extras: {
+						address: this.address,
+						fromPage: '../../bizpage/device/deviceinfo.html'
+					}
+				});
+			},
+			callTel: function(number) {
+				plus.device.dial(number, false);
+			},
+			toShare: function() {
+				let self = this;
+				mui.alert('分享app即可获取联系电话！', '分享', '分享', function(){
+					mui.toast('分享成功！');
+					self.isShared = 0;
+					console.log('CONSTS.IS_SHARED:' + CONSTS.IS_SHARED);
+					cacheUtils.localStorage(CONSTS.IS_SHARED).set(CONSTS.IS_SHARED, self.isShared);
+					//入库
+					//@tudo
+				});
+			},
 			itemtap: function(item) {
 				let self = plus.webview.currentWebview();
 				muiUtils.openWindow('allGoods.html', {
