@@ -26,8 +26,10 @@
 				<div class="clear"></div>
 			</div>
 		</div>
-		<div id="confirmImgDiv" style="width:100%;height: 100%;position: fixed;top:0;left: 0;display: none;z-index: 22;background-color: gray;">
-			<span class="confirmImgSpan"><img id="confirmImg"></span>
+		<div id="confirmImgDiv_{{dataid}}" style="width:100%;height: 100%;position: fixed;top:0;left: 0;display: none;z-index: 22;background-color: gray;text-align: center;">
+			<span class="confirmImgSpan" style="display: table-cell;vertical-align: middle">
+				<img id="confirmImg_{{dataid}}" style="max-height: 100%;max-width: 100%;">
+			</span>
 			<div class="mui-content-padded edit-div-content">
 				<div class="flex-container" style="">
 					<a href="javascript:void(0);" @tap="exitConfirmImg()">
@@ -282,11 +284,11 @@
 				});
 			},
 			exitConfirmImg() {
-				$('#confirmImgDiv').hide();
-				$('#confirmImg').attr('src', '');
+				$('#confirmImgDiv_' + this.dataid).css('display', 'none');
+				$('#confirmImg_' + this.dataid).attr('src', '');
 			},
 			confirmImg() {
-				var $image = $('#confirmImg');
+				var $image = $('#confirmImg_' + this.dataid);
 				var readyimg_path = $image.attr('src');
 
 				if(readyimg_path !== '') {
@@ -309,8 +311,8 @@
 					simulateLoading(container, 0);
 				}
 				this.uploadImage(this.pictures, this.callback);
-				$('#confirmImgDiv').hide();
-				$('#confirmImg').attr('src', '');
+				$('#confirmImgDiv_' + this.dataid).css('display', 'none');
+				$('#confirmImg_' + this.dataid).attr('src', '');
 			},
 			// 上传图片
 			uploadImage: function(pictures, callback) {
@@ -407,7 +409,7 @@
 					plus.io.resolveLocalFileSystemURL(localurl, function(entry) {
 						entry.file(function(file) {
 							$('#readyimg_' + id).attr('src', localurl);
-							confirmImg(localurl);
+							confirmImg(localurl, id);
 							mui('#picture').popover('toggle');
 						}, function(e) {});
 					});
@@ -473,7 +475,7 @@
 				plus.io.resolveLocalFileSystemURL(path, function(entry) {
 					entry.file(function(file) {
 						$('#readyimg_' + id).attr('src', path);
-						confirmImg(path);
+						confirmImg(path, id);
 						mui('#picture').popover('toggle');
 					}, function(e) {});
 				});
@@ -545,9 +547,9 @@
 	}
 
 	//不截图直接上传
-	function confirmImg(path) {
-		$('#confirmImgDiv').show();
-		$('#confirmImg').attr('src', path);
+	function confirmImg(path, id) {
+		$('#confirmImgDiv_' + id).css('display', 'table');
+		$('#confirmImg_' + id).attr('src', path);
 	}
 
 	// 照片裁剪类
@@ -1073,20 +1075,5 @@
 		padding-left: 5px !important;
 		padding-right: 5px !important;
 		margin-right: 0;
-	}
-	
-	#confirmImgDiv {
-		display: table;
-		text-align: center;
-	}
-	
-	#confirmImgDiv .confirmImgSpan {
-		display: table-cell;
-		vertical-align: middle
-	}
-	
-	#confirmImg {
-		max-height: 100%;
-		max-width: 100%;
 	}
 </style>

@@ -14,7 +14,7 @@
 					<p>秀你自己</p>
 				</div>
 			</div>
-			<div class="project">
+			<div class="project" @tap="open('../../bizpage/release/project.html')">
 				<div>
 					<p><img src="../../../../static/img/release/project.svg"></p>
 					<p>发布工程信息</p>
@@ -26,7 +26,7 @@
 		<div class="mui-pull-right">
 			<div class="top">
 				<div>
-					<div class="worker">
+					<div class="worker" @tap="open('../../bizpage/release/work.html')">
 						<div>
 							<p><img src="../../../../static/img/release/worker.svg"></p>
 							<p>发布用工需求</p>
@@ -35,7 +35,7 @@
 					</div>
 				</div>
 				<div>
-					<div class="store">
+					<div class="store" @tap="open('../../bizpage/release/store.html')">
 						<div>
 							<p><img src="../../../../static/img/release/store.svg"></p>
 							<p>发布设备店铺</p>

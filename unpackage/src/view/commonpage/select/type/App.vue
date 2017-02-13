@@ -77,7 +77,8 @@
 				deep: deep,
 				selectedNum: selectedNum,
 				fromPage: plus.webview.currentWebview().fromPage,
-				typeDataSelected: typeDataSelected
+				typeDataSelected: typeDataSelected,
+				selectNumLim: plus.webview.currentWebview().selectNumLim || 5
 			};
 		},
 		created: function() {
@@ -89,11 +90,15 @@
 					mui.toast('您不能选择跨省份的区域！');
 					return;
 				}
+				if(this.typeName === '设备类型' && this.typeData[this.curIndex].selectedNum > 0) {
+					mui.toast('您不能选择跨大类的设备类型！');
+					return;
+				}
 				this.curIndex = index;
 			},
 			select(type1, type2) {
-				if(!type2.selected && this.typeName !== '区域' && this.selectedNum >= 5) {
-					mui.toast('您最多可选择5个' + this.typeName + '！');
+				if(!type2.selected && this.typeName !== '区域' && this.selectedNum >= this.selectNumLim) {
+					mui.toast('您最多可选择' + this.selectNumLim + '个' + this.typeName + '！');
 					return;
 				}
 				if(!type2.selected && this.typeName === '区域' && this.typeDataSelected.length > 0 && type2.area_parent_id !== this.typeDataSelected[0].area_parent_id) {

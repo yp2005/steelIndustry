@@ -1,48 +1,32 @@
 <template>
 	<div class="mui-content">
-		<div class="mui-scroll-wrapper releaseCard">
+		<div class="mui-scroll-wrapper releaseWork">
 			<div class="mui-scroll">
-				<div class="title">基本信息</div>
-				<div class="inputRow"><label>联系人</label><input type="text" placeholder="请输入姓名(必填)"></div>
-				<div class="inputRow"><label>联系方式</label><input type="text" placeholder="请输入您的联系方式(必填)"></div>
+				<div class="title">公司信息</div>
+				<div class="inputRow"><label>公司名称</label><input type="text" placeholder="请输入公司名称(必填)"></div>
+				<div class="inputRow"><label>联系人</label><input type="text" placeholder="请输入联系人(必填)"></div>
+				<div class="inputRow"><label>联系电话</label><input type="text" placeholder="请输入联系电话(必填)"></div>
+				<div class="title">招聘信息</div>
+				<div class="inputRow"><label>标题</label><input type="text" placeholder="请输入标题(必填)"></div>
 				<div class="inputRow">
-					<label>联系地址</label>
-					<p v-if="address" class="workType" @tap="selectAddress">{{address.province + ' ' + address.city + ' ' + address.district + ' ' +address.street}}</p>
-					<input type="text" v-else placeholder="请选择联系地址(必填)" readonly @tap="selectAddress">
-					<span class="jxddicon icon-jinru32"></span>
-				</div>
-				<div class="inputRow">
-					<label>工龄</label>
-					<div class="mui-numbox" data-numbox-min='0' data-numbox-max='50'>
-						<button class="mui-btn mui-btn-numbox-minus" type="button">-</button>
-						<input type="text" class="mui-input-numbox" type="number">
-						<button class="mui-btn mui-btn-numbox-plus" type="button">+</button>
-					</div>
-				</div>
-				<div class="title">求职信息</div>
-				<div class="inputRow"><label>标题</label><input type="text" placeholder="姓名加工种(必填)"></div>
-				<div class="inputRow">
-					<label>工种</label>
+					<label>所需工种</label>
 					<p v-if="workTypeDis" class="workType" @tap="selectWorkType">{{workTypeDis}}</p>
-					<input type="text" v-else placeholder="请选择工种(必填)" v-model="workTypeDis" readonly @tap="selectWorkType">
+					<input type="text" v-else placeholder="请选择所需工种(必填)" v-model="workTypeDis" readonly @tap="selectWorkType">
 					<span class="jxddicon icon-jinru32"></span>
 				</div>
 				<div class="inputRow">
-					<label>服务区域</label>
-					<div class="area" v-if="city" @tap="selectArea">
-						<p>服务城市：{{city.province + ' ' + city.city}}</p>
-						<p><span class="mui-pull-left">服务区域：</span><span>{{cityDataDis}}</span></p>
-					</div>
-					<input type="text" v-else v-model="cityDataDis" readonly placeholder="请选择服务区域(必填)" @tap="selectArea">
+					<label>工作地点</label>
+					<p v-if="address" class="workType" @tap="selectAddress">{{address.province + ' ' + address.city + ' ' + address.district + ' ' +address.street}}</p>
+					<input type="text" v-else placeholder="请选择工作地点(必填)" readonly @tap="selectAddress">
 					<span class="jxddicon icon-jinru32"></span>
 				</div>
 				<div class="inputRow textarea">
-					<label>自我介绍</label>
-					<textarea id="textarea" placeholder="介绍你的工作技能、工作经验等" @input="textAreaInput"></textarea>
+					<label>工作介绍</label>
+					<textarea id="textarea" placeholder="请详细描述工作情况，还可以说明一下待遇福利等" @input="textAreaInput"></textarea>
 				</div>
 				<div class="inputRow">
-					<p>您可以上传图片辅助说明，最多五张(选填)</p>
-					<upload :is-cut="isCut" :pictures.sync="pictures" :imagecount="5" dataid="cardPicture"></upload>
+					<p>您可以上传图片辅助说明，最多5张(选填)</p>
+					<upload :is-cut="isCut" :pictures.sync="pictures" :imagecount="5"></upload>
 				</div>
 				<div class="bottomBtn">
 					<a href="javascript:void(0)">保存草稿</a>
@@ -59,9 +43,6 @@
 	import api from 'api';
 	import CONSTS from 'common/consts';
 	import upload from 'component/upload/UploadImage';
-		import {
-		cityData3Lev
-	} from 'common/cityData';
 	export default {
 		data: function() {
 			return {
@@ -136,10 +117,6 @@
 				}],
 				workTypeSelected: [],
 				workTypeDis: '',
-				cityData: cityData3Lev,
-				cityDataSelected: [],
-				cityDataDis: '',
-				city: undefined,
 				address: undefined
 			};
 		},
@@ -158,22 +135,11 @@
 			selectWorkType() {
 				muiUtils.openWindow('../../commonpage/select/type.html', '../../commonpage/select/type.html', {
 					extras: {
-						title: '选择工种',
+						title: '选择所需工种',
 						typeData: this.workType,
 						deep: 2,
 						typeName: '工种',
-						fromPage: '../../bizpage/release/card.html'
-					}
-				});
-			},
-			selectArea() {
-				muiUtils.openWindow('../../commonpage/select/type.html', '../../commonpage/select/type.html', {
-					extras: {
-						title: '选择服务区域',
-						typeData: this.cityData,
-						deep: 3,
-						typeName: '区域',
-						fromPage: '../../bizpage/release/card.html'
+						fromPage: '../../bizpage/release/work.html'
 					}
 				});
 			},
@@ -181,47 +147,28 @@
 				muiUtils.openWindow('../../commonpage/map/selectaddress.html', '../../commonpage/map/selectaddress.html', {
 					extras: {
 						address: this.address,
-						fromPage: '../../bizpage/release/card.html'
+						fromPage: '../../bizpage/release/work.html'
 					}
 				});
 			}
 		},
 		ready: function() {
-			mui('.mui-scroll-wrapper.releaseCard').scroll({
+			mui('.mui-scroll-wrapper.releaseWork').scroll({
 				bounce: true,
 				indicators: false, // 是否显示滚动条
 				deceleration: mui.os.ios ? 0.003 : 0.0009
 			});
-			mui('.mui-numbox').numbox();
 			var that = this;
 			window.addEventListener('typeDataSelected', function(e) {
 				var typeDataSelected = e.detail.typeDataSelected;
-				if(e.detail.typeName === '工种') {
-					that.workType = e.detail.typeData;
-					that.workTypeSelected = typeDataSelected;
-					that.workTypeDis = '';
-					for(var wt of that.workTypeSelected) {
-						if(that.workTypeDis === '') {
-							that.workTypeDis += wt.text;
-						}
-						else {
-							that.workTypeDis += ',' + wt.text;
-						}
-					}
-				}
-				else {
-					that.cityData = e.detail.typeData;
-					that.city = e.detail.city;
-					that.cityDataSelected = typeDataSelected;
-					that.cityDataDis = '';
-					that.city = e.detail.city;
-					for(var cd of that.cityDataSelected) {
-						if(that.cityDataDis === '') {
-							that.cityDataDis += cd.text;
-						}
-						else {
-							that.cityDataDis += ',' + cd.text;
-						}
+				that.workType = e.detail.typeData;
+				that.workTypeSelected = typeDataSelected;
+				that.workTypeDis = '';
+				for(var wt of that.workTypeSelected) {
+					if(that.workTypeDis === '') {
+						that.workTypeDis += wt.text;
+					} else {
+						that.workTypeDis += ',' + wt.text;
 					}
 				}
 			});
@@ -235,20 +182,20 @@
 	};
 </script>
 <style>
-	.releaseCard {
+	.releaseWork {
 		position: absolute;
 		top: 45px;
 		bottom: 0;
 		width: 100%;
 	}
 	
-	.releaseCard input,
-	.releaseCard textarea,
-	.releaseCard label {
+	.releaseWork input,
+	.releaseWork textarea,
+	.releaseWork label {
 		font-size: 14px;
 	}
 	
-	.releaseCard .inputRow {
+	.releaseWork .inputRow {
 		color: #333;
 		line-height: 30px;
 		padding: 10px;
@@ -257,7 +204,7 @@
 		overflow: hidden;
 	}
 	
-	.releaseCard .inputRow > input[type=text] {
+	.releaseWork .inputRow> input[type=text] {
 		line-height: normal;
 		width: inherit;
 		height: inherit;
@@ -270,7 +217,7 @@
 		right: 40px;
 	}
 	
-	.releaseCard .inputRow > .jxddicon.icon-jinru32 {
+	.releaseWork .inputRow> .jxddicon.icon-jinru32 {
 		position: absolute;
 		right: 10px;
 		top: 16px;
@@ -279,7 +226,7 @@
 		color: #999;
 	}
 	
-	.releaseCard .inputRow:after {
+	.releaseWork .inputRow:after {
 		content: "";
 		height: 1px;
 		position: absolute;
@@ -290,57 +237,57 @@
 		transform: scaleY(0.5);
 	}
 	
-	.releaseCard .title {
+	.releaseWork .title {
 		background-color: #ddd;
 		padding: 5px;
 		font-size: 15px;
 		color: #222;
 	}
 	
-	.releaseCard .inputRow label {
+	.releaseWork .inputRow label {
 		width: 70px;
 		float: left;
 	}
 	
-	.releaseCard .inputRow .area,
-	.releaseCard .inputRow .area p:nth-child(2) span:nth-child(2),
-	.releaseCard .inputRow .workType {
+	.releaseWork .inputRow .area,
+	.releaseWork .inputRow .area p:nth-child(2) span:nth-child(2),
+	.releaseWork .inputRow .workType {
 		padding-left: 70px;
 	}
 	
-	.releaseCard .inputRow .area,
-	.releaseCard .inputRow .workType {
+	.releaseWork .inputRow .area,
+	.releaseWork .inputRow .workType {
 		padding-right: 30px;
 	}
 	
-	.releaseCard .inputRow .area p,
-	.releaseCard .inputRow .workType {
+	.releaseWork .inputRow .area p,
+	.releaseWork .inputRow .workType {
 		color: #333;
 	}
 	
-	.releaseCard .inputRow .area p:nth-child(2) {
+	.releaseWork .inputRow .area p:nth-child(2) {
 		line-height: 20px;
 	}
 	
-	.releaseCard .inputRow .area p:nth-child(2) span {
+	.releaseWork .inputRow .area p:nth-child(2) span {
 		display: inherit;
 	}
 	
-	.releaseCard .mui-numbox .mui-input-numbox {
+	.releaseWork .mui-numbox .mui-input-numbox {
 		width: 36px !important;
 		padding: 0 !important;
 	}
 	
-	.releaseCard .inputRow.textarea {
+	.releaseWork .inputRow.textarea {
 		overflow: hidden;
 	}
 	
-	.releaseCard .inputRow.textarea label,
-	.releaseCard .inputRow.textarea textarea {
+	.releaseWork .inputRow.textarea label,
+	.releaseWork .inputRow.textarea textarea {
 		float: left;
 	}
 	
-	.releaseCard textarea {
+	.releaseWork textarea {
 		font-size: 14px;
 		color: #666666;
 		border: 0;
