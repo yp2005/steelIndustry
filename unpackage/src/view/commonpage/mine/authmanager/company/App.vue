@@ -10,32 +10,17 @@
 						<span class="statusFont"> → 认证成功</span>
 					</div>
 					<div class="title"></div>
-					<div class="inputRow"><label>姓名</label><input placeholder="请输入您的真实姓名"></div>
-					<div class="inputRow"><label>身份证号</label><input placeholder="请输入您的身份证号"></div>
+					<div class="inputRow"><label>法人姓名</label><input placeholder="请输入您的真实姓名"></div>
+					<div class="inputRow"><label>企业全称</label><input placeholder="请输入您的身份证号"></div>
 					<div class="title"></div>
 					<div class="inputRow">
-						<p>请上传身份证正面(必填)</p>
+						<p>请上传二代企业营业执照(必填)</p>
 						<upload :is-cut="isCut" :pictures.sync="pictures" :imagecount="1" :dataid="sfz_zhengmian"></upload>
-					</div>
-					<div class="title"></div>
-					<div class="inputRow">
-						<p>请上传身份证反面(必填)</p>
-						<upload :is-cut="isCut" :pictures.sync="pictures" :imagecount="1" :dataid="sfz_fanmian"></upload>
-					</div>
-					<div class="title"></div>
-					<div class="inputRow">
-						<p>请上传1张本人手持身份证的照片(必填)</p>
-						<upload :is-cut="isCut" :pictures.sync="pictures" :imagecount="1" :dataid="sfz_shouchi"></upload>
-					</div>
-					<div class="title"></div>
-					<div class="inputRow">
-						<p>请上传1张本人正面照(必填)</p>
-						<upload :is-cut="isCut" :pictures.sync="pictures" :imagecount="1" :dataid="benren_zhengmian"></upload>
 					</div>
 					<div class="title"></div>
 					<div class="inputRow" style="font-size: 14px;">
 						<input style="margin:0px 5px;" type="checkbox" /><span>我阅读并同意</span>
-						<span class="statusFont1" @tap="declarationWindow(true)">《包工头个人师傅签约规则》</span></div>
+						<span class="statusFont1" @tap="declarationWindow(true)">《包工头企业服务商入驻认证规则》</span></div>
 					<div class="bottomBtn">
 						<a style="width:100%;" href="javascript:void(0)" @tap="stepNext(1)">提交审核</a>
 					</div>
@@ -51,7 +36,7 @@
 					<span class="statusFont"> → 认证成功</span>
 				</div>
 				<div style="margin-top:100px;color:#21A30D;font-size:22px;">
-					您的实名认证申请提交成功
+					您的企业认证申请提交成功
 				</div>
 				<div style="margin-top:20px;color:#666;">
 					我们将在一个工作日内完成审核，请耐心等待
@@ -63,7 +48,7 @@
 		</template>
 	</div>
     <div v-show="disStatement" class="declarationWindow">
-        <h4>包工头个人师傅签约规则</h4>
+        <h4>包工头企业服务商入驻认证规则</h4>
         <p>内容</p>
         <p>内容</p>
         <p><a href="javascript:void(0)" @tap="declarationWindow(false)">确定</a></p>

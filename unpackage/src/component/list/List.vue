@@ -1,54 +1,3 @@
-/**
- * @file 列表展示组件（不包含上拉和下拉刷新）
- * @Author zhongzhian
- * 组件说明：ListCtrl组件的子组件，也可单独使用；目前作为商品列表展示组件使用
- * 组件使用：
- *  引入：import vheader from 'component/list/List';
- *  标签示例：<list :listitem="listitem" @comlist_itemtap="itemtap" :keymap="keymap" 
- *				:showdelete="showdelete"
- *				 :showall="showall" @before_alldelete="before" @after_alldelete="after"></list>
- *  参数：
- *  @param {Array} listitem 数据样例如下
- * 		[
- * 			{
- *          	"s_id": 0,	//列表项id
- *              "last_date": "2016-03-24",	//时间
- *              "picurl": "",	//图片url
- *              "title": "标题是什么鬼",	//商品名称
- *              "price": 1111,	//商品价格
- *              "viewed": 3820,		//浏览次数
- *              "remark": "说明"	//说明
- *       	},...
- *       ]
- *  @param {Function} comlist_itemtap 列表选中事件，
- *		参数值为列表项选中的回调函数，itemtap(item),item为列表项的数据，参考上一参数，
- *		跟ListCtrl组件一起使用时，该参数可从ListCtrl中传入，List组件本身可不传。
- *  @param {Object} keymap 列表数据结构的映射，
- *		参数为【列表数据的字段名称】与【实际数据的字段名称】的映射，不传就使用列表默认的
- 		defaultkeys = {
-			's_id':'s_id', 				//列表项id
-			'last_date':'last_date',	//到期时间
-			'picurl':'picurl',			//图片url
-			'title':'title',			//列表项名称
-			'price':'price',			//价格
-			'viewed':'viewed',			//浏览次数
-			'remark':'remark',			//描述
-			'type':'type'				//分类
-		}
- *  @param {Boolean} showdelete 列表项是否可删除，
- *		跟ListCtrl组件一起使用时，该参数可从ListCtrl中传入。
- *  @param {Boolean} showall 批量操作列表项，在前面出现checkbox，
- *		注::::使用此参数，请务必在数据项中添加isselect属性（数据类型为bool），作为该数据项的选中标识
- *		跟ListCtrl组件一起使用时，该参数可从ListCtrl中传入。
- *  @param {Function} before_alldelete 批量删除列表项前调用，
- *		before(),由于数据列表是父级组件传入的,因此暂时不需要参数，需要再加
- *		跟ListCtrl组件一起使用时，该事件可从ListCtrl中传入。
- *  @param {Function} after_alldelete 批量删除列表项后调用，
- *		after(),由于数据列表是父级组件传入的,因此暂时不需要参数，需要再加
- *		跟ListCtrl组件一起使用时，该事件可从ListCtrl中传入。
- * @public
- */
-
 <template>
 	<!--下拉刷新容器 -->
 	<ul class="mui-table-view mui-table-view-chevron">
@@ -65,56 +14,37 @@
 				</div>
 				<div class="comlistAllDelete {{showall ? 'comlist_alldelete' : ''}}">
 					<!-- lazyload -->
-					<img class="mui-media-object mui-pull-left comlist_img_main" :src="item[keymap['picurl']][0] | imageSizeFilter '100'">
-					<div class="mui-media-body comlist_div_main">
-						<p class="mui-ellipsis-2 comlist_font_main">{{*item[keymap['title']]}}</p>
-						<div class="teamContent">
-							<p v-if="item[keymap['type']]" class="mui-ellipsis comlist_font_sub">所属类目:&nbsp{{*item[keymap['type']]}}</p>
-							<p v-if="item[keymap['price']]" class="mui-ellipsis comlist_p_price">
-								<span class="price">
-									<i>￥</i>{{*item[keymap['price']] | mycurrency 0}}<i class="dot">.{{*item[keymap['price']] | mycurrency 1}}</i>
-								</span>
+					<div class="oneStore">
+						<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
+						<div class="storeInfo">
+							<p class="mui-ellipsis">店铺名称店铺名称店铺名称店铺名称店铺名称店铺名称</p>
+							<p>北京 北京市 海淀区</p>
+							<p>
+								<img v-if="item.shiming" :src="shimingpicpath">
+								<img v-else :src="noshimingpicpath">
+								<img v-if="item.qiye" :src="qiyepicpath">
+								<img v-else :src="noqiyepicpath">
+								<span class="mui-pull-right">距离：9999KM</span>
 							</p>
-							<p class="mui-ellipsis comlist_font_sub">
-								<span v-if="item[keymap['last_date']]" class="comlist_span_lastdate">有效期限:&nbsp{{*item[keymap['last_date']] | dateFilter 2}}</span>
-							</p>
-	                        <p class="mui-ellipsis comlist_font_sub">
-	                            <span v-if="item[keymap['viewed']] != undefined" class="comlist_span_viewed">浏览量:&nbsp{{*item[keymap['viewed']]}}</span>
-	                        </p>
-                        </div>
-						<p v-if="item[keymap['remark']]" class="mui-ellipsis-2 comlist_font_sub">{{*item[keymap['remark']]}}</p>
+							<p><a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div v-if="item[keymap['store_num']] != undefined" class="comlist_div_second">
-				<p v-if="item[keymap['store_num']] == 0">
-					暂无反馈
-				</p>
-				<p v-else>
-					<span>有<label style="color:#f04e30;">{{*item[keymap['store_num']]}}</label>条新反馈</span>
-				</p>
-				
 			</div>
 		</li>
 	</ul>
 </template>
 
 <script>
-//  import CONSTS from 'common/consts';
-	import {dateFilter} from 'filter/dateFilter';
-	import {
-		mycurrency,
-		myvolumes
-	} from 'filter/goodsFilter';
-    import {
-        imageSizeFilter
-    } from 'filter/commonFilter';
 	export default {
-//	    data: function(){
-//	        return {
-//	            errorpic: CONSTS.ERROR_PIC
-//	        }
-//	    },
+		data: function(){
+			return {
+				shimingpicpath: require('static/img/mine/shimingrenzheng.svg'),
+				noshimingpicpath: require('static/img/mine/noshimingrenzheng.svg'),
+				qiyepicpath: require('static/img/mine/qiyerenzheng.svg'),
+				noqiyepicpath: require('static/img/mine/noqiyerenzheng.svg'),
+			}
+		},
 		props: {
 			showall:{
 				type: Boolean,
@@ -124,14 +54,7 @@
 				type: Boolean,
 				default:false
 			},
-			listitem: Array,
-			keymap: Object
-		},
-		filters:{
-		    imageSizeFilter:imageSizeFilter,
-			dateFilter:dateFilter,
-			mycurrency: mycurrency,
-			myvolumes: myvolumes
+			listitem: Array
 		},
 		events:{
 			alldelete: function(){
@@ -163,22 +86,7 @@
 			}
 		},
 		ready: function(){
-			var defaultkeys = {
-				's_id':'s_id',
-				'last_date':'last_date',
-				'picurl':'picurl',
-				'title':'title',
-				'price':'price',
-				'viewed':'viewed',
-				'remark':'remark',
-				'type':'type',
-				'store_num':'store_num'
-			}
-			for(var k in defaultkeys){
-				if(!this.keymap[k]){
-					this.keymap[k] = defaultkeys[k];
-				}
-			}
+			
 		}
 	}
 </script>
@@ -288,5 +196,59 @@
 	}
 	.mui-table-view-cell {
 		padding: 16px 12px;
+	}
+	
+	/*new*/
+	
+	.oneStore {
+		background-color: #fff;
+	}
+	
+	.oneStore img {
+		float: left;
+		width: 106px;
+		height: 106px;
+	}
+	
+	.oneStore .storeInfo {
+		padding-left: 116px;
+		min-height: 80px;
+	}
+	
+	.oneStore .storeInfo p {
+		font-size: 13px;
+	}
+	
+	.oneStore .storeInfo p:nth-child(1) {
+		color: #000;
+		font-size: 14px;
+	}
+	
+	.oneStore .storeInfo p:nth-child(3) {
+		overflow: hidden;
+		padding: 5px 0;
+	}
+	
+	.oneStore .storeInfo p:nth-child(3) img {
+		width: 19px;
+		height: 19px;
+		margin-right: 4px;
+	}
+	
+	.oneStore .storeInfo p:nth-child(4) a {
+		color: #fff;
+		background-color: #26c6da;
+		line-height: 1;
+		padding: 5px 8px;
+		border-radius: 3px;
+		margin: 5px 0;
+	}
+	
+	.oneStore .storeInfo p:nth-child(4) span {
+		line-height: 1;
+		margin-top: 4px;
+		font-size: 19px;
+		font-weight: 800;
+		color: #777;
 	}
 </style>

@@ -4,6 +4,13 @@ var fs = require('fs');
 var mockbase = './test/mock/data';
 var mockApi = function(res, pathname, paramObj, next, req) {
 	switch(pathname) {
+		
+		case '/test/1': //jsonp
+			var data = JSON.parse(fs.readFileSync(path.join(mockbase, 'homelist.json'), 'utf-8'));
+			res.setHeader('Content-type', 'application/javascript');
+			res.end(JSON.stringify(data));
+			return;
+		
 		//by余鹏 测试数据
 		case '/common/category/g1/v10': //jsonp
 			var data = JSON.parse(fs.readFileSync(path.join(mockbase, 'typedata.json'), 'utf-8'));

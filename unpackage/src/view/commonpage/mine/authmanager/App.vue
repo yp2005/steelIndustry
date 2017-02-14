@@ -7,7 +7,7 @@
 						<ul class="mui-table-view mui-table-view-auth">
 							<li class="mui-table-view-cell mui-media">
 								<a href="javascript:void(0);" @tap="open('../../commonpage/authmanager/person.html')">
-									<img class="mui-media-object mui-pull-left" :src="picpath">
+									<img class="mui-media-object mui-pull-left" :src="shimingpicpath">
 									<div class="mui-media-body">
 										实名认证
 										<span class="auth-renzheng-span">立即认证</span>
@@ -20,7 +20,7 @@
 						<ul class="mui-table-view mui-table-view-auth">
 							<li class="mui-table-view-cell mui-media">
 								<a href="javascript:void(0);" @tap="open('../../commonpage/authmanager/company.html')">
-									<img class="mui-media-object mui-pull-left" :src="picpath">
+									<img class="mui-media-object mui-pull-left" :src="qiyepicpath">
 									<div class="mui-media-body">
 										企业认证
 										<span class="auth-renzheng-span">立即认证</span>
@@ -33,7 +33,7 @@
 						<ul class="mui-table-view mui-table-view-auth">
 							<li class="mui-table-view-cell mui-media">
 								<a href="javascript:void(0);">
-									<img class="mui-media-object mui-pull-left" :src="picpath">
+									<img class="mui-media-object mui-pull-left" :src="haochupicpath">
 									<div class="mui-media-body">
 										认证的好处
 										<p class='mui-ellipsis'>防范恶意假冒，认证提升接单率</p>
@@ -61,7 +61,9 @@
 	export default {
 		data: function() {
 			return {
-				picpath: require('static/img/mine/shimingrenzheng.svg'),
+				shimingpicpath: require('static/img/mine/noshimingrenzheng.svg'),
+				qiyepicpath: require('static/img/mine/noqiyerenzheng.svg'),
+				haochupicpath: require('static/img/mine/gold.svg'),
 				userInfo: {
 					name: '余鹏',
 					avatar: require('static/img/mine/nohp.png'),
