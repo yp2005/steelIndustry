@@ -27,7 +27,7 @@
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>-->
-				<li class="mui-table-view-cell">
+				<li class="mui-table-view-cell" @tap="open('../../commonpage/mine/mycard.html')">
 					<p>
 						<img src="../../static/img/mine/mycard.svg" />
 						<span>我的名片</span>

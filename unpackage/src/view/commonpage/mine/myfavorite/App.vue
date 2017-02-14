@@ -1,9 +1,3 @@
-/**
- * @file 店铺列表主组件 
- * @Author yupeng 
- * @private
- */
-
 <template>
 	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
 	<div class="deviceList">
@@ -14,27 +8,6 @@
 			<a href="javascript: void(0)" class="haha {{filterType == 3 ? 'filterActive':''" @tap="favoriteFilter(3)">订单</a>
 		</p>
 		<listctrl :noresultmsg="noresultmsg" :childlist="childlist" @getlistdata="getdata" @comlist_itemtap="itemtap" :toptipheight="45"></listctrl>
-			 
-		<!--<div id="scroll" class="mui-scroll-wrapper">
-			<div id="pullrefresh" class="mui-scroll">
-				<img class="advertisement" src="http://img0.imgtn.bdimg.com/it/u=3660483257,1608558041&fm=15&gp=0.jpg">
-				<div class="oneStore" @tap="gotoDetail('id')">
-					<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
-					<div class="storeInfo">
-						<p class="mui-ellipsis">店铺名称店铺名称店铺名称店铺名称店铺名称店铺名称</p>
-						<p>北京 北京市 海淀区</p>
-						<p>
-							<img src="../../../../static/img/mine/shimingrenzheng.svg">
-							<img src="../../../../static/img/mine/noshimingrenzheng.svg">
-							<img src="../../../../static/img/mine/qiyerenzheng.svg">
-							<img src="../../../../static/img/mine/noqiyerenzheng.svg">
-							<span class="mui-pull-right">距离：9999KM</span>
-						</p>
-						<p><a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
-					</div>
-				</div>
-			</div>
-		</div>-->
 	</div>
 </template>
 
