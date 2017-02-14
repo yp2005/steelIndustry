@@ -314,7 +314,7 @@
 	.oneCalculator {
 		padding: 60px 10px 0 25px;
 		background-color: #fff;
-		transition: transform 500ms;
+		transition: transform 500ms,opacity 500ms;
 		opacity: 0;
 		transform: scale(0);
 		position: absolute;
