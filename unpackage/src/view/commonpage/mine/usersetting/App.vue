@@ -7,36 +7,36 @@
 	                    <ul class="mui-table-view mui-table-view-chevron">
 	                        <li class="mui-table-view-cell">
 	                            <a id="head" class="jxddicon icon-jinru32" style="line-height: 75px;"><span class="avatar">头像</span>
-	                                <span class="mui-pull-right head" style="padding-right: 20px;">
+	                                <span class="mui-pull-right head userinfo_span2">
 	                                	<img class="head-img mui-action-preview" :src="userInfo.avatar" @error="loadDefaultImg">
 	                                </span>
 	                            </a>
 	                        </li>
 	                        <li class="mui-table-view-cell">
-	                            <a>登录账号<span class="mui-pull-right">{{userInfo.mobile_number || '请输入'}}</span></a>
+	                            <a>登录账号<span class="mui-pull-right userinfo_span2">{{userInfo.mobile_number || '请输入'}}</span></a>
 	                        </li>
 	                        <li class="mui-table-view-cell">
-	                            <a>联系人<span class="mui-pull-right">{{userInfo.name || '请输入'}}</span></a>
+	                            <a class="jxddicon icon-jinru32">联系人<span class="mui-pull-right userinfo_span2" @tap="gotoEditUserInfo">{{userInfo.name || '请输入'}}</span></a>
 	                        </li>
 	                        <li class="mui-table-view-cell">
-	                            <a>生日<span class="mui-pull-right">{{membername || '请输入'}}</span></a>
+	                            <a class="jxddicon icon-jinru32">生日<span class="mui-pull-right userinfo_span2" @tap="gotoEditUserInfo">{{membername || '请输入'}}</span></a>
 	                        </li>
 	                        <li class="mui-table-view-cell">
-	                            <a>性别<span class="mui-pull-right">{{membername || '请输入'}}</span></a>
+	                            <a class="jxddicon icon-jinru32">性别<span class="mui-pull-right userinfo_span2" @tap="gotoEditUserInfo">{{membername || '请输入'}}</span></a>
 	                        </li>
 	                        <li class="mui-table-view-cell">
-	                            <a>开通vip<span class="mui-pull-right">诚邀加入VIP会员，享受新特权</span></a>
+	                            <a>开通vip<span class="mui-pull-right userinfo_span2">诚邀加入VIP会员，享受新特权</span></a>
 	                        </li>
 	                        <li class="mui-table-view-cell">
-	                            <a>地址<span class="mui-pull-right">{{membername || '请输入'}}</span></a>
+	                            <a class="jxddicon icon-jinru32">地址<span class="mui-pull-right userinfo_span2" @tap="gotoEditUserInfo">{{membername || '请输入'}}</span></a>
 	                        </li>
 	                    </ul>
 	                    <ul class="mui-table-view  mui-table-view-chevron">
 	                        <li class="mui-table-view-cell">
-	                            <a>公司名称<span class="mui-pull-right">{{membername || '请输入'}}</span></a>
+	                            <a>公司名称<span class="mui-pull-right userinfo_span2">{{membername || '请输入'}}</span></a>
 	                        </li>
 	                        <li class="mui-table-view-cell">
-	                            <a>公司地址<span class="mui-pull-right">{{membername || '请输入'}}</span></a>
+	                            <a>公司地址<span class="mui-pull-right userinfo_span2">{{membername || '请输入'}}</span></a>
 	                        </li>
 	                    </ul>
 					</div>
@@ -74,6 +74,14 @@
 		methods: {
 			loadDefaultImg: function() {
 				this.userInfo.avatar = require('static/img/mine/nohp.png');
+			},
+			gotoEditUserInfo: function(){
+				muiUtils.openWindow('../../commonpage/usersetting/edituserinfo.html', 'commonpage_usersetting_edituserinfo', {
+//					isValidLogin: true,
+					extras: {
+						id: 'id'
+					}
+				});
 			},
 			signout: function() {
 				var btnArray = ['取消', '确定'];
@@ -144,4 +152,9 @@
 	.jxddicon:before {
 		font-family: jxddMuiicons;
 	}
+	
+	.userinfo_span2{
+		padding-right: 20px;
+	}
+	
 </style>
