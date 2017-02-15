@@ -231,7 +231,7 @@ const closeAllOpenPage = () => {
  */
 const openPreWindow = (options) => {
   // 缓存读取id。通过id来开页面，如果没有就跳首页
-    let o = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.LOGIN_FORWORD) || pageUrl.PAGE_URL.buyer_index;
+    let o = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.LOGIN_FORWORD) || pageUrl.PAGE_URL.index;
     options = options || {};
   // 处理默认值
     options = merge(o.options || {}, options || {});
@@ -251,7 +251,7 @@ const openPreWindow = (options) => {
   //  options.createNew = true;//重复新开一个webview，解决刷新数据刷新问题
     let login = true;
     let gotoPage = plus.webview.getWebviewById(o.id);
-    if (o.id === pageUrl.PAGE_URL.buyer_index.id) {
+    if (o.id === pageUrl.PAGE_URL.index.id) {
         let accessToken = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).get(CONSTS.LOGIN_ACCESS_TOKEN);
         if (accessToken === undefined || accessToken == null || accessToken === '' || accessToken === 'null') {
             login = false;
@@ -276,10 +276,10 @@ const openPreWindow = (options) => {
     } else if (gotoPage) {
     // 纯按钮操作，不涉及页面, 必须将去向页面show处理，中间有几个页面，仅仅关闭当前页面是不够的
         mui.fire(gotoPage, CONSTS.LOGIN_COMPUTER_EVENT, {});
-        setTimeout(() => {
-            gotoPage.hide();
-            gotoPage.show(options.show.aniShow, options.show.duration);
-        }, 300);
+//      setTimeout(() => {
+//          gotoPage.hide();
+//          gotoPage.show(options.show.aniShow, options.show.duration);
+//      }, 300);
         setTimeout(() => {
             plus.webview.currentWebview().close('none');
         }, 1000);
