@@ -50,7 +50,7 @@
 					address.lng = position.coords.longitude;
 					address.lat = position.coords.latitude;
 					for(var data of that.cityData) {
-						if(position.address.province.indexOf(data.text) != -1) {
+						if(position.address.province.indexOf(data.text) === 0) {
 							address.province = data.text;
 							address.provinceid = data.value;
 							for(var city of data.children) {
@@ -121,7 +121,7 @@
 				address.lng = point.getLng();
 				address.lat = point.getLat();
 				for(var province of this.cityData) {
-					if(addressDetail.indexOf(province.text) != -1) {
+					if(addressDetail.indexOf(province.text) === 0) {
 						address.province = province.text;
 						address.provinceid = province.value;
 						for(var city of province.children) {

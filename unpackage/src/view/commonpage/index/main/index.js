@@ -4,6 +4,9 @@ import VueRouter from 'vue-router';
 import app from './app';
 import vheader from 'component/mui/Header.vue';
 import vnav from 'component/mui/NavTabbar.vue';
+import {
+	cityData3Lev
+} from 'common/cityData';
 
 Vue.use(VueRouter);
 let router = new VueRouter();
@@ -11,9 +14,6 @@ let router = new VueRouter();
 //mui生命周期管理
 mui.init({
 	swipeBack: false
-});
-mui.plusReady(function() {
-	router.start(app, '#app');
 });
 
 // head 和 foot所用参数
@@ -118,3 +118,41 @@ mui.back = function() {
 		}
 	}
 };
+
+mui.plusReady(function() {
+	router.start(app, '#app');
+	plus.geolocation.getCurrentPosition(function(position) {
+		var address = {};
+		address.lng = position.coords.longitude;
+		address.lat = position.coords.latitude;
+		for(var data of cityData3Lev) {
+			if(position.address.province.indexOf(data.text) === 0) {
+				address.province = data.text;
+				address.provinceid = data.value;
+				for(var city of data.children) {
+					if(city.text === position.address.city) {
+						address.city = city.text;
+						address.cityid = city.value;
+						for(var district of city.children) {
+							if(district.text === position.address.district) {
+								address.county = district.text;
+								address.countyid = district.value;
+								break;
+							}
+						}
+						break;
+					}
+				}
+				break;
+			}
+		}
+		address.street = position.address.street;
+		header.address = address;
+	}, function(e) {
+		wt.close();
+		mui.toast('获取地址失败，请重试！');
+		that.back();
+	}, {
+		provider: 'baidu'
+	});
+});
