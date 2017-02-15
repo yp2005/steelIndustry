@@ -333,14 +333,14 @@
 						if(status === 200 && data.erroCode === 2000) {
 							log.log('上传成功!');
 							wt.close();
-							var callbackpath = data.result.site_url;
-							log.log('upload callbackpath：' + callbackpath);
+							var imgName = data.result.imgName;
+							log.log('upload callbackpath：' + imgName);
 							if(callback) {
-								callback(callbackpath);
+								callback(imgName);
 								plus.nativeUI.toast('上传成功');
 							}
 							if(pictures) {
-								pictures.push(callbackpath);
+								pictures.push(imgName);
 							}
 						} else {
 							log.log('上传失败：' + status);
