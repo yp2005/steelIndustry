@@ -34,14 +34,14 @@
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
-				<li class="mui-table-view-cell">
+				<li class="mui-table-view-cell" @tap="open('../../commonpage/mine/mystore.html')">
 					<p>
 						<img src="../../static/img/mine/mystore.svg" />
 						<span>我的店铺</span>
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
-				<li class="mui-table-view-cell">
+				<li class="mui-table-view-cell" @tap="open('../../commonpage/mine/mywork.html')">
 					<p>
 						<img src="../../static/img/mine/employmentdemand.svg" />
 						<span>用工需求</span>

@@ -2,10 +2,10 @@
 	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
 	<div class="deviceList">
 		<p class="conditions">
-			<a href="javascript: void(0)" class="haha {{filterType == 0 ? 'filterActive':''" @tap="favoriteFilter(0)">师傅名片</a>
-			<a href="javascript: void(0)" class="haha {{filterType == 1 ? 'filterActive':''" @tap="favoriteFilter(1)">用工需求</a>
-			<a href="javascript: void(0)" class="haha {{filterType == 2 ? 'filterActive':''" @tap="favoriteFilter(2)">店铺</a>
-			<a href="javascript: void(0)" class="haha {{filterType == 3 ? 'filterActive':''" @tap="favoriteFilter(3)">订单</a>
+			<a href="javascript: void(0)" class="haha {{filterType == 0 ? 'filterActive':''}}" @tap="favoriteFilter(0)">师傅名片</a>
+			<a href="javascript: void(0)" class="haha {{filterType == 1 ? 'filterActive':''}}" @tap="favoriteFilter(1)">用工需求</a>
+			<a href="javascript: void(0)" class="haha {{filterType == 2 ? 'filterActive':''}}" @tap="favoriteFilter(2)">店铺</a>
+			<a href="javascript: void(0)" class="haha {{filterType == 3 ? 'filterActive':''}}" @tap="favoriteFilter(3)">订单</a>
 		</p>
 		<listctrl :noresultmsg="noresultmsg" :childlist="childlist" @getlistdata="getdata" @comlist_itemtap="itemtap" :toptipheight="45"></listctrl>
 	</div>
@@ -37,6 +37,7 @@
 		methods: {
 			favoriteFilter(type) {
 				this.filterType = type;
+				this.$broadcast('reflashlist');
 			},
 			getdata: function(pager, callback) {
 				var that = this;
@@ -138,6 +139,6 @@
 	}
 	
 	.filterActive{
-		color:#26c6da;
+		color:#26c6da !important;
 	}
 </style>
