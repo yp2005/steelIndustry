@@ -33,7 +33,7 @@ gulp.task('webserver', function() {
     gulp.src('./test/mock')
         .pipe(webserver({
             livereload: true,
-            host:'192.168.2.66',
+            host:'192.168.2.59',
             directoryListing: {
                 enable: true,
                 path: 'market'

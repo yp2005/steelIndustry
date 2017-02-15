@@ -316,8 +316,7 @@
 			},
 			// 上传图片
 			uploadImage: function(pictures, callback) {
-				var server = '';
-				// var server = 'http://192.168.2.61:8888/zqb/api/facade/test_upload/upload_image1';
+				var server = api.COMMON_API.img_upload_url;
 				log.log('上传图片:' + server);
 				if(files.length <= 0) {
 					plus.nativeUI.alert('没有添加上传文件！');
@@ -328,14 +327,13 @@
 				var task = plus.uploader.createUpload(server, {
 						method: 'POST'
 					},
-					function(t, status) { // 上传完成
-						files = [];
-						if(status === 200) {
-							log.log('上传成功：' + t.responseText);
+					function(t, status) {// 上传完成
+						log.log('responseText:' + t.responseText);
+						let data = JSON.parse(t.responseText || '{}');
+						if(status === 200 && data.erroCode === 2000) {
+							log.log('上传成功!');
 							wt.close();
-							// var result = eval("(" + t.responseText + ")");
-							let result = JSON.parse(t.responseText || '{}');
-							var callbackpath = (result.result_data || {}).site_url;
+							var callbackpath = data.result.site_url;
 							log.log('upload callbackpath：' + callbackpath);
 							if(callback) {
 								callback(callbackpath);
@@ -345,12 +343,9 @@
 								pictures.push(callbackpath);
 							}
 						} else {
-							log.log('t.responseText:' + t.responseText);
 							log.log('上传失败：' + status);
-
 							wt.close();
-							plus.nativeUI.toast('上传失败');
-							// callback(status);
+							plus.nativeUI.toast('上传失败：' + data.erroMsg || status);
 							that.delUpload(that.uploadIndex - 1);
 						}
 					}
@@ -360,7 +355,7 @@
 				task.setRequestHeader('instance_id', instanceId);
 				task.setRequestHeader('access_token', token);
 				task.addData('business_type', that.businessType);
-				task.addData('type', 'jpg');
+				task.addData('type', 'img');
 				for(var i = 0; i < files.length; i++) {
 					var f = files[i];
 					log.log('add file path:' + f.path);
@@ -368,7 +363,7 @@
 						key: f.name
 					});
 				}
-				log.log('开始上传：');
+				log.log('开始上传...');
 				task.start();
 			}
 		}

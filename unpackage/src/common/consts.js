@@ -22,6 +22,12 @@ const PREFIX_LOGIN = 'login';
 // forword登录成功后跳转页面
 const LOGIN_FORWORD = 'forword';
 
+// app实例id标识
+const APP_INSTANCE_ID = 'instance_id';
+
+// 账户的token标识
+const LOGIN_ACCESS_TOKEN = 'access_token';
+
 const ERROR_CODE = {
 	SUCCESS: '10000', // 成功
 };
@@ -40,6 +46,8 @@ const IS_SHARED = 'is_shared';
 
 export default {
 	USER_INFO,
+	APP_INSTANCE_ID,
+	LOGIN_ACCESS_TOKEN,
 	ERROR_CODE,
 	DEVICE_LIST,
 	PROJECT_LIST,
@@ -53,6 +61,8 @@ export default {
 
 export {
 	USER_INFO,
+	APP_INSTANCE_ID,
+	LOGIN_ACCESS_TOKEN,
 	ERROR_CODE,
 	DEVICE_LIST,
 	PROJECT_LIST,

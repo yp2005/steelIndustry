@@ -10,13 +10,13 @@
 					<span>{{userInfo.mobile_number}}</span>
 					<!--<span class="gold">金币<img src="../../static/img/mine/gold.svg">: 5000 </span>-->
 				</p>
-				<p>积分: 5000</p>
+				<p>积分: {{jifen}}</p>
 				<span class="jxddicon icon-shezhi44" @tap="open('../../commonpage/mine/usersetting.html')"></span>
 				<div class="authinfo">
-					<img src="../../static/img/mine/shimingrenzheng.svg">
-					<img src="../../static/img/mine/noshimingrenzheng.svg">
-					<img src="../../static/img/mine/qiyerenzheng.svg">
-					<img src="../../static/img/mine/noqiyerenzheng.svg">
+					<img v-if="isPersonAuth" src="../../static/img/mine/shimingrenzheng.svg">
+					<img v-else src="../../static/img/mine/noshimingrenzheng.svg">
+					<img v-if="isCompanyAuth" src="../../static/img/mine/qiyerenzheng.svg">
+					<img v-else src="../../static/img/mine/noqiyerenzheng.svg">
 				</div>
 			</div>
 			<ul class="mui-table-view content-list">
@@ -27,28 +27,21 @@
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>-->
-				<li class="mui-table-view-cell">
+				<li class="mui-table-view-cell" @tap="open('../../commonpage/mine/mycard.html')">
 					<p>
 						<img src="../../static/img/mine/mycard.svg" />
 						<span>我的名片</span>
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
-				<li class="mui-table-view-cell">
-					<p>
-						<img src="../../static/img/mine/mycard.svg" />
-						<span>采购订单</span>
-						<span class="jxddicon icon-jinru32"></span>
-					</p>
-				</li>
-				<li class="mui-table-view-cell">
+				<li class="mui-table-view-cell" @tap="open('../../commonpage/mine/mystore.html')">
 					<p>
 						<img src="../../static/img/mine/mystore.svg" />
 						<span>我的店铺</span>
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
-				<li class="mui-table-view-cell">
+				<li class="mui-table-view-cell" @tap="open('../../commonpage/mine/mywork.html')">
 					<p>
 						<img src="../../static/img/mine/employmentdemand.svg" />
 						<span>用工需求</span>
@@ -70,7 +63,7 @@
 					</p>
 				</li>
 				
-				<li class="mui-table-view-cell">
+				<li class="mui-table-view-cell" @tap="open('../../commonpage/mine/usersetting.html')">
 					<p>
 						<img src="../../static/img/mine/authentication.svg" />
 						<span>个人信息</span>
@@ -84,14 +77,7 @@
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
-				<li class="mui-table-view-cell">
-					<p>
-						<img src="../../static/img/mine/mymessage.svg" />
-						<span>保证金管理</span>
-						<span class="jxddicon icon-jinru32"></span>
-					</p>
-				</li>
-				<li class="mui-table-view-cell">
+				<li class="mui-table-view-cell" @tap="open('../../commonpage/mine/myfavorite.html')">
 					<p>
 						<img src="../../static/img/mine/mycollection.svg" />
 						<span>我的收藏</span>
@@ -122,7 +108,10 @@
 					name: '余鹏', 
 					avatar: require('static/img/mine/nohp.png'),
 					mobile_number: '18710095921'
-				}
+				},
+				jifen:5000,
+				isPersonAuth: true,
+				isCompanyAuth: true
 			};
 		},
 		created: function() {
