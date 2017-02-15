@@ -200,7 +200,7 @@
 		},
 		methods: {
 			gotoDetail: function(id) {
-				muiUtils.openWindow('deviceinfo.html', {
+				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', {
                     extras: {
                         'id': id
                     }

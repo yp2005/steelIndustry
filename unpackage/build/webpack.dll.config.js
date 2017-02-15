@@ -95,11 +95,11 @@ module.exports = {
             path: path.join(config.build.assetsRoot, '[name]-mainfest.json'),
             name: '[name]_library'
         }),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            }
-        }),
+//      new webpack.optimize.UglifyJsPlugin({
+//          compress: {
+//              warnings: false
+//          }
+//      }),
         new webpack.optimize.DedupePlugin(),
         new HappyPack({
             id: 'babelJs',

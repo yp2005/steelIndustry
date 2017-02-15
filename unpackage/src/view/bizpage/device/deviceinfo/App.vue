@@ -2,7 +2,7 @@
 
 <template>
 	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
-	<div class="mui-scroll-wrapper deviceInfo">
+	<div class="mui-scroll-wrapper deviceInfo" style="bottom: {{isStoreManage ? '50px' : '0'}}">
 		<div class="mui-scroll">
 			<!--轮播图-->
 			<div>
@@ -28,9 +28,9 @@
 					<li class="mui-table-view-cell telphone">
 						<p>
 							<span class="mui-icon mui-icon-phone"></span>
-							
-							<span class="text-context" v-show = "isShared==0" @tap="callTel('15011547881')">18106088602</span>
-							<span class="text-context" v-show = "isShared!=0" @tap="toShare">电话咨询</span>
+
+							<span class="text-context" v-show="isShared==0" @tap="callTel('15011547881')">18106088602</span>
+							<span class="text-context" v-show="isShared!=0" @tap="toShare">电话咨询</span>
 							<span class="jxddicon icon-jinru32"></span>
 						</p>
 					</li>
@@ -61,21 +61,25 @@
 						</template>
 					</ul>
 				</div>
-				<li class="mui-table-view-cell store-title">
-					<p class="goods">
-						<span class="tishi">温馨提示（联系时请说明是在“XXX”上看到的）</span>
-					</p>
-				</li>
-				<li class="mui-table-view-cell">
-					<p class="fabu">
-						<span>我要发布店铺<i id="box"></i></span>
-					</p>
-				</li>
-				<div class="list-ad-two">
-					<a href="http://8du.in/1p1M0Q"><img src="http://img.168bgt.com/upload/2016/07/24/20160724145643_62.jpg" alt="厦门"></a>
+				<div class="store-info" v-if="!isStoreManage">
+					<li class="mui-table-view-cell store-title">
+						<p class="goods">
+							<span class="tishi">温馨提示（联系时请说明是在“XXX”上看到的）</span>
+						</p>
+					</li>
+					<li class="mui-table-view-cell">
+						<p class="fabu">
+							<a @tap="open">我要发布店铺<i id="box"></i></a>
+						</p>
+					</li>
+					<div class="list-ad-two">
+						<a href="http://8du.in/1p1M0Q"><img src="http://img.168bgt.com/upload/2016/07/24/20160724145643_62.jpg" alt="厦门"></a>
+					</div>
 				</div>
 			</div>
 		</div>
+	</div>
+	<a v-if="isStoreManage" @tap="storeManage" class="store-manage-btn">店铺管理</a>
 </template>
 
 <script>
@@ -91,6 +95,7 @@
 			// 0 分享，非0未分享
 			let isShared = cacheUtils.localStorage(CONSTS.IS_SHARED).get(CONSTS.IS_SHARED);
 			return {
+				isStoreManage: plus.webview.currentWebview().isStoreManage,
 				// banner
 				imageDatas: [],
 				// 店铺id
@@ -131,6 +136,27 @@
 			}];
 		},
 		methods: {
+			open: function() {
+				cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.LOGIN_FORWORD, {
+					id: '../../bizpage/device/deviceinfo.html',
+					url: '../../bizpage/device/deviceinfo.html'
+				});
+				//判断是否登录，没登录需要打开登录页面，登录了查看是否已经发布店铺，发布了就打开店铺，显示店铺管理页面，没法发就跳转发布店铺页面
+				muiUtils.loginValid(this.forwordPublishPage);
+			},
+			forwordPublishPage: function() {
+				let url = '../../bizpage/release/store.html';
+				let userInfo = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO);
+				if(userInfo && userInfo.hasStore) {
+					//已经开店了，直接进入店铺管理
+					url = '../../bizpage/device/storemanage.html';
+				}
+				muiUtils.openWindow(url, url, {
+					extras: {
+						isStoreManage: true
+					}
+				});
+			},
 			shoucang: function() {
 				mui.toast('收藏成功！');
 			},
@@ -148,7 +174,7 @@
 			},
 			toShare: function() {
 				let self = this;
-				mui.alert('分享app即可获取联系电话！', '分享', '分享', function(){
+				mui.alert('分享app即可获取联系电话！', '分享', '分享', function() {
 					mui.toast('分享成功！');
 					self.isShared = 0;
 					console.log('CONSTS.IS_SHARED:' + CONSTS.IS_SHARED);
@@ -159,12 +185,15 @@
 			},
 			itemtap: function(item) {
 				let self = plus.webview.currentWebview();
-				muiUtils.openWindow('allGoods.html', {
+				muiUtils.openWindow('../../bizpage/device/allGoods.html', {
 					extras: {
 						'id': self.id,
 						'imageDatas': this.googsList
 					}
 				});
+			},
+			storeManage: function() {
+
 			}
 		},
 		watch: {
@@ -335,6 +364,7 @@
 		height: 0;
 		position: absolute;
 		top: 5px;
+		margin-left: 5px;
 	}
 	
 	.list-ad-two {
@@ -344,5 +374,23 @@
 	
 	.list-ad-two img {
 		width: 100%;
+	}
+	
+	.store-manage-btn {
+		background-color: #fff;
+		color: rgb(38, 198, 218);
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		margin-bottom: 0;
+		border: none;
+		padding: 0;
+		height: 50px;
+		line-height: 50px;
+		box-shadow: none;
+		border-radius: 0;
+		text-align: center;
+		z-index: 2;
 	}
 </style>
