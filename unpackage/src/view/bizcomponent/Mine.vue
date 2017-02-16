@@ -11,7 +11,7 @@
 					<!--<span class="gold">金币<img src="../../static/img/mine/gold.svg">: 5000 </span>-->
 				</p>
 				<p>积分: {{jifen}}</p>
-				<span class="jxddicon icon-shezhi44" @tap="open('../../commonpage/mine/usersetting.html')"></span>
+				<!--<span class="jxddicon icon-shezhi44" @tap="open('../../commonpage/mine/usersetting.html')"></span>-->
 				<div class="authinfo">
 					<img v-if="isPersonAuth" src="../../static/img/mine/shimingrenzheng.svg">
 					<img v-else src="../../static/img/mine/noshimingrenzheng.svg">
@@ -50,22 +50,29 @@
 				</li>
 				<li class="mui-table-view-cell">
 					<p>
-						<img src="../../static/img/mine/project.svg" />
+						<img src="../../static/img/mine/tiezi.svg" />
 						<span>我的帖子</span>
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
 				<li class="mui-table-view-cell">
 					<p>
-						<img src="../../static/img/mine/project.svg" />
+						<img src="../../static/img/mine/mymessage.svg" />
 						<span>我的回复</span>
+						<span class="jxddicon icon-jinru32"></span>
+					</p>
+				</li>
+				<li class="mui-table-view-cell" @tap="open('../../commonpage/mine/myfavorite.html')">
+					<p>
+						<img src="../../static/img/mine/mycollection.svg" />
+						<span>我的收藏</span>
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
 				
 				<li class="mui-table-view-cell" @tap="open('../../commonpage/mine/usersetting.html')">
 					<p>
-						<img src="../../static/img/mine/authentication.svg" />
+						<img src="../../static/img/mine/myinformation.svg" />
 						<span>个人信息</span>
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
@@ -74,13 +81,6 @@
 					<p>
 						<img src="../../static/img/mine/authentication.svg" />
 						<span>认证管理</span>
-						<span class="jxddicon icon-jinru32"></span>
-					</p>
-				</li>
-				<li class="mui-table-view-cell" @tap="open('../../commonpage/mine/myfavorite.html')">
-					<p>
-						<img src="../../static/img/mine/mycollection.svg" />
-						<span>我的收藏</span>
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>

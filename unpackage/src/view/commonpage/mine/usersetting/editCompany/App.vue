@@ -2,12 +2,10 @@
 	<div class="mui-content">
 		<div class="mui-scroll-wrapper releaseCard">
 			<div class="mui-scroll">
-				<div class="title">个人信息</div>
-				<div class="inputRow"><label>联系人</label><input type="text" v-model="name" placeholder="请输入姓名(必填)"></div>
-				<div class="inputRow"><label>生日</label><input type="text" v-model="bddate" @tap="selectDate" placeholder="请输入姓名(必填)"></div>
-				<div class="inputRow"><label>性别</label><input type="text" v-model="gender.text" @tap="selectGender" placeholder="请选择性别(必填)"></div>
+				<div class="title">公司信息</div>
+				<div class="inputRow"><label>公司名称</label><input type="text" v-model="name" placeholder="请输入姓名(必填)"></div>
 				<div class="inputRow">
-					<label>联系地址</label>
+					<label>公司地址</label>
 					<p v-if="address" class="workType" @tap="selectAddress">{{address.province + ' ' + (address.city || '') + ' ' + (address.county || '')}}</p>
 					<input type="text" v-else placeholder="请选择联系地址(必填)" readonly @tap="selectAddress">
 				</div>
@@ -59,23 +57,8 @@
 			}
 			cityPicker.setData(cityData3Lev);
 			
-//			var datePicker = new mui.DtPicker({"type":"date"});
-			
-			var genderPicker = new mui.PopPicker({
-				layer: 1
-			});
-			genderPicker.setData([{
-				value: 0,
-				text: '男',
-			}, {
-				value: 1,
-				text: '女',
-			}]);
-			
 			return {
 				cityPicker: cityPicker,
-				genderPicker: genderPicker,
-//				datePicker: datePicker,
 				pictures: [],
 				isCut: false,
 				address: plus.webview.currentWebview().address || {
@@ -86,12 +69,7 @@
 					county: null,
 					countyid: null
 				},
-				name: '',
-				bddate: '',
-				gender: {
-					value: 0,
-					text: '男',
-				}
+				name: ''
 			};
 		},
 		created: function() {
@@ -109,22 +87,6 @@
 						county: items[2].value && items[2].value !== -1 ? items[2].text : undefined,
 						countyid: items[2].value && items[2].value !== -1 ? items[2].value : undefined
 					}
-				});
-			},
-			selectDate: function(){
-				var that = this;
-//				this.datePicker.show(function(items) {
-//					that.bddate = items.text;
-//				});
-				
-                plus.nativeUI.pickDate(function(e) {
-                	that.bddate = e.date.getFullYear() + "-" + (e.date.getMonth() + 1) + "-" + e.date.getDate();
-                });
-			},
-			selectGender: function(){
-				var that = this;
-				this.genderPicker.show(function(items) {
-					that.gender = items[0];
 				});
 			},
 			textAreaInput() {
