@@ -2,7 +2,7 @@
 import muiUtils from 'common/muiUtils';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import app from '../deviceinfo/App';
+import app from './App';
 import vheader from 'component/mui/Header';
 import CONSTS from 'common/consts'
 Vue.use(VueRouter);

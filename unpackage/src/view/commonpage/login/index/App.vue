@@ -3,27 +3,31 @@
 <template>
 	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
 	<div class="mui-content">
-		<div class="input-row it">
-			<label>手机号(将作为登录账户)</label>
-			<input class="input-clear mui-input tel-input" maxlength="11" placeholder="请输入手机号" v-model="phone">
-		</div>
-		<div class="input-row it">
-			<label>图形验证码</label>
-			<input class="mui-input-clear mui-input" maxlength="4" placeholder="图形验证码" v-model="imgCode">
-			<img class="img-code" :src="imgCodeUrl" />
-		</div>
-		<div class="input-row it">
-			<label>手机验证码</label>
-			<input class="mui-input-clear mui-input" maxlength="4" placeholder="手机验证码" v-model="telCode">
-			<a class="tel-code" @tap="sendCode">免费发送</a>
-		</div>
-		<div class="input-row">
-			<div class="mui-checkbox mui-left">
-				<input id="agree-checkbox" v-model="agree-me" type="checkbox">
-				<label class="agree-proc" for="agree-checkbox">我阅读并同意</label><i class="go-protocol" @tap="gotoProtocol">《XXX用户协议》</i>
+		<div class="mui-scroll-wrapper login">
+			<div class="mui-scroll">
+				<div class="input-row it">
+					<label>手机号(将作为登录账户)</label>
+					<input class="input-clear mui-input tel-input" maxlength="11" placeholder="请输入手机号" v-model="phone">
+				</div>
+				<div class="input-row it">
+					<label>图形验证码</label>
+					<input class="mui-input-clear mui-input" maxlength="4" placeholder="图形验证码" v-model="imgCode">
+					<img class="img-code" :src="imgCodeUrl" />
+				</div>
+				<div class="input-row it">
+					<label>手机验证码</label>
+					<input class="mui-input-clear mui-input" maxlength="4" placeholder="手机验证码" v-model="telCode">
+					<a class="tel-code" @tap="sendCode">免费发送</a>
+				</div>
+				<div class="input-row">
+					<div class="mui-checkbox mui-left">
+						<input id="agree-checkbox" v-model="agree-me" type="checkbox">
+						<label class="agree-proc" for="agree-checkbox">我阅读并同意</label><i class="go-protocol" @tap="gotoProtocol">《XXX用户协议》</i>
+					</div>
+				</div>
+				<a @tap="login" class="login-btn">立即登录</a>
 			</div>
 		</div>
-		<a @tap="login" class="login-btn">立即登录</a>
 	</div>
 </template>
 
@@ -33,6 +37,7 @@
 	import log from 'common/logUtils';
 	import CONSTS from 'common/consts';
 	import cacheUtils from 'common/cacheUtils';
+	import pageUrl from 'api';
 
 	export default {
 		data: function() {
@@ -43,8 +48,8 @@
 		created: function() {},
 		methods: {
 			gotoProtocol: function() {
-				let url = '../../commonpage/login/protocol.html';
-				muiUtils.openWindow(url, url, {
+				let page = pageUrl.PAGE_URL.protocol;
+				muiUtils.openWindow(page.url, page.id, {
 					isClose: false
 				});
 			},
@@ -59,13 +64,26 @@
 		watch: {
 
 		},
-		ready: function() {},
+		ready: function() {
+			var deceleration = mui.os.ios ? 0.003 : 0.0009;
+			mui('.mui-scroll-wrapper').scroll({
+				bounce: true,
+				indicators: false, //是否显示滚动条
+				deceleration: deceleration
+			});
+		},
 		components: {
 			nonetworkmask
 		}
 	};
 </script>
 <style scoped>
+	.login {
+		position: absolute;
+		top: 45px;
+		bottom: 50px;
+		width: 100%;
+	}
 	.mui-content {
 		font-size: 16px;
 	}

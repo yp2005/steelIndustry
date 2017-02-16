@@ -202,7 +202,8 @@
 			gotoDetail: function(id) {
 				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', {
                     extras: {
-                        'id': id
+                        id: id,
+                        status: -1
                     }
                });
 			},

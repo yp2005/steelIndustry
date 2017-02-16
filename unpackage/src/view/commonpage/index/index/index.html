@@ -17,7 +17,7 @@
             var download = '_downloads/';
             var imgs = window.localStorage.getItem('home_index_imageDatas') || '';
             plus.io.resolveLocalFileSystemURL(download, function(entry) {
-                if (imgs.indexOf(entry.fullPath) === -1) {
+                if (imgs === '' || imgs.indexOf(entry.fullPath) === -1) {
                     clear();
                 } else {
                     entry.getMetadata(function(metadata) {

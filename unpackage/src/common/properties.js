@@ -30,6 +30,8 @@ exports.logprops = {
 exports.urlprops = {
   // 缓存位置时的黑名单，页面id，登录页面之类的
     'webview.id.blacklist': [
+        'account_login_password',
+        'protocol'
         
     ],
   // 预加载页面id,这些页面需要处理showevent事件
