@@ -14,6 +14,11 @@
 					<input type="text" v-else placeholder="请选择工程地址(必填)" readonly @tap="selectAddress">
 					<span class="jxddicon icon-jinru32"></span>
 				</div>
+				<div class="inputRow">
+					<label>到期时间</label>
+					<input type="text" placeholder="请选择到期时间(必填)" v-model="dueTime" readonly @tap="selectDueTime">
+					<span class="jxddicon icon-jinru32"></span>
+				</div>
 				<div class="inputRow textarea">
 					<label>工程介绍</label>
 					<textarea id="textarea" placeholder="请详细描述工程信息" @input="textAreaInput"></textarea>
@@ -42,7 +47,8 @@
 			return {
 				pictures: [],
 				isCut: false,
-				address: undefined
+				address: undefined,
+				dueTime: undefined
 			};
 		},
 		created: function() {
@@ -64,6 +70,22 @@
 						fromPage: '../../bizpage/release/project.html'
 					}
 				});
+			},
+			selectDueTime() {
+                var that = this;
+                var minDate = new Date();
+                minDate.setDate(minDate.getDate() + 1);
+                plus.nativeUI.pickDate(function(e) {
+                    var date = e.date;
+                    if(date < minDate) {
+                        date = minDate;
+                    }
+                    that.dueTime = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+                }, function() {
+                    //that.$validation.effectiveDate.touched = true;
+                },{
+                    minDate: minDate
+                });
 			}
 		},
 		ready: function() {
