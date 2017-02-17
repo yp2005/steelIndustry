@@ -3,7 +3,7 @@
 		<div class="mui-page mui-page-center">
 			<div class="mui-page-content">
 				<div class="mui-scroll-wrapper" data-scroll="2">
-					<div class="mui-scroll" style="transform: translate3d(0px, 0px, 0px) translateZ(0px);">
+					<div id="pullrefresh" class="mui-scroll" style="transform: translate3d(0px, 0px, 0px) translateZ(0px);">
 	                    <ul class="mui-table-view mui-table-view-chevron">
 	                        <li class="mui-table-view-cell">
 	                            <a id="head" class="jxddicon icon-jinru32" style="line-height: 75px;"><span class="avatar">头像</span>
@@ -67,6 +67,7 @@
 		data: function() {
 			return {
 				cache: 0.00,
+				pullrefresh: null,
 				userInfo: {
 					name: '余鹏',
 					avatar: require('static/img/mine/nohp.png'),
@@ -129,11 +130,31 @@
 						mui.toast("退出成功");
 					} else {}
 				})
+			},
+			reflash() {
+				console.log('reflash...');
+				this.pullrefresh.endPullDownToRefresh();
+				this.pullrefresh.refresh(true);
 			}
 		},
 		ready: function() {
 			that = this;
 			this.showimage = this.userInfo.avatar;
+//			var deceleration = mui.os.ios ? 0.003 : 0.0009;
+//			mui('.mui-scroll-wrapper').scroll({
+//				bounce: true,
+//				indicators: true, //是否显示滚动条
+//				deceleration: deceleration
+//			});
+//			this.pullrefresh = mui('#pullrefresh').pullToRefresh({
+//				down: {
+//					auto: false,
+//					offset: 50,
+//					callback: function() {
+//						that.reflash();
+//					}
+//				}
+//			});
 		},
         components: {
             upload

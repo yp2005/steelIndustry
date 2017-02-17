@@ -43,14 +43,14 @@
 		},
 		methods: {
 			gotoDetail: function(id) {
-				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', 'bizpage_device_deviceinfo', {
+				muiUtils.openWindow('../../bizpage/device/storemanage.html', 'bizpage_device_storemanage', {
                     extras: {
                         'id': id
                     }
                 });
 			},
 			gotoEdit: function(id) {
-				muiUtils.openWindow('../../bizpage/release/card.html', 'bizpage_release_card', {
+				muiUtils.openWindow('../../bizpage/release/store.html', 'bizpage_release_store', {
 					extras: {
                         'id': id
 					}

@@ -6,11 +6,13 @@
 					<div class="mui-scroll" style="transform: translate3d(0px, 0px, 0px) translateZ(0px);">
 						<ul class="mui-table-view mui-table-view-auth">
 							<li class="mui-table-view-cell mui-media">
-								<a href="javascript:void(0);" @tap="open('../../commonpage/authmanager/person.html')">
-									<img class="mui-media-object mui-pull-left" :src="shimingpicpath">
+								<a href="javascript:void(0);" @tap="open('../../commonpage/authmanager/person.html',shiming)">
+									<img v-if="shiming" class="mui-media-object mui-pull-left" :src="shimingpicpath">
+									<img v-else class="mui-media-object mui-pull-left" :src="noshimingpicpath">
 									<div class="mui-media-body">
 										实名认证
-										<span class="auth-renzheng-span">立即认证</span>
+										<span v-if="shiming" class="auth-renzheng-span" style="color:#999;">已认证</span>
+										<span v-else class="auth-renzheng-span">立即认证</span>
 										<p class='mui-ellipsis'>实名认证可提高帐号的安全性和信任级别</p>
 									</div>
 									<!--<div class="auth-renzheng-div">立即认证</div>-->
@@ -19,11 +21,13 @@
 						</ul>
 						<ul class="mui-table-view mui-table-view-auth">
 							<li class="mui-table-view-cell mui-media">
-								<a href="javascript:void(0);" @tap="open('../../commonpage/authmanager/company.html')">
-									<img class="mui-media-object mui-pull-left" :src="qiyepicpath">
+								<a href="javascript:void(0);" @tap="open('../../commonpage/authmanager/company.html',qiye)">
+									<img v-if="qiye" class="mui-media-object mui-pull-left" :src="qiyepicpath">
+									<img v-else class="mui-media-object mui-pull-left" :src="noqiyepicpath">
 									<div class="mui-media-body">
 										企业认证
-										<span class="auth-renzheng-span">立即认证</span>
+										<span v-if="qiye" class="auth-renzheng-span" style="color:#999;">已认证</span>
+										<span v-else class="auth-renzheng-span">立即认证</span>
 										<p class='mui-ellipsis'>企业认证可提高帐号的安全性和信任级别</p>
 									</div>
 									<!--<div class="auth-renzheng-div">立即认证</div>-->
@@ -61,9 +65,13 @@
 	export default {
 		data: function() {
 			return {
-				shimingpicpath: require('static/img/mine/noshimingrenzheng.svg'),
-				qiyepicpath: require('static/img/mine/noqiyerenzheng.svg'),
-				haochupicpath: require('static/img/mine/gold.svg'),
+				shiming: false,
+				qiye: false,
+				shimingpicpath: require('static/img/mine/shimingrenzheng.svg'),
+				qiyepicpath: require('static/img/mine/qiyerenzheng.svg'),
+				noshimingpicpath: require('static/img/mine/noshimingrenzheng.svg'),
+				noqiyepicpath: require('static/img/mine/noqiyerenzheng.svg'),
+				haochupicpath: require('static/img/mine/help.svg'),
 				userInfo: {
 					name: '余鹏',
 					avatar: require('static/img/mine/nohp.png'),
@@ -72,7 +80,8 @@
 			}
 		},
 		methods: {
-			open(url) {
+			open(url,iscancel) {
+				if(iscancel) return;
 				muiUtils.openWindow(url, url, {
 //					isValidLogin: true,
 					extras: {

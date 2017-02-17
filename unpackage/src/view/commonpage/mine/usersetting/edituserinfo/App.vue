@@ -4,12 +4,12 @@
 			<div class="mui-scroll">
 				<div class="title">个人信息</div>
 				<div class="inputRow"><label>联系人</label><input type="text" v-model="name" placeholder="请输入姓名(必填)"></div>
-				<div class="inputRow"><label>生日</label><input type="text" v-model="bddate" @tap="selectDate" placeholder="请输入姓名(必填)"></div>
-				<div class="inputRow"><label>性别</label><input type="text" v-model="gender.text" @tap="selectGender" placeholder="请选择性别(必填)"></div>
+				<div class="inputRow"><label>生日</label><input type="text" v-model="bddate" @tap="selectDate" placeholder="请选择生日日期"></div>
+				<div class="inputRow"><label>性别</label><input type="text" v-model="gender.text" @tap="selectGender" placeholder="请选择性别"></div>
 				<div class="inputRow">
 					<label>联系地址</label>
 					<p v-if="address" class="workType" @tap="selectAddress">{{address.province + ' ' + (address.city || '') + ' ' + (address.county || '')}}</p>
-					<input type="text" v-else placeholder="请选择联系地址(必填)" readonly @tap="selectAddress">
+					<input type="text" v-else placeholder="请选择联系地址" readonly @tap="selectAddress">
 				</div>
 				<div class="inputRow textarea">
 					<label>详细地址</label>
