@@ -57,6 +57,11 @@
 						不等边角钢
 					</a>
 				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" href="javascript:void(0)" @tap="hSteelActive = true">
+						H型钢
+					</a>
+				</li>
 			</ul>
 			<div class="oneCalculator {{steelPlateActive ? 'active' : ''}}">
 				<a href="javascript:void(0)" @tap="steelPlateActive = false" class="jxddicon icon-houtui44">返回</a>
@@ -166,7 +171,7 @@
 				</div>
 			</div>
 			<div class="oneCalculator {{notEqualSideAngleSteelActive ? 'active' : ''}}">
-			<a href="javascript:void(0)" @tap="notEqualSideAngleSteelActive = false" class="jxddicon icon-houtui44">返回</a>
+				<a href="javascript:void(0)" @tap="notEqualSideAngleSteelActive = false" class="jxddicon icon-houtui44">返回</a>
 				<img src="../../static/img/calculator/budengbianjiaogang.jpg" />
 				<div class="calculateArea">
 					<p>不等边角钢重量计算</p>
@@ -176,6 +181,20 @@
 					<p><span>厚度：</span><input type="text" v-model="notEqualSideAngleSteelThickness"><span>mm</span></p>
 					<p><span>重量：</span><input type="text" value="{{notEqualSideAngleSteelWeight | weight}} " readonly><span>kg</span></p>
 				</div>
+			</div>
+			<div class="oneCalculator hsteel {{hSteelActive ? 'active' : ''}}">
+				<a href="javascript:void(0)" @tap="hSteelActive = false" class="jxddicon icon-houtui44">返回</a>
+				<img src="../../static/img/calculator/hxinggang.jpg" />
+				<div class="calculateArea">
+					<p>H型钢</p>
+					<p><span>腹板高度：</span><input type="text" v-model="hSteelFBHeight"><span>mm</span></p>
+					<p><span>腹板厚度：</span><input type="text" v-model="hSteelFBThickness"><span>mm</span></p>
+					<p><span>翼板宽度：</span><input type="text" v-model="hSteelYBWidth"><span>mm</span></p>
+					<p><span>翼板厚度：</span><input type="text" v-model="hSteelYBThickness"><span>mm</span></p>
+					<p><span>长度：</span><input type="text" v-model="hSteelLength"><span>m</span></p>
+					<p><span>重量：</span><input type="text" value="{{hSteelWeight | weight}} " readonly><span>kg</span></p>
+				</div>
+				<img src="../../static/img/calculator/hxingguige.jpg"/>
 			</div>
 		</div>
 	</div>
@@ -239,7 +258,14 @@
 				notEqualSideAngleSteelWidth1: undefined,
 				notEqualSideAngleSteelWidth2: undefined,
 				notEqualSideAngleSteelThickness: undefined,
-				notEqualSideAngleSteelWeight: 0
+				notEqualSideAngleSteelWeight: 0,
+				hSteelActive: false,
+				hSteelFBHeight: undefined,
+				hSteelFBThickness: undefined,
+				hSteelYBWidth: undefined,
+				hSteelYBThickness: undefined,
+				hSteelLength: undefined,
+				hSteelWeight: 0
 			};
 		},
 		computed: {
@@ -247,7 +273,7 @@
 				return 785 * this.steelPlateLength * this.steelPlateWidth * this.steelPlateThickness / 100;
 			},
 			steelPipeWeight() {
-				return(this.steelPipeDiameter - this.steelPipeThickness) * this.steelPipeThickness * this.steelPipeLength * 2466 / 100000;
+				return this.steelPipeThickness * this.steelPipeLength * (this.steelPipeDiameter - this.steelPipeThickness) * 2466 / 100000;
 			},
 			roundSteelWeight() {
 				return this.roundSteelDiameter * this.roundSteelDiameter * this.roundSteelLength * 617 / 100000;
@@ -268,13 +294,16 @@
 				return this.sidePassLength * this.sidePassWidth * this.sidePassThickness * 4 * 785 / 100000;
 			},
 			flatPassWeight() {
-				return(this.flatPassSideLength + this.flatPassSideWidth) * 2 * this.flatPassThickness * this.flatPassLength * 785 / 100000;
+				return 2 * (this.flatPassSideLength + this.flatPassSideWidth) * this.flatPassThickness * this.flatPassLength * 785 / 100000;
 			},
 			equalSideAngleSteelWeight() {
 				return this.equalSideAngleSteelLength * this.equalSideAngleSteelWidth * this.equalSideAngleSteelThickness * 15 / 1000;
 			},
 			notEqualSideAngleSteelWeight() {
-				return(this.notEqualSideAngleSteelWidth1 + this.notEqualSideAngleSteelWidth2) * this.notEqualSideAngleSteelLength * this.notEqualSideAngleSteelThickness * 76 / 10000;
+				return this.notEqualSideAngleSteelLength * (this.notEqualSideAngleSteelWidth1 + this.notEqualSideAngleSteelWidth2) * this.notEqualSideAngleSteelThickness * 76 / 10000;
+			},
+			hSteelWeight() {
+				return 785 * (this.hSteelFBThickness * (this.hSteelFBHeight - 2 * this.hSteelYBThickness) + 2 * this.hSteelYBWidth * this.hSteelYBThickness) * this.hSteelLength / 100000;
 			}
 		},
 		filters: {
@@ -314,7 +343,7 @@
 	.oneCalculator {
 		padding: 60px 10px 0 25px;
 		background-color: #fff;
-		transition: transform 500ms,opacity 500ms;
+		transition: transform 500ms, opacity 500ms;
 		opacity: 0;
 		transform: scale(0);
 		position: absolute;
@@ -323,7 +352,11 @@
 		bottom: 0;
 	}
 	
-	.oneCalculator > a {
+	.oneCalculator.hsteel {
+		padding: 50px 10px 0 25px;
+	}
+	
+	.oneCalculator>a {
 		position: absolute;
 		top: 0;
 		left: 10px;
@@ -338,17 +371,29 @@
 		z-index: 99;
 	}
 	
-	.oneCalculator img {
+	.oneCalculator img:nth-of-type(1) {
 		width: 40px;
 		height: 40px;
 		float: left;
 	}
 	
+	.oneCalculator img:nth-of-type(2) {
+		width: 280px;
+		margin-top: 10px;
+	}
 	
 	.oneCalculator .calculateArea p {
 		line-height: 50px;
 		color: #666;
-		padding-left: 50px;
+		
+	}
+	
+	.oneCalculator.hsteel .calculateArea p {
+		line-height: 35px;
+	}
+	
+	.oneCalculator .calculateArea p span:nth-child(1) {
+		width: 70px;
 	}
 	
 	.oneCalculator .calculateArea p:nth-child(1) {
@@ -357,6 +402,7 @@
 		color: #333;
 		font-size: 15px;
 		padding-bottom: 15px;
+		padding-left: 50px;
 	}
 	
 	.oneCalculator input[type=text] {
