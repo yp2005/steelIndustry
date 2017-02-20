@@ -29,10 +29,15 @@ const APP_INSTANCE_ID = 'instance_id';
 const LOGIN_ACCESS_TOKEN = 'access_token';
 
 const ERROR_CODE = {
+	UNKOWNERROR: 1000,//未知异常
 	SUCCESS: 2000, // 成功
-	FAIL: 3000,
-	NOTLOGIN: 4000,
-	NOPERMISSON: 5000,
+	FAIL: 3000,//失败
+	NOTLOGIN: 4000,//未登录
+	VALIDATECODEERROR: 4001,//验证码错误
+	VALIDATECODTIMEOUT: 4002,//验证码过期
+	MOBILEPHONEVALIDATECODEERROR: 4003,//手机验证码错误
+	MOBILEPHONEVALIDATECODETIMEOUT: 4004,//手机验证码过期
+	NOPERMISSON: 5000,//没有权限
 	REMOTELOGIN: 6000,//其他设备端登录了该账户，被迫下线
 	ILLEGALACCESS: 7000,//非法访问
 	TIMEEXCEPTION: 8000//本地时间异常，请校准本地时间
@@ -50,6 +55,9 @@ const SEARCH_HISTORY_KEY = 'searchhistory';
 
 const IS_SHARED = 'is_shared';
 
+const HAS_CARD = 'has_card';
+
+
 export default {
 	USER_INFO,
 	APP_INSTANCE_ID,
@@ -62,7 +70,8 @@ export default {
 	SEARCH_HISTORY_KEY,
 	PREFIX_LOGIN,
 	LOGIN_FORWORD,
-	IS_SHARED
+	IS_SHARED,
+	HAS_CARD
 };
 
 export {
@@ -77,5 +86,6 @@ export {
 	SEARCH_HISTORY_KEY,
 	PREFIX_LOGIN,
 	LOGIN_FORWORD,
-	IS_SHARED
+	IS_SHARED,
+	HAS_CARD
 };

@@ -15,7 +15,7 @@
 		<div id="scroll" class="mui-scroll-wrapper">
 			<div id="pullrefresh" class="mui-scroll">
 				<img class="advertisement" src="http://img0.imgtn.bdimg.com/it/u=3660483257,1608558041&fm=15&gp=0.jpg">
-				<div class="oneMaster">
+				<div class="oneMaster" @tap="gotoDetail('id')">
 					<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
 					<div class="masterInfo">
 						<p class="mui-ellipsis">求职标题求职标题求职标题求职标题求职标题求职标题</p>
@@ -194,6 +194,13 @@
 
 		},
 		methods: {
+			gotoDetail: function(id) {
+				muiUtils.openWindow('../../bizpage/master/masterinfo.html', {
+                    extras: {
+                        id: id
+                    }
+               });
+			},
 			doSearch: function() {
 				//this.$broadcast('reflashlist');
 			},
