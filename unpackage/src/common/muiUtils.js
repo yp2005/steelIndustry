@@ -489,7 +489,6 @@ const ajaxBeforeSend = (options, url) => {
 	var extraToken = localTime;
 	for(var i = 0; i < md5Times; i++) {
 		extraToken = md5(extraToken);
-		console.log(extraToken)
 	}
 	options.headers.extraToken = extraToken;
 	options.headers.url = url; // 打印而已
