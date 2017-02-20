@@ -29,6 +29,7 @@ const APP_INSTANCE_ID = 'instance_id';
 const LOGIN_ACCESS_TOKEN = 'access_token';
 
 const ERROR_CODE = {
+	UNKOWNERROR: 1000,//未知异常
 	SUCCESS: 2000, // 成功
 	FAIL: 3000,
 	NOTLOGIN: 4000,
