@@ -11,7 +11,7 @@
 					<!--<span class="gold">金币<img src="../../static/img/mine/gold.svg">: 5000 </span>-->
 				</p>
 				<p>积分: {{jifen}}</p>
-				<!--<span class="jxddicon icon-shezhi44" @tap="open('../../commonpage/mine/usersetting.html')"></span>-->
+				<span class="jxddicon icon-shezhi44" @tap="open('../../commonpage/mine/adminsetting.html')"></span>
 				<div class="authinfo">
 					<img v-if="isPersonAuth" src="../../static/img/mine/shimingrenzheng.svg">
 					<img v-else src="../../static/img/mine/noshimingrenzheng.svg">
