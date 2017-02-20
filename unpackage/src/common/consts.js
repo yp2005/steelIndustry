@@ -29,7 +29,13 @@ const APP_INSTANCE_ID = 'instance_id';
 const LOGIN_ACCESS_TOKEN = 'access_token';
 
 const ERROR_CODE = {
-	SUCCESS: '10000', // 成功
+	SUCCESS: 2000, // 成功
+	FAIL: 3000,
+	NOTLOGIN: 4000,
+	NOPERMISSON: 5000,
+	REMOTELOGIN: 6000,//其他设备端登录了该账户，被迫下线
+	ILLEGALACCESS: 7000,//非法访问
+	TIMEEXCEPTION: 8000//本地时间异常，请校准本地时间
 };
 
 const DEVICE_LIST = 'device_list';

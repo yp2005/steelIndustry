@@ -17,7 +17,7 @@ import cacheUtils from './cacheUtils';
 import pageUrl from 'api';
 import CONSTS from './consts';
 import { delAllFile } from './image-utils';
-
+import md5 from './md5';
 
 /**
  * 打开新窗口
@@ -30,117 +30,119 @@ import { delAllFile } from './image-utils';
  * @public
  */
 const openWindow = (url, id, options) => {
-    if (unsafeTap()) {
-        return false;
-    }
-  // 判断网络情况，无网直接跳网络异常页面
-  //  if (getNetworkType() === 1) {
-  //      forwordError();
-  //      return false;
-  //  }
-    id = id || url;
-    options = options || {};
+	if(unsafeTap()) {
+		return false;
+	}
+	// 判断网络情况，无网直接跳网络异常页面
+	//  if (getNetworkType() === 1) {
+	//      forwordError();
+	//      return false;
+	//  }
+	id = id || url;
+	options = options || {};
 
-    if (typeof id === 'object') {
-        options = id;
-        id = url;
-    }
-  // 处理默认值
-    options = merge({
-        styles: {
-            popGesture: 'close',
-            softinputMode: 'adjustResize'
-        },
-        show: {
-            autoShow: true,
-            aniShow: 'pop-in',
-            duration: 300
-        },
-        waiting: {
-            autoShow: false // 自动显示等待框，默认为true
-        },
-        createNew: false
-    }, options || {});
+	if(typeof id === 'object') {
+		options = id;
+		id = url;
+	}
+	// 处理默认值
+	options = merge({
+		styles: {
+			popGesture: 'close',
+			softinputMode: 'adjustResize'
+		},
+		show: {
+			autoShow: true,
+			aniShow: 'pop-in',
+			duration: 300
+		},
+		waiting: {
+			autoShow: false // 自动显示等待框，默认为true
+		},
+		createNew: false
+	}, options || {});
 
-    let blacklist = propUtils.getProperty('webview.id.blacklist', 'urlprops');
-    if (!blacklist.some(item => item === id)) {
-        cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.LOGIN_FORWORD, {
-            url: url,
-            id: id,
-            options: options || {}
-        });
-        logger.log('缓存的url:' + url);
-    }
+	let blacklist = propUtils.getProperty('webview.id.blacklist', 'urlprops');
+	if(!blacklist.some(item => item === id)) {
+		cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.LOGIN_FORWORD, {
+			url: url,
+			id: id,
+			options: options || {}
+		});
+		logger.log('缓存的url:' + url);
+	}
 
-  // 是否需要验证登录
-    if (options.isValidLogin === true) {
-        if (loginValid() === false) {
-            return false;
-        }
-    }
-    //强制将要离开的界面关闭键盘(ios7.0 bug)
-    hideKeyBord();
-    setStatusStyleForPageId(id);
-    let gotoPage = plus.webview.getWebviewById(id);
-    let pagelist = propUtils.getProperty('webview.preload.whiltlist', 'urlprops');
-    if (gotoPage && !options.createNew) {
-        if (pagelist.some(item => item === id)) {
-            mui.fire(gotoPage, CONSTS.WEBVIEW_SHOW_EVENT, options.extras);
-        }
-        gotoPage.hide(); // 只有先hide再show才能出动画
-        gotoPage.show(options.show.aniShow, options.show.duration);
-    } else {
-        gotoPage = mui.openWindow(url, id, options);
-        if (!pagelist.some(item => item === id)) {
-            controlOpenPage(id);
-        }
-    }
-  // 延迟一秒关闭当前webview
-    if (options.isClose === true) {
-        setTimeout(function() {
-      // 去掉关闭动画
-            closWebview();
-        }, 1100);
-    }
-    setTimeout(function() {
-        popGestureEvent(gotoPage);
-    }, 300);
-    return gotoPage;
+	// 是否需要验证登录
+	if(options.isValidLogin === true) {
+		if(loginValid() === false) {
+			return false;
+		}
+	}
+	//强制将要离开的界面关闭键盘(ios7.0 bug)
+	hideKeyBord();
+	setStatusStyleForPageId(id);
+	let gotoPage = plus.webview.getWebviewById(id);
+	let pagelist = propUtils.getProperty('webview.preload.whiltlist', 'urlprops');
+	if(gotoPage && !options.createNew) {
+		if(pagelist.some(item => item === id)) {
+			mui.fire(gotoPage, CONSTS.WEBVIEW_SHOW_EVENT, options.extras);
+		}
+		gotoPage.hide(); // 只有先hide再show才能出动画
+		gotoPage.show(options.show.aniShow, options.show.duration);
+	} else {
+		gotoPage = mui.openWindow(url, id, options);
+		if(!pagelist.some(item => item === id)) {
+			controlOpenPage(id);
+		}
+	}
+	// 延迟一秒关闭当前webview
+	if(options.isClose === true) {
+		setTimeout(function() {
+			// 去掉关闭动画
+			closWebview();
+		}, 1100);
+	}
+	setTimeout(function() {
+		popGestureEvent(gotoPage);
+	}, 300);
+	return gotoPage;
 };
 
 /**
  * 根据内存状态设置状态栏样式，非主页页面使用
  */
-const setStatusStyle = () => {/*
-    if (!plus) {
-        return;
-    }
-    if (window.localStorage.getItem('openwindow_seller_index') === '0') {
-        plus.navigator.setStatusBarBackground('#419fdc');
-    } else {
-        plus.navigator.setStatusBarBackground('#f04e30');
-    }
-    plus.navigator.setStatusBarStyle('UIStatusBarStyleBlackOpaque');
-*/};
+const setStatusStyle = () => {
+	/*
+	    if (!plus) {
+	        return;
+	    }
+	    if (window.localStorage.getItem('openwindow_seller_index') === '0') {
+	        plus.navigator.setStatusBarBackground('#419fdc');
+	    } else {
+	        plus.navigator.setStatusBarBackground('#f04e30');
+	    }
+	    plus.navigator.setStatusBarStyle('UIStatusBarStyleBlackOpaque');
+	*/
+};
 
 /**
  * 根据页面id设置状态栏样式，只有两个主页需要关注
  * @param {[type]} id [description]
  */
 const setStatusStyleForPageId = id => {
-    if (!plus) {
-        return;
-    }
-    if (id === 'main') {
-    // plus.navigator.setStatusBarBackground('#f04e30');
-    // plus.navigator.setStatusBarStyle('UIStatusBarStyleBlackOpaque');
-        window.localStorage.setItem('openwindow_seller_index', '1');
-    } else if (id === 'seller_index') {
-    // plus.navigator.setStatusBarBackground('#419fdc');
-    // plus.navigator.setStatusBarStyle('UIStatusBarStyleBlackOpaque');
-        window.localStorage.setItem('openwindow_seller_index', '0');
-    }
-    setStatusStyle();
+	if(!plus) {
+		return;
+	}
+	if(id === 'main') {
+		// plus.navigator.setStatusBarBackground('#f04e30');
+		// plus.navigator.setStatusBarStyle('UIStatusBarStyleBlackOpaque');
+		window.localStorage.setItem('openwindow_seller_index', '1');
+	} else if(id === 'seller_index') {
+		// plus.navigator.setStatusBarBackground('#419fdc');
+		// plus.navigator.setStatusBarStyle('UIStatusBarStyleBlackOpaque');
+		window.localStorage.setItem('openwindow_seller_index', '0');
+	}
+	setStatusStyle();
 };
 
 /**
@@ -150,14 +152,14 @@ const setStatusStyleForPageId = id => {
  */
 var tapFirst = null;
 const unsafeTap = () => {
-    if (!tapFirst) {
-        tapFirst = new Date().getTime();
-        setTimeout(function() {
-            tapFirst = null;
-        }, 500);
-    } else {
-        return true;
-    }
+	if(!tapFirst) {
+		tapFirst = new Date().getTime();
+		setTimeout(function() {
+			tapFirst = null;
+		}, 500);
+	} else {
+		return true;
+	}
 };
 
 /**
@@ -166,25 +168,25 @@ const unsafeTap = () => {
  */
 /* eslint-disable no-unused-vars*/
 const popGestureEvent = gotoPage => {
-    let sbb = null;
-    let sbs = null;
-    gotoPage.addEventListener('popGesture', function(e) {
-        sbb = sbb || plus.navigator.getStatusBarBackground();
-        sbs = sbs || plus.navigator.getStatusBarStyle();
-        if (e.type === 'end') {
-            if (e.result === false) {
-        // 侧滑取消，还原状态栏样式
-                plus.navigator.setStatusBarBackground(sbb);
-                plus.navigator.setStatusBarStyle(sbs);
-            }
-        }
-        if (e.type === 'move' && e.progress > 55) {
-            let id = plus.webview.currentWebview().id;
-            if (id === 'main') {
-                setStatusStyleForPageId('main');
-            }
-        }
-    }, false);
+	let sbb = null;
+	let sbs = null;
+	gotoPage.addEventListener('popGesture', function(e) {
+		sbb = sbb || plus.navigator.getStatusBarBackground();
+		sbs = sbs || plus.navigator.getStatusBarStyle();
+		if(e.type === 'end') {
+			if(e.result === false) {
+				// 侧滑取消，还原状态栏样式
+				plus.navigator.setStatusBarBackground(sbb);
+				plus.navigator.setStatusBarStyle(sbs);
+			}
+		}
+		if(e.type === 'move' && e.progress > 55) {
+			let id = plus.webview.currentWebview().id;
+			if(id === 'main') {
+				setStatusStyleForPageId('main');
+			}
+		}
+	}, false);
 };
 
 /**
@@ -193,18 +195,18 @@ const popGestureEvent = gotoPage => {
  * @return {void}
  */
 const controlOpenPage = id => {
-    let maxNum = propUtils.getProperty('open_page_num', 'UIprops');
-    let allView = plus.webview.all();
-    let pagelist = propUtils.getProperty('webview.preload.whiltlist', 'urlprops');
-    allView = allView.filter(item => !pagelist.some(id => id === item.id));
-    if (allView.length > maxNum) {
-        logger.log(maxNum + 'openPage is max:' + allView.length, 'controlOpenPage()');
-        setTimeout(function() {
-            allView.splice(0, 1).map(id => {
-                plus.webview.close(id, 'none');
-            });
-        }, 1000);
-    }
+	let maxNum = propUtils.getProperty('open_page_num', 'UIprops');
+	let allView = plus.webview.all();
+	let pagelist = propUtils.getProperty('webview.preload.whiltlist', 'urlprops');
+	allView = allView.filter(item => !pagelist.some(id => id === item.id));
+	if(allView.length > maxNum) {
+		logger.log(maxNum + 'openPage is max:' + allView.length, 'controlOpenPage()');
+		setTimeout(function() {
+			allView.splice(0, 1).map(id => {
+				plus.webview.close(id, 'none');
+			});
+		}, 1000);
+	}
 };
 
 /**
@@ -212,15 +214,15 @@ const controlOpenPage = id => {
  * @return {[type]} [description]
  */
 const closeAllOpenPage = () => {
-    let allView = plus.webview.all();
-    let pagelist = propUtils.getProperty('webview.preload.whiltlist', 'urlprops');
-    allView = allView.filter(item => !pagelist.some(id => id === item.id));
-    logger.log('closeAllOpenPage is max:' + allView.length, 'closeAllOpenPage()');
-    setTimeout(function() {
-        allView.map(id => {
-            plus.webview.close(id, 'none');
-        });
-    }, 1000);
+	let allView = plus.webview.all();
+	let pagelist = propUtils.getProperty('webview.preload.whiltlist', 'urlprops');
+	allView = allView.filter(item => !pagelist.some(id => id === item.id));
+	logger.log('closeAllOpenPage is max:' + allView.length, 'closeAllOpenPage()');
+	setTimeout(function() {
+		allView.map(id => {
+			plus.webview.close(id, 'none');
+		});
+	}, 1000);
 };
 
 /**
@@ -230,66 +232,66 @@ const closeAllOpenPage = () => {
  * @public
  */
 const openPreWindow = (options) => {
-  // 缓存读取id。通过id来开页面，如果没有就跳首页
-    let o = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.LOGIN_FORWORD) || pageUrl.PAGE_URL.index;
-    options = options || {};
-  // 处理默认值
-    options = merge(o.options || {}, options || {});
-    options = merge({
-        styles: {
-            popGesture: 'close'
-        },
-        show: {
-            autoShow: true,
-            aniShow: 'pop-in',
-            duration: 300
-        },
-        waiting: {
-            autoShow: false // 自动显示等待框，默认为true
-        }
-    }, options || {});
-  //  options.createNew = true;//重复新开一个webview，解决刷新数据刷新问题
-    let login = true;
-    let gotoPage = plus.webview.getWebviewById(o.id);
-    if (o.id === pageUrl.PAGE_URL.index.id) {
-        let accessToken = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).get(CONSTS.LOGIN_ACCESS_TOKEN);
-        if (accessToken === undefined || accessToken == null || accessToken === '' || accessToken === 'null') {
-            login = false;
-        }
-        if (options.openIndex !== undefined) {
-            mui.fire(gotoPage, 'home_nav', {
-                index: options.openIndex
-            });
-        }
-        setTimeout(() => {
-            gotoPage.hide();
-            gotoPage.show(options.show.aniShow, options.show.duration);
-        }, 300);
-        if (login === false) {
-            mui.fire(plus.webview.getWebviewById(o.id), CONSTS.LOGIN_OUT_EVENT, {});
-            return;
-        }
-        mui.fire(gotoPage, CONSTS.LOGIN_COMPUTER_EVENT, {});
-        setTimeout(function() {
-            closWebview();
-        }, 1000);
-    } else if (gotoPage) {
-    // 纯按钮操作，不涉及页面, 必须将去向页面show处理，中间有几个页面，仅仅关闭当前页面是不够的
-        mui.fire(gotoPage, CONSTS.LOGIN_COMPUTER_EVENT, {});
-//      setTimeout(() => {
-//          gotoPage.hide();
-//          gotoPage.show(options.show.aniShow, options.show.duration);
-//      }, 300);
-        setTimeout(() => {
-            plus.webview.currentWebview().close('none');
-        }, 1000);
-    } else {
-    // 跳转到目标页面
-        mui.openWindow(o.url, o.id, options);
-        setTimeout(function() {
-            plus.webview.currentWebview().close('none');
-        }, 500);
-    }
+	// 缓存读取id。通过id来开页面，如果没有就跳首页
+	let o = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.LOGIN_FORWORD) || pageUrl.PAGE_URL.index;
+	options = options || {};
+	// 处理默认值
+	options = merge(o.options || {}, options || {});
+	options = merge({
+		styles: {
+			popGesture: 'close'
+		},
+		show: {
+			autoShow: true,
+			aniShow: 'pop-in',
+			duration: 300
+		},
+		waiting: {
+			autoShow: false // 自动显示等待框，默认为true
+		}
+	}, options || {});
+	//  options.createNew = true;//重复新开一个webview，解决刷新数据刷新问题
+	let login = true;
+	let gotoPage = plus.webview.getWebviewById(o.id);
+	if(o.id === pageUrl.PAGE_URL.index.id) {
+		let accessToken = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).get(CONSTS.LOGIN_ACCESS_TOKEN);
+		if(accessToken === undefined || accessToken == null || accessToken === '' || accessToken === 'null') {
+			login = false;
+		}
+		if(options.openIndex !== undefined) {
+			mui.fire(gotoPage, 'home_nav', {
+				index: options.openIndex
+			});
+		}
+		setTimeout(() => {
+			gotoPage.hide();
+			gotoPage.show(options.show.aniShow, options.show.duration);
+		}, 300);
+		if(login === false) {
+			mui.fire(plus.webview.getWebviewById(o.id), CONSTS.LOGIN_OUT_EVENT, {});
+			return;
+		}
+		mui.fire(gotoPage, CONSTS.LOGIN_COMPUTER_EVENT, {});
+		setTimeout(function() {
+			closWebview();
+		}, 1000);
+	} else if(gotoPage) {
+		// 纯按钮操作，不涉及页面, 必须将去向页面show处理，中间有几个页面，仅仅关闭当前页面是不够的
+		mui.fire(gotoPage, CONSTS.LOGIN_COMPUTER_EVENT, {});
+		//      setTimeout(() => {
+		//          gotoPage.hide();
+		//          gotoPage.show(options.show.aniShow, options.show.duration);
+		//      }, 300);
+		setTimeout(() => {
+			plus.webview.currentWebview().close('none');
+		}, 1000);
+	} else {
+		// 跳转到目标页面
+		mui.openWindow(o.url, o.id, options);
+		setTimeout(function() {
+			plus.webview.currentWebview().close('none');
+		}, 500);
+	}
 };
 
 /**
@@ -297,23 +299,23 @@ const openPreWindow = (options) => {
  * @public
  */
 const openIndexWindow = (options) => {
-    options = options || {};
-    let openIndex = options.openIndex || 0;
-    mui.fire(plus.webview.getWebviewById(pageUrl.PAGE_URL.index.id), 'home_nav', {
-        index: openIndex
-    });
-    let id = pageUrl.PAGE_URL.index.id;
-    let url = pageUrl.PAGE_URL.index.url;
-    setTimeout(function() {
-        openWindow(url, id, options);
-    }, 300);
-    closeAllOpenPage();
+	options = options || {};
+	let openIndex = options.openIndex || 0;
+	mui.fire(plus.webview.getWebviewById(pageUrl.PAGE_URL.index.id), 'home_nav', {
+		index: openIndex
+	});
+	let id = pageUrl.PAGE_URL.index.id;
+	let url = pageUrl.PAGE_URL.index.url;
+	setTimeout(function() {
+		openWindow(url, id, options);
+	}, 300);
+	closeAllOpenPage();
 };
 
 const closWebview = () => {
-    if (plus.webview.currentWebview().id !== 'main') {
-        plus.webview.currentWebview().close('none');
-    }
+	if(plus.webview.currentWebview().id !== 'main') {
+		plus.webview.currentWebview().close('none');
+	}
 };
 
 /**
@@ -329,16 +331,16 @@ const closWebview = () => {
  * @public
  */
 const getNetworkType = () => {
-    let types = {};
-    types[plus.networkinfo.CONNECTION_UNKNOW] = 'Unknown connection';
-    types[plus.networkinfo.CONNECTION_NONE] = 'None connection';
-    types[plus.networkinfo.CONNECTION_ETHERNET] = 'Ethernet connection';
-    types[plus.networkinfo.CONNECTION_WIFI] = 'WiFi connection';
-    types[plus.networkinfo.CONNECTION_CELL2G] = 'Cellular 2G connection';
-    types[plus.networkinfo.CONNECTION_CELL3G] = 'Cellular 3G connection';
-    types[plus.networkinfo.CONNECTION_CELL4G] = 'Cellular 4G connection';
-    logger.log('networkinfo:' + plus.networkinfo.getCurrentType(), 'getNetworkType()');
-    return plus.networkinfo.getCurrentType();
+	let types = {};
+	types[plus.networkinfo.CONNECTION_UNKNOW] = 'Unknown connection';
+	types[plus.networkinfo.CONNECTION_NONE] = 'None connection';
+	types[plus.networkinfo.CONNECTION_ETHERNET] = 'Ethernet connection';
+	types[plus.networkinfo.CONNECTION_WIFI] = 'WiFi connection';
+	types[plus.networkinfo.CONNECTION_CELL2G] = 'Cellular 2G connection';
+	types[plus.networkinfo.CONNECTION_CELL3G] = 'Cellular 3G connection';
+	types[plus.networkinfo.CONNECTION_CELL4G] = 'Cellular 4G connection';
+	logger.log('networkinfo:' + plus.networkinfo.getCurrentType(), 'getNetworkType()');
+	return plus.networkinfo.getCurrentType();
 };
 
 /**
@@ -354,16 +356,16 @@ const getNetworkType = () => {
  * @public
  */
 const getNetworkTypeZH = () => {
-    let types = {};
-    types[plus.networkinfo.CONNECTION_UNKNOW] = '网络连接状态未知';
-    types[plus.networkinfo.CONNECTION_NONE] = '未连接网络';
-    types[plus.networkinfo.CONNECTION_ETHERNET] = '有线网络';
-    types[plus.networkinfo.CONNECTION_WIFI] = 'WiFi网络';
-    types[plus.networkinfo.CONNECTION_CELL2G] = '2G网络';
-    types[plus.networkinfo.CONNECTION_CELL3G] = '3G网络';
-    types[plus.networkinfo.CONNECTION_CELL4G] = '4G网络';
+	let types = {};
+	types[plus.networkinfo.CONNECTION_UNKNOW] = '网络连接状态未知';
+	types[plus.networkinfo.CONNECTION_NONE] = '未连接网络';
+	types[plus.networkinfo.CONNECTION_ETHERNET] = '有线网络';
+	types[plus.networkinfo.CONNECTION_WIFI] = 'WiFi网络';
+	types[plus.networkinfo.CONNECTION_CELL2G] = '2G网络';
+	types[plus.networkinfo.CONNECTION_CELL3G] = '3G网络';
+	types[plus.networkinfo.CONNECTION_CELL4G] = '4G网络';
 
-    return types[plus.networkinfo.getCurrentType()];
+	return types[plus.networkinfo.getCurrentType()];
 };
 
 /**
@@ -372,11 +374,11 @@ const getNetworkTypeZH = () => {
  * @public
  */
 const forwordError = (options) => {
-    options = options || {};
-    let url = pageUrl.PAGE_URL.error_connect.url;
-    let id = pageUrl.PAGE_URL.error_connect.id;
-    logger.log(id + 'forwordError:' + url, 'forwordError()');
-    mui.openWindow(url, id, {});
+	options = options || {};
+	let url = pageUrl.PAGE_URL.error_connect.url;
+	let id = pageUrl.PAGE_URL.error_connect.id;
+	logger.log(id + 'forwordError:' + url, 'forwordError()');
+	mui.openWindow(url, id, {});
 };
 
 /**
@@ -387,25 +389,25 @@ const forwordError = (options) => {
  * @public
  */
 const muiAjax = (url, options) => {
-    if (options.loading === undefined) {
-        options.loading = true;
-    }
-    logger.log('url:' + url + ' options:' + utils.stringify(options));
-  //  mui.ajaxSettings.beforeSend = ajaxBeforeSend;
-    mui.ajaxSettings.inspect = ajaxInspect;
-    mui.ajaxSettings.success = ajaxSuccess;
-    mui.ajaxSettings.error = ajaxError;
-    mui.ajaxSettings.complete = ajaxComplete;
-  /**
-   * ajax超时时间设置为10秒
-   */
-    mui.ajaxSettings.timeout = 10000;
-    if (ajaxBeforeSend(options, url) === false) {
-        logger.log('ajaxBeforeSend has return false', 'muiAjax ajaxBeforeSend');
-    //      options.error();
-        return false;
-    }
-    mui.ajax(url, options);
+	if(options.loading === undefined) {
+		options.loading = true;
+	}
+	logger.log('url:' + url + ' options:' + utils.stringify(options));
+	//  mui.ajaxSettings.beforeSend = ajaxBeforeSend;
+	mui.ajaxSettings.inspect = ajaxInspect;
+	mui.ajaxSettings.success = ajaxSuccess;
+	mui.ajaxSettings.error = ajaxError;
+	mui.ajaxSettings.complete = ajaxComplete;
+	/**
+	 * ajax超时时间设置为10秒
+	 */
+	mui.ajaxSettings.timeout = 10000;
+	if(ajaxBeforeSend(options, url) === false) {
+		logger.log('ajaxBeforeSend has return false', 'muiAjax ajaxBeforeSend');
+		//      options.error();
+		return false;
+	}
+	mui.ajax(url, options);
 };
 
 /**
@@ -415,44 +417,44 @@ const muiAjax = (url, options) => {
  * @return {void}           无返回
  */
 const loginValid = (cb, opt) => {
-    let accessToken = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).get(CONSTS.LOGIN_ACCESS_TOKEN);
-    if (accessToken === undefined || accessToken == null || accessToken === '' || accessToken === 'null') {
-    // 未登录，打开登录页面
-        let ops = {
-            styles: {
-                popGesture: 'close',
-                softinputMode: 'adjustResize'
-            },
-            show: {
-                autoShow: true,
-                aniShow: 'pop-in',
-                duration: 300
-            },
-            waiting: {
-                autoShow: false // 自动显示等待框，默认为true
-            },
-            createNew: false
-        };
-        if (cb !== undefined && typeof cb === 'function') {
-      // 开启监听，等待登录完成
-            window.addEventListener(CONSTS.LOGIN_COMPUTER_EVENT, e => {
-                logger.log(CONSTS.LOGIN_COMPUTER_EVENT, 'loginValidHasCb');
-        // 确保callback是一个函数
-                if (typeof cb === 'function') {
-                    cb(opt);
-                } else {
-                    logger.log('cbSuccess must be function!');
-                }
-            });
-        }
-        mui.openWindow(pageUrl.PAGE_URL.login_index.url, pageUrl.PAGE_URL.login_index.id, ops);
-        return false;
-    } else {
-        if (cb !== undefined && typeof cb === 'function') {
-            cb(opt);
-        }
-        return true;
-    }
+	let accessToken = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).get(CONSTS.LOGIN_ACCESS_TOKEN);
+	if(accessToken === undefined || accessToken == null || accessToken === '' || accessToken === 'null') {
+		// 未登录，打开登录页面
+		let ops = {
+			styles: {
+				popGesture: 'close',
+				softinputMode: 'adjustResize'
+			},
+			show: {
+				autoShow: true,
+				aniShow: 'pop-in',
+				duration: 300
+			},
+			waiting: {
+				autoShow: false // 自动显示等待框，默认为true
+			},
+			createNew: false
+		};
+		if(cb !== undefined && typeof cb === 'function') {
+			// 开启监听，等待登录完成
+			window.addEventListener(CONSTS.LOGIN_COMPUTER_EVENT, e => {
+				logger.log(CONSTS.LOGIN_COMPUTER_EVENT, 'loginValidHasCb');
+				// 确保callback是一个函数
+				if(typeof cb === 'function') {
+					cb(opt);
+				} else {
+					logger.log('cbSuccess must be function!');
+				}
+			});
+		}
+		mui.openWindow(pageUrl.PAGE_URL.login_index.url, pageUrl.PAGE_URL.login_index.id, ops);
+		return false;
+	} else {
+		if(cb !== undefined && typeof cb === 'function') {
+			cb(opt);
+		}
+		return true;
+	}
 };
 
 /**
@@ -464,29 +466,38 @@ const loginValid = (cb, opt) => {
  * @private
  */
 const ajaxBeforeSend = (options, url) => {
-  //  logger.log('ajaxBeforeSend', 'muiUtils.js');
-  //  if (getNetworkType() === 1) {
-  //      forwordError();
-  //      return false;
-  //  }
-  // 设置头部认证信息
-    options.headers = options.headers || {};
-    let token = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).get(CONSTS.LOGIN_ACCESS_TOKEN);
-    let instanceId = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).get(CONSTS.APP_INSTANCE_ID);
-    if (instanceId === undefined || instanceId == null || instanceId === '' || instanceId === 'null') {
-        instanceId = utils.uuidV4();
-        cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).set(CONSTS.APP_INSTANCE_ID, instanceId);
-    }
+	//  logger.log('ajaxBeforeSend', 'muiUtils.js');
+	//  if (getNetworkType() === 1) {
+	//      forwordError();
+	//      return false;
+	//  }
+	// 设置头部认证信息
+	options.headers = options.headers || {};
+	let token = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).get(CONSTS.LOGIN_ACCESS_TOKEN);
+	let instanceId = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).get(CONSTS.APP_INSTANCE_ID);
+	if(instanceId === undefined || instanceId == null || instanceId === '' || instanceId === 'null') {
+		instanceId = utils.uuidV4();
+		cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).set(CONSTS.APP_INSTANCE_ID, instanceId);
+	}
 
-    options.headers.instance_id = instanceId;
-    options.headers.access_token = (token === 'null' || token == null) ? '' : token;
-    options.headers.reqStartTime = new Date().getTime(); // 请求开始时间
-    options.headers.url = url; // 打印而已
-  // 开启加载动画
-    if (options.loading === true) {
-        let w = plus.nativeUI.showWaiting('处理中...');
-        options.nativeUI = w;
-    }
+	options.headers.instance_id = instanceId;
+	options.headers.access_token = (token === 'null' || token == null) ? '' : token;
+	var localTime = new Date().getTime();
+	options.headers.reqStartTime =  localTime// 请求开始时间
+	localTime = localTime + '';
+	var md5Times = ~~localTime.substring(localTime.length - 1) || 1;
+	var extraToken = localTime;
+	for(var i = 0; i < md5Times; i++) {
+		extraToken = md5(extraToken);
+		console.log(extraToken)
+	}
+	options.headers.extraToken = extraToken;
+	options.headers.url = url; // 打印而已
+	// 开启加载动画
+	if(options.loading === true) {
+		let w = plus.nativeUI.showWaiting('处理中...');
+		options.nativeUI = w;
+	}
 };
 
 /**
@@ -497,56 +508,52 @@ const ajaxBeforeSend = (options, url) => {
  * @private
  */
 const ajaxInspect = (data, xhr, setting) => {
-  //  logger.log(JSON.stringify(setting.inspecterror) + 'require data before deal:' + JSON.stringify(data), 'inspecttype' + setting.inspecttype);
-  // 关闭加载动画
-    if (setting.nativeUI !== undefined) {
-        setting.nativeUI.close();
-    }
-    let reqTime = new Date().getTime() - setting.headers.reqStartTime;
-    logger.log('url:' + setting.url);
-    logger.log('ajaxInspect reqTime:' + reqTime, 'ajaxInspect()');
-    if (data === 'error') { // 异常处理
-        logger.log('errorType:' + setting.inspecttype, 'error');
-        logger.log('error:' + setting.inspecterror, 'error');
-    } else { // 正常处理
-    // 将API返回的data数据处理成统一格式
-        let tempData = data.result_data || {};
-        data.header = {
-            code: data.error_code + '',
-            msg: data.error_message
-        };
-        Object.keys(tempData).map(item => {
-            data[item] = tempData[item];
-        });
-        delete data.error_code;
-        delete data.error_message;
-        delete data.error_data;
-        delete data.result_data;
-        logger.log('require data after deal:' + JSON.stringify(data));
-    // 当在函数体内使用赋值操作时，系统就创建了一个变量名为data的变量。这个data是函数内部的变量，对它进行赋值当然只在函数体内起作用，外面的data还是原来的data,对对象进行修改就会反映到外部data上，因为对象和数组都是传递的引用
-    // data = tempData;
-        if (data.header !== undefined && data.header.code === CONSTS.ERROR_CODE.INSUFFICIENT_PERMISSIONS) {
-            logger.log('权限不足', 'ajaxInspect');
-            if (loginValid() === false) {
-                setting.error();
-                return false;
-            }
-        }
-        let instanceId = xhr.getResponseHeader(CONSTS.APP_INSTANCE_ID);
-        if (instanceId === cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).get(CONSTS.APP_INSTANCE_ID)) {
-            logger.log("it's my require!!!!", 'valid instanceId is ok');
-        } else {
-            logger.log('it is not  my require!!!!,the token is no safe,please login again and change password,' + instanceId, 'valid instanceId is nok');
-    // 测试阶段，直接忽略，上线了可以开启
-    // return false;
-        }
-    // 更新token
-        let token = xhr.getResponseHeader(CONSTS.LOGIN_ACCESS_TOKEN) || cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).get(CONSTS.LOGIN_ACCESS_TOKEN);
-    // logger.log(token, 'CONSTS.LOGIN_ACCESS_TOKEN ajaxInspect');
-        cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).set(CONSTS.LOGIN_ACCESS_TOKEN, token);
-    }
-  // 返回true就是放过，false就拦截后面的请求，目前拦截了error和sucess
-    return true;
+	//  logger.log(JSON.stringify(setting.inspecterror) + 'require data before deal:' + JSON.stringify(data), 'inspecttype' + setting.inspecttype);
+	// 关闭加载动画
+	if(setting.nativeUI !== undefined) {
+		setting.nativeUI.close();
+	}
+	let reqTime = new Date().getTime() - setting.headers.reqStartTime;
+	logger.log('url:' + setting.url);
+	logger.log('ajaxInspect reqTime:' + reqTime, 'ajaxInspect()');
+	if(data === 'error') { // 异常处理
+		logger.log('errorType:' + setting.inspecttype, 'error');
+		logger.log('error:' + setting.inspecterror, 'error');
+	} else { // 正常处理
+		logger.log('require data:' + JSON.stringify(data));
+		if(data.erroCode !== undefined && data.erroCode === CONSTS.ERROR_CODE.NOTLOGIN) {
+			logger.log('未登录', 'ajaxInspect');
+			if(loginValid() === false) {
+				setting.error();
+				return false;
+			}
+		}
+		else if(data.erroCode !== undefined && data.erroCode === CONSTS.ERROR_CODE.NOPERMISSON) {
+			logger.log('没有权限', 'ajaxInspect');
+		}
+		else if(data.erroCode !== undefined && data.erroCode === CONSTS.ERROR_CODE.REMOTELOGIN) {
+			logger.log('其他客户端登录', 'ajaxInspect');
+		}
+		else if(data.erroCode !== undefined && data.erroCode === CONSTS.ERROR_CODE.ILLEGALACCESS) {
+			logger.log('非法访问', 'ajaxInspect');
+		}
+		else if(data.erroCode !== undefined && data.erroCode === CONSTS.ERROR_CODE.TIMEEXCEPTION) {
+			logger.log('时间异常', 'ajaxInspect');
+		}
+		/*let instanceId = xhr.getResponseHeader(CONSTS.APP_INSTANCE_ID);
+		if(instanceId === cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).get(CONSTS.APP_INSTANCE_ID)) {
+			logger.log("it's my require!!!!", 'valid instanceId is ok');
+		} else {
+			logger.log('it is not  my require!!!!,the token is no safe,please login again and change password,' + instanceId, 'valid instanceId is nok');
+			return false;
+		}
+		// 更新token
+		let token = xhr.getResponseHeader(CONSTS.LOGIN_ACCESS_TOKEN) || cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).get(CONSTS.LOGIN_ACCESS_TOKEN);
+		// logger.log(token, 'CONSTS.LOGIN_ACCESS_TOKEN ajaxInspect');
+		cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).set(CONSTS.LOGIN_ACCESS_TOKEN, token);*/
+	}
+	// 返回true就是放过，false就拦截后面的请求，目前拦截了error和sucess
+	return true;
 };
 
 /**
@@ -557,7 +564,7 @@ const ajaxInspect = (data, xhr, setting) => {
  * @private
  */
 const ajaxSuccess = (data, xhr, setting) => {
-    logger.log('ajaxSuccess' + data, 'muiUtils.js');
+	logger.log('ajaxSuccess' + data, 'muiUtils.js');
 };
 
 /**
@@ -565,7 +572,7 @@ const ajaxSuccess = (data, xhr, setting) => {
  * @private
  */
 const ajaxError = (error, type, xhr, setting) => {
-    logger.log('ajaxError' + error + type, 'muiUtils.js');
+	logger.log('ajaxError' + error + type, 'muiUtils.js');
 };
 
 /**
@@ -573,10 +580,10 @@ const ajaxError = (error, type, xhr, setting) => {
  * @private
  */
 const ajaxComplete = (status, xhr, setting) => {
-    let reqTime = new Date().getTime() - setting.headers.reqStartTime;
-  //  logger.log('ajaxComplete reqStartTime:' + setting.headers.reqStartTime + 'reqEndTime:' + new Date().getTime(), 'ajaxComplete()');
-    logger.log('ajaxComplete reqTime:' + reqTime, 'ajaxComplete()');
-//  logger.log('ajaxComplete', 'ajaxComplete()');
+	let reqTime = new Date().getTime() - setting.headers.reqStartTime;
+	//  logger.log('ajaxComplete reqStartTime:' + setting.headers.reqStartTime + 'reqEndTime:' + new Date().getTime(), 'ajaxComplete()');
+	logger.log('ajaxComplete reqTime:' + reqTime, 'ajaxComplete()');
+	//  logger.log('ajaxComplete', 'ajaxComplete()');
 };
 
 /**
@@ -585,14 +592,14 @@ const ajaxComplete = (status, xhr, setting) => {
  * return 用户登录返回用户对象，用户未登录返回null
  */
 const getLoginUserInfo = () => {
-    let accessToken = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).get(CONSTS.LOGIN_ACCESS_TOKEN);
-    if (accessToken === 'undefined' || accessToken == null || accessToken === '' || accessToken === 'null') {
-        return {};
-    } else {
-        let localStorage = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN);
-        let userInfo = localStorage.getObject(CONSTS.USER_INFO);
-        return userInfo;
-    }
+	let accessToken = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).get(CONSTS.LOGIN_ACCESS_TOKEN);
+	if(accessToken === 'undefined' || accessToken == null || accessToken === '' || accessToken === 'null') {
+		return {};
+	} else {
+		let localStorage = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN);
+		let userInfo = localStorage.getObject(CONSTS.USER_INFO);
+		return userInfo;
+	}
 };
 
 /**
@@ -601,20 +608,20 @@ const getLoginUserInfo = () => {
  * @public
  */
 const clearMemory = (onlyMemory) => {
-    let instanceId = window.localStorage.getItem(CONSTS.PREFIX_LOGIN + '_' + CONSTS.APP_INSTANCE_ID);
-    let accessToken = window.localStorage.getItem(CONSTS.PREFIX_LOGIN + '_' + CONSTS.LOGIN_ACCESS_TOKEN);
-    let userInfo = window.localStorage.getItem(CONSTS.PREFIX_LOGIN + '_' + CONSTS.USER_INFO);
-    window.localStorage.clear();
-    cacheUtils.cookie.clear();
-    window.sessionStorage.clear();
-    if (onlyMemory !== true) {
-        delAllFile();
-    }
-    cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).set(CONSTS.APP_INSTANCE_ID, instanceId === undefined ? '' : instanceId);
-    cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).set(CONSTS.LOGIN_ACCESS_TOKEN, accessToken === undefined ? '' : accessToken);
-    cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).set(CONSTS.USER_INFO, userInfo === undefined ? '' : userInfo);
-//  window.localStorage.setItem(CONSTS.PREFIX_LOGIN + '_' + CONSTS.APP_INSTANCE_ID, instanceId === undefined ? '' : instanceId);
-//  window.localStorage.setItem(CONSTS.PREFIX_LOGIN + '_' + CONSTS.LOGIN_ACCESS_TOKEN, accessToken === undefined ? '' : accessToken);
+	let instanceId = window.localStorage.getItem(CONSTS.PREFIX_LOGIN + '_' + CONSTS.APP_INSTANCE_ID);
+	let accessToken = window.localStorage.getItem(CONSTS.PREFIX_LOGIN + '_' + CONSTS.LOGIN_ACCESS_TOKEN);
+	let userInfo = window.localStorage.getItem(CONSTS.PREFIX_LOGIN + '_' + CONSTS.USER_INFO);
+	window.localStorage.clear();
+	cacheUtils.cookie.clear();
+	window.sessionStorage.clear();
+	if(onlyMemory !== true) {
+		delAllFile();
+	}
+	cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).set(CONSTS.APP_INSTANCE_ID, instanceId === undefined ? '' : instanceId);
+	cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).set(CONSTS.LOGIN_ACCESS_TOKEN, accessToken === undefined ? '' : accessToken);
+	cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).set(CONSTS.USER_INFO, userInfo === undefined ? '' : userInfo);
+	//  window.localStorage.setItem(CONSTS.PREFIX_LOGIN + '_' + CONSTS.APP_INSTANCE_ID, instanceId === undefined ? '' : instanceId);
+	//  window.localStorage.setItem(CONSTS.PREFIX_LOGIN + '_' + CONSTS.LOGIN_ACCESS_TOKEN, accessToken === undefined ? '' : accessToken);
 };
 
 /**
@@ -623,48 +630,48 @@ const clearMemory = (onlyMemory) => {
  * @private
  */
 const hideKeyBord = (url) => {
-    if(document.documentElement.clientHeight < plus.webview.currentWebview().pageOldH){
-    	var nativeWebview = plus.webview.currentWebview().nativeInstanceObject();
-    	if (mui.os.android) {//安卓暂时没有发现此问题如果有请把它放开
-//          var main = plus.android.runtimeMainActivity();
-//          var Context = plus.android.importClass('android.content.Context');
-//          var InputMethodManager = plus.android.importClass('android.view.inputmethod.InputMethodManager');
-//          var imm = main.getSystemService(Context.INPUT_METHOD_SERVICE);
-//          plus.android.importClass(nativeWebview);
-//          nativeWebview.requestFocus();
-//          imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
-        } 
-        if(mui.os.ios){
-        	var tagName = document.activeElement.tagName.toLowerCase();
-			if(tagName=='input'||tagName=='textarea'){
+	if(document.documentElement.clientHeight < plus.webview.currentWebview().pageOldH) {
+		var nativeWebview = plus.webview.currentWebview().nativeInstanceObject();
+		if(mui.os.android) { //安卓暂时没有发现此问题如果有请把它放开
+			//          var main = plus.android.runtimeMainActivity();
+			//          var Context = plus.android.importClass('android.content.Context');
+			//          var InputMethodManager = plus.android.importClass('android.view.inputmethod.InputMethodManager');
+			//          var imm = main.getSystemService(Context.INPUT_METHOD_SERVICE);
+			//          plus.android.importClass(nativeWebview);
+			//          nativeWebview.requestFocus();
+			//          imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
+		}
+		if(mui.os.ios) {
+			var tagName = document.activeElement.tagName.toLowerCase();
+			if(tagName == 'input' || tagName == 'textarea') {
 				document.activeElement.blur();
 				return;
 			}
-    		nativeWebview.plusCallMethod({
-                'setKeyboardDisplayRequiresUserAction': false
-            });
-            var input = document.createElement('input');
-	    	document.body.appendChild(input);
-	        input.focus();
+			nativeWebview.plusCallMethod({
+				'setKeyboardDisplayRequiresUserAction': false
+			});
+			var input = document.createElement('input');
+			document.body.appendChild(input);
+			input.focus();
 			input.blur();
 			document.body.removeChild(input);
-			input=null;
-        }
-    }
+			input = null;
+		}
+	}
 };
 
 export default {
-    openWindow,
-    openPreWindow,
-    openIndexWindow,
-    getNetworkType,
-    getNetworkTypeZH,
-    forwordError,
-    muiAjax,
-    loginValid,
-    getLoginUserInfo,
-    clearMemory,
-    closeAllOpenPage,
-    setStatusStyle,
-    setStatusStyleForPageId
+	openWindow,
+	openPreWindow,
+	openIndexWindow,
+	getNetworkType,
+	getNetworkTypeZH,
+	forwordError,
+	muiAjax,
+	loginValid,
+	getLoginUserInfo,
+	clearMemory,
+	closeAllOpenPage,
+	setStatusStyle,
+	setStatusStyleForPageId
 };
