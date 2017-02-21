@@ -196,6 +196,7 @@
 		line-height: 62px;
 		max-width: 62px;
 		height: 62px;
+		width: 62px;
 	}
 	
 	.mui-table-view .mui-media-body {

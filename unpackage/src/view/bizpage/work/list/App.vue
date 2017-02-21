@@ -15,7 +15,7 @@
 		<div id="scroll" class="mui-scroll-wrapper">
 			<div id="pullrefresh" class="mui-scroll">
 				<img class="advertisement" src="http://img0.imgtn.bdimg.com/it/u=3660483257,1608558041&fm=15&gp=0.jpg">
-				<div class="oneWork">
+				<div class="oneWork" @tap="gotoDetail('id')">
 					<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
 					<div class="workStore">
 						<p class="mui-ellipsis">用工需求标题用工需求标题用工需求标题用工需求标题用工需求标题</p>
@@ -197,6 +197,13 @@
 
 		},
 		methods: {
+			gotoDetail: function(id) {
+				muiUtils.openWindow('../../bizpage/work/workinfo.html', {
+                    extras: {
+                        id: id
+                    }
+               });
+			},
 			doSearch: function() {
 				//this.$broadcast('reflashlist');
 			},
