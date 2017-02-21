@@ -1,6 +1,10 @@
 <template>
 	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
 	<div class="deviceList">
+		<p class="conditions">
+			<a href="javascript: void(0)">用户量{{userNum}}</a>
+			<a href="javascript: void(0)">周活跃{{activeNum}}</a>
+		</p>
 		<listctrl :noresultmsg="noresultmsg" :childlist="childlist" @getlistdata="getdata" @comlist_itemtap="itemtap" :toptipheight="45" :showdelete="showdelete"></listctrl>
 	</div>
 </template>
@@ -10,7 +14,7 @@
 	import muiUtils from 'common/muiUtils';
 	import log from 'common/logUtils';
 	import listctrl from 'src/component/list/ListCtrl';
-	import list from 'src/component/list/List';
+	import list from './List';
 	import api from 'api';
 	import CONSTS from 'common/consts';
 	import {
@@ -20,7 +24,8 @@
 		data: function() {
 			return {
 				childlist: list,
-				filterType: 0,
+				userNum: 100000,
+				activeNum: 8900,
 				disnonetworkmask: false,
 				showdelete: false,
 				pullrefresh: null
@@ -86,7 +91,7 @@
 	}
 	
 	.deviceList .mui-scroll-wrapper {
-		/*top: 45px;*/
+		top: 45px;
 	}
 	
 	.deviceList .conditions {

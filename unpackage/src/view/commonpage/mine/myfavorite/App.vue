@@ -5,7 +5,7 @@
 			<a href="javascript: void(0)" class="haha {{filterType == 0 ? 'filterActive':''}}" @tap="favoriteFilter(0)">师傅名片</a>
 			<a href="javascript: void(0)" class="haha {{filterType == 1 ? 'filterActive':''}}" @tap="favoriteFilter(1)">用工需求</a>
 			<a href="javascript: void(0)" class="haha {{filterType == 2 ? 'filterActive':''}}" @tap="favoriteFilter(2)">店铺</a>
-			<a href="javascript: void(0)" class="haha {{filterType == 3 ? 'filterActive':''}}" @tap="favoriteFilter(3)">订单</a>
+			<a href="javascript: void(0)" class="haha {{filterType == 3 ? 'filterActive':''}}" @tap="favoriteFilter(3)">工程</a>
 		</p>
 		<listctrl :noresultmsg="noresultmsg" :childlist="childlist" @getlistdata="getdata" @comlist_itemtap="itemtap" :toptipheight="45"></listctrl>
 	</div>
@@ -27,6 +27,7 @@
 			return {
 				childlist: list,
 				filterType:0,
+				filterpath:'master/masterinfo',
 				disnonetworkmask: false,
 				pullrefresh: null
 			};
@@ -37,6 +38,20 @@
 		methods: {
 			favoriteFilter(type) {
 				this.filterType = type;
+				switch(type){
+					case 0:
+						this.filterpath = 'master/masterinfo';
+						break
+					case 1:
+						this.filterpath = 'work/workinfo';
+						break
+					case 2:
+						this.filterpath = 'device/storemanage';
+						break
+					case 3:
+						this.filterpath = 'project/projectinfo';
+						break
+				}
 				this.$broadcast('reflashlist');
 			},
 			getdata: function(pager, callback) {
@@ -67,9 +82,9 @@
 				});
 			},
 			itemtap: function(item) {
-				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', 'bizpage_device_deviceinfo', {
+				muiUtils.openWindow('../../bizpage/'+this.filterpath+'.html', 'bizpage_'+this.filterpath.replace('/','_'), {
 					extras: {
-						url: '../../bizpage/device/deviceinfo.html'
+						id: 'id'
 					}
 				});
 			}
