@@ -3,7 +3,6 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import app from './App';
 import vheader from 'component/mui/Header';
-import muiUtils from 'common/muiUtils';
 
 Vue.use(VueRouter);
 var router = new VueRouter();
@@ -19,14 +18,12 @@ var header = new HeaderVue({
             title: {
                 display: true
             },
-            rightIconButton:{
-            	display: true,
-            	iconClass: 'mui-icon mui-icon-plusempty',
-            	text: '',
-            	onClick: function(_this){
-					muiUtils.openWindow('../../commonpage/adminsetting/noticenew.html', 'commonpage_adminsetting_noticenew');
-            	}
-            }
+            rightButton: {
+                display: false,
+                text: '',
+                onClick: function() {
+                }
+            },
         }
     },
     el: 'vheader'

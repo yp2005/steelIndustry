@@ -10,7 +10,7 @@
 	import muiUtils from 'common/muiUtils';
 	import log from 'common/logUtils';
 	import listctrl from 'src/component/list/ListCtrl';
-	import list from 'src/component/list/List';
+	import list from './List';
 	import api from 'api';
 	import CONSTS from 'common/consts';
 	import {
@@ -22,7 +22,7 @@
 				childlist: list,
 				filterType: 0,
 				disnonetworkmask: false,
-				showdelete: true,
+				showdelete: false,
 				pullrefresh: null
 			};
 		},
@@ -40,10 +40,10 @@
 					dataType: "json",
 					success: function(data) {
 //						callback(data.result_data);
-						if(data.header.code === CONSTS.ERROR_CODE.SUCCESS) {
-							callback(data);
+						if(data.error_code === CONSTS.ERROR_CODE.SUCCESS) {
+							callback(data.result_data);
 						} else {
-							mui.toast(data.msg);
+							mui.toast(data.error_message);
 							callback(null);
 						}
 					},
@@ -55,9 +55,9 @@
 				});
 			},
 			itemtap: function(item) {
-				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', 'bizpage_device_deviceinfo', {
+				muiUtils.openWindow('../../commonpage/adminsetting/noticedetail.html', 'commonpage_adminsetting_noticedetail', {
 					extras: {
-						url: '../../bizpage/device/deviceinfo.html'
+						id: 'id'
 					}
 				});
 			}

@@ -17,7 +17,7 @@
 					<div class="oneStore">
 						<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
 						<div class="storeInfo">
-							<p class="mui-ellipsis">帖子111</p>
+							<p class="mui-ellipsis">{{item.title}}</p>
 							<p>北京 北京市 海淀区</p>
 							<p>
 								<img v-if="item.shiming" :src="shimingpicpath">
@@ -26,7 +26,9 @@
 								<img v-else :src="noqiyepicpath">
 								<span class="mui-pull-right">距离：9999KM</span>
 							</p>
-							<p><a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
+							<p>
+								<a @tap="itemDelete(index,$event)" href="javascript:void(0)" style="color:red;border-color: red;">删除</a>
+							</p>
 						</div>
 					</div>
 				</div>
@@ -64,9 +66,10 @@
 			}
 		},
 		methods: {
-			itemDelete: function(index){
+			itemDelete: function(index,event){
 				var that = this;
-				this.$dispatch('comlist_itemdelete',index);
+//				this.$dispatch('comlist_itemdelete',index);
+				event.stopPropagation();
 			},
 			itemtap: function(item) {
 				if(!item.disabled){
@@ -236,12 +239,12 @@
 	}
 	
 	.oneStore .storeInfo p:nth-child(4) a {
-		color: #fff;
-		background-color: #26c6da;
+		color: #26c6da;
 		line-height: 1;
 		padding: 5px 8px;
 		border-radius: 3px;
 		margin: 5px 0;
+		border: 1px solid #26c6da;
 	}
 	
 	.oneStore .storeInfo p:nth-child(4) span {

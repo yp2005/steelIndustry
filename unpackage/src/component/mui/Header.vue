@@ -27,6 +27,9 @@
 			<a href="javascript:void(0)" style="display: {{hdstyleDef.rightButton.display}}" @tap="hdstyleDef.rightButton.onClick(this)" class="mui-btn mui-btn-link mui-pull-right {{hdstyleDef.rightButton.text === '首页' ? 'jxddicon icon-shouye' : ''}} {{hdstyleDef.rightButton.text === '我的求购' ? 'jxddicon icon-wodeqiugou0' : ''}}">
 				<i>{{hdstyleDef.rightButton.text}}</i>
 			</a>
+			<a href="javascript:void(0)" style="font-size: 30px;font-weight: bold;padding: 2px 10px;display: {{hdstyleDef.rightIconButton.display}}" @tap="hdstyleDef.rightIconButton.onClick(this)" class="mui-btn mui-btn-link mui-pull-right {{hdstyleDef.rightIconButton.iconClass}}">
+				<i>{{hdstyleDef.rightIconButton.text}}</i>
+			</a>
 			<a href="javascript:void(0)" style="display: {{hdstyleDef.rightSearchBtn.display}}; margin-right: {{hdstyleDef.rightSearchBtn.marginright}};" @tap="searchFocus" class="right-search-btn"><span class="jxddicon icon-sousuo"></span></a>
 			<div class="barcode" @tap="hdstyleDef.rightBarcodeBtn.onClick(this)" style="display: {{hdstyleDef.rightBarcodeBtn.display}};">
 				<i class="jxddicon icon-saoyisao" style="color: {{hdstyleDef.rightBarcodeBtn.color || '#ffffff'}};"></i>

@@ -52,10 +52,10 @@
 					dataType: "json",
 					success: function(data) {
 //						callback(data.result_data);
-						if(data.header.code === CONSTS.ERROR_CODE.SUCCESS) {
-							callback(data);
+						if(data.error_code === CONSTS.ERROR_CODE.SUCCESS) {
+							callback(data.result_data);
 						} else {
-							mui.toast(data.msg);
+							mui.toast(data.error_message);
 							callback(null);
 						}
 					},

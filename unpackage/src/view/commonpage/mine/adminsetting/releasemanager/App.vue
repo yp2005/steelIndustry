@@ -28,7 +28,7 @@
 				childlist: list,
 				filterType: 0,
 				disnonetworkmask: false,
-				showdelete: true,
+				showdelete: false,
 				noresultmsg: '目前没有需要审核的店铺信息',
 				pullrefresh: null
 			};
@@ -67,10 +67,10 @@
 					dataType: "json",
 					success: function(data) {
 //						callback(data.result_data);
-						if(data.header.code === CONSTS.ERROR_CODE.SUCCESS) {
-							callback(data);
+						if(data.error_code === CONSTS.ERROR_CODE.SUCCESS) {
+							callback(data.result_data);
 						} else {
-							mui.toast(data.msg);
+							mui.toast(data.error_message);
 							callback(null);
 						}
 					},
