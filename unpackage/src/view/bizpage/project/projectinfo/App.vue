@@ -1,4 +1,4 @@
-/** * @file 店铺详情 * @Author lxm * @private */
+/** * @file 工程详情 * @Author lxm * @private */
 
 <template>
 	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
@@ -8,44 +8,44 @@
 				<ul class="mui-table-view mui-table-view-chevron">
 					<li class="mui-table-view-cell">
 						<p class="jieshao">
-							<span class="title">{{workInfo.title}}</span>
+							<span class="title">{{projectInfo.title}}</span>
 							<span @tap="shoucang" class="jxddicon icon-shoucang1"></span>
 						</p>
 					</li>
 					<li class="mui-table-view-cell">
 						<label>发布时间</label>
-						<span class="info-text">{{workInfo.publishtime}}</span>
+						<span class="info-text">{{projectInfo.publishtime}}</span>
 					</li>
 					<li class="mui-table-view-cell">
 						<label>到期时间</label>
-						<span class="info-text">{{workInfo.endtime}}</span>
+						<span class="info-text">{{projectInfo.endtime}}</span>
 					</li>
 					<li class="mui-table-view-cell">
 						<label>招工范围</label>
-						<span class="info-text">{{workInfo.type}}</span>
+						<span class="info-text">{{projectInfo.type}}</span>
 					</li>
 					<li class="mui-table-view-cell">
 						<label>干活地点</label>
-						<span @tap="positioning" class="address info-text">{{workInfo.address.province + ' ' + workInfo.address.city + ' ' + workInfo.address.district + ' ' + workInfo.address.street}}</span>
+						<span @tap="positioning" class="address info-text">{{projectInfo.address.province + ' ' + projectInfo.address.city + ' ' + projectInfo.address.district + ' ' + projectInfo.address.street}}</span>
 						<span @tap="positioning" class="jxddicon icon-weizhi2 address-dingwei"></span>
 					</li>
 				</ul>
 				<ul class="mui-table-view mui-table-view-chevron shifu">
 					<li class="mui-table-view-cell">
-						<img class="mui-media-object mui-pull-left head-img" id="head-img" src="{{workInfo.userImg}}">
-						<p class="master-name">{{workInfo.name}}</p>
+						<img class="mui-media-object mui-pull-left head-img" id="head-img" src="{{projectInfo.userImg}}">
+						<p class="master-name">{{projectInfo.name}}</p>
 						<div class="yuyue">
-							<p class="counts">{{workInfo.yuyue}}</p>
+							<p class="counts">{{projectInfo.yuyue}}</p>
 							<p>预约人数</p>
 						</div>
 						<div class="views">
-							<p class="counts">{{workInfo.views}}</p>
+							<p class="counts">{{projectInfo.views}}</p>
 							<p>浏览量</p>
 						</div>
 					</li>
 					<li class="mui-table-view-cell btn">
 						<p>
-							<span @tap="callTel(workInfo.telphone)" class="tel-btn"><span class="mui-icon mui-icon-phone icon-span"></span>电话咨询</span>
+							<span @tap="callTel(projectInfo.telphone)" class="tel-btn"><span class="mui-icon mui-icon-phone icon-span"></span>电话咨询</span>
 						</p>
 						<!--<p>
 							<span class="yuyue-btn"><span class="jxddicon icon-yijianfankui icon-span"></span>立即预约</span>
@@ -54,13 +54,13 @@
 				</ul>
 				<ul class="mui-table-view shifu">
 					<li class="mui-table-view-cell">
-						<label>工作介绍</label>
+						<label>工程介绍</label>
 					</li>
 					<li class="mui-table-view-cell">
-						<span>{{workInfo.introduction}}</span>
+						<span>{{projectInfo.introduction}}</span>
 					</li>
 					<li class="mui-table-view-cell master-images">
-						<template v-for="item in workInfo.workinfoimgs">
+						<template v-for="item in projectInfo.projectInfoimgs">
 							<img :src="item.url">
 						</template>
 					</li>
@@ -71,7 +71,7 @@
 					</li>
 					<li class="mui-table-view-cell">
 						<p class="fabu">
-							<a @tap="publishWorkInfo">我要发布用工需求<i id="box"></i></a>
+							<a @tap="publishprojectInfo">我要发布工程<i id="box"></i></a>
 						</p>
 					</li>
 				</ul>
@@ -92,13 +92,13 @@
 			// 0 分享，非0未分享
 			let isShared = cacheUtils.localStorage(CONSTS.IS_SHARED).get(CONSTS.IS_SHARED);
 			return {
-				workInfo: {},
+				projectInfo: {},
 				isShared: isShared
 			}
 		},
 		created: function() {
 			//ajax请求数据，这里的数据是模拟数据，后台查询的数据需要进行处理
-			this.workInfo = {
+			this.projectInfo = {
 				views: 30,
 				yuyue: 9,
 				name: '江海流',
@@ -114,7 +114,7 @@
 					street: '阜石路甲69号'
 				},
 				introduction: '团队服务，质量保障，价格低廉，一条龙服务。',
-				workinfoimgs: [{
+				projectInfoimgs: [{
 						url: 'http://img.168bgt.com/upload/2016/05/22/20160522172528_408.jpg'
 					},
 					{
@@ -130,7 +130,7 @@
 			positioning: function() {
 				muiUtils.openWindow('../../commonpage/map/selectaddress.html', '../../commonpage/map/selectaddress.html', {
 					extras: {
-						address: this.workInfo.address,
+						address: this.projectInfo.address,
 						isPositioning: true,
 						fromPage: '../../bizpage/device/deviceinfo.html'
 					}
@@ -154,7 +154,7 @@
 			shoucang: function() {
 				mui.toast('收藏成功！');
 			},
-			publishWorkInfo: function() {
+			publishprojectInfo: function() {
 				let url = '../../bizpage/release/work.html';
 				muiUtils.openWindow(url, url);
 			}

@@ -204,7 +204,7 @@
 		padding-top: 15px;
 	}
 	
-	.mui-table-view-cell {
+	.mui-table-view {
 		margin-bottom: 10px;
 	}
 	

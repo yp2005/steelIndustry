@@ -14,7 +14,7 @@
 		<div id="scroll" class="mui-scroll-wrapper">
 			<div id="pullrefresh" class="mui-scroll">
 				<img class="advertisement" src="http://img0.imgtn.bdimg.com/it/u=3660483257,1608558041&fm=15&gp=0.jpg">
-				<div class="oneProject">
+				<div class="oneProject" @tap="gotoDetail('id')">
 					<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
 					<div class="projectInfo">
 						<p class="mui-ellipsis">工程名称工程名称工程名称工程名称工程名称工程名称</p>
@@ -114,6 +114,13 @@
 
 		},
 		methods: {
+			gotoDetail: function(id) {
+				muiUtils.openWindow('../../bizpage/project/projectinfo.html', {
+                    extras: {
+                        id: id
+                    }
+               });
+			},
 			doSearch: function() {
 				//this.$broadcast('reflashlist');
 			},
