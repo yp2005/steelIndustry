@@ -3,63 +3,68 @@
 		<div class="mui-scroll">
 			<ul id="list" class="mui-table-view mui-table-view-chevron">
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="javascript:void(0)" @tap="steelPlateActive = true">
+					<a class="mui-navigate-right" href="javascript:void(0)" @tap="openOneCalculator('steelPlateActive')">
 						钢板
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="javascript:void(0)" @tap="steelPipeActive = true">
+					<a class="mui-navigate-right" href="javascript:void(0)" @tap="openOneCalculator('steelPipeActive')">
 						钢管
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="javascript:void(0)" @tap="roundSteelActive = true">
+					<a class="mui-navigate-right" href="javascript:void(0)" @tap="openOneCalculator('roundSteelActive')">
 						圆钢
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="javascript:void(0)" @tap="squareSteelActive = true">
+					<a class="mui-navigate-right" href="javascript:void(0)" @tap="openOneCalculator('squareSteelActive')">
 						方钢
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="javascript:void(0)" @tap="flatSteelActive = true">
+					<a class="mui-navigate-right" href="javascript:void(0)" @tap="openOneCalculator('flatSteelActive')">
 						扁钢
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="javascript:void(0)" @tap="sixAngleSteelActive = true">
+					<a class="mui-navigate-right" href="javascript:void(0)" @tap="openOneCalculator('sixAngleSteelActive')">
 						六角钢
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="javascript:void(0)" @tap="screwThreadSteelActive = true">
+					<a class="mui-navigate-right" href="javascript:void(0)" @tap="openOneCalculator('screwThreadSteelActive')">
 						螺纹钢
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="javascript:void(0)" @tap="sidePassActive = true">
+					<a class="mui-navigate-right" href="javascript:void(0)" @tap="openOneCalculator('sidePassActive')">
 						方通
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="javascript:void(0)" @tap="flatPassActive = true">
+					<a class="mui-navigate-right" href="javascript:void(0)" @tap="openOneCalculator('flatPassActive')">
 						扁通
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="javascript:void(0)" @tap="equalSideAngleSteelActive = true">
+					<a class="mui-navigate-right" href="javascript:void(0)" @tap="openOneCalculator('equalSideAngleSteelActive')">
 						等边角钢
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="javascript:void(0)" @tap="notEqualSideAngleSteelActive = true">
+					<a class="mui-navigate-right" href="javascript:void(0)" @tap="openOneCalculator('notEqualSideAngleSteelActive')">
 						不等边角钢
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="javascript:void(0)" @tap="hSteelActive = true">
+					<a class="mui-navigate-right" href="javascript:void(0)" @tap="openOneCalculator('hSteelActive')">
 						H型钢
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" href="javascript:void(0)" @tap="openOneCalculator('colorFilmActive')">
+						彩卷
 					</a>
 				</li>
 			</ul>
@@ -186,7 +191,7 @@
 				<a href="javascript:void(0)" @tap="hSteelActive = false" class="jxddicon icon-houtui44">返回</a>
 				<img src="../../static/img/calculator/hxinggang.jpg" />
 				<div class="calculateArea">
-					<p>H型钢</p>
+					<p>H型钢重量计算</p>
 					<p><span>腹板高度：</span><input type="text" v-model="hSteelFBHeight"><span>mm</span></p>
 					<p><span>腹板厚度：</span><input type="text" v-model="hSteelFBThickness"><span>mm</span></p>
 					<p><span>翼板宽度：</span><input type="text" v-model="hSteelYBWidth"><span>mm</span></p>
@@ -194,7 +199,31 @@
 					<p><span>长度：</span><input type="text" v-model="hSteelLength"><span>m</span></p>
 					<p><span>重量：</span><input type="text" value="{{hSteelWeight | weight}} " readonly><span>kg</span></p>
 				</div>
-				<img src="../../static/img/calculator/hxingguige.jpg"/>
+				<img src="../../static/img/calculator/hxingguige.jpg" />
+			</div>
+			<div class="oneCalculator {{colorFilmActive ? 'active' : ''}}">
+				<a href="javascript:void(0)" @tap="colorFilmActive = false" class="jxddicon icon-houtui44">返回</a>
+				<img src="../../static/img/calculator/caijuan.jpg" />
+				<div class="calculateArea">
+					<p>彩卷计算</p>
+					<p>
+						<span>宽度：</span>
+						<span>
+							<input checked name="colorFilmWidth" type="radio" value="1000" v-model="colorFilmWidth"/>
+							<label>1000</label>
+						</span>
+						<span>
+							<input name="colorFilmWidth" type="radio" value="1200" v-model="colorFilmWidth"/>
+							<label>1200</label>
+						</span>
+						<span>mm</span>
+					</p>
+					<p><span>内径：</span><input type="text" v-model="colorFilmDiameter"><span>cm</span></p>
+					<p><span>彩卷厚度：</span><input type="text" v-model="colorFilmThickness"><span>cm</span></p>
+					<p><span>彩板厚度：</span><input type="text" v-model="colorPlateThickness"><span>mm</span></p>
+					<p><span>长度：</span><input type="text" value="{{colorFilmLength | weight}} " readonly><span>m</span></p>
+					<p><span>重量：</span><input type="text" value="{{colorFilmWeight | weight}} " readonly><span>kg</span></p>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -265,7 +294,14 @@
 				hSteelYBWidth: undefined,
 				hSteelYBThickness: undefined,
 				hSteelLength: undefined,
-				hSteelWeight: 0
+				hSteelWeight: 0,
+				colorFilmActive: false,
+				colorFilmWidth: 1000,
+				colorFilmDiameter: undefined,
+				colorFilmThickness: undefined,
+				colorPlateThickness: undefined,
+				colorFilmLength: undefined,
+				colorFilmWeight: 0
 			};
 		},
 		computed: {
@@ -294,16 +330,22 @@
 				return this.sidePassLength * this.sidePassWidth * this.sidePassThickness * 4 * 785 / 100000;
 			},
 			flatPassWeight() {
-				return 2 * (this.flatPassSideLength + this.flatPassSideWidth) * this.flatPassThickness * this.flatPassLength * 785 / 100000;
+				return 2 * (parseFloat(this.flatPassSideLength) + parseFloat(this.flatPassSideWidth)) * this.flatPassThickness * this.flatPassLength * 785 / 100000;
 			},
 			equalSideAngleSteelWeight() {
 				return this.equalSideAngleSteelLength * this.equalSideAngleSteelWidth * this.equalSideAngleSteelThickness * 15 / 1000;
 			},
 			notEqualSideAngleSteelWeight() {
-				return this.notEqualSideAngleSteelLength * (this.notEqualSideAngleSteelWidth1 + this.notEqualSideAngleSteelWidth2) * this.notEqualSideAngleSteelThickness * 76 / 10000;
+				return this.notEqualSideAngleSteelLength * (parseFloat(this.notEqualSideAngleSteelWidth1) + parseFloat(this.notEqualSideAngleSteelWidth2)) * this.notEqualSideAngleSteelThickness * 76 / 10000;
 			},
 			hSteelWeight() {
 				return 785 * (this.hSteelFBThickness * (this.hSteelFBHeight - 2 * this.hSteelYBThickness) + 2 * this.hSteelYBWidth * this.hSteelYBThickness) * this.hSteelLength / 100000;
+			},
+			colorFilmWeight() {
+				return this.colorFilmWidth / 10 * Math.PI * ((parseFloat(this.colorFilmDiameter) + parseFloat(this.colorFilmThickness)) * (parseFloat(this.colorFilmDiameter) + parseFloat(this.colorFilmThickness)) - this.colorFilmDiameter * this.colorFilmDiameter) * 785 / 100000;
+			},
+			colorFilmLength() {
+				return 127.4 / this.colorPlateThickness / this.colorFilmWidth * this.colorFilmWeight;
 			}
 		},
 		filters: {
@@ -315,7 +357,10 @@
 			}
 		},
 		methods: {
-
+			openOneCalculator(activeSteelName) {
+				this[activeSteelName] = true;
+				this.scroll.scrollTo(0, 0, 0);
+			}
 		},
 		ready: function() {
 			this.scroll = mui('.mui-scroll-wrapper.calculator').scroll({
@@ -385,7 +430,6 @@
 	.oneCalculator .calculateArea p {
 		line-height: 50px;
 		color: #666;
-		
 	}
 	
 	.oneCalculator.hsteel .calculateArea p {
@@ -394,6 +438,23 @@
 	
 	.oneCalculator .calculateArea p span:nth-child(1) {
 		width: 70px;
+	}
+	
+	.oneCalculator .calculateArea p span:nth-child(2),
+	.oneCalculator .calculateArea p span:nth-child(3) {
+		width: 60px;
+		position: relative;
+	}
+	
+	.oneCalculator .calculateArea p span input[type=radio] {
+		height: 16px;
+		width: 16px;
+		position: absolute;
+		top: 17px;
+	}
+	
+	.oneCalculator .calculateArea p span label {
+		margin-left: 18px;
 	}
 	
 	.oneCalculator .calculateArea p:nth-child(1) {
