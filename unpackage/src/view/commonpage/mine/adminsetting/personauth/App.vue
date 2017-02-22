@@ -15,22 +15,22 @@
 					<div class="title"></div>
 					<div class="inputRow">
 						<p>身份证正面</p>
-						<img :src="imgurl1">
+						<img :src="imgurl1" class="personAuthImg">
 					</div>
 					<div class="title"></div>
 					<div class="inputRow">
 						<p>身份证反面</p>
-						<img :src="imgurl2">
+						<img :src="imgurl2" class="personAuthImg">
 					</div>
 					<div class="title"></div>
 					<div class="inputRow">
 						<p>本人手持身份证的照片</p>
-						<img :src="imgurl3">
+						<img :src="imgurl3" class="personAuthImg">
 					</div>
 					<div class="title"></div>
 					<div class="inputRow">
 						<p>本人正面照</p>
-						<img :src="imgurl4">
+						<img :src="imgurl4" class="personAuthImg">
 					</div>
 					<div class="bottomBtn">
 						<a href="javascript:void(0)" @tap="authAgree()">审核通过</a>
@@ -289,5 +289,9 @@
         border: solid 1px #26c6da;
         border-radius: 5px;
         color: #26c6da;
+    }
+    
+    .personAuthImg{
+    	width:100%;
     }
 </style>

@@ -2,8 +2,8 @@
 	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
 	<div class="deviceList">
 		<p class="conditions">
-			<a href="javascript: void(0)">用户量{{userNum}}</a>
-			<a href="javascript: void(0)">周活跃{{activeNum}}</a>
+			<a href="javascript: void(0)">用户量(<span class="userNumSpan">{{userNum}}</span>)</a>
+			<a href="javascript: void(0)">周活跃(<span class="userNumSpan">{{activeNum}}</span>)</a>
 		</p>
 		<listctrl :noresultmsg="noresultmsg" :childlist="childlist" @getlistdata="getdata" @comlist_itemtap="itemtap" :toptipheight="45" :showdelete="showdelete"></listctrl>
 	</div>
@@ -102,13 +102,11 @@
 	
 	.deviceList .conditions a {
 		color: #000;
-		width: 23%;
+		width: 49%;
 		position: relative;
 	}
 	
-	.deviceList .conditions a:nth-child(1) ,
-	.deviceList .conditions a:nth-child(2) ,
-	.deviceList .conditions a:nth-child(3) {
+	.deviceList .conditions a:nth-child(1) {
 		border-right: solid 1px #ddd;
 	}
 	
@@ -133,5 +131,9 @@
 	
 	.filterActive{
 		color:#26c6da !important;
+	}
+	
+	.userNumSpan{
+		color:#26c6da
 	}
 </style>
