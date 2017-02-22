@@ -15,6 +15,9 @@
 	                            <a class="jxddicon icon-jinru32">发布信息审核</a>
 	                        </li>
 	                        <li class="mui-table-view-cell" @tap="open('../../commonpage/adminsetting/advertisingmanager.html')">
+	                            <a class="jxddicon icon-jinru32">广告管理</a>
+	                        </li>
+	                        <li class="mui-table-view-cell" @tap="open('../../commonpage/adminsetting/positionmanager.html')">
 	                            <a class="jxddicon icon-jinru32">广告位管理</a>
 	                        </li>
 	                        <li class="mui-table-view-cell" @tap="open('../../commonpage/adminsetting/noticemanager.html')">

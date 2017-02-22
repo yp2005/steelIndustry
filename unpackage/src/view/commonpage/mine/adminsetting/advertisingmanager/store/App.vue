@@ -55,11 +55,9 @@
 				});
 			},
 			itemtap: function(item) {
-				muiUtils.openWindow('../../commonpage/advertisingmanager/editadvertising.html', 'commonpage_advertisingmanager_editadvertising', {
-					extras: {
-						id: 'id'
-					}
-				});
+				let gotoPage = plus.webview.getWebviewById('commonpage_advertisingmanager_store');
+				mui.fire(gotoPage, 'advertising_storepick', {store:item});
+				mui.back();
 			}
 		},
 		ready: function() {

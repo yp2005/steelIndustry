@@ -55,7 +55,7 @@
 				});
 			},
 			itemtap: function(item) {
-				muiUtils.openWindow('../../commonpage/adminsetting/noticedetail.html', 'commonpage_adminsetting_noticedetail', {
+				muiUtils.openWindow('../../commonpage/noticemanager/noticedetail.html', 'commonpage_noticemanager_noticedetail', {
 					extras: {
 						id: 'id'
 					}

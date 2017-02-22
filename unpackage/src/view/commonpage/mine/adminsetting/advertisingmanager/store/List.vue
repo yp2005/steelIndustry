@@ -3,9 +3,9 @@
 	<ul class="mui-table-view mui-table-view-chevron">
 		<li @tap="itemtap(item)" v-for="(index, item) in listitem" class="mui-table-view-cell mui-media comlist_li_padding" >
 			<div v-if="showdelete" class="mui-slider-right mui-disabled">
-				<a @tap="itemAgree(index)" class="mui-btn mui-btn-yellow">通过</a>
-				<a @tap="itemNotAgree(index)" class="mui-btn mui-btn-red">打回</a>
+				<a @tap="itemDelete(index)" class="mui-btn mui-btn-red">删除</a>
 			</div>
+			<div v-if="item.disabled === false" class="mypurchase-tip">我的发布</div>
 			<div class="mui-slider-handle">
 				<div class="comlist_alldelete_left {{showall ? 'comlist_alldelete' : ''}}">
 					<div class="mui-checkbox">
@@ -26,10 +26,7 @@
 								<img v-else :src="noqiyepicpath">
 								<span class="mui-pull-right">距离：9999KM</span>
 							</p>
-							<p>
-								<a @tap="itemAgree(index,$event)" href="javascript:void(0)">认证审核</a>
-								<a @tap="itemNotAgree(index,$event)" href="javascript:void(0)" style="color:red;border-color: red;">封号</a>
-							</p>
+							<p><a href="javascript:void(0)" @tap="gotoStore(item)">进入店铺</a><span class="mui-pull-right">...</span></p>
 						</div>
 					</div>
 				</div>
@@ -39,7 +36,6 @@
 </template>
 
 <script>
-	import muiUtils from 'common/muiUtils';
 	export default {
 		data: function(){
 			return {
@@ -68,14 +64,7 @@
 			}
 		},
 		methods: {
-			itemAgree: function(index,event){
-				muiUtils.openWindow('../../commonpage/usermanager/personauth.html', 'commonpage_usermanager_personauth', {
-					extras: {
-						id: 'id'
-					}
-				});
-			},
-			itemNotAgree: function(index,event){
+			itemDelete: function(index,event){
 				var that = this;
 //				this.$dispatch('comlist_itemdelete',index);
 				event.stopPropagation();
@@ -89,12 +78,12 @@
                     });
 				}
 			},
-			deleteAll: function() {
-				for(var i = (this.listitem.length - 1);i >= 0;i--){
-					if(this.listitem[i].isselect){
-						this.listitem.splice(i,1);
+			gotoStore: function(item) {
+				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', 'bizpage_device_deviceinfo', {
+					extras: {
+						url: '../../bizpage/device/deviceinfo.html'
 					}
-				}
+				});
 			}
 		},
 		ready: function(){

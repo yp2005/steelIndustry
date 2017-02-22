@@ -69,7 +69,7 @@
 		methods: {
 			itemEdit: function(index,event){
 				var that = this;
-				muiUtils.openWindow('../../commonpage/adminsetting/noticenew.html', 'commonpage_adminsetting_noticenew', {
+				muiUtils.openWindow('../../commonpage/noticemanager/noticenew.html', 'commonpage_noticemanager_noticenew', {
 					extras: {
 						id: 'id'
 					}

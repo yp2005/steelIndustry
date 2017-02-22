@@ -2,39 +2,15 @@
 	<div class="mui-content">
 		<div class="mui-scroll-wrapper releaseCard">
 			<div class="mui-scroll">
-				<div class="title"></div>
-				<ul class="mui-table-view">
-					<li class="mui-table-view-cell">
-						<span class="userSwitchSpan">分享获取联系方式</span>
-						<div class="mui-switch {{islianxi ? 'mui-active' : ''}}">
-							<div class="mui-switch-handle" @tap="changeSwitch(0)"></div>
-						</div>
-					</li>
-					<li class="mui-table-view-cell">
-						<span class="userSwitchSpan">店铺审核</span>
-						<div class="mui-switch {{isdianpu ? 'mui-active' : ''}}">
-							<div class="mui-switch-handle" @tap="changeSwitch(1)"></div>
-						</div>
-					</li>
-					<li class="mui-table-view-cell">
-						<span class="userSwitchSpan">工程审核</span>
-					<div class="mui-switch {{isgongcheng ? 'mui-active' : ''}}">
-						<div class="mui-switch-handle" @tap="changeSwitch(2)"></div>
+				<div class="title">首页广告位</div>
+				<div class="inputRow">
+					<label>广告类型</label>
+					<p class="workType">{{shouyetypestr}}</p>
+				</div>
+					<div class="inputRow">
+						<p>请上传身份证正面(必填)</p>
+						<upload :is-cut="isCut" :pictures.sync="pictures" :imagecount="1" :dataid="sfz_zhengmian"></upload>
 					</div>
-					</li>
-					<li class="mui-table-view-cell">
-						<span class="userSwitchSpan">名片审核</span>
-					<div class="mui-switch {{ismingpian ? 'mui-active' : ''}}">
-						<div class="mui-switch-handle" @tap="changeSwitch(3)"></div>
-					</div>
-					</li>
-					<li class="mui-table-view-cell">
-						<span class="userSwitchSpan">用工需求审核</span>
-					<div class="mui-switch {{isyonggong ? 'mui-active' : ''}}">
-						<div class="mui-switch-handle" @tap="changeSwitch(4)"></div>
-					</div>
-					</li>
-				</ul>
 				<div class="title"></div>
 				<div class="inputRow"><label>主题帖积分</label><input type="text" v-model="bddate" placeholder="请输入主题帖积分"></div>
 				<div class="inputRow"><label>回帖积分</label><input type="text" v-model="gender.text" placeholder="请输入回帖积分"></div>
