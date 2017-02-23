@@ -69,7 +69,7 @@
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
-				
+
 				<li class="mui-table-view-cell" @tap="open('../../commonpage/mine/usersetting.html')">
 					<p>
 						<img src="../../static/img/mine/myinformation.svg" />
@@ -84,6 +84,14 @@
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
+				<li class="mui-table-view-cell" @tap="showShareBar">
+					<p>
+						<img src="../../static/img/share/share.svg" />
+						<span>分享</span>
+						<i class="mui-ellipsis">一次分享即可免费联系所有发布信息的用户</i>
+						<span class="jxddicon icon-jinru32"></span>
+					</p>
+				</li>
 
 				<!--<li class="mui-table-view-cell">
 					<p>
@@ -92,7 +100,6 @@
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>-->
-
 			</ul>
 		</div>
 	</div>
@@ -105,13 +112,15 @@
 			return {
 				scroll: undefined,
 				userInfo: {
-					name: '余鹏', 
+					name: '余鹏',
 					avatar: require('static/img/mine/nohp.png'),
 					mobile_number: '18710095921'
 				},
-				jifen:5000,
+				jifen: 5000,
 				isPersonAuth: true,
-				isCompanyAuth: true
+				isCompanyAuth: true,
+				shares: {},
+				showShare: false
 			};
 		},
 		created: function() {
@@ -123,18 +132,93 @@
 		methods: {
 			open(url) {
 				muiUtils.openWindow(url, url, {
-//					isValidLogin: true,
+					//					isValidLogin: true,
 					extras: {
 						url: url
 					}
 				});
+			},
+			shareMessage(shareOb) {
+				var msg = {
+					content: "这是一条分享测试信息...",
+					href: "http://www.baidu.com"
+				};
+				var that = this;
+				if('weixin' == shareOb.id) {
+					plus.nativeUI.actionSheet({ title: "分享到微信", cancel: "取消", buttons: [{ title: "分享到微信朋友圈" }, { title: "发送给微信好友" }] }, function(e) {
+						if(e.index === 1) {
+							msg.extra = { scene: "WXSceneTimeline" };
+						} else {
+							msg.extra = { scene: "WXSceneSession" };
+						}
+						shareOb.send(msg, function() {
+							mui.toast("分享成功！");
+						}, function(e) {
+							mui.toast("分享失败!");
+						});
+					});
+				} else {
+					shareOb.send(msg, function() {
+						mui.toast("分享成功！");
+					}, function(e) {
+						mui.toast("分享失败!");
+					});
+				}
+
+			},
+			showShareBar() {
+				this.showShare = true;
+			},
+			shareAction(type) {
+				this.showShare = false;
+				var that = this;
+				var shareOb;
+				switch(type) {
+					case 'weixin':
+						shareOb = this.shares.sharewx;
+						break;
+					case 'qq':
+						shareOb = this.shares.shareqq;
+						break;
+					case 'tencentweibo':
+						shareOb = this.shares.sharetxwb;
+						break;
+					case 'sinaweibo':
+						shareOb = this.shares.sharesnwb;
+						break;
+				}
+				shareOb.authorize(function() {
+					that.shareMessage(shareOb);
+				}, function(e) {
+					mui.toast("分享失败!");
+				});
 			}
+
 		},
 		ready: function() {
 			this.scroll = mui('.mui-scroll-wrapper.mine').scroll({
 				bounce: true,
 				indicators: false, // 是否显示滚动条
 				deceleration: mui.os.ios ? 0.003 : 0.0009
+			});
+			var that = this;
+			plus.share.getServices(function(s) {
+				for(var i in s) {
+					if('weixin' == s[i].id) {
+						that.shares.sharewx = s[i];
+					}
+					if('qq' == s[i].id) {
+						that.shares.shareqq = s[i];
+					}
+					if('tencentweibo' == s[i].id) {
+						that.shares.sharetxwb = s[i];
+					}
+					if('sinaweibo' == s[i].id) {
+						that.shares.sharesnwb = s[i];
+					}
+				}
+			}, function(e) {
+				mui.toast("获取分享服务列表失败！");
 			});
 		}
 	};
@@ -175,7 +259,6 @@
 	.header p:nth-child(2) {
 		margin-top: 10px;
 	}
-	
 	/*.header .gold {
 		color: #fcb814;
 		position: absolute;
@@ -239,6 +322,7 @@
 		line-height: 14px;
 		font-family: 'Hiragino Sans GB', 苹果丽黑 !important;
 		padding-left: 8px;
+		min-width: 36px;
 	}
 	
 	.mui-table-view .mui-table-view-cell p span:nth-of-type(2) {
@@ -246,6 +330,14 @@
 		right: 0;
 		top: 15px;
 		line-height: 18px;
+	}
+	
+	.mui-table-view .mui-table-view-cell p i {
+		padding-left: 10px;
+		padding-right: 18px;
+		color: #999;
+		font-size: 13px;
+		line-height: 1;
 	}
 	
 	.mui-table-view.content-list:before {

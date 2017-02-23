@@ -67,7 +67,7 @@
 		"Messaging": {},
 		"Orientation": {},
 		"Geolocation": {},
-		"Accelerometer": {}
+		"Accelerometer": {},"Share":{}
 	},
 	"plus": {
 		"splashscreen": {
@@ -81,13 +81,9 @@
 		"runmode": "normal",/*应用的首次启动运行模式，可取liberate或normal，liberate模式在第一次启动时将解压应用资源（Android平台File API才可正常访问_www目录）*/
 		"signature": "Sk9JTiBVUyBtYWlsdG86aHIyMDEzQGRjbG91ZC5pbw==",/*可选，保留给应用签名，暂不使用*/
 		"distribute": {
-			"plugins": {
+			"plugins": {"share":{"weixin":{"appid":"wx78d199c2b18a4691","appsecret":"dda36f96c18f83aea0b00e9ed57d0912","description":"可选，微信分享"}},
 				"push": {
-					"igexin": {
-						"appid": "pZEVNLBYIw7GCMQtegVr89",
-						"appkey": "HD69XVl29n9ca00Y73WOoA",
-						"appsecret": "cGeD3Mp5xc9CUj3fymMQd7"
-					}
+					
 				}
 			},
 			"apple": {
@@ -111,7 +107,7 @@
 				"keystore": "",/*Android应用打包使用的密钥库文件*/
 				"password": "",/*Android应用打包使用密钥库中证书的密码*/
 				"aliasname": "",/*Android应用打包使用密钥库中证书的别名*/
-				"permissions": ["<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>","<uses-permission android:name=\"android.permission.VIBRATE\"/>","<uses-permission android:name=\"android.permission.READ_LOGS\"/>","<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>","<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>","<uses-permission android:name=\"com.android.launcher.permission.UNINSTALL_SHORTCUT\"/>","<uses-permission android:name=\"android.permission.CAMERA\"/>","<uses-permission android:name=\"com.android.launcher.permission.INSTALL_SHORTCUT\"/>","<uses-permission android:name=\"android.permission.SEND_SMS\"/>","<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>","<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>","<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>","<uses-permission android:name=\"android.permission.CALL_PHONE\"/>","<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>","<uses-feature android:name=\"android.hardware.camera\"/>","<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>","<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>","<uses-permission android:name=\"android.permission.WRITE_SMS\"/>","<uses-permission android:name=\"android.permission.READ_SMS\"/>"]
+				"permissions": ["<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>","<uses-permission android:name=\"com.android.launcher.permission.INSTALL_SHORTCUT\"/>","<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>","<uses-permission android:name=\"android.permission.SEND_SMS\"/>","<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>","<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>","<uses-permission android:name=\"android.permission.VIBRATE\"/>","<uses-permission android:name=\"android.permission.READ_LOGS\"/>","<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>","<uses-permission android:name=\"android.permission.CALL_PHONE\"/>","<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>","<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>","<uses-feature android:name=\"android.hardware.camera\"/>","<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>","<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>","<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>","<uses-permission android:name=\"android.permission.WRITE_SMS\"/>","<uses-permission android:name=\"com.android.launcher.permission.UNINSTALL_SHORTCUT\"/>","<uses-permission android:name=\"android.permission.READ_SMS\"/>","<uses-permission android:name=\"android.permission.CAMERA\"/>"]
 			},
 			"orientation": [
 				"portrait-primary"
@@ -2261,7 +2257,14 @@
 					"dist/bizpage/release/index.html",
 					"dist/bizpage/device/list.html",
 					"dist/bizpage/master/list.html",
-					"dist/bizpage/project/list.html"
+					"dist/bizpage/project/list.html",
+					"dist/commonpage/mine/mycard.html",
+					"dist/commonpage/mine/usersetting.html",
+					"dist/commonpage/mine/authmanager.html",
+					"dist/commonpage/mine/myfavorite.html",
+					"dist/commonpage/mine/mywork.html",
+					"dist/commonpage/mine/mystore.html",
+					"dist/bizpage/work/list.html"
 				],
 				"priority": 0
 			},
@@ -2300,7 +2303,9 @@
 					"dist/static/js/mui.pullToRefresh.js",
 					"dist/static/css/pull_to_refresh.css"
 				],
-				"refer": [],
+				"refer": [
+					"dist/bizpage/device/deviceinfo.html"
+				],
 				"priority": 0
 			},
 			"dist/bizpage/release/index.html": {
@@ -2320,7 +2325,10 @@
 					"dist/vendors.dll.js"
 				],
 				"refer": [
-					"dist/bizpage/release/card.html"
+					"dist/bizpage/release/card.html",
+					"dist/bizpage/release/store.html",
+					"dist/bizpage/release/work.html",
+					"dist/bizpage/release/project.html"
 				],
 				"priority": 0
 			},
@@ -2438,6 +2446,279 @@
 					"dist/static/css/mui.poppicker.css",
 					"dist/static/js/mui.poppicker.js",
 					"dist/vendors.dll.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/commonpage/mine/mycard.html": {
+				"resources": [
+					"dist/static/js/mui.pullToRefresh.material.js",
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/commonpage/mine/mycard.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/css/commonpage/mine/mycard.css",
+					"dist/static/js/mui.pullToRefresh.js",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js",
+					"dist/static/css/pull_to_refresh.css"
+				],
+				"refer": [
+					"dist/bizpage/device/deviceinfo.html"
+				],
+				"priority": 0
+			},
+			"dist/commonpage/mine/usersetting.html": {
+				"resources": [
+					"dist/static/css/commonpage/mine/usersetting.css",
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/js/commonpage/mine/usersetting.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js",
+					"dist/static/js/mui.pullToRefresh.material.js",
+					"dist/static/js/mui.pullToRefresh.js",
+					"dist/static/css/pull_to_refresh.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/bizpage/device/deviceinfo.html": {
+				"resources": [
+					"dist/static/css/bizpage/device/deviceinfo.css",
+					"dist/static/js/bizpage/device/deviceinfo.js"
+				],
+				"refer": [
+					"dist/commonpage/map/selectaddress.html"
+				],
+				"priority": 0
+			},
+			"dist/commonpage/authmanager/person.html": {
+				"resources": [
+					"dist/static/css/commonpage/authmanager/person.css",
+					"dist/static/js/commonpage/authmanager/person.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/commonpage/mine/authmanager.html": {
+				"resources": [
+					"dist/static/css/commonpage/mine/authmanager.css",
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/commonpage/mine/authmanager.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js"
+				],
+				"refer": [
+					"dist/commonpage/authmanager/person.html",
+					"dist/commonpage/authmanager/company.html"
+				],
+				"priority": 0
+			},
+			"dist/commonpage/authmanager/company.html": {
+				"resources": [
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/vendorUtils.dll.js",
+					"dist/static/css/commonpage/authmanager/company.css",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/js/commonpage/authmanager/company.js",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/commonpage/mine/myfavorite.html": {
+				"resources": [
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/js/commonpage/mine/myfavorite.js",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js",
+					"dist/static/css/commonpage/mine/myfavorite.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/commonpage/mine/mywork.html": {
+				"resources": [
+					"dist/static/js/mui.pullToRefresh.material.js",
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/css/commonpage/mine/mywork.css",
+					"dist/static/js/commonpage/mine/mywork.js",
+					"dist/static/js/mui.pullToRefresh.js",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js",
+					"dist/static/css/pull_to_refresh.css"
+				],
+				"refer": [
+					"dist/bizpage/device/deviceinfo.html"
+				],
+				"priority": 0
+			},
+			"dist/commonpage/mine/mystore.html": {
+				"resources": [
+					"dist/static/js/mui.pullToRefresh.material.js",
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/js/commonpage/mine/mystore.js",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/js/mui.pullToRefresh.js",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js",
+					"dist/static/css/pull_to_refresh.css",
+					"dist/static/css/commonpage/mine/mystore.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/bizpage/release/store.html": {
+				"resources": [
+					"dist/static/js/bizpage/release/store.js",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/static/css/bizpage/release/store.css",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/mui.picker.css"
+				],
+				"refer": [
+					"dist/commonpage/select/type.html"
+				],
+				"priority": 0
+			},
+			"dist/bizpage/release/work.html": {
+				"resources": [
+					"dist/static/fonts/jxdd.ttf",
+					"dist/static/css/bizpage/release/work.css",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/js/bizpage/release/work.js",
+					"dist/static/css/mui.picker.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/bizpage/release/project.html": {
+				"resources": [
+					"dist/static/fonts/jxdd.ttf",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/css/bizpage/release/project.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/static/js/bizpage/release/project.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/mui.picker.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/bizpage/work/list.html": {
+				"resources": [
+					"dist/static/js/mui.pullToRefresh.material.js",
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/js/bizpage/work/list.js",
+					"dist/static/css/bizpage/work/list.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/js/mui.pullToRefresh.js",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js",
+					"dist/static/css/pull_to_refresh.css",
+					"dist/static/fonts/jxdd.ttf"
 				],
 				"refer": [],
 				"priority": 0
