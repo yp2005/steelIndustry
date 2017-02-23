@@ -300,7 +300,7 @@
 				colorFilmDiameter: undefined,
 				colorFilmThickness: undefined,
 				colorPlateThickness: undefined,
-				colorFilmLength: undefined,
+				colorFilmLength: 0,
 				colorFilmWeight: 0
 			};
 		},
@@ -345,6 +345,9 @@
 				return this.colorFilmWidth / 10 * Math.PI * ((parseFloat(this.colorFilmDiameter) + parseFloat(this.colorFilmThickness)) * (parseFloat(this.colorFilmDiameter) + parseFloat(this.colorFilmThickness)) - this.colorFilmDiameter * this.colorFilmDiameter) * 785 / 100000;
 			},
 			colorFilmLength() {
+				if(this.colorPlateThickness == 0) {
+					return 0;
+				}
 				return 127.4 / this.colorPlateThickness / this.colorFilmWidth * this.colorFilmWeight;
 			}
 		},

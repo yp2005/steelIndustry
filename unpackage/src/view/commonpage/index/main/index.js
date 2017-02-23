@@ -122,11 +122,14 @@ mui.back = function() {
 mui.plusReady(function() {
 	router.start(app, '#app');
 	plus.geolocation.getCurrentPosition(function(position) {
+		if(!position.address || position.address == {}) {
+			return;
+		}
 		var address = {};
 		address.lng = position.coords.longitude;
 		address.lat = position.coords.latitude;
 		for(var data of cityData3Lev) {
-			if(position.address.province.indexOf(data.text) === 0) {
+			if(position.address.province && position.address.province.indexOf(data.text) === 0) {
 				address.province = data.text;
 				address.provinceid = data.value;
 				for(var city of data.children) {
@@ -146,13 +149,9 @@ mui.plusReady(function() {
 				break;
 			}
 		}
-		address.street = position.address.street;
+		address.street = position.address.street || '';
 		header.address = address;
-	}, function(e) {
-		wt.close();
-		mui.toast('获取地址失败，请重试！');
-		that.back();
-	}, {
+	}, function(e) {}, {
 		provider: 'baidu'
 	});
 });
