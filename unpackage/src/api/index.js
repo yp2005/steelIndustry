@@ -13,7 +13,8 @@ const APIS = {
 	imgUpload: API_ROOT + '/common/upload_image',
 	getSettings: API_ROOT + '/settings/getSettings',
 	getUser: API_ROOT + '/user/getUser',
-	updateLatestLoginTime: API_ROOT + '/user/updateLatestLoginTime'
+	updateLatestLoginTime: API_ROOT + '/user/updateLatestLoginTime',
+	test_api: API_ROOT + '/test/1'
 };
 
 const PAGE_URL = {
