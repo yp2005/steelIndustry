@@ -4,7 +4,7 @@
 		"iPhone",
 		"iPad"
 	],
-	"id": "H5D5CD96F",/*应用的标识，创建应用时自动生成，勿手动修改*/
+	"id": "com.steelIndustry",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "钢",/*应用名称，程序桌面图标名称*/
 	"version": {
 		"name": "1.0.0",/*应用版本名称*/
@@ -81,7 +81,7 @@
 		"runmode": "normal",/*应用的首次启动运行模式，可取liberate或normal，liberate模式在第一次启动时将解压应用资源（Android平台File API才可正常访问_www目录）*/
 		"signature": "Sk9JTiBVUyBtYWlsdG86aHIyMDEzQGRjbG91ZC5pbw==",/*可选，保留给应用签名，暂不使用*/
 		"distribute": {
-			"plugins": {"share":{"weixin":{"appid":"wx78d199c2b18a4691","appsecret":"dda36f96c18f83aea0b00e9ed57d0912","description":"可选，微信分享"}},
+			"plugins": {"share":{"weixin":{"appid":"wx78d199c2b18a4691","appsecret":"dda36f96c18f83aea0b00e9ed57d0912","description":"可选，微信分享"},"qq":{"appid":"101385824","description":"QQ分享"}},
 				"push": {
 					
 				}

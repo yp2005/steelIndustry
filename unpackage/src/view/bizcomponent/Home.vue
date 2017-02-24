@@ -1,5 +1,5 @@
 <template>
-	<div class="mui-scroll-wrapper home" >
+	<div class="mui-scroll-wrapper home">
 		<div class="mui-scroll">
 			<imageslider :images="imageDatas" :item-tap="bannerTap"></imageslider>
 			<ul class="mui-table-view mui-grid-view">
@@ -34,7 +34,7 @@
 					<p class="mui-ellipsis-2" v-for="message in messages">{{message.text}}</p>
 				</div>
 			</div>
-			
+
 			<p class="title">设备推荐</p>
 			<div class="oneStore">
 				<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
@@ -48,7 +48,8 @@
 						<img src="../../static/img/mine/noqiyerenzheng.svg">
 						<span class="mui-pull-right">距离：9999KM</span>
 					</p>
-					<p><a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
+					<p>
+						<a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
 				</div>
 			</div>
 			<div class="oneStore">
@@ -63,7 +64,8 @@
 						<img src="../../static/img/mine/noqiyerenzheng.svg">
 						<span class="mui-pull-right">距离：9999KM</span>
 					</p>
-					<p><a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
+					<p>
+						<a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
 				</div>
 			</div>
 			<div class="oneStore">
@@ -78,7 +80,8 @@
 						<img src="../../static/img/mine/noqiyerenzheng.svg">
 						<span class="mui-pull-right">距离：9999KM</span>
 					</p>
-					<p><a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
+					<p>
+						<a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
 				</div>
 			</div>
 			<div class="oneStore">
@@ -93,10 +96,11 @@
 						<img src="../../static/img/mine/noqiyerenzheng.svg">
 						<span class="mui-pull-right">距离：9999KM</span>
 					</p>
-					<p><a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
+					<p>
+						<a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
 				</div>
 			</div>
-			
+
 			<p class="title">热门岗位</p>
 			<div class="oneWork">
 				<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
@@ -110,7 +114,8 @@
 						<img src="../../static/img/mine/noqiyerenzheng.svg">
 						<span class="mui-pull-right">距离：9999KM</span>
 					</p>
-					<p><a href="javascript:void(0)">立即预约</a><span class="mui-pull-right">...</span></p>
+					<p>
+						<a href="javascript:void(0)">立即预约</a><span class="mui-pull-right">...</span></p>
 				</div>
 			</div>
 			<div class="oneWork">
@@ -125,7 +130,8 @@
 						<img src="../../static/img/mine/noqiyerenzheng.svg">
 						<span class="mui-pull-right">距离：9999KM</span>
 					</p>
-					<p><a href="javascript:void(0)">立即预约</a><span class="mui-pull-right">...</span></p>
+					<p>
+						<a href="javascript:void(0)">立即预约</a><span class="mui-pull-right">...</span></p>
 				</div>
 			</div>
 			<div class="oneWork">
@@ -140,7 +146,8 @@
 						<img src="../../static/img/mine/noqiyerenzheng.svg">
 						<span class="mui-pull-right">距离：9999KM</span>
 					</p>
-					<p><a href="javascript:void(0)">立即预约</a><span class="mui-pull-right">...</span></p>
+					<p>
+						<a href="javascript:void(0)">立即预约</a><span class="mui-pull-right">...</span></p>
 				</div>
 			</div>
 			<div class="oneWork">
@@ -155,7 +162,8 @@
 						<img src="../../static/img/mine/noqiyerenzheng.svg">
 						<span class="mui-pull-right">距离：9999KM</span>
 					</p>
-					<p><a href="javascript:void(0)">立即预约</a><span class="mui-pull-right">...</span></p>
+					<p>
+						<a href="javascript:void(0)">立即预约</a><span class="mui-pull-right">...</span></p>
 				</div>
 			</div>
 		</div>
@@ -165,6 +173,7 @@
 <script>
 	import imageslider from 'component/slider/ImageSlider';
 	import muiUtils from 'common/muiUtils';
+	import api from 'api';
 	export default {
 		data: function() {
 			return {
@@ -214,9 +223,22 @@
 						address: this.address
 					}
 				});
+			},
+			getUser() {
+				muiUtils.muiAjax(api.APIS.updateLatestLoginTime, {
+					data: '{}',
+					contentType: 'application/json',
+					dataType: "json",
+					type: "post",
+					success: function(data) {
+						console.log(console.log(JSON.stringify(data)))
+					},
+					error: function(xhr, type, errorThrown) {}
+				});
 			}
 		},
 		ready: function() {
+			var that = this;
 			if(plus.webview.getWebviewById('HBuilder')) {
 				plus.webview.getWebviewById('HBuilder').close('none');
 			}
@@ -231,6 +253,10 @@
 				bounce: true,
 				indicators: false, // 是否显示滚动条
 				deceleration: mui.os.ios ? 0.003 : 0.0009
+			});
+			that.getUser();
+			document.addEventListener("resume", function() {
+				that.getUser();
 			});
 		}
 	};
@@ -303,6 +329,7 @@
 		line-height: 21px;
 		margin-bottom: 10px;
 	}
+	
 	.systemMessage span {
 		font-size: 18px;
 		color: #000;
@@ -320,7 +347,7 @@
 		padding-left: 85px;
 	}
 	
-	@keyframes lunbo{
+	@keyframes lunbo {
 		0% {
 			top: 0;
 		}

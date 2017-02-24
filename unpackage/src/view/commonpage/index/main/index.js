@@ -122,7 +122,7 @@ mui.back = function() {
 mui.plusReady(function() {
 	router.start(app, '#app');
 	plus.geolocation.getCurrentPosition(function(position) {
-		if(!position.address || position.address == {}) {
+		if(!position.address || !position.address.province) {
 			return;
 		}
 		var address = {};

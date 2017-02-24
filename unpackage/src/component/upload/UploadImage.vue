@@ -316,7 +316,7 @@
 			},
 			// 上传图片
 			uploadImage: function(pictures, callback) {
-				var server = api.COMMON_API.img_upload_url;
+				var server = api.APIS.imgUpload;
 				log.log('上传图片:' + server);
 				if(files.length <= 0) {
 					plus.nativeUI.alert('没有添加上传文件！');
