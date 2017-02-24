@@ -42,11 +42,15 @@
 									<img v-else :src="noqiyepicpath">
 									<span class="mui-pull-right">距离：9999KM</span>
 								</p>
-								<p><a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
+								<p>
+									<a href="javascript:void(0)" @tap="gotoStore">进入店铺</a>
+									<a href="javascript:void(0)" @tap="pickStore">重新选择</a>
+									<span class="mui-pull-right">...</span>
+								</p>
 							</div>
 						</div>
-						<div v-else class="advertising_storepick">
-	                        <a @tap="pickStore">请选择店铺</a>
+						<div v-else class="advertising_storepick" @tap="pickStore">
+	                        <a href="javascript:void(0)">请选择店铺</a>
 	                    </div>
 					</div>
 				</div>
@@ -91,6 +95,13 @@
 			pickStore() {
 				muiUtils.openWindow('../../commonpage/advertisingmanager/store.html', 'commonpage_advertisingmanager_store');
 			},
+			gotoStore: function() {
+				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', 'bizpage_device_deviceinfo', {
+					extras: {
+						store: this.advertStore
+					}
+				});
+			},
 			textAreaInput() {
 				var textarea = document.getElementById('textarea');
 				textarea.style.height = '80px';
@@ -115,7 +126,7 @@
 			mui('.mui-numbox').numbox();
 			var that = this;
 			//
-			window.addEventListener('advertising_storepick', e => {
+			window.addEventListener('advertising_storepick', function(e) {
 				that.advertStore = e.detail.store;
 			});
 		},
@@ -386,6 +397,7 @@
 		color: #777;
 	}
 	.advertising_storepick{
+		border: 1px solid #ccc;
 		text-align: center;
 	}
 	.advertising_storepick a{

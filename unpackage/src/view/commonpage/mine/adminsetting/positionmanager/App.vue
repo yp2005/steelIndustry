@@ -2,15 +2,33 @@
 	<div class="mui-content">
 		<div class="mui-scroll-wrapper releaseCard">
 			<div class="mui-scroll">
+				
 				<div class="title">首页广告位</div>
 				<div class="inputRow">
 					<label>广告类型</label>
 					<p class="workType">{{shouyetypestr}}</p>
 				</div>
-					<div class="inputRow">
-						<p>请上传身份证正面(必填)</p>
-						<upload :is-cut="isCut" :pictures.sync="pictures" :imagecount="1" :dataid="sfz_zhengmian"></upload>
+				
+				<div v-show="shouyetype == 'alliance'" class="inputRow">
+					<p>广告联盟</p>
+					<div>
+						<textarea id="textarea" v-model="advertUrl" placeholder="请输入地址" @input="textAreaInput"></textarea>
 					</div>
+				</div>
+				<div v-show="shouyetype != 'alliance'" class="inputRow">
+					<div>
+						<div v-if="shouyeAdverts.length>0" class="oneStore">
+							guanggao
+						</div>
+						<div v-else class="advertising_storepick" @tap="pickAdvert(0)">
+	                        <a href="javascript:void(0)">请选择广告</a>
+	                    </div>
+					</div>
+				</div>
+					
+					
+					
+					
 				<div class="title"></div>
 				<div class="inputRow"><label>主题帖积分</label><input type="text" v-model="bddate" placeholder="请输入主题帖积分"></div>
 				<div class="inputRow"><label>回帖积分</label><input type="text" v-model="gender.text" placeholder="请输入回帖积分"></div>
@@ -42,13 +60,13 @@
 	export default {
 		data: function() {
 			var pickerData = [{
-				value: 'alliance',
+				value: 'loopImg',
 				text: '轮播图',
 			}, {
-				value: 'loopImg',
+				value: 'oneImg',
 				text: '单个图片',
 			}, {
-				value: 'oneImg',
+				value: 'alliance',
 				text: '广告联盟',
 			}];
 			var advertisingPicker = new mui.PopPicker({
@@ -62,6 +80,7 @@
 			advertisingPicker.setData(pickerData);
 			
 			return {
+				shouyeAdverts:[],
 				liebiaoPicker: advertisingPicker,
 				xiangqingPicker: advertisingPicker2,
 				islianxi: false,
@@ -69,9 +88,9 @@
 				isgongcheng: true,
 				ismingpian: true,
 				isyonggong: true,
-				shouyetype:'alliance',
-				liebiaotype:'alliance',
-				xiangqingtype:'alliance',
+				shouyetype:'loopImg',
+				liebiaotype:'loopImg',
+				xiangqingtype:'loopImg',
 				shouyetypestr:'轮播图',
 				liebiaotypestr:'轮播图',
 				xiangqingtypestr:'轮播图',
@@ -97,29 +116,12 @@
 					that.xiangqingtype = items[0].value;
 				});
 			},
-			changeSwitch: function(_switch){
-				switch(_switch){
-					case 0:
-						this.islianxi = !this.islianxi;
-						console.log('this.islianxi:::::'+this.islianxi);
-						break;
-					case 1:
-						this.isdianpu = !this.isdianpu;
-						console.log('this.isdianpu:::::'+this.isdianpu);
-						break;
-					case 2:
-						this.isgongcheng = !this.isgongcheng;
-						console.log('this.isgongcheng:::::'+this.isgongcheng);
-						break;
-					case 3:
-						this.ismingpian = !this.ismingpian;
-						console.log('this.ismingpian:::::'+this.ismingpian);
-						break;
-					case 4:
-						this.isyonggong = !this.isyonggong;
-						console.log('this.isyonggong:::::'+this.isyonggong);
-						break;
-				}
+			pickAdvert: function(_page){
+				muiUtils.openWindow('../../commonpage/positionmanager/advert.html', 'commonpage_positionmanager_advert',{
+					extras: {
+						page: _page
+					}
+				});
 			},
 			saveInfo() {
 				mui.toast("保存成功");
@@ -133,6 +135,11 @@
 				deceleration: mui.os.ios ? 0.003 : 0.0009
 			});
 			mui('.mui-numbox').numbox();
+			window.addEventListener('position_advertpick', function(e) {
+				var page = e.detail.page;
+				that.shouyeAdverts = e.detail.adverts;
+				console.log(JSON.stringify(that.shouyeAdverts));
+			});
 		},
 		components: {
 		}
@@ -273,5 +280,15 @@
 	.userSwitchSpan{
 		color: #222;
 		font-size:14px;
+	}
+	
+	
+	.advertising_storepick{
+		border: 1px solid #ccc;
+		text-align: center;
+	}
+	.advertising_storepick a{
+		margin:10px;
+		font-size: 20px;
 	}
 </style>

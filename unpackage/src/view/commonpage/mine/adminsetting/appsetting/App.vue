@@ -66,13 +66,13 @@
 	export default {
 		data: function() {
 			var pickerData = [{
-				value: 'alliance',
+				value: 'loopImg',
 				text: '轮播图',
 			}, {
-				value: 'loopImg',
+				value: 'oneImg',
 				text: '单个图片',
 			}, {
-				value: 'oneImg',
+				value: 'alliance',
 				text: '广告联盟',
 			}];
 			var advertisingPicker = new mui.PopPicker({
@@ -93,9 +93,9 @@
 				isgongcheng: true,
 				ismingpian: true,
 				isyonggong: true,
-				shouyetype:'alliance',
-				liebiaotype:'alliance',
-				xiangqingtype:'alliance',
+				shouyetype:'loopImg',
+				liebiaotype:'loopImg',
+				xiangqingtype:'loopImg',
 				shouyetypestr:'轮播图',
 				liebiaotypestr:'轮播图',
 				xiangqingtypestr:'轮播图',

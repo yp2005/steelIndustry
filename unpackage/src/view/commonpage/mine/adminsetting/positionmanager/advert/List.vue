@@ -80,12 +80,11 @@
 				}
 			},
 			gotoStore: function(item,event) {
-				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', 'bizpage_device_deviceinfo', {
+				muiUtils.openWindow('../../commonpage/advertisingmanager/editadvertising.html', 'commonpage_advertisingmanager_editadvertising', {
 					extras: {
-						url: '../../bizpage/device/deviceinfo.html'
+						id: 'id'
 					}
 				});
-				event.stopPropagation();
 			}
 		},
 		ready: function(){

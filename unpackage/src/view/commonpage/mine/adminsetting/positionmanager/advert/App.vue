@@ -1,14 +1,17 @@
 <template>
 	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
 	<div class="deviceList">
-		<listctrl :noresultmsg="noresultmsg" :childlist="childlist" @getlistdata="getdata" @comlist_itemtap="itemtap" :toptipheight="45" :showdelete="showdelete"></listctrl>
+		<listctrl :noresultmsg="noresultmsg" :listitem.sync="listitem" :showall="showall" :childlist="childlist" @getlistdata="getdata" @comlist_itemtap="itemtap" :toptipheight="45" :showdelete="showdelete"></listctrl>
 	</div>
+	<navbtn :buttons="specbuttons"></navbtn>
+	<!--<a class="fixOneLabelBf04e30" style="background-color: #26c6da;color:#FFF;" href="javascript:void(0);" @tap="signout">退出登录</a>-->
 </template>
 
 <script>
 	import nonetworkmask from 'component/mask/NoNetWorkMask';
 	import muiUtils from 'common/muiUtils';
 	import log from 'common/logUtils';
+	import navbtn from 'component/NavBtnBar';
 	import listctrl from 'src/component/list/ListCtrl';
 	import list from './List';
 	import api from 'api';
@@ -17,13 +20,42 @@
 		cityData3Lev
 	} from 'common/cityData';
 	export default {
+		watch: {
+			listitem:{
+				handler: function (val, oldVal) {
+					let selectNum = 0;
+					for(var i =0;i< this.listitem.length;i++){
+						if(this.listitem[i].isselect){
+							selectNum++;
+						}
+					}
+					this.specbuttons[0].text = selectNum+'';
+					this.specbuttons[1].disabled = !(selectNum>0);
+				},
+		  		deep: true
+			}
+		},
 		data: function() {
 			return {
+				listitem:[],
 				childlist: list,
 				filterType: 0,
 				disnonetworkmask: false,
 				showdelete: false,
-				pullrefresh: null
+				showall: true,
+				pullrefresh: null,
+				specbuttons: [{
+					text: '0',
+					isedit: true
+				}, {
+					text: '确定',
+					btnclass: 'nav-btn-blue',
+					disabled: true,
+					btntap: function(_this) {
+						var sel = _this.$parent;
+						sel.submitAdvert();
+					}
+				}]
 			};
 		},
 		methods: {
@@ -39,7 +71,10 @@
 					contentType: 'application/json',
 					dataType: "json",
 					success: function(data) {
-//						callback(data.result_data);
+						data.result_data.items = data.result_data.items.map(item => {
+							item.isselect = false;
+							return item;
+						})
 						if(data.error_code === CONSTS.ERROR_CODE.SUCCESS) {
 							callback(data.result_data);
 						} else {
@@ -55,8 +90,13 @@
 				});
 			},
 			itemtap: function(item) {
-				let gotoPage = plus.webview.getWebviewById('commonpage_advertisingmanager_editadvertising');
-				mui.fire(gotoPage, 'advertising_storepick', {store:item});
+//				let gotoPage = plus.webview.getWebviewById('commonpage_advertisingmanager_editadvertising');
+//				mui.fire(gotoPage, 'advertising_storepick', {store:item});
+//				mui.back();
+			},
+			submitAdvert: function(){
+				let gotoPage = plus.webview.getWebviewById('../../commonpage/adminsetting/positionmanager.html');
+				mui.fire(gotoPage, 'position_advertpick', {page:0,adverts:this.listitem});
 				mui.back();
 			}
 		},
@@ -71,7 +111,8 @@
 		},
 		components: {
 			nonetworkmask,
-			listctrl
+			listctrl,
+			navbtn
 		}
 	};
 </script>
@@ -79,7 +120,7 @@
 	.deviceList {
 		position: absolute;
 		top: 45px;
-		bottom: 0;
+		bottom: 50px;
 		width: 100%;
 	}
 	
