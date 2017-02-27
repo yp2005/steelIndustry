@@ -140,6 +140,7 @@
 			},
 			shareMessage(shareOb) {
 				var msg = {
+					title: '分享测试标题',
 					content: "这是一条分享测试信息...",
 					href: "http://www.baidu.com"
 				};
@@ -148,8 +149,11 @@
 					plus.nativeUI.actionSheet({ title: "分享到微信", cancel: "取消", buttons: [{ title: "分享到微信朋友圈" }, { title: "发送给微信好友" }] }, function(e) {
 						if(e.index === 1) {
 							msg.extra = { scene: "WXSceneTimeline" };
-						} else {
+						} else if(e.index === 2) {
 							msg.extra = { scene: "WXSceneSession" };
+						}
+						else {
+							return;
 						}
 						shareOb.send(msg, function() {
 							mui.toast("分享成功！");
