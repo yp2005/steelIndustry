@@ -55,11 +55,11 @@
 				});
 			},
 			itemtap: function(item) {
-				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', 'bizpage_device_deviceinfo', {
-					extras: {
-						url: '../../bizpage/device/deviceinfo.html'
-					}
-				});
+//				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', 'bizpage_device_deviceinfo', {
+//					extras: {
+//						url: '../../bizpage/device/deviceinfo.html'
+//					}
+//				});
 			}
 		},
 		ready: function() {

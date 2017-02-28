@@ -8,7 +8,6 @@
 					<label>广告类型</label>
 					<p class="workType">{{shouyetypestr}}</p>
 				</div>
-				
 				<div v-show="shouyetype == 'alliance'" class="inputRow">
 					<p>广告联盟</p>
 					<div>
@@ -19,10 +18,10 @@
 					<ul class="mui-table-view mui-grid-view">
 						<template v-for="(index,advert) in shouyeAdverts">
 							<li class="mui-table-view-cell mui-col-xs-3">
-								<div>
-									<p class="div-p"></p>
-								</div>
 								<img :src="advert.image_url" @tap="gotoAdvert(advert)">
+								<div>
+									<p class="div-p mui-ellipsis">{{advert.title}}</p>
+								</div>
 								<a href="javascript:void(0);" @tap="delAdvert(0,index)" class="mui-btn mui-btn-primary mui-btn-outlined"><span class="mui-icon mui-icon-trash"></span></a>
 							</li>
 						</template>
@@ -38,10 +37,10 @@
 				<div class="title">列表广告位</div>
 				<div class="inputRow">
 					<label>广告类型</label>
-					<p v-if="liebiaotype" class="workType" @tap="selectAddress()">{{liebiaotypestr}}</p>
-					<input type="text" v-else placeholder="请选择广告类型" readonly @tap="selectAddress()">
+					<p class="workType">{{liebiaotypestr}}</p>
+					<!--<p v-if="liebiaotype" class="workType" @tap="selectAddress()">{{liebiaotypestr}}</p>
+					<input type="text" v-else placeholder="请选择广告类型" readonly @tap="selectAddress()">-->
 				</div>
-				
 				<div v-show="liebiaotype == 'alliance'" class="inputRow">
 					<p>广告联盟</p>
 					<div>
@@ -52,10 +51,10 @@
 					<ul class="mui-table-view mui-grid-view">
 						<template v-for="(index,advert) in liebiaoAdverts">
 							<li class="mui-table-view-cell mui-col-xs-3">
-								<div>
-									<p class="div-p"></p>
-								</div>
 								<img :src="advert.image_url" @tap="gotoAdvert(advert)">
+								<div>
+									<p class="div-p mui-ellipsis">{{advert.title}}</p>
+								</div>
 								<a href="javascript:void(0);" @tap="delAdvert(1,index)" class="mui-btn mui-btn-primary mui-btn-outlined"><span class="mui-icon mui-icon-trash"></span></a>
 							</li>
 						</template>
@@ -71,10 +70,10 @@
 				<div class="title">详情广告位</div>
 				<div class="inputRow">
 					<label>广告类型</label>
-					<p v-if="xiangqingtype" class="workType" @tap="selectAddress2()">{{xiangqingtypestr}}</p>
-					<input type="text" v-else placeholder="请选择广告类型" readonly @tap="selectAddress2()">
+					<p class="workType">{{xiangqingtypestr}}</p>
+					<!--<p v-if="xiangqingtype" class="workType" @tap="selectAddress2()">{{xiangqingtypestr}}</p>
+					<input type="text" v-else placeholder="请选择广告类型" readonly @tap="selectAddress2()">-->
 				</div>
-				
 				<div v-show="xiangqingtype == 'alliance'" class="inputRow">
 					<p>广告联盟</p>
 					<div>
@@ -158,15 +157,6 @@
 				bddate: ''
 			};
 		},
-//		watch:{
-//			liebiaotype: function(){
-//				if(this.liebiaotype == )
-//				this.liebiaoAdverts.length =
-//			},
-//			xiangqingtype: function(){
-//				
-//			}
-//		},
 		methods: {
 			selectAddress: function() {
 				var that = this;
@@ -249,8 +239,6 @@
 						break;
 				}
 			});
-		},
-		components: {
 		}
 	};
 </script>
