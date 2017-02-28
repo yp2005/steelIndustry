@@ -1,9 +1,9 @@
 <template>
 	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
-	<div class="deviceList">
+	<div class="deviceList {{showall?'':'noShowAll'}}" >
 		<listctrl :noresultmsg="noresultmsg" :listitem.sync="listitem" :showall="showall" :childlist="childlist" @getlistdata="getdata" @comlist_itemtap="itemtap" :toptipheight="45" :showdelete="showdelete"></listctrl>
 	</div>
-	<navbtn :buttons="specbuttons"></navbtn>
+	<navbtn v-if="showall" :buttons="specbuttons"></navbtn>
 	<!--<a class="fixOneLabelBf04e30" style="background-color: #26c6da;color:#FFF;" href="javascript:void(0);" @tap="signout">退出登录</a>-->
 </template>
 
@@ -24,9 +24,11 @@
 			listitem:{
 				handler: function (val, oldVal) {
 					let selectNum = 0;
+					this.selectItems = [];
 					for(var i =0;i< this.listitem.length;i++){
 						if(this.listitem[i].isselect){
 							selectNum++;
+							this.selectItems.push(this.listitem[i]);
 						}
 					}
 					this.specbuttons[0].text = selectNum+'';
@@ -37,12 +39,14 @@
 		},
 		data: function() {
 			return {
+				page:plus.webview.currentWebview().page,
+				advertType:plus.webview.currentWebview().type,
+				selectItems:[],
 				listitem:[],
 				childlist: list,
 				filterType: 0,
 				disnonetworkmask: false,
 				showdelete: false,
-				showall: true,
 				pullrefresh: null,
 				specbuttons: [{
 					text: '0',
@@ -57,6 +61,11 @@
 					}
 				}]
 			};
+		},
+		computed: {
+			showall: function() {
+				return this.advertType == 'loopImg';
+			}
 		},
 		methods: {
 			getdata: function(pager, callback) {
@@ -90,13 +99,15 @@
 				});
 			},
 			itemtap: function(item) {
-//				let gotoPage = plus.webview.getWebviewById('commonpage_advertisingmanager_editadvertising');
-//				mui.fire(gotoPage, 'advertising_storepick', {store:item});
-//				mui.back();
+				if(!this.showall){
+					let gotoPage = plus.webview.getWebviewById('../../commonpage/adminsetting/positionmanager.html');
+					mui.fire(gotoPage, 'position_advertpick', {page:this.page,adverts:[item]});
+					mui.back();
+				}
 			},
 			submitAdvert: function(){
 				let gotoPage = plus.webview.getWebviewById('../../commonpage/adminsetting/positionmanager.html');
-				mui.fire(gotoPage, 'position_advertpick', {page:0,adverts:this.listitem});
+				mui.fire(gotoPage, 'position_advertpick', {page:this.page,adverts:this.selectItems});
 				mui.back();
 			}
 		},
@@ -122,6 +133,10 @@
 		top: 45px;
 		bottom: 50px;
 		width: 100%;
+	}
+	
+	.noShowAll{
+		bottom: 0px !important;
 	}
 	
 	.deviceList .mui-scroll-wrapper {

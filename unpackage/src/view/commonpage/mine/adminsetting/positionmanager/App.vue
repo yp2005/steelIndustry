@@ -16,34 +16,91 @@
 					</div>
 				</div>
 				<div v-show="shouyetype != 'alliance'" class="inputRow">
-					<div>
-						<div v-if="shouyeAdverts.length>0" class="oneStore">
-							guanggao
-						</div>
-						<div v-else class="advertising_storepick" @tap="pickAdvert(0)">
-	                        <a href="javascript:void(0)">请选择广告</a>
-	                    </div>
-					</div>
+					<ul class="mui-table-view mui-grid-view">
+						<template v-for="(index,advert) in shouyeAdverts">
+							<li class="mui-table-view-cell mui-col-xs-3">
+								<div>
+									<p class="div-p"></p>
+								</div>
+								<img :src="advert.image_url" @tap="gotoAdvert(advert)">
+								<a href="javascript:void(0);" @tap="delAdvert(0,index)" class="mui-btn mui-btn-primary mui-btn-outlined"><span class="mui-icon mui-icon-trash"></span></a>
+							</li>
+						</template>
+						<li class="mui-table-view-cell mui-col-xs-3">
+							<div>
+								<p class="div-p"></p>
+							</div>
+							<img :src="positionEmpty" @tap="pickAdvert(0,shouyetype)">
+						</li>
+					</ul>
 				</div>
-					
-					
-					
-					
-				<div class="title"></div>
-				<div class="inputRow"><label>主题帖积分</label><input type="text" v-model="bddate" placeholder="请输入主题帖积分"></div>
-				<div class="inputRow"><label>回帖积分</label><input type="text" v-model="gender.text" placeholder="请输入回帖积分"></div>
+				
+				<div class="title">列表广告位</div>
 				<div class="inputRow">
-					<label>首页广告位</label>
-					<p class="workType">{{shouyetypestr}}</p>
-				</div><div class="inputRow">
-					<label>列表页广告位</label>
+					<label>广告类型</label>
 					<p v-if="liebiaotype" class="workType" @tap="selectAddress()">{{liebiaotypestr}}</p>
 					<input type="text" v-else placeholder="请选择广告类型" readonly @tap="selectAddress()">
-				</div><div class="inputRow">
-					<label>详情页广告位</label>
+				</div>
+				
+				<div v-show="liebiaotype == 'alliance'" class="inputRow">
+					<p>广告联盟</p>
+					<div>
+						<textarea id="textarea" v-model="advertUrl" placeholder="请输入地址" @input="textAreaInput"></textarea>
+					</div>
+				</div>
+				<div v-show="liebiaotype != 'alliance'" class="inputRow">
+					<ul class="mui-table-view mui-grid-view">
+						<template v-for="(index,advert) in liebiaoAdverts">
+							<li class="mui-table-view-cell mui-col-xs-3">
+								<div>
+									<p class="div-p"></p>
+								</div>
+								<img :src="advert.image_url" @tap="gotoAdvert(advert)">
+								<a href="javascript:void(0);" @tap="delAdvert(1,index)" class="mui-btn mui-btn-primary mui-btn-outlined"><span class="mui-icon mui-icon-trash"></span></a>
+							</li>
+						</template>
+						<li class="mui-table-view-cell mui-col-xs-3">
+							<div>
+								<p class="div-p"></p>
+							</div>
+							<img :src="positionEmpty" @tap="pickAdvert(1,liebiaotype)">
+						</li>
+					</ul>
+				</div>
+				
+				<div class="title">详情广告位</div>
+				<div class="inputRow">
+					<label>广告类型</label>
 					<p v-if="xiangqingtype" class="workType" @tap="selectAddress2()">{{xiangqingtypestr}}</p>
 					<input type="text" v-else placeholder="请选择广告类型" readonly @tap="selectAddress2()">
 				</div>
+				
+				<div v-show="xiangqingtype == 'alliance'" class="inputRow">
+					<p>广告联盟</p>
+					<div>
+						<textarea id="textarea" v-model="advertUrl" placeholder="请输入地址" @input="textAreaInput"></textarea>
+					</div>
+				</div>
+				<div v-show="xiangqingtype != 'alliance'" class="inputRow">
+					<ul class="mui-table-view mui-grid-view">
+						<template v-for="(index,advert) in xiangqingAdverts">
+							<li class="mui-table-view-cell mui-col-xs-3">
+								<img :src="advert.image_url" @tap="gotoAdvert(advert)">
+								<div>
+									<p class="div-p mui-ellipsis">{{advert.title}}</p>
+								</div>
+								<a href="javascript:void(0);" @tap="delAdvert(2,index)" class="mui-btn mui-btn-primary mui-btn-outlined"><span class="mui-icon mui-icon-trash"></span></a>
+							</li>
+						</template>
+						<li class="mui-table-view-cell mui-col-xs-3">
+							<img :src="positionEmpty" @tap="pickAdvert(2,xiangqingtype)">
+							<div>
+								<p class="div-p"></p>
+							</div>
+						</li>
+					</ul>
+				</div>
+				
 				<div class="bottomBtn">
 					<a href="javascript:void(0)" @tap="saveInfo">保存修改</a>
 				</div>
@@ -77,10 +134,13 @@
 			var advertisingPicker2 = new mui.PopPicker({
 				layer: 1
 			});
-			advertisingPicker.setData(pickerData);
+			advertisingPicker2.setData(pickerData);
 			
 			return {
+				positionEmpty: require('static/img/upload_empty.jpg'),
 				shouyeAdverts:[],
+				liebiaoAdverts:[],
+				xiangqingAdverts:[],
 				liebiaoPicker: advertisingPicker,
 				xiangqingPicker: advertisingPicker2,
 				islianxi: false,
@@ -98,15 +158,27 @@
 				bddate: ''
 			};
 		},
-		created: function() {
-
-		},
+//		watch:{
+//			liebiaotype: function(){
+//				if(this.liebiaotype == )
+//				this.liebiaoAdverts.length =
+//			},
+//			xiangqingtype: function(){
+//				
+//			}
+//		},
 		methods: {
 			selectAddress: function() {
 				var that = this;
 				this.liebiaoPicker.show(function(items) {
 					that.liebiaotypestr = items[0].text;
 					that.liebiaotype = items[0].value;
+					if(items[0].value == 'oneImg'){
+						if(that.liebiaoAdverts.length>0){
+							var firstitem = that.liebiaoAdverts[0];
+							that.liebiaoAdverts = [firstitem];
+						}
+					}
 				});
 			},
 			selectAddress2: function() {
@@ -114,12 +186,39 @@
 				this.xiangqingPicker.show(function(items) {
 					that.xiangqingtypestr = items[0].text;
 					that.xiangqingtype = items[0].value;
+					if(items[0].value == 'oneImg'){
+						if(that.xiangqingAdverts.length>0){
+							var firstitem = that.xiangqingAdverts[0];
+							that.xiangqingAdverts = [firstitem];
+						}
+					}
 				});
 			},
-			pickAdvert: function(_page){
+			pickAdvert: function(_page,type){
 				muiUtils.openWindow('../../commonpage/positionmanager/advert.html', 'commonpage_positionmanager_advert',{
 					extras: {
-						page: _page
+						page: _page,
+						type:type
+					}
+				});
+			},
+			delAdvert: function(_page,index){
+				switch(_page){
+					case 0:
+						this.shouyeAdverts.splice(index, 1);
+						break;
+					case 1:
+						this.liebiaoAdverts.splice(index, 1);
+						break;
+					case 2:
+						this.xiangqingAdverts.splice(index, 1);
+						break;
+				}
+			},
+			gotoAdvert: function(advert){
+				muiUtils.openWindow('../../commonpage/advertisingmanager/editadvertising.html', 'commonpage_advertisingmanager_editadvertising', {
+					extras: {
+						id: 'id'
 					}
 				});
 			},
@@ -129,6 +228,7 @@
 			}
 		},
 		ready: function() {
+			var that = this;
 			mui('.mui-scroll-wrapper.releaseCard').scroll({
 				bounce: true,
 				indicators: false, // 是否显示滚动条
@@ -137,8 +237,17 @@
 			mui('.mui-numbox').numbox();
 			window.addEventListener('position_advertpick', function(e) {
 				var page = e.detail.page;
-				that.shouyeAdverts = e.detail.adverts;
-				console.log(JSON.stringify(that.shouyeAdverts));
+				switch(page){
+					case 0:
+						that.shouyeAdverts = e.detail.adverts;
+						break;
+					case 1:
+						that.liebiaoAdverts = e.detail.adverts;
+						break;
+					case 2:
+						that.xiangqingAdverts = e.detail.adverts;
+						break;
+				}
 			});
 		},
 		components: {
@@ -291,4 +400,43 @@
 		margin:10px;
 		font-size: 20px;
 	}
+	
+	/****************************/
+	
+	.mui-input-row .mui-btn {
+		float: none;
+		width: auto;
+		margin: 10px;
+	}
+	
+	.mui-icon-trash {
+		font-size: 20px !important;
+		background-color: red;
+		border-radius: 50%;
+		color: #ffffff;
+	}
+	
+	.mui-table-view-cell a {
+		border: 0;
+		border-radius: 0;
+	}
+	
+	.mui-table-view-cell img {
+		max-width: 100%;
+		max-height: 76px;
+	}
+	
+	.mui-table-view-cell>.mui-btn {
+		top: 14px;
+		right: -12px;
+	}
+	
+	.mui-table-view.mui-grid-view .mui-table-view-cell {
+		padding-top: 10px !important;
+		padding-left: 5px !important;
+		padding-right: 5px !important;
+		margin-right: 0;
+	}
+	
+	/****************************/
 </style>
