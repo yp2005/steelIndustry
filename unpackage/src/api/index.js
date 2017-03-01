@@ -1,7 +1,7 @@
 'use strict';
 
 /* API_ROOT */
-const API_ROOT = 'http://192.168.2.66';
+const API_ROOT = 'http://192.168.2.59:8000';
 
 /**
  * api的版本，鉴于api的版本可能会出现不统一的情况，所以还是在url里面进行拼接
@@ -9,12 +9,16 @@ const API_ROOT = 'http://192.168.2.66';
 /* eslint-disable no-unused-vars */
 //const API_VERSION = 'v10';
 
+const COMMON_API = {
+//	test_api: API_ROOT + '/test/1'
+
+	test_api: '../../static/data/homelist.json'
+};
 const APIS = {
 	imgUpload: API_ROOT + '/common/upload_image',
 	getSettings: API_ROOT + '/settings/getSettings',
 	getUser: API_ROOT + '/user/getUser',
-	updateLatestLoginTime: API_ROOT + '/user/updateLatestLoginTime',
-	test_api: API_ROOT + '/test/1'
+	updateLatestLoginTime: API_ROOT + '/user/updateLatestLoginTime'
 };
 
 const PAGE_URL = {
@@ -77,6 +81,7 @@ const PAGE_URL = {
 };
 
 export default {
+	COMMON_API,
 	APIS,
 	PAGE_URL
 };
