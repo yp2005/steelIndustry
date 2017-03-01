@@ -59,7 +59,7 @@
 						</template>
 						<li class="mui-table-view-cell mui-col-xs-3">
 							<div class="positionAddAdvertDiv" @tap="pickAdvert(1,liebiaotype)">
-								<a href="javascript:void(0)" style="font-size: 40px;height: 30px;color: #999; " class="positionAddAdvertDiv_add mui-icon mui-icon-plusempty">
+								<a href="javascript:void(0)" style="font-size: 40px;height: 30px;color: #999;" class="positionAddAdvertDiv_add mui-icon mui-icon-plusempty">
 								</a>
 								<span>选择广告</span>
 							</div>
