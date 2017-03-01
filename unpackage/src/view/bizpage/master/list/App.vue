@@ -47,7 +47,7 @@
 				layer: 3
 			});
 			for(var cityData of cityData3Lev) {
-				for(var city of cityData.children) {;
+				for(var city of cityData.children) {
 					city.children.unshift({
 						value: -1,
 						area_parent_id: city.value,
@@ -171,7 +171,7 @@
 				searchValue: plus.webview.currentWebview().searchValue || '',
 				address: plus.webview.currentWebview().address || {
 					province: '全国',
-					provinceid: 0,
+					provinceid: -1,
 					city: null,
 					cityid: null,
 					county: null,

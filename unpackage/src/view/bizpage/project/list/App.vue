@@ -96,7 +96,7 @@
 				searchValue: plus.webview.currentWebview().searchValue || '',
 				address: plus.webview.currentWebview().address || {
 					province: '全国',
-					provinceid: 0,
+					provinceid: -1,
 					city: null,
 					cityid: null,
 					county: null,
