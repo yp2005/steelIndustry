@@ -26,10 +26,11 @@
 							</li>
 						</template>
 						<li class="mui-table-view-cell mui-col-xs-3">
-							<div>
-								<p class="div-p"></p>
+							<div class="positionAddAdvertDiv" @tap="pickAdvert(0,shouyetype)">
+								<a href="javascript:void(0)" style="font-size: 40px;height: 30px;color: #999;" class="positionAddAdvertDiv_add mui-icon mui-icon-plusempty">
+								</a>
+								<span>选择广告</span>
 							</div>
-							<img :src="positionEmpty" @tap="pickAdvert(0,shouyetype)">
 						</li>
 					</ul>
 				</div>
@@ -38,8 +39,6 @@
 				<div class="inputRow">
 					<label>广告类型</label>
 					<p class="workType">{{liebiaotypestr}}</p>
-					<!--<p v-if="liebiaotype" class="workType" @tap="selectAddress()">{{liebiaotypestr}}</p>
-					<input type="text" v-else placeholder="请选择广告类型" readonly @tap="selectAddress()">-->
 				</div>
 				<div v-show="liebiaotype == 'alliance'" class="inputRow">
 					<p>广告联盟</p>
@@ -59,10 +58,11 @@
 							</li>
 						</template>
 						<li class="mui-table-view-cell mui-col-xs-3">
-							<div>
-								<p class="div-p"></p>
+							<div class="positionAddAdvertDiv" @tap="pickAdvert(1,liebiaotype)">
+								<a href="javascript:void(0)" style="font-size: 40px;height: 30px;color: #999;" class="positionAddAdvertDiv_add mui-icon mui-icon-plusempty">
+								</a>
+								<span>选择广告</span>
 							</div>
-							<img :src="positionEmpty" @tap="pickAdvert(1,liebiaotype)">
 						</li>
 					</ul>
 				</div>
@@ -71,8 +71,6 @@
 				<div class="inputRow">
 					<label>广告类型</label>
 					<p class="workType">{{xiangqingtypestr}}</p>
-					<!--<p v-if="xiangqingtype" class="workType" @tap="selectAddress2()">{{xiangqingtypestr}}</p>
-					<input type="text" v-else placeholder="请选择广告类型" readonly @tap="selectAddress2()">-->
 				</div>
 				<div v-show="xiangqingtype == 'alliance'" class="inputRow">
 					<p>广告联盟</p>
@@ -92,9 +90,10 @@
 							</li>
 						</template>
 						<li class="mui-table-view-cell mui-col-xs-3">
-							<img :src="positionEmpty" @tap="pickAdvert(2,xiangqingtype)">
-							<div>
-								<p class="div-p"></p>
+							<div class="positionAddAdvertDiv" @tap="pickAdvert(2,xiangqingtype)">
+								<a href="javascript:void(0)" style="font-size: 40px;height: 30px;color: #999;" class="positionAddAdvertDiv_add mui-icon mui-icon-plusempty">
+								</a>
+								<span>选择广告</span>
 							</div>
 						</li>
 					</ul>
@@ -427,4 +426,25 @@
 	}
 	
 	/****************************/
+	
+	.positionAddAdvertDiv{
+		width: 75px;
+		height: 75px;
+		background-color: #f3f5f7;
+		text-align: center;
+		padding: 10px;
+	}
+	.positionAddAdvertDiv span{
+		color: #999;
+		font-size: 12px;
+		margin: -10px 0px 0px 0px;
+		display: inherit;
+		/*color: #999;
+		width: 50px;
+		line-height: 20px;
+		margin-top: 5px;*/
+	}
+	.positionAddAdvertDiv_add{
+		font-size: 25px;
+	}
 </style>
