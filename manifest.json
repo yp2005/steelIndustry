@@ -5,7 +5,7 @@
 		"iPad"
 	],
 	"id": "com.steelIndustry",/*应用的标识，创建应用时自动生成，勿手动修改*/
-	"name": "钢",/*应用名称，程序桌面图标名称*/
+	"name": "彩钢精英",/*应用名称，程序桌面图标名称*/
 	"version": {
 		"name": "1.0.0",/*应用版本名称*/
 		"code": "83"
@@ -2264,7 +2264,8 @@
 					"dist/commonpage/mine/myfavorite.html",
 					"dist/commonpage/mine/mywork.html",
 					"dist/commonpage/mine/mystore.html",
-					"dist/bizpage/work/list.html"
+					"dist/bizpage/work/list.html",
+					"dist/commonpage/mine/adminsetting.html"
 				],
 				"priority": 0
 			},
@@ -2356,7 +2357,9 @@
 					"dist/static/css/pull_to_refresh.css",
 					"dist/static/css/bizpage/master/list.css"
 				],
-				"refer": [],
+				"refer": [
+					"dist/bizpage/master/masterinfo.html"
+				],
 				"priority": 0
 			},
 			"dist/bizpage/release/card.html": {
@@ -2719,6 +2722,178 @@
 					"dist/vendors.dll.js",
 					"dist/static/css/pull_to_refresh.css",
 					"dist/static/fonts/jxdd.ttf"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/bizpage/master/masterinfo.html": {
+				"resources": [
+					"dist/static/css/bizpage/master/masterinfo.css",
+					"dist/static/js/bizpage/master/masterinfo.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/commonpage/adminsetting/bbsmanager.html": {
+				"resources": [
+					"dist/static/js/commonpage/adminsetting/bbsmanager.js",
+					"dist/static/css/commonpage/adminsetting/bbsmanager.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/commonpage/mine/adminsetting.html": {
+				"resources": [
+					"dist/static/js/mui.pullToRefresh.material.js",
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/js/commonpage/mine/adminsetting.js",
+					"dist/static/js/mui.pullToRefresh.js",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js",
+					"dist/static/css/commonpage/mine/adminsetting.css",
+					"dist/static/css/pull_to_refresh.css"
+				],
+				"refer": [
+					"dist/commonpage/adminsetting/bbsmanager.html",
+					"dist/commonpage/adminsetting/usermanager.html",
+					"dist/commonpage/adminsetting/releasemanager.html",
+					"dist/commonpage/adminsetting/advertisingmanager.html",
+					"dist/commonpage/adminsetting/appsetting.html",
+					"dist/commonpage/adminsetting/noticemanager.html"
+				],
+				"priority": 0
+			},
+			"dist/commonpage/adminsetting/usermanager.html": {
+				"resources": [
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/js/commonpage/adminsetting/usermanager.js",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/css/commonpage/adminsetting/usermanager.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/commonpage/adminsetting/releasemanager.html": {
+				"resources": [
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/js/commonpage/adminsetting/releasemanager.js",
+					"dist/static/css/commonpage/adminsetting/releasemanager.css",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/commonpage/adminsetting/advertisingmanager.html": {
+				"resources": [
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/commonpage/adminsetting/advertisingmanager.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/fonts/mui.ttf",
+					"dist/static/js/mui.poppicker.js",
+					"dist/static/css/commonpage/adminsetting/advertisingmanager.css",
+					"dist/vendors.dll.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/commonpage/adminsetting/appsetting.html": {
+				"resources": [
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/commonpage/adminsetting/appsetting.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/commonpage/adminsetting/appsetting.css",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/commonpage/adminsetting/noticemanager.html": {
+				"resources": [
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/js/commonpage/adminsetting/noticemanager.js",
+					"dist/static/css/commonpage/adminsetting/noticemanager.css",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/fonts/mui.ttf",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js"
 				],
 				"refer": [],
 				"priority": 0
