@@ -48,6 +48,13 @@
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
+				<li class="mui-table-view-cell" @tap="open('../../commonpage/mine/myproject.html')">
+					<p>
+						<img src="../../static/img/mine/project.svg" />
+						<span>我的工程</span>
+						<span class="jxddicon icon-jinru32"></span>
+					</p>
+				</li>
 				<li class="mui-table-view-cell">
 					<p>
 						<img src="../../static/img/mine/tiezi.svg" />
@@ -367,15 +374,15 @@
 	}
 	
 	.mui-table-view.content-list,
-	.mui-table-view.content-list .mui-table-view-cell:nth-child(6) {
+	.mui-table-view.content-list .mui-table-view-cell:nth-child(7) {
 		margin-bottom: 8px;
 	}
 	
-	.mui-table-view.content-list .mui-table-view-cell:nth-child(6):after {
+	.mui-table-view.content-list .mui-table-view-cell:nth-child(7):after {
 		left: 0px;
 	}
 	
-	.mui-table-view.content-list .mui-table-view-cell:nth-child(7):before {
+	.mui-table-view.content-list .mui-table-view-cell:nth-child(8):before {
 		content: '';
 		position: absolute;
 		left: 0;

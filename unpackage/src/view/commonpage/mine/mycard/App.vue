@@ -6,7 +6,7 @@
 				<div class="oneStore" @tap="gotoDetail('id')">
 					<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
 					<div class="storeInfo">
-						<p class="mui-ellipsis">名片名称</p>
+						<p class="mui-ellipsis">名片标题</p>
 						<p>哈哈</p>
 						<p>2017-01-01</p>
 						<p>不知道说啥</p>
@@ -43,7 +43,7 @@
 		},
 		methods: {
 			gotoDetail: function(id) {
-				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', 'bizpage_device_deviceinfo', {
+				muiUtils.openWindow('../../bizpage/master/masterinfo.html', 'bizpage_master_masterinfo', {
                     extras: {
                         'id': id
                     }
