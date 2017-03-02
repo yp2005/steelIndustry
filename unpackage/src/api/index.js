@@ -2,6 +2,12 @@
 
 /* API_ROOT */
 const API_ROOT = 'http://192.168.2.59:8000';
+const USER = '/user';
+const STORE = '/store';
+const SETTING = '/settings';
+const PROJECT = '/project';
+const MASTER = '/masterCard';
+const COMMON = '/common';
 
 /**
  * api的版本，鉴于api的版本可能会出现不统一的情况，所以还是在url里面进行拼接
@@ -18,7 +24,62 @@ const APIS = {
 	imgUpload: API_ROOT + '/common/upload_image',
 	getSettings: API_ROOT + '/settings/getSettings',
 	getUser: API_ROOT + '/user/getUser',
-	updateLatestLoginTime: API_ROOT + '/user/updateLatestLoginTime'
+	updateLatestLoginTime: API_ROOT + '/user/updateLatestLoginTime',
+	
+	user: {
+		getImage: API_ROOT + USER + '/getImage',
+		login: API_ROOT + USER + '/login',
+		getUser: API_ROOT + USER + '/getUser',
+		updateLatestLoginTime: API_ROOT + USER + '/updateLatestLoginTime',
+		updateUserState: API_ROOT + USER + '/updateUserState',
+		sendCode: API_ROOT + USER + '/sendCode'
+	},
+	
+	store: {
+		getStore: API_ROOT + STORE + '/getStore',
+		getStoreByUserId: API_ROOT + STORE + '/getStoreByUserId',
+		getStoreList: API_ROOT + STORE + '/getStoreList',
+		saveStore: API_ROOT + STORE + '/saveStore',
+		updateStoreCt: API_ROOT + STORE + '/updateStoreCt'
+	},
+	
+	settings: {
+		getSettings:　API_ROOT + SETTING + '/getSettings',
+		updateSettings:　API_ROOT + SETTING + '/updateSettings'
+	},
+	
+	project: {
+		getUserProject: API_ROOT + PROJECT + '/getUserProject',
+		getProjectById: API_ROOT + PROJECT + '/getProjectById',
+		getProjectList: API_ROOT + PROJECT + '/getProjectList',
+		saveProject: API_ROOT + PROJECT + '/saveProject',
+		updateProjectCt: API_ROOT + PROJECT + '/updateProjectCt'
+	},
+	
+	masterCard: {
+		getMasterCard: API_ROOT + MASTER + '/getMasterCard',
+		getMasterCardByUserId: API_ROOT + MASTER + '/getMasterCardByUserId',
+		getMasterCardList: API_ROOT + MASTER + '/getMasterCardList',
+		saveMasterCard: API_ROOT + MASTER + '/saveMasterCard',
+		updateMasterCardCt: API_ROOT + MASTER + '/updateMasterCardCt',
+		updateMasterCardWorkState: API_ROOT + MASTER + '/updateMasterCardWorkState'
+	},
+	
+	common: {
+		upload_image: API_ROOT + COMMON + '/upload_image',
+		appupdate: API_ROOT + COMMON + '/appupdate'
+	},
+	
+	project: {
+		getUserProject: API_ROOT + PROJECT + '/getUserProject',
+		getProjectById: API_ROOT + PROJECT + '/getProjectById',
+		getProjectList: API_ROOT + PROJECT + '/getProjectList',
+		saveProject: API_ROOT + PROJECT + '/saveProject',
+		updateProjectCt: API_ROOT + PROJECT + '/updateProjectCt'
+	}
+	
+	
+	
 };
 
 const PAGE_URL = {
