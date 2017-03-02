@@ -1710,7 +1710,11 @@
 			"dist/vendors.dll.js",
 			"dist/static/css/jxdd.css",
 			"dist/static/fonts/jxdd.ttf",
-			"dist/static/css/jxddadd.css"
+			"dist/static/css/jxddadd.css",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/mui.picker.css",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js"
 		],
 		"refer": [
 			"dist/commonpage/login/forgotPassword.html",
@@ -1720,7 +1724,9 @@
 			"dist/buyer/supplier/product.html",
 			"dist/buyer/store/index.html",
 			"dist/buyer/purchase/list.html",
-			"dist/commonpage/login/reg.html"
+			"dist/commonpage/login/reg.html",
+			"dist/commonpage/login/protocol.html",
+			"dist/bizpage/device/deviceinfo.html"
 		]
 	},
 	"dist/buyer/address/addoredit.html": {
@@ -3334,7 +3340,23 @@
 	"dist/commonpage/login/protocol.html": {
 		"resources": [
 			"dist/static/js/commonpage/login/protocol.js",
-			"dist/static/css/commonpage/login/protocol.css"
+			"dist/static/css/commonpage/login/protocol.css",
+			"dist/static/css/jxdd.css",
+			"dist/static/css/iconfont.css",
+			"dist/static/fonts/jxdd.ttf",
+			"dist/vendorUtils.dll.js",
+			"dist/static/js/vendors.js",
+			"dist/vendorVue.dll.js",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/jxddadd.css",
+			"dist/static/css/mui.min.css",
+			"dist/static/js/mui.js",
+			"dist/static/css/mui.picker.css",
+			"dist/static/css/override_mui.css",
+			"dist/vendorMui.dll.js",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js",
+			"dist/vendors.dll.js"
 		],
 		"refer": []
 	},
@@ -3373,7 +3395,15 @@
 			"dist/bizpage/release/index.html",
 			"dist/bizpage/device/list.html",
 			"dist/bizpage/master/list.html",
-			"dist/bizpage/project/list.html"
+			"dist/bizpage/project/list.html",
+			"dist/commonpage/mine/mystore.html",
+			"dist/bizpage/work/list.html",
+			"dist/commonpage/mine/mywork.html",
+			"dist/commonpage/mine/adminsetting.html",
+			"dist/commonpage/mine/authmanager.html",
+			"dist/commonpage/mine/usersetting.html",
+			"dist/commonpage/mine/myfavorite.html",
+			"dist/commonpage/mine/mycard.html"
 		]
 	},
 	"dist/commonpage/index/guide.html": {
@@ -3409,6 +3439,9 @@
 			"dist/static/js/mui.pullToRefresh.material.js",
 			"dist/static/js/mui.pullToRefresh.js",
 			"dist/static/css/pull_to_refresh.css"
+		],
+		"refer": [
+			"dist/bizpage/device/deviceinfo.html"
 		]
 	},
 	"dist/bizpage/release/index.html": {
@@ -3428,7 +3461,10 @@
 			"dist/vendors.dll.js"
 		],
 		"refer": [
-			"dist/bizpage/release/card.html"
+			"dist/bizpage/release/card.html",
+			"dist/bizpage/release/store.html",
+			"dist/bizpage/release/project.html",
+			"dist/bizpage/release/work.html"
 		]
 	},
 	"dist/bizpage/master/list.html": {
@@ -3454,6 +3490,9 @@
 			"dist/vendors.dll.js",
 			"dist/static/css/pull_to_refresh.css",
 			"dist/static/css/bizpage/master/list.css"
+		],
+		"refer": [
+			"dist/bizpage/master/masterinfo.html"
 		]
 	},
 	"dist/bizpage/release/card.html": {
@@ -3493,6 +3532,9 @@
 			"dist/static/js/mui.poppicker.js",
 			"dist/vendors.dll.js",
 			"dist/static/css/pull_to_refresh.css"
+		],
+		"refer": [
+			"dist/bizpage/project/projectinfo.html"
 		]
 	},
 	"dist/commonpage/select/type.html": {
@@ -3536,7 +3578,449 @@
 			"dist/static/js/mui.picker.js",
 			"dist/static/css/mui.picker.css",
 			"dist/static/css/mui.poppicker.css",
-			"dist/static/js/mui.poppicker.js"
+			"dist/static/js/mui.poppicker.js",
+			"dist/static/js/mui.pullToRefresh.material.js",
+			"dist/static/js/mui.pullToRefresh.js",
+			"dist/static/css/pull_to_refresh.css"
+		],
+		"refer": [
+			"dist/commonpage/usersetting/editCompany.html"
+		]
+	},
+	"dist/bizpage/device/deviceinfo.html": {
+		"resources": [
+			"dist/static/css/bizpage/device/deviceinfo.css",
+			"dist/static/js/bizpage/device/deviceinfo.js",
+			"dist/static/css/jxdd.css",
+			"dist/static/css/iconfont.css",
+			"dist/static/fonts/jxdd.ttf",
+			"dist/vendorUtils.dll.js",
+			"dist/static/js/vendors.js",
+			"dist/vendorVue.dll.js",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/jxddadd.css",
+			"dist/static/css/mui.min.css",
+			"dist/static/js/mui.js",
+			"dist/static/css/mui.picker.css",
+			"dist/static/css/override_mui.css",
+			"dist/vendorMui.dll.js",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js",
+			"dist/vendors.dll.js"
+		],
+		"refer": [
+			"dist/bizpage/device/storemanage.html",
+			"dist/commonpage/login/index.html",
+			"dist/commonpage/map/selectaddress.html"
+		]
+	},
+	"dist/bizpage/device/allGoods.html": {
+		"resources": [
+			"dist/static/css/bizpage/device/allGoods.css",
+			"dist/static/js/bizpage/device/allGoods.js",
+			"dist/static/css/jxdd.css",
+			"dist/static/css/iconfont.css",
+			"dist/static/fonts/jxdd.ttf",
+			"dist/vendorUtils.dll.js",
+			"dist/static/js/vendors.js",
+			"dist/vendorVue.dll.js",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/jxddadd.css",
+			"dist/static/css/mui.min.css",
+			"dist/static/js/mui.js",
+			"dist/static/css/mui.picker.css",
+			"dist/static/css/override_mui.css",
+			"dist/vendorMui.dll.js",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js",
+			"dist/vendors.dll.js"
+		]
+	},
+	"dist/commonpage/map/selectaddress.html": {
+		"resources": [
+			"dist/static/css/jxdd.css",
+			"dist/static/css/iconfont.css",
+			"dist/static/fonts/jxdd.ttf",
+			"dist/static/js/commonpage/map/selectaddress.js",
+			"dist/vendorUtils.dll.js",
+			"dist/static/js/vendors.js",
+			"dist/vendorVue.dll.js",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/commonpage/map/selectaddress.css",
+			"dist/static/css/jxddadd.css",
+			"dist/static/css/mui.min.css",
+			"dist/static/js/mui.js",
+			"dist/static/css/mui.picker.css",
+			"dist/static/css/override_mui.css",
+			"dist/vendorMui.dll.js",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js",
+			"dist/vendors.dll.js"
+		]
+	},
+	"dist/bizpage/release/project.html": {
+		"resources": [
+			"dist/static/fonts/jxdd.ttf",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/css/bizpage/release/project.css",
+			"dist/static/js/mui.poppicker.js",
+			"dist/static/js/bizpage/release/project.js",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/mui.picker.css"
+		]
+	},
+	"dist/bizpage/release/work.html": {
+		"resources": [
+			"dist/static/fonts/jxdd.ttf",
+			"dist/static/css/bizpage/release/work.css",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js",
+			"dist/static/js/mui.picker.js",
+			"dist/static/js/bizpage/release/work.js",
+			"dist/static/css/mui.picker.css"
+		],
+		"refer": [
+			"dist/commonpage/select/type.html",
+			"dist/commonpage/map/selectaddress.html"
+		]
+	},
+	"dist/bizpage/release/store.html": {
+		"resources": [
+			"dist/static/js/bizpage/release/store.js",
+			"dist/static/fonts/jxdd.ttf",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js",
+			"dist/static/css/bizpage/release/store.css",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/mui.picker.css",
+			"dist/static/css/jxdd.css",
+			"dist/static/css/iconfont.css",
+			"dist/vendorUtils.dll.js",
+			"dist/static/js/vendors.js",
+			"dist/vendorVue.dll.js",
+			"dist/static/css/jxddadd.css",
+			"dist/static/css/mui.min.css",
+			"dist/static/js/mui.js",
+			"dist/static/css/override_mui.css",
+			"dist/vendorMui.dll.js",
+			"dist/vendors.dll.js"
+		],
+		"refer": [
+			"dist/commonpage/select/type.html",
+			"dist/commonpage/map/selectaddress.html"
+		]
+	},
+	"dist/bizpage/work/list.html": {
+		"resources": [
+			"dist/static/js/mui.pullToRefresh.material.js",
+			"dist/static/css/jxdd.css",
+			"dist/static/css/iconfont.css",
+			"dist/static/fonts/jxdd.ttf",
+			"dist/vendorUtils.dll.js",
+			"dist/static/js/vendors.js",
+			"dist/vendorVue.dll.js",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/jxddadd.css",
+			"dist/static/js/bizpage/work/list.js",
+			"dist/static/css/bizpage/work/list.css",
+			"dist/static/css/mui.min.css",
+			"dist/static/js/mui.js",
+			"dist/static/css/mui.picker.css",
+			"dist/static/js/mui.pullToRefresh.js",
+			"dist/static/css/override_mui.css",
+			"dist/vendorMui.dll.js",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js",
+			"dist/vendors.dll.js",
+			"dist/static/css/pull_to_refresh.css"
+		],
+		"refer": [
+			"dist/bizpage/master/masterinfo.html",
+			"dist/bizpage/work/workinfo.html"
+		]
+	},
+	"dist/bizpage/device/storemanage.html": {
+		"resources": [
+			"dist/static/css/bizpage/device/storemanage.css",
+			"dist/static/js/bizpage/device/storemanage.js",
+			"dist/static/css/jxdd.css",
+			"dist/static/css/iconfont.css",
+			"dist/static/fonts/jxdd.ttf",
+			"dist/vendorUtils.dll.js",
+			"dist/static/js/vendors.js",
+			"dist/vendorVue.dll.js",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/jxddadd.css",
+			"dist/static/css/mui.min.css",
+			"dist/static/js/mui.js",
+			"dist/static/css/mui.picker.css",
+			"dist/static/css/override_mui.css",
+			"dist/vendorMui.dll.js",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js",
+			"dist/vendors.dll.js"
+		],
+		"refer": [
+			"dist/bizpage/device/editstore.html"
+		]
+	},
+	"dist/bizpage/device/editstore.html": {
+		"resources": [
+			"dist/static/css/bizpage/device/editstore.css",
+			"dist/static/css/jxdd.css",
+			"dist/static/css/iconfont.css",
+			"dist/static/fonts/jxdd.ttf",
+			"dist/vendorUtils.dll.js",
+			"dist/static/js/vendors.js",
+			"dist/vendorVue.dll.js",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/jxddadd.css",
+			"dist/static/css/mui.min.css",
+			"dist/static/js/mui.js",
+			"dist/static/css/mui.picker.css",
+			"dist/static/css/override_mui.css",
+			"dist/vendorMui.dll.js",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js",
+			"dist/vendors.dll.js",
+			"dist/static/js/bizpage/device/editstore.js"
+		],
+		"refer": [
+			"dist/commonpage/login/index.html",
+			"dist/bizpage/device/storemanage.html",
+			"dist/bizpage/release/store.html"
+		]
+	},
+	"dist/commonpage/mine/mystore.html": {
+		"resources": [
+			"dist/static/js/mui.pullToRefresh.material.js",
+			"dist/static/css/jxdd.css",
+			"dist/static/css/iconfont.css",
+			"dist/static/fonts/jxdd.ttf",
+			"dist/vendorUtils.dll.js",
+			"dist/static/js/vendors.js",
+			"dist/vendorVue.dll.js",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/jxddadd.css",
+			"dist/static/js/commonpage/mine/mystore.js",
+			"dist/static/css/mui.min.css",
+			"dist/static/js/mui.js",
+			"dist/static/css/mui.picker.css",
+			"dist/static/js/mui.pullToRefresh.js",
+			"dist/static/css/override_mui.css",
+			"dist/vendorMui.dll.js",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js",
+			"dist/vendors.dll.js",
+			"dist/static/css/pull_to_refresh.css",
+			"dist/static/css/commonpage/mine/mystore.css"
+		],
+		"refer": [
+			"dist/bizpage/device/deviceinfo.html"
+		]
+	},
+	"dist/bizpage/master/masterinfo.html": {
+		"resources": [
+			"dist/static/css/bizpage/master/masterinfo.css",
+			"dist/static/js/bizpage/master/masterinfo.js",
+			"dist/static/css/jxdd.css",
+			"dist/static/css/iconfont.css",
+			"dist/static/fonts/jxdd.ttf",
+			"dist/vendorUtils.dll.js",
+			"dist/static/js/vendors.js",
+			"dist/vendorVue.dll.js",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/jxddadd.css",
+			"dist/static/css/mui.min.css",
+			"dist/static/js/mui.js",
+			"dist/static/css/mui.picker.css",
+			"dist/static/css/override_mui.css",
+			"dist/vendorMui.dll.js",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js",
+			"dist/vendors.dll.js"
+		],
+		"refer": [
+			"dist/commonpage/map/selectaddress.html"
+		]
+	},
+	"dist/bizpage/work/workinfo.html": {
+		"resources": [
+			"dist/static/css/bizpage/work/workinfo.css",
+			"dist/static/js/bizpage/work/workinfo.js"
+		],
+		"refer": [
+			"dist/commonpage/map/selectaddress.html"
+		]
+	},
+	"dist/commonpage/mine/mywork.html": {
+		"resources": [
+			"dist/static/js/mui.pullToRefresh.material.js",
+			"dist/static/css/jxdd.css",
+			"dist/static/css/iconfont.css",
+			"dist/static/fonts/jxdd.ttf",
+			"dist/vendorUtils.dll.js",
+			"dist/static/js/vendors.js",
+			"dist/vendorVue.dll.js",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/jxddadd.css",
+			"dist/static/css/mui.min.css",
+			"dist/static/js/mui.js",
+			"dist/static/css/mui.picker.css",
+			"dist/static/css/commonpage/mine/mywork.css",
+			"dist/static/js/commonpage/mine/mywork.js",
+			"dist/static/js/mui.pullToRefresh.js",
+			"dist/static/css/override_mui.css",
+			"dist/vendorMui.dll.js",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js",
+			"dist/vendors.dll.js",
+			"dist/static/css/pull_to_refresh.css"
+		],
+		"refer": [
+			"dist/bizpage/device/deviceinfo.html"
+		]
+	},
+	"dist/bizpage/project/projectinfo.html": {
+		"resources": [
+			"dist/static/js/bizpage/project/projectinfo.js",
+			"dist/static/css/bizpage/project/projectinfo.css"
+		]
+	},
+	"dist/commonpage/mine/adminsetting.html": {
+		"resources": [
+			"dist/static/js/mui.pullToRefresh.material.js",
+			"dist/static/css/jxdd.css",
+			"dist/static/css/iconfont.css",
+			"dist/static/fonts/jxdd.ttf",
+			"dist/vendorUtils.dll.js",
+			"dist/static/js/vendors.js",
+			"dist/vendorVue.dll.js",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/jxddadd.css",
+			"dist/static/css/mui.min.css",
+			"dist/static/js/mui.js",
+			"dist/static/css/mui.picker.css",
+			"dist/static/js/commonpage/mine/adminsetting.js",
+			"dist/static/js/mui.pullToRefresh.js",
+			"dist/static/css/override_mui.css",
+			"dist/vendorMui.dll.js",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js",
+			"dist/vendors.dll.js",
+			"dist/static/css/commonpage/mine/adminsetting.css",
+			"dist/static/css/pull_to_refresh.css"
+		]
+	},
+	"dist/commonpage/mine/authmanager.html": {
+		"resources": [
+			"dist/static/css/commonpage/mine/authmanager.css",
+			"dist/static/css/jxdd.css",
+			"dist/static/css/iconfont.css",
+			"dist/static/fonts/jxdd.ttf",
+			"dist/vendorUtils.dll.js",
+			"dist/static/js/commonpage/mine/authmanager.js",
+			"dist/static/js/vendors.js",
+			"dist/vendorVue.dll.js",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/jxddadd.css",
+			"dist/static/css/mui.min.css",
+			"dist/static/js/mui.js",
+			"dist/static/css/mui.picker.css",
+			"dist/static/css/override_mui.css",
+			"dist/vendorMui.dll.js",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js",
+			"dist/vendors.dll.js"
+		],
+		"refer": [
+			"dist/commonpage/authmanager/person.html",
+			"dist/commonpage/authmanager/company.html"
+		]
+	},
+	"dist/commonpage/authmanager/person.html": {
+		"resources": [
+			"dist/static/css/commonpage/authmanager/person.css",
+			"dist/static/js/commonpage/authmanager/person.js"
+		]
+	},
+	"dist/commonpage/authmanager/company.html": {
+		"resources": [
+			"dist/static/css/jxdd.css",
+			"dist/static/css/iconfont.css",
+			"dist/static/fonts/jxdd.ttf",
+			"dist/vendorUtils.dll.js",
+			"dist/static/css/commonpage/authmanager/company.css",
+			"dist/static/js/vendors.js",
+			"dist/vendorVue.dll.js",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/jxddadd.css",
+			"dist/static/css/mui.min.css",
+			"dist/static/js/mui.js",
+			"dist/static/css/mui.picker.css",
+			"dist/static/js/commonpage/authmanager/company.js",
+			"dist/static/css/override_mui.css",
+			"dist/vendorMui.dll.js",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js",
+			"dist/vendors.dll.js"
+		]
+	},
+	"dist/commonpage/usersetting/editCompany.html": {
+		"resources": [
+			"dist/static/js/commonpage/usersetting/editCompany.js",
+			"dist/static/css/commonpage/usersetting/editCompany.css"
+		]
+	},
+	"dist/commonpage/mine/myfavorite.html": {
+		"resources": [
+			"dist/static/css/jxdd.css",
+			"dist/static/css/iconfont.css",
+			"dist/static/fonts/jxdd.ttf",
+			"dist/vendorUtils.dll.js",
+			"dist/static/js/vendors.js",
+			"dist/vendorVue.dll.js",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/jxddadd.css",
+			"dist/static/css/mui.min.css",
+			"dist/static/js/mui.js",
+			"dist/static/css/mui.picker.css",
+			"dist/static/js/commonpage/mine/myfavorite.js",
+			"dist/static/css/override_mui.css",
+			"dist/vendorMui.dll.js",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js",
+			"dist/vendors.dll.js",
+			"dist/static/css/commonpage/mine/myfavorite.css"
+		]
+	},
+	"dist/commonpage/mine/mycard.html": {
+		"resources": [
+			"dist/static/js/mui.pullToRefresh.material.js",
+			"dist/static/css/jxdd.css",
+			"dist/static/css/iconfont.css",
+			"dist/static/fonts/jxdd.ttf",
+			"dist/vendorUtils.dll.js",
+			"dist/static/js/commonpage/mine/mycard.js",
+			"dist/static/js/vendors.js",
+			"dist/vendorVue.dll.js",
+			"dist/static/js/mui.picker.js",
+			"dist/static/css/jxddadd.css",
+			"dist/static/css/mui.min.css",
+			"dist/static/js/mui.js",
+			"dist/static/css/mui.picker.css",
+			"dist/static/css/commonpage/mine/mycard.css",
+			"dist/static/js/mui.pullToRefresh.js",
+			"dist/static/css/override_mui.css",
+			"dist/vendorMui.dll.js",
+			"dist/static/css/mui.poppicker.css",
+			"dist/static/js/mui.poppicker.js",
+			"dist/vendors.dll.js",
+			"dist/static/css/pull_to_refresh.css"
+		],
+		"refer": [
+			"dist/bizpage/release/card.html",
+			"dist/bizpage/device/deviceinfo.html"
 		]
 	}
 }
