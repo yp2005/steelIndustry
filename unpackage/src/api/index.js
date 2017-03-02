@@ -68,18 +68,7 @@ const APIS = {
 	common: {
 		upload_image: API_ROOT + COMMON + '/upload_image',
 		appupdate: API_ROOT + COMMON + '/appupdate'
-	},
-	
-	project: {
-		getUserProject: API_ROOT + PROJECT + '/getUserProject',
-		getProjectById: API_ROOT + PROJECT + '/getProjectById',
-		getProjectList: API_ROOT + PROJECT + '/getProjectList',
-		saveProject: API_ROOT + PROJECT + '/saveProject',
-		updateProjectCt: API_ROOT + PROJECT + '/updateProjectCt'
 	}
-	
-	
-	
 };
 
 const PAGE_URL = {
