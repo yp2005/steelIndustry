@@ -1,7 +1,7 @@
 'use strict';
 
 /* API_ROOT */
-const API_ROOT = 'http://192.168.2.66';
+const API_ROOT = 'http://192.168.2.59';
 const USER = '/user';
 const STORE = '/store';
 const SETTING = '/settings';
@@ -21,11 +21,6 @@ const COMMON_API = {
 	test_api: '../../static/data/homelist.json'
 };
 const APIS = {
-	imgUpload: API_ROOT + '/common/upload_image',
-	getSettings: API_ROOT + '/settings/getSettings',
-	getUser: API_ROOT + '/user/getUser',
-	updateLatestLoginTime: API_ROOT + '/user/updateLatestLoginTime',
-	
 	user: {
 		getImage: API_ROOT + USER + '/getImage',
 		login: API_ROOT + USER + '/login',
