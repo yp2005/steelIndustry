@@ -58,7 +58,7 @@
 		"NativeObj": {},
 		
 		
-		"Maps": {},
+		
 		
 		
 		"Uploader": {},
@@ -67,7 +67,7 @@
 		"Messaging": {},
 		"Orientation": {},
 		"Geolocation": {},
-		"Accelerometer": {},"Share":{}
+		"Accelerometer": {},"Share":{},"Maps":{}
 	},
 	"plus": {
 		"splashscreen": {
@@ -81,7 +81,7 @@
 		"runmode": "normal",/*应用的首次启动运行模式，可取liberate或normal，liberate模式在第一次启动时将解压应用资源（Android平台File API才可正常访问_www目录）*/
 		"signature": "Sk9JTiBVUyBtYWlsdG86aHIyMDEzQGRjbG91ZC5pbw==",/*可选，保留给应用签名，暂不使用*/
 		"distribute": {
-			"plugins": {"share":{"weixin":{"appid":"wx78d199c2b18a4691","appsecret":"dda36f96c18f83aea0b00e9ed57d0912","description":"可选，微信分享"},"qq":{"appid":"101385824","description":"QQ分享"}},
+			"plugins": {"maps":{"baidu":{"appkey_ios":"jEki5FmmGA9geU4BBedlkvb37ZBGCOXG","appkey_android":"Q4WlnwEHdDX58sYUjqR55d8eH7WcyhMM","appkey":"","description":""}},"share":{"weixin":{"appid":"wx78d199c2b18a4691","appsecret":"dda36f96c18f83aea0b00e9ed57d0912","description":"可选，微信分享"},"qq":{"appid":"101385824","description":"QQ分享"}},
 				"push": {
 					
 				}
@@ -2370,7 +2370,18 @@
 					"dist/static/css/mui.poppicker.css",
 					"dist/static/js/mui.poppicker.js",
 					"dist/static/js/mui.picker.js",
-					"dist/static/css/mui.picker.css"
+					"dist/static/css/mui.picker.css",
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/vendors.dll.js"
 				],
 				"refer": [
 					"dist/commonpage/select/type.html",
@@ -2478,7 +2489,9 @@
 					"dist/static/css/pull_to_refresh.css"
 				],
 				"refer": [
-					"dist/bizpage/device/deviceinfo.html"
+					"dist/bizpage/device/deviceinfo.html",
+					"dist/bizpage/release/card.html",
+					"dist/bizpage/master/masterinfo.html"
 				],
 				"priority": 0
 			},
@@ -2515,7 +2528,9 @@
 					"dist/static/js/bizpage/device/deviceinfo.js"
 				],
 				"refer": [
-					"dist/commonpage/map/selectaddress.html"
+					"dist/commonpage/map/selectaddress.html",
+					"dist/commonpage/login/index.html",
+					"dist/bizpage/device/storemanage.html"
 				],
 				"priority": 0
 			},
@@ -2627,7 +2642,10 @@
 					"dist/static/css/pull_to_refresh.css"
 				],
 				"refer": [
-					"dist/bizpage/device/deviceinfo.html"
+					"dist/bizpage/device/deviceinfo.html",
+					"dist/bizpage/release/card.html",
+					"dist/bizpage/release/work.html",
+					"dist/bizpage/work/workinfo.html"
 				],
 				"priority": 0
 			},
@@ -2655,7 +2673,10 @@
 					"dist/static/css/pull_to_refresh.css",
 					"dist/static/css/commonpage/mine/mystore.css"
 				],
-				"refer": [],
+				"refer": [
+					"dist/bizpage/device/storemanage.html",
+					"dist/bizpage/release/store.html"
+				],
 				"priority": 0
 			},
 			"dist/bizpage/release/store.html": {
@@ -2694,7 +2715,18 @@
 					"dist/static/js/mui.poppicker.js",
 					"dist/static/js/bizpage/release/project.js",
 					"dist/static/js/mui.picker.js",
-					"dist/static/css/mui.picker.css"
+					"dist/static/css/mui.picker.css",
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/vendors.dll.js"
 				],
 				"refer": [],
 				"priority": 0
@@ -2723,7 +2755,9 @@
 					"dist/static/css/pull_to_refresh.css",
 					"dist/static/fonts/jxdd.ttf"
 				],
-				"refer": [],
+				"refer": [
+					"dist/bizpage/work/workinfo.html"
+				],
 				"priority": 0
 			},
 			"dist/bizpage/master/masterinfo.html": {
@@ -2772,7 +2806,8 @@
 					"dist/commonpage/adminsetting/releasemanager.html",
 					"dist/commonpage/adminsetting/advertisingmanager.html",
 					"dist/commonpage/adminsetting/appsetting.html",
-					"dist/commonpage/adminsetting/noticemanager.html"
+					"dist/commonpage/adminsetting/noticemanager.html",
+					"dist/commonpage/adminsetting/positionmanager.html"
 				],
 				"priority": 0
 			},
@@ -2797,7 +2832,9 @@
 					"dist/static/js/mui.poppicker.js",
 					"dist/vendors.dll.js"
 				],
-				"refer": [],
+				"refer": [
+					"dist/commonpage/usermanager/personauth.html"
+				],
 				"priority": 0
 			},
 			"dist/commonpage/adminsetting/releasemanager.html": {
@@ -2846,7 +2883,9 @@
 					"dist/static/css/commonpage/adminsetting/advertisingmanager.css",
 					"dist/vendors.dll.js"
 				],
-				"refer": [],
+				"refer": [
+					"dist/commonpage/advertisingmanager/editadvertising.html"
+				],
 				"priority": 0
 			},
 			"dist/commonpage/adminsetting/appsetting.html": {
@@ -2894,6 +2933,181 @@
 					"dist/static/fonts/mui.ttf",
 					"dist/static/js/mui.poppicker.js",
 					"dist/vendors.dll.js"
+				],
+				"refer": [
+					"dist/commonpage/noticemanager/noticedetail.html",
+					"dist/commonpage/noticemanager/noticenew.html"
+				],
+				"priority": 0
+			},
+			"dist/bizpage/device/storemanage.html": {
+				"resources": [
+					"dist/static/css/bizpage/device/storemanage.css",
+					"dist/static/js/bizpage/device/storemanage.js",
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/commonpage/usermanager/personauth.html": {
+				"resources": [
+					"dist/static/js/commonpage/usermanager/personauth.js",
+					"dist/static/css/commonpage/usermanager/personauth.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/commonpage/advertisingmanager/editadvertising.html": {
+				"resources": [
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/js/commonpage/advertisingmanager/editadvertising.js",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/css/commonpage/advertisingmanager/editadvertising.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js"
+				],
+				"refer": [
+					"dist/commonpage/advertisingmanager/store.html"
+				],
+				"priority": 0
+			},
+			"dist/commonpage/advertisingmanager/store.html": {
+				"resources": [
+					"dist/static/js/mui.pullToRefresh.material.js",
+					"dist/static/css/commonpage/advertisingmanager/store.css",
+					"dist/static/js/mui.pullToRefresh.js",
+					"dist/static/js/commonpage/advertisingmanager/store.js",
+					"dist/static/css/pull_to_refresh.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/commonpage/adminsetting/positionmanager.html": {
+				"resources": [
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/commonpage/adminsetting/positionmanager.css",
+					"dist/static/css/mui.picker.css",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/commonpage/adminsetting/positionmanager.js",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js"
+				],
+				"refer": [
+					"dist/commonpage/positionmanager/advert.html"
+				],
+				"priority": 0
+			},
+			"dist/commonpage/positionmanager/advert.html": {
+				"resources": [
+					"dist/static/css/commonpage/positionmanager/advert.css",
+					"dist/static/js/mui.pullToRefresh.material.js",
+					"dist/static/js/mui.pullToRefresh.js",
+					"dist/static/js/commonpage/positionmanager/advert.js",
+					"dist/static/css/pull_to_refresh.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/commonpage/noticemanager/noticedetail.html": {
+				"resources": [
+					"dist/static/js/commonpage/noticemanager/noticedetail.js",
+					"dist/static/css/commonpage/noticemanager/noticedetail.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/commonpage/noticemanager/noticenew.html": {
+				"resources": [
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/commonpage/noticemanager/noticenew.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/commonpage/noticemanager/noticenew.css",
+					"dist/static/css/mui.picker.css",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"dist/bizpage/work/workinfo.html": {
+				"resources": [
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/js/bizpage/work/workinfo.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/css/bizpage/work/workinfo.css",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js"
+				],
+				"refer": [
+					"dist/commonpage/map/selectaddress.html"
+				],
+				"priority": 0
+			},
+			"dist/bizpage/project/projectinfo.html": {
+				"resources": [
+					"dist/static/js/bizpage/project/projectinfo.js",
+					"dist/static/css/bizpage/project/projectinfo.css"
 				],
 				"refer": [],
 				"priority": 0

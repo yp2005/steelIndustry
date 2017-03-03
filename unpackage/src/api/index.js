@@ -1,7 +1,7 @@
 'use strict';
 
 /* API_ROOT */
-const API_ROOT = 'http://192.168.2.59:8000';
+const API_ROOT = 'http://192.168.2.66';
 const USER = '/user';
 const STORE = '/store';
 const SETTING = '/settings';

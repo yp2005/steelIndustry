@@ -174,6 +174,8 @@
 	import imageslider from 'component/slider/ImageSlider';
 	import muiUtils from 'common/muiUtils';
 	import api from 'api';
+	import cacheUtils from 'common/cacheUtils';
+	import CONSTS from 'common/consts';
 	export default {
 		data: function() {
 			return {
@@ -224,14 +226,51 @@
 					}
 				});
 			},
-			getUser() {
+			getAppSettings() {
+				muiUtils.muiAjax(api.APIS.settings.getSettings, {
+					contentType: 'application/json',
+					type: "get",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							cacheUtils.localStorage(CONSTS.SYSTEM).set(CONSTS.APPSETTINGS, JSON.stringify(data.result));
+						}
+					},
+					error: function(xhr, type, errorThrown) {}
+				});
 				muiUtils.muiAjax(api.APIS.updateLatestLoginTime, {
 					data: '{}',
 					contentType: 'application/json',
 					dataType: "json",
 					type: "post",
+					success: function(data) {},
+					error: function(xhr, type, errorThrown) {}
+				});
+			},
+			checkAppUpdate() {
+				muiUtils.muiAjax(api.APIS.common.appupdate, {
+					contentType: 'application/json',
+					type: "get",
 					success: function(data) {
-						console.log(console.log(JSON.stringify(data)))
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							var localeVersion = cacheUtils.localStorage(CONSTS.SYSTEM).get(CONSTS.APPVERSION);
+							if(!localeVersion) {
+								localeVersion = JSON.stringify(data.result);
+								cacheUtils.localStorage(CONSTS.SYSTEM).set(CONSTS.APPVERSION, localeVersion);
+							}
+							localeVersion = JSON.parse(localeVersion || {});
+							if(localeVersion.appVersion.appVersion < data.result.appVersion.appVersion) {
+								var btnArray = ['暂不', '更新'];
+								mui.confirm('APP本地版本：' + localeVersion.appVersion.appVersion + '，最新版本：' + data.result.appVersion.appVersion + '，是否更新？', '版本更新', btnArray, function(e) {
+									if(e.index == 1) {
+										if(mui.os.ios) {
+											plus.runtime.openURL(data.result.iOS.url);
+										} else {
+											plus.runtime.openURL(data.result.Android.url);
+										}
+									}
+								});
+							}
+						}
 					},
 					error: function(xhr, type, errorThrown) {}
 				});
@@ -254,9 +293,10 @@
 				indicators: false, // 是否显示滚动条
 				deceleration: mui.os.ios ? 0.003 : 0.0009
 			});
-			that.getUser();
+			that.checkAppUpdate();
+			that.getAppSettings();
 			document.addEventListener("resume", function() {
-				that.getUser();
+				that.getAppSettings();
 			});
 		}
 	};

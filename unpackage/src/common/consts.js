@@ -57,6 +57,11 @@ const IS_SHARED = 'is_shared';
 
 const HAS_CARD = 'has_card';
 
+const SYSTEM = 'system';
+
+const APPSETTINGS = 'app_settings';
+
+const APPVERSION = 'app_version';
 
 export default {
 	USER_INFO,
@@ -71,7 +76,10 @@ export default {
 	PREFIX_LOGIN,
 	LOGIN_FORWORD,
 	IS_SHARED,
-	HAS_CARD
+	HAS_CARD,
+	SYSTEM,
+	APPSETTINGS,
+	APPVERSION
 };
 
 export {
@@ -87,5 +95,8 @@ export {
 	PREFIX_LOGIN,
 	LOGIN_FORWORD,
 	IS_SHARED,
-	HAS_CARD
+	HAS_CARD,
+	SYSTEM,
+	APPSETTINGS,
+	APPVERSION
 };
