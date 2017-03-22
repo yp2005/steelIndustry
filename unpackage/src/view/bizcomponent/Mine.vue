@@ -6,16 +6,16 @@
 					<img class="head-portrait" :src="userInfo.avatar">
 				</div>
 				<p>
-					<span>{{userInfo.name || '姓名未填写'}}</span>
-					<span>{{userInfo.mobile_number}}</span>
+					<span>{{userInfo.userName || '姓名未填写'}}</span>
+					<span>{{userInfo.mobileNumber}}</span>
 					<!--<span class="gold">金币<img src="../../static/img/mine/gold.svg">: 5000 </span>-->
 				</p>
-				<p>积分: {{jifen}}</p>
+				<p>积分: {{userInfo.points}}</p>
 				<span class="jxddicon icon-shezhi44" @tap="open('../../commonpage/mine/adminsetting.html')"></span>
 				<div class="authinfo">
-					<img v-if="isPersonAuth" src="../../static/img/mine/shimingrenzheng.svg">
+					<img v-if="userInfo.realNameAuthentication === 1" src="../../static/img/mine/shimingrenzheng.svg">
 					<img v-else src="../../static/img/mine/noshimingrenzheng.svg">
-					<img v-if="isCompanyAuth" src="../../static/img/mine/qiyerenzheng.svg">
+					<img v-if="userInfo.enterpriseCertification === 1" src="../../static/img/mine/qiyerenzheng.svg">
 					<img v-else src="../../static/img/mine/noqiyerenzheng.svg">
 				</div>
 			</div>
@@ -114,18 +114,14 @@
 
 <script>
 	import muiUtils from 'common/muiUtils';
+	import cacheUtils from 'common/cacheUtils';
+	import CONSTS from 'common/consts';
 	export default {
 		data: function() {
+			var userInfo = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO);
 			return {
 				scroll: undefined,
-				userInfo: {
-					name: '余鹏',
-					avatar: require('static/img/mine/nohp.png'),
-					mobile_number: '18710095921'
-				},
-				jifen: 5000,
-				isPersonAuth: true,
-				isCompanyAuth: true,
+				userInfo: userInfo,
 				shares: {},
 				showShare: false
 			};
