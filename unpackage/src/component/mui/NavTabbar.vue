@@ -72,21 +72,35 @@
 			release() {
 				muiUtils.openWindow('../../bizpage/release/index.html', '../../bizpage/release/index.html', {
 					styles: {
-                        popGesture: 'none'
+						popGesture: 'none'
 
-                    },
-                    show: {
-                        aniShow: 'slide-in-bottom',
-                        autoShow: true,
-                        duration: 300
-                    }
+					},
+					show: {
+						aniShow: 'slide-in-bottom',
+						autoShow: true,
+						duration: 300
+					}
 				});
 			},
 			switch: function(index) {
-				this.display({
-					index: index,
-					self: this
-				});
+				if(index === 3) {
+					// 临时解决回首页登录成功之后，跳转不到首页的问题
+					let id = 'main';
+					let url = '../../buyer/index/main.html';
+					cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.LOGIN_FORWORD, {
+						url: url,
+						id: id
+					});
+					muiUtils.loginValid(this.display, {
+						index: index,
+						self: this
+					});
+				} else {
+					this.display({
+						index: index,
+						self: this
+					});
+				}
 			},
 			display: function(option) { // 导航点击事件处理方法
 				if(option.self.index === option.index) {
@@ -231,6 +245,7 @@
 		border-top: solid 1px #d7d7d7;
 		background-color: #fff;
 	}
+	
 	.nav-bar-tab span.centerPlusCircle1 {
 		position: absolute;
 		left: 50%;
@@ -281,6 +296,7 @@
 		background-size: 23px 26px;
 		background-repeat: no-repeat;
 	}
+	
 	.icon-calculatorxuanzhong {
 		background: url(../../static/img/calculator-xuanzhong.svg);
 		width: 22px !important;

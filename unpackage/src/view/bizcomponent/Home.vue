@@ -237,7 +237,7 @@
 					},
 					error: function(xhr, type, errorThrown) {}
 				});
-				muiUtils.muiAjax(api.APIS.updateLatestLoginTime, {
+				muiUtils.muiAjax(api.APIS.user.updateLatestLoginTime, {
 					data: '{}',
 					contentType: 'application/json',
 					dataType: "json",
@@ -254,7 +254,7 @@
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
 							if(CONSTS.APPVERSION < data.result.appVersion.appVersion) {
 								var btnArray = ['暂不', '更新'];
-								mui.confirm('APP本地版本：' + localeVersion.appVersion.appVersion + '，最新版本：' + data.result.appVersion.appVersion + '，是否更新？', '版本更新', btnArray, function(e) {
+								mui.confirm('APP本地版本：' + CONSTS.APPVERSION + '，最新版本：' + data.result.appVersion.appVersion + '，是否更新？', '版本更新', btnArray, function(e) {
 									if(e.index == 1) {
 										if(mui.os.ios) {
 											plus.runtime.openURL(data.result.iOS.url);
