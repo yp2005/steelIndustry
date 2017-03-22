@@ -252,13 +252,7 @@
 					type: "get",
 					success: function(data) {
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
-							var localeVersion = cacheUtils.localStorage(CONSTS.SYSTEM).get(CONSTS.APPVERSION);
-							if(!localeVersion) {
-								localeVersion = JSON.stringify(data.result);
-								cacheUtils.localStorage(CONSTS.SYSTEM).set(CONSTS.APPVERSION, localeVersion);
-							}
-							localeVersion = JSON.parse(localeVersion || {});
-							if(localeVersion.appVersion.appVersion < data.result.appVersion.appVersion) {
+							if(CONSTS.APPVERSION < data.result.appVersion.appVersion) {
 								var btnArray = ['暂不', '更新'];
 								mui.confirm('APP本地版本：' + localeVersion.appVersion.appVersion + '，最新版本：' + data.result.appVersion.appVersion + '，是否更新？', '版本更新', btnArray, function(e) {
 									if(e.index == 1) {
