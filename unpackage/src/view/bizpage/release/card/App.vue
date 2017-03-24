@@ -56,11 +56,10 @@
 <script>
 	import muiUtils from 'common/muiUtils';
 	import log from 'common/logUtils';
-	import api from 'api';
 	import CONSTS from 'common/consts';
 	import upload from 'component/upload/UploadImage';
-	import pageUrl from 'api';
-		import {
+	import api from 'api';
+	import {
 		cityData3Lev
 	} from 'common/cityData';
 	export default {
@@ -194,6 +193,38 @@
 				});
 			},
 			submit(state) {
+				if(!this.masterCard.contact) {
+					mui.toast('请输入姓名');
+					return;
+				}
+				if(!this.masterCard.mobileNumber) {
+					mui.toast('请输入联系方式');
+					return;
+				}
+				if(!/^1[3|4|5|7|8][0-9]{9}$/.test(this.masterCard.mobileNumber)) {
+					mui.toast('请输入正确的手机号码');
+					return;
+				}
+				if(!this.address) {
+					mui.toast('请选择联系地址');
+					return;
+				}
+				if(!this.masterCard.workingYears) {
+					mui.toast('请填写工龄');
+					return;
+				}
+				if(!this.masterCard.cardTitle) {
+					mui.toast('请填写标题');
+					return;
+				}
+				if(!this.workTypeSelected || this.workTypeSelected.length === 0) {
+					mui.toast('请选择工种');
+					return;
+				}
+				if(!this.cityDataSelected || this.cityDataSelected.length === 0) {
+					mui.toast('请选择服务区域');
+					return;
+				}
 				var data = this.masterCard;
 				data.state = state;
 				data.provinceId = this.address.provinceid;
@@ -219,7 +250,7 @@
 						areaNname: area.text
 					});
 				}
-				muiUtils.muiAjax(pageUrl.APIS.masterCard.saveMasterCard, {
+				muiUtils.muiAjax(api.APIS.masterCard.saveMasterCard, {
 					data: JSON.stringify(data),
 					contentType: 'application/json',
 					dataType: "json",
@@ -227,7 +258,10 @@
 					success: function(data) {
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
 							mui.toast('保存成功！');
-							// TODO 跳转页面
+							muiUtils.openWindow('../../commonpage/mine/mycard.html', '../../commonpage/mine/mycard.html', {
+								isValidLogin: true,
+								isClose: true
+							});
 						} else {
 							mui.toast(data.erroCode + '：' + data.erroMsg);
 						}
@@ -255,13 +289,11 @@
 					for(var wt of that.workTypeSelected) {
 						if(that.workTypeDis === '') {
 							that.workTypeDis += wt.text;
-						}
-						else {
+						} else {
 							that.workTypeDis += ',' + wt.text;
 						}
 					}
-				}
-				else {
+				} else {
 					that.cityData = e.detail.typeData;
 					that.city = e.detail.city;
 					that.cityDataSelected = typeDataSelected;
@@ -270,8 +302,7 @@
 					for(var cd of that.cityDataSelected) {
 						if(that.cityDataDis === '') {
 							that.cityDataDis += cd.text;
-						}
-						else {
+						} else {
 							that.cityDataDis += ',' + cd.text;
 						}
 					}
@@ -309,7 +340,7 @@
 		overflow: hidden;
 	}
 	
-	.releaseCard .inputRow > input[type=text] {
+	.releaseCard .inputRow>input[type=text] {
 		line-height: normal;
 		width: inherit;
 		height: inherit;
@@ -322,7 +353,7 @@
 		right: 40px;
 	}
 	
-	.releaseCard .inputRow > .jxddicon.icon-jinru32 {
+	.releaseCard .inputRow>.jxddicon.icon-jinru32 {
 		position: absolute;
 		right: 10px;
 		top: 16px;
