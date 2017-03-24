@@ -79,7 +79,8 @@
 						aniShow: 'slide-in-bottom',
 						autoShow: true,
 						duration: 300
-					}
+					},
+					isValidLogin: true
 				});
 			},
 			switch: function(index) {

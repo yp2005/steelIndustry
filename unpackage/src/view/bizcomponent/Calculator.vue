@@ -342,13 +342,13 @@
 				return 785 * (this.hSteelFBThickness * (this.hSteelFBHeight - 2 * this.hSteelYBThickness) + 2 * this.hSteelYBWidth * this.hSteelYBThickness) * this.hSteelLength / 100000;
 			},
 			colorFilmWeight() {
-				return this.colorFilmWidth / 10 * Math.PI * ((parseFloat(this.colorFilmDiameter) + parseFloat(this.colorFilmThickness)) * (parseFloat(this.colorFilmDiameter) + parseFloat(this.colorFilmThickness)) - this.colorFilmDiameter * this.colorFilmDiameter) * 785 / 100000;
+				return this.colorFilmLength / (127.4 / this.colorPlateThickness / this.colorFilmWidth);
 			},
 			colorFilmLength() {
 				if(this.colorPlateThickness == 0) {
 					return 0;
 				}
-				return 127.4 / this.colorPlateThickness / this.colorFilmWidth * this.colorFilmWeight;
+				return this.colorFilmThickness * 10 / this.colorPlateThickness * Math.PI * (parseFloat(this.colorFilmDiameter) + parseFloat(this.colorFilmThickness)) / 100;
 			}
 		},
 		filters: {

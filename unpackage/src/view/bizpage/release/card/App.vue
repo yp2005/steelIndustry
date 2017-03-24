@@ -3,8 +3,8 @@
 		<div class="mui-scroll-wrapper releaseCard">
 			<div class="mui-scroll">
 				<div class="title">基本信息</div>
-				<div class="inputRow"><label>联系人</label><input type="text" placeholder="请输入姓名(必填)"></div>
-				<div class="inputRow"><label>联系方式</label><input type="text" placeholder="请输入您的联系方式(必填)"></div>
+				<div class="inputRow"><label>联系人</label><input v-model="masterCard.contact" type="text" placeholder="请输入姓名(必填)"></div>
+				<div class="inputRow"><label>联系方式</label><input v-model="masterCard.mobileNumber" type="text" placeholder="请输入您的联系方式(必填)"></div>
 				<div class="inputRow">
 					<label>联系地址</label>
 					<p v-if="address" class="workType" @tap="selectAddress">{{address.province + ' ' + address.city + ' ' + address.district + ' ' +address.street}}</p>
@@ -15,12 +15,12 @@
 					<label>工龄</label>
 					<div class="mui-numbox" data-numbox-min='0' data-numbox-max='50'>
 						<button class="mui-btn mui-btn-numbox-minus" type="button">-</button>
-						<input type="text" class="mui-input-numbox" type="number">
+						<input v-model="masterCard.workingYears" class="mui-input-numbox" type="number">
 						<button class="mui-btn mui-btn-numbox-plus" type="button">+</button>
 					</div>
 				</div>
 				<div class="title">求职信息</div>
-				<div class="inputRow"><label>标题</label><input type="text" placeholder="姓名加工种(必填)"></div>
+				<div class="inputRow"><label>标题</label><input v-model="masterCard.cardTitle" type="text" placeholder="姓名加工种(必填)"></div>
 				<div class="inputRow">
 					<label>工种</label>
 					<p v-if="workTypeDis" class="workType" @tap="selectWorkType">{{workTypeDis}}</p>
@@ -38,15 +38,15 @@
 				</div>
 				<div class="inputRow textarea">
 					<label>自我介绍</label>
-					<textarea id="textarea" placeholder="介绍你的工作技能、工作经验等" @input="textAreaInput"></textarea>
+					<textarea id="textarea" v-model="masterCard.description" placeholder="介绍你的工作技能、工作经验等" @input="textAreaInput"></textarea>
 				</div>
 				<div class="inputRow">
 					<p>您可以上传图片辅助说明，最多五张(选填)</p>
-					<upload :is-cut="isCut" :pictures.sync="pictures" :imagecount="5" dataid="cardPicture"></upload>
+					<upload :is-cut="isCut" :pictures.sync="masterCard.pictures" :imagecount="5" dataid="cardPicture"></upload>
 				</div>
 				<div class="bottomBtn">
-					<a href="javascript:void(0)">保存草稿</a>
-					<a href="javascript:void(0)">提交审核</a>
+					<a href="javascript:void(0)" @tap="submit(0)">保存草稿</a>
+					<a href="javascript:void(0)" @tap="submit(2)">提交审核</a>
 				</div>
 			</div>
 		</div>
@@ -59,13 +59,21 @@
 	import api from 'api';
 	import CONSTS from 'common/consts';
 	import upload from 'component/upload/UploadImage';
+	import pageUrl from 'api';
 		import {
 		cityData3Lev
 	} from 'common/cityData';
 	export default {
 		data: function() {
 			return {
-				pictures: [],
+				masterCard: {
+					contact: '',
+					mobileNumber: '',
+					workingYears: undefined,
+					cardTitle: '',
+					description: '',
+					pictures: []
+				},
 				isCut: false,
 				workType: [{
 					value: '1',
@@ -182,6 +190,50 @@
 					extras: {
 						address: this.address,
 						fromPage: '../../bizpage/release/card.html'
+					}
+				});
+			},
+			submit(state) {
+				var data = this.masterCard;
+				data.state = state;
+				data.provinceId = this.address.provinceid;
+				data.provinceName = this.address.province;
+				data.cityId = this.address.cityid;
+				data.cityName = this.address.city;
+				data.countyId = this.address.districtid;
+				data.countyName = this.address.district;
+				data.street = this.address.street;
+				data.lng = this.address.lng;
+				data.lat = this.address.lat;
+				data.workerTypes = [];
+				data.serviceArea = [];
+				for(var workType of this.workTypeSelected) {
+					data.workerTypes.push({
+						id: workType.value,
+						typeName: workType.text
+					});
+				}
+				for(var area of this.cityDataSelected) {
+					data.serviceArea.push({
+						areaId: area.value,
+						areaNname: area.text
+					});
+				}
+				muiUtils.muiAjax(pageUrl.APIS.masterCard.saveMasterCard, {
+					data: JSON.stringify(data),
+					contentType: 'application/json',
+					dataType: "json",
+					type: "post",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							mui.toast('保存成功！');
+							// TODO 跳转页面
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。')
 					}
 				});
 			}

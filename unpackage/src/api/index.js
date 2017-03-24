@@ -1,7 +1,7 @@
 'use strict';
 
 /* API_ROOT */
-const API_ROOT = 'http://192.168.2.59';
+const API_ROOT = 'http://192.168.2.66';
 const USER = '/user';
 const STORE = '/store';
 const SETTING = '/settings';
@@ -61,8 +61,8 @@ const APIS = {
 	},
 	
 	common: {
-		upload_image: API_ROOT + COMMON + '/upload_image',
-		appupdate: API_ROOT + COMMON + '/appupdate'
+		uploadImage: API_ROOT + COMMON + '/uploadImage',
+		appupdate: API_ROOT + COMMON + '/appUpdate'
 	}
 };
 

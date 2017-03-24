@@ -574,7 +574,11 @@
 					"dist/static/fonts/iconfont.ttf",
 					"dist/static/css/jxdd.css",
 					"dist/static/fonts/jxdd.ttf",
-					"dist/static/css/jxddadd.css"
+					"dist/static/css/jxddadd.css",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js"
 				],
 				"refer": [
 					"dist/commonpage/login/reg.html",
@@ -589,7 +593,9 @@
 					"dist/commonpage/search/searchpage.html",
 					"dist/commonpage/login/phoneLogin.html",
 					"dist/buyer/purchase/list.html",
-					"dist/commonpage/login/forgotPassword.html"
+					"dist/commonpage/login/forgotPassword.html",
+					"dist/bizpage/release/index.html",
+					"dist/commonpage/login/protocol.html"
 				],
 				"priority": 0
 			},
@@ -1629,7 +1635,14 @@
 					"dist/static/js/mui.js",
 					"dist/static/css/commonpage/login/protocol.css",
 					"dist/static/js/vendors.js",
-					"dist/static/js/commonpage/login/protocol.js"
+					"dist/static/js/commonpage/login/protocol.js",
+					"dist/static/css/jxdd.css",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.picker.css",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js"
 				],
 				"priority": 4,
 				"refer": []
@@ -2265,7 +2278,8 @@
 					"dist/commonpage/mine/mywork.html",
 					"dist/commonpage/mine/mystore.html",
 					"dist/bizpage/work/list.html",
-					"dist/commonpage/mine/adminsetting.html"
+					"dist/commonpage/mine/adminsetting.html",
+					"dist/commonpage/login/index.html"
 				],
 				"priority": 0
 			},

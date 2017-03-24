@@ -3,7 +3,7 @@
 		<div class="mui-scroll">
 			<div class="header">
 				<div class="portraitImgWrap">
-					<img class="head-portrait" :src="userInfo.avatar">
+					<img class="head-portrait" src="{{userInfo.avatar || '../../static/img/mine/nohp.png'}}">
 				</div>
 				<p>
 					<span>{{userInfo.userName || '姓名未填写'}}</span>
@@ -135,7 +135,7 @@
 		methods: {
 			open(url) {
 				muiUtils.openWindow(url, url, {
-					//					isValidLogin: true,
+					isValidLogin: true,
 					extras: {
 						url: url
 					}
