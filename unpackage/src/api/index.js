@@ -57,7 +57,9 @@ const APIS = {
 		getMasterCardList: API_ROOT + MASTER + '/getMasterCardList',
 		saveMasterCard: API_ROOT + MASTER + '/saveMasterCard',
 		updateMasterCardCt: API_ROOT + MASTER + '/updateMasterCardCt',
-		updateMasterCardWorkState: API_ROOT + MASTER + '/updateMasterCardWorkState'
+		updateMasterCardWorkState: API_ROOT + MASTER + '/updateMasterCardWorkState',
+		updateMasterCardState: API_ROOT + MASTER + '/updateMasterCardState',
+		deleteMasterCard: API_ROOT + MASTER + '/deleteMasterCard'
 	},
 	
 	common: {

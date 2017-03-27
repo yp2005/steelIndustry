@@ -1,8 +1,4 @@
-/**
- * @file 发布页主组件 
- * @Author yupeng 
- * @private
- */
+/** * @file 发布页主组件 * @Author yupeng * @private */
 
 <template>
 	<div class="release">
@@ -22,7 +18,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="mui-pull-right">
 			<div class="top">
 				<div>
@@ -57,15 +53,58 @@
 
 <script>
 	import muiUtils from 'common/muiUtils';
+	import api from 'api';
+	import CONSTS from 'common/consts';
 	export default {
 		methods: {
 			close() {
 				plus.webview.currentWebview().close('slide-out-bottom');
 			},
 			open(url) {
-				muiUtils.openWindow(url, url, {
-					isClose: true
+				var that = this;
+				muiUtils.muiAjax(api.APIS.masterCard.getMasterCard, {
+					dataType: "json",
+					type: "get",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							if(data.result) {
+								that.masterCard = data.result;
+								switch(that.masterCard.state) {
+									case 0:
+										that.masterCard.stateValue = '草稿';
+										break;
+									case 1:
+										that.masterCard.stateValue = '通过审核';
+										break;
+									case 2:
+										that.masterCard.stateValue = '审核中';
+										break;
+									case 3:
+										that.masterCard.stateValue = '审核不通过';
+										break;
+								}
+								muiUtils.openWindow('../../commonpage/mine/mycard.html', '../../commonpage/mine/mycard.html', {
+									isValidLogin: true,
+									isClose: true,
+									extras: {
+										masterCard: that.masterCard
+									}
+								});
+							} else {
+								muiUtils.openWindow(url, url, {
+									isValidLogin: true,
+									isClose: true
+								});
+							}
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。')
+					}
 				});
+
 			}
 		}
 	};
@@ -80,33 +119,33 @@
 		padding: 15% 0;
 	}
 	
-	.release > div {
+	.release>div {
 		width: 50%;
 		height: 100%;
 	}
 	
-	.release > .mui-pull-left {
+	.release>.mui-pull-left {
 		padding: 0 8px 0 16px;
 	}
 	
-	.release > .mui-pull-right {
+	.release>.mui-pull-right {
 		padding: 0 16px 0 8px;
 	}
 	
-	.release > div div {
+	.release>div div {
 		float: left;
 	}
 	
-	.top > div {
+	.top>div {
 		height: 50%;
 		width: 100%;
 	}
 	
-	.top > div:nth-child(1) {
+	.top>div:nth-child(1) {
 		padding-bottom: 8px;
 	}
 	
-	.top > div:nth-child(2) {
+	.top>div:nth-child(2) {
 		padding-top: 8px;
 	}
 	
@@ -222,7 +261,7 @@
 		background-color: #6490ff;
 	}
 	
-	.release > p {
+	.release>p {
 		position: fixed;
 		bottom: 0;
 		width: 100%;
@@ -232,7 +271,7 @@
 		border-top: solid 1px #ccc;
 	}
 	
-	.release > p span {
+	.release>p span {
 		color: #03a9f4;
 		font-size: 40px;
 		transform: rotate(45deg);

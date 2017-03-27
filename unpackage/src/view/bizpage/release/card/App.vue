@@ -64,90 +64,169 @@
 	} from 'common/cityData';
 	export default {
 		data: function() {
-			return {
-				masterCard: {
+			var masterCard = plus.webview.currentWebview().masterCard;
+			var workTypeSelected = [];
+			var workTypeDis = '';
+			var cityDataSelected = [];
+			var cityDataDis = '';
+			var city = undefined;
+			var address = undefined;
+			var workType = [{
+				value: '1',
+				text: '彩钢厂',
+				children: [{
+					value: '11',
+					text: '车间管理',
+				}, {
+					value: '12',
+					text: '主机操作',
+				}, {
+					value: '13',
+					text: '副机操作',
+				}, {
+					value: '14',
+					text: '切割操作',
+				}, {
+					value: '15',
+					text: '剪板折弯',
+				}, {
+					value: '16',
+					text: '单板操作',
+				}, {
+					value: '17',
+					text: 'c-z型钢操作',
+				}, {
+					value: '18',
+					text: '其他',
+				}]
+			}, {
+				value: '2',
+				text: '钢结构厂',
+				children: [{
+					value: '21',
+					text: '数控切割',
+				}, {
+					value: '22',
+					text: '数控转床',
+				}, {
+					value: '23',
+					text: '阻焊',
+				}, {
+					value: '24',
+					text: '二保焊',
+				}, {
+					value: '25',
+					text: '铆工',
+				}, {
+					value: '26',
+					text: '其他',
+				}]
+			}, {
+				value: '3',
+				text: '工程安装',
+				children: [{
+					value: '31',
+					text: '焊工',
+				}, {
+					value: '32',
+					text: '打板',
+				}, {
+					value: '33',
+					text: '高空',
+				}, {
+					value: '34',
+					text: '其他',
+				}]
+			}];
+			var cityData = cityData3Lev;
+			if(masterCard) {
+				for(var wt of masterCard.workerTypes) {
+					workTypeSelected.push({
+						value: wt.id + '',
+						text: wt.typeName
+					});
+					if(workTypeDis === '') {
+						workTypeDis += wt.typeName;
+					} else {
+						workTypeDis += ',' + wt.typeName;
+					}
+				}
+				for(var wktp of workType) {
+					wktp.selectedNum = 0;
+					for(var wktp2 of wktp.children) {
+						wktp2.selected = false;
+						for(var wts of workTypeSelected) {
+							if(wts.value === wktp2.value) {
+								wktp2.selected = true;
+								wktp.selectedNum++;
+								break;
+							}
+						}
+					}
+				}
+				for(var sa of masterCard.serviceArea) {
+					cityDataSelected.push({
+						value: sa.areaId + '',
+						text: sa.areaNname
+					});
+					if(cityDataDis === '') {
+						cityDataDis += sa.areaNname;
+					} else {
+						cityDataDis += ',' + sa.areaNname;
+					}
+					if(!city) {
+						city = {
+							province: sa.parentAreaPageUse.parentAreaPageUse.areaNname,
+							city: sa.parentAreaPageUse.areaNname
+						};
+					}
+				}
+				for(var cd of cityData) {
+					cd.selectedNum = 0;
+					for(var cd2 of cd.children) {
+						for(var cd3 of cd2.children) {
+							cd3.selected = false;
+							for(var cds of cityDataSelected) {
+								if(cds.value === cd3.value) {
+									cd3.selected = true;
+									cd.selectedNum++;
+									break;
+								}
+							}
+						}
+					}
+				}
+				address = {};
+				address.provinceid = masterCard.provinceId;
+				address.province = masterCard.provinceName;
+				address.cityid = masterCard.cityId;
+				address.city = masterCard.cityName;
+				address.districtid = masterCard.countyId;
+				address.district = masterCard.countyName;
+				address.street = masterCard.street;
+				address.lng = masterCard.lng;
+				address.lat = masterCard.lat;
+			} else {
+				masterCard = {
 					contact: '',
 					mobileNumber: '',
 					workingYears: undefined,
 					cardTitle: '',
 					description: '',
 					pictures: []
-				},
+				};
+			}
+			return {
+				masterCard: masterCard,
 				isCut: false,
-				workType: [{
-					value: '1',
-					text: '彩钢厂',
-					children: [{
-						value: '11',
-						text: '车间管理',
-					}, {
-						value: '12',
-						text: '主机操作',
-					}, {
-						value: '13',
-						text: '副机操作',
-					}, {
-						value: '14',
-						text: '切割操作',
-					}, {
-						value: '15',
-						text: '剪板折弯',
-					}, {
-						value: '16',
-						text: '单板操作',
-					}, {
-						value: '17',
-						text: 'c-z型钢操作',
-					}, {
-						value: '18',
-						text: '其他',
-					}]
-				}, {
-					value: '2',
-					text: '钢结构厂',
-					children: [{
-						value: '21',
-						text: '数控切割',
-					}, {
-						value: '22',
-						text: '数控转床',
-					}, {
-						value: '23',
-						text: '阻焊',
-					}, {
-						value: '24',
-						text: '二保焊',
-					}, {
-						value: '25',
-						text: '铆工',
-					}, {
-						value: '26',
-						text: '其他',
-					}]
-				}, {
-					value: '3',
-					text: '工程安装',
-					children: [{
-						value: '31',
-						text: '焊工',
-					}, {
-						value: '32',
-						text: '打板',
-					}, {
-						value: '33',
-						text: '高空',
-					}, {
-						value: '34',
-						text: '其他',
-					}]
-				}],
-				workTypeSelected: [],
-				workTypeDis: '',
-				cityData: cityData3Lev,
-				cityDataSelected: [],
-				cityDataDis: '',
-				city: undefined,
-				address: undefined
+				workType: workType,
+				workTypeSelected: workTypeSelected,
+				workTypeDis: workTypeDis,
+				cityData: cityData,
+				cityDataSelected: cityDataSelected,
+				cityDataDis: cityDataDis,
+				city: city,
+				address: address
 			};
 		},
 		created: function() {
@@ -238,6 +317,7 @@
 				data.lat = this.address.lat;
 				data.workerTypes = [];
 				data.serviceArea = [];
+				delete data.stateValue;
 				for(var workType of this.workTypeSelected) {
 					data.workerTypes.push({
 						id: workType.value,

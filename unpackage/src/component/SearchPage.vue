@@ -62,7 +62,7 @@
                     if(e.index == 1) {
                         that.historySearchDatas = [];
                     }
-                })
+                });
 
             },
             doSearch: function(data) { //向父组件触发最近搜索点击事件
