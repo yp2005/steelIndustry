@@ -166,7 +166,7 @@
 				}
 				for(var sa of masterCard.serviceArea) {
 					cityDataSelected.push({
-						value: sa.areaId + '',
+						value: sa.areaId,
 						text: sa.areaNname
 					});
 					if(cityDataDis === '') {
@@ -188,6 +188,7 @@
 							cd3.selected = false;
 							for(var cds of cityDataSelected) {
 								if(cds.value === cd3.value) {
+									console.log()
 									cd3.selected = true;
 									cd.selectedNum++;
 									break;
