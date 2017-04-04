@@ -3,11 +3,11 @@
 		<div class="mui-scroll-wrapper releaseWork">
 			<div class="mui-scroll">
 				<div class="title">公司信息</div>
-				<div class="inputRow"><label>公司名称</label><input type="text" placeholder="请输入公司名称(必填)"></div>
-				<div class="inputRow"><label>联系人</label><input type="text" placeholder="请输入联系人(必填)"></div>
-				<div class="inputRow"><label>联系电话</label><input type="text" placeholder="请输入联系电话(必填)"></div>
+				<div class="inputRow"><label>公司名称</label><input v-model="workInfo.companyName" type="text" placeholder="请输入公司名称(必填)"></div>
+				<div class="inputRow"><label>联系人</label><input v-model="workInfo.contact" type="text" placeholder="请输入联系人(必填)"></div>
+				<div class="inputRow"><label>联系电话</label><input v-model="workInfo.mobileNumber" type="text" placeholder="请输入联系电话(必填)"></div>
 				<div class="title">招聘信息</div>
-				<div class="inputRow"><label>标题</label><input type="text" placeholder="请输入标题(必填)"></div>
+				<div class="inputRow"><label>标题</label><input v-model="workInfo.demandTitle" type="text" placeholder="请输入标题(必填)"></div>
 				<div class="inputRow">
 					<label>所需工种</label>
 					<p v-if="workTypeDis" class="workType" @tap="selectWorkType">{{workTypeDis}}</p>
@@ -27,15 +27,15 @@
 				</div>
 				<div class="inputRow textarea">
 					<label>工作介绍</label>
-					<textarea id="textarea" placeholder="请详细描述工作情况，还可以说明一下待遇福利等" @input="textAreaInput"></textarea>
+					<textarea v-model="workInfo.description" id="textarea" placeholder="请详细描述工作情况，还可以说明一下待遇福利等" @input="textAreaInput"></textarea>
 				</div>
 				<div class="inputRow">
 					<p>您可以上传图片辅助说明，最多5张(选填)</p>
-					<upload :is-cut="isCut" :pictures.sync="pictures" :imagecount="5"></upload>
+					<upload :is-cut="isCut" :pictures.sync="workInfo.pictures" :imagecount="5"></upload>
 				</div>
 				<div class="bottomBtn">
-					<a href="javascript:void(0)">保存草稿</a>
-					<a href="javascript:void(0)">提交审核</a>
+					<a href="javascript:void(0)" @tap="submit(0)">保存草稿</a>
+					<a href="javascript:void(0)" @tap="submit(2)">提交审核</a>
 				</div>
 			</div>
 		</div>
@@ -51,7 +51,7 @@
 	export default {
 		data: function() {
 			return {
-				pictures: [],
+				workInfo: {pictures: []},
 				isCut: false,
 				workType: [{
 					value: '1',
@@ -172,6 +172,84 @@
                 },{
                     minDate: minDate
                 });
+			},
+			submit(state) {
+				if(!this.workInfo.companyName) {
+					mui.toast('请输入公司名称');
+					return;
+				}
+				if(!this.workInfo.contact) {
+					mui.toast('请输入联系人');
+					return;
+				}
+				if(!this.workInfo.mobileNumber) {
+					mui.toast('请输入联系电话');
+					return;
+				}
+				if(!/^1[3|4|5|7|8][0-9]{9}$/.test(this.workInfo.mobileNumber)) {
+					mui.toast('请输入正确的手机号码');
+					return;
+				}
+				if(!this.workInfo.demandTitle) {
+					mui.toast('请输入标题');
+					return;
+				}
+				if(!this.workTypeSelected || this.workTypeSelected.length === 0) {
+					mui.toast('请选择所需工种');
+					return;
+				}
+				if(!this.address) {
+					mui.toast('请选择工作地点');
+					return;
+				}
+				if(!this.dueTime) {
+					mui.toast('请选择到期时间');
+					return;
+				}
+				var data = this.workInfo;
+				data.state = state;
+				data.dueTime = new Date(this.dueTime + ' 00:00:00').getTime();
+				data.provinceId = this.address.provinceid;
+				data.provinceName = this.address.province;
+				data.cityId = this.address.cityid;
+				data.cityName = this.address.city;
+				data.countyId = this.address.districtid;
+				data.countyName = this.address.district;
+				data.street = this.address.street;
+				data.lng = this.address.lng;
+				data.lat = this.address.lat;
+				data.workerTypes = [];
+				for(var workType of this.workTypeSelected) {
+					data.workerTypes.push({
+						id: workType.value,
+						typeName: workType.text
+					});
+				}
+				for(var i = 0; i < data.pictures.length; i++) {
+					if(data.pictures[i].indexOf('http') != -1) {
+						data.pictures[i] = data.pictures[i].substring(data.pictures[i].lastIndexOf('/') + 1);
+					}
+				}
+				muiUtils.muiAjax(api.APIS.employmentDemand.saveEmploymentDemand, {
+					data: JSON.stringify(data),
+					contentType: 'application/json',
+					dataType: "json",
+					type: "post",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							mui.toast('保存成功！');
+							muiUtils.openWindow('../../commonpage/mine/mywork.html', '../../commonpage/mine/mywork.html', {
+								isValidLogin: true,
+								isClose: true
+							});
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。')
+					}
+				});
 			}
 		},
 		ready: function() {

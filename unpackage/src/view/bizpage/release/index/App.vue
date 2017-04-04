@@ -62,49 +62,55 @@
 			},
 			open(url) {
 				var that = this;
-				muiUtils.muiAjax(api.APIS.masterCard.getMasterCard, {
-					dataType: "json",
-					type: "get",
-					success: function(data) {
-						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
-							if(data.result) {
-								that.masterCard = data.result;
-								switch(that.masterCard.state) {
-									case 0:
-										that.masterCard.stateValue = '草稿';
-										break;
-									case 1:
-										that.masterCard.stateValue = '通过审核';
-										break;
-									case 2:
-										that.masterCard.stateValue = '审核中';
-										break;
-									case 3:
-										that.masterCard.stateValue = '审核不通过';
-										break;
-								}
-								muiUtils.openWindow('../../commonpage/mine/mycard.html', '../../commonpage/mine/mycard.html', {
-									isValidLogin: true,
-									isClose: true,
-									extras: {
-										masterCard: that.masterCard
+				if(url === '../../bizpage/release/card.html') {
+					muiUtils.muiAjax(api.APIS.masterCard.getMasterCard, {
+						dataType: "json",
+						type: "get",
+						success: function(data) {
+							if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+								if(data.result) {
+									that.masterCard = data.result;
+									switch(that.masterCard.state) {
+										case 0:
+											that.masterCard.stateValue = '草稿';
+											break;
+										case 1:
+											that.masterCard.stateValue = '通过审核';
+											break;
+										case 2:
+											that.masterCard.stateValue = '审核中';
+											break;
+										case 3:
+											that.masterCard.stateValue = '审核不通过';
+											break;
 									}
-								});
+									muiUtils.openWindow('../../commonpage/mine/mycard.html', '../../commonpage/mine/mycard.html', {
+										isValidLogin: true,
+										isClose: true,
+										extras: {
+											masterCard: that.masterCard
+										}
+									});
+								} else {
+									muiUtils.openWindow(url, url, {
+										isValidLogin: true,
+										isClose: true
+									});
+								}
 							} else {
-								muiUtils.openWindow(url, url, {
-									isValidLogin: true,
-									isClose: true
-								});
+								mui.toast(data.erroCode + '：' + data.erroMsg);
 							}
-						} else {
-							mui.toast(data.erroCode + '：' + data.erroMsg);
+						},
+						error: function(xhr, type, errorThrown) {
+							mui.toast('服务器或网络异常，请稍后重试。')
 						}
-					},
-					error: function(xhr, type, errorThrown) {
-						mui.toast('服务器或网络异常，请稍后重试。')
-					}
-				});
-
+					});
+				} else {
+					muiUtils.openWindow(url, url, {
+						isValidLogin: true,
+						isClose: true
+					});
+				}
 			}
 		}
 	};

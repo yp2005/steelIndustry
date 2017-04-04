@@ -232,7 +232,7 @@
 					type: "get",
 					success: function(data) {
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
-							cacheUtils.localStorage(CONSTS.SYSTEM).set(CONSTS.APPSETTINGS, JSON.stringify(data.result));
+							cacheUtils.localStorage(CONSTS.SYSTEM).setObject(CONSTS.APPSETTINGS, data.result);
 						}
 					},
 					error: function(xhr, type, errorThrown) {}

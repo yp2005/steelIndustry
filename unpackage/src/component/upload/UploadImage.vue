@@ -138,6 +138,12 @@
 			log.log('uploadtype:' + this.uploadtype + ';imagecount:' + this.imagecount);
 			$('#upload_edit_div_' + this.dataid).appendTo($('.mui-content'));
 			isCutG = this.isCut;
+			if(this.pictures.length > 0) {
+				for(var i = 0; i < this.pictures.length; i++) {
+					this['uploadImagePath' + (i + 1)] = this.pictures[i];
+					this.uploadIndex++;
+				}
+			}
 		},
 		watch: {
 			/**

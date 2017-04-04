@@ -1,5 +1,3 @@
-/** * @file 店铺详情 * @Author lxm * @private */
-
 <template>
 	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
 	<div class="mui-scroll-wrapper deviceInfo" style="bottom: {{isStoreManage ? '50px' : '0'}}">
@@ -8,29 +6,29 @@
 				<ul class="mui-table-view mui-table-view-chevron shifu">
 					<li class="mui-table-view-cell">
 						<div>
-							<img class="mui-media-object mui-pull-left head-img" id="head-img" src="">
+							<img class="mui-media-object mui-pull-left head-img" id="head-img" :src="picture">
 							<div class="mui-media-body">
-								<p><i class="master-name">{{master.name}}</i><i class="master-age">工龄{{master.age}}年</i>编号：{{master.code}}</p>
-								<p class='mui-ellipsis'>
-									<span class="jxddicon icon-weizhi2"></span>
-									<span>实名认证</span>
+								<p><i class="master-name">{{master.contact}}</i><i class="master-age">工龄{{master.workingYears}}年</i></p>
+								<p class='realNameAuthentication'>
+									<img v-if="master.realNameAuthentication === 1" src="../../../../static/img/mine/shimingrenzheng.svg">
+									<img v-else src="../../../../static/img/mine/noshimingrenzheng.svg">
 								</p>
 							</div>
 						</div>
 					</li>
 					<li class="mui-table-view-cell">
 						<div class="yuyue">
-							<p class="counts">{{master.yuyue}}</p>
-							<p>预约人数</p>
+							<p class="counts">{{master.callTimes}}</p>
+							<p>咨询次数</p>
 						</div>
 						<div class="views">
-							<p class="counts">{{master.views}}</p>
+							<p class="counts">{{master.browseVolume}}</p>
 							<p>浏览量</p>
 						</div>
 					</li>
 					<li class="mui-table-view-cell btn">
 						<p>
-							<span @tap="callTel(master.telphone)" class="tel-btn"><span class="mui-icon mui-icon-phone icon-span"></span>电话咨询</span>
+							<span @tap="callTel(master.mobileNumber)" class="tel-btn"><span class="mui-icon mui-icon-phone icon-span"></span>电话咨询</span>
 						</p>
 						<!--<p>
 							<span class="yuyue-btn"><span class="jxddicon icon-yijianfankui icon-span"></span>立即预约</span>
@@ -40,21 +38,22 @@
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell">
 						<p class="jieshao">
-							<span>{{master.name}} <i>{{master.type}}</i></span>
+							<span>{{master.contact}}</span>
+							<span>{{master.workerTypesDis}}</span>
 							<span @tap="shoucang" class="jxddicon icon-shoucang1"></span>
 						</p>
 					</li>
 					<li class="mui-table-view-cell">
 						<label>服务范围</label>
-						<span class="info-text">{{master.serviceArea}}</span>
+						<span class="info-text">{{master.serviceAreaDis}}</span>
 					</li>
-					<li class="mui-table-view-cell">
+					<!--<li class="mui-table-view-cell">
 						<label>安装项目</label>
 						<span class="info-text">{{master.project}}</span>
-					</li>
+					</li>-->
 					<li class="mui-table-view-cell">
-						<label>现居地址</label>
-						<span @tap="positioning" class="address info-text">{{master.address.province + ' ' + master.address.city + ' ' + master.address.district + ' ' + master.address.street}}</span>
+						<label>联系地址</label>
+						<span @tap="positioning" class="address info-text">{{master.provinceName + ' ' + master.cityName + ' ' + master.countyName + ' ' + master.street}}</span>
 						<span @tap="positioning" class="jxddicon icon-weizhi2 address-dingwei"></span>
 					</li>
 				</ul>
@@ -63,16 +62,16 @@
 						<label>师傅介绍</label>
 					</li>
 					<li class="mui-table-view-cell">
-						<span>{{master.introduction}}</span>
+						<span>{{master.description}}</span>
 					</li>
 					<li class="mui-table-view-cell master-images">
-						<template v-for="item in master.masterimgs">
-							<img :src="item.url">
+						<template v-for="picture in master.pictures">
+							<img :src="picture">
 						</template>
 					</li>
 					<li class="mui-table-view-cell store-title">
 						<p>
-							<span class="tishi">温馨提示（联系时请说明是在“XXX”上看到的）</span>
+							<span class="tishi">温馨提示（联系时请说明是在“彩钢精英”上看到的）</span>
 						</p>
 					</li>
 				</ul>
@@ -92,44 +91,71 @@
 	export default {
 		data: function() {
 			// 0 分享，非0未分享
-			let isShared = cacheUtils.localStorage(CONSTS.IS_SHARED).get(CONSTS.IS_SHARED);
+			var userInfo = cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS).shareSwitch;
+			var isShared = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO).isShared;
+			var masterCard = plus.webview.currentWebview().masterCard;
 			return {
-				master: {},
+				picture: '1',
+				userInfo: userInfo,
+				master: masterCard || {},
 				isShared: isShared
-			}
+			};
 		},
 		created: function() {
-			//ajax请求数据，这里的数据是模拟数据，后台查询的数据需要进行处理
-			this.master = {
-				name: '江海流',
-				age: 30,
-				code: 1200,
-				telphone: '13885788345',
-				views: 30,
-				yuyue: 9,
-				type: '油漆涂料施工',
-				serviceArea: '市辖区、思明区、沧海区、湖里区、集美区、同安区、翔安区',
-				project: '装修队',
-				address: {
-					province: '北京',
-					city: '北京市',
-					district: '海淀区',
-					street: '阜石路甲69号'
-				},
-				introduction: '团队服务，质量保障，价格低廉，一条龙服务。',
-				masterimgs: [{
-						url: 'http://img.168bgt.com/upload/2016/05/22/20160522172528_408.jpg'
+			if(this.master) {
+				this.picture = this.master.pictures.length > 0 ? this.master.pictures[0] : (this.userInfo.avatar || '1');
+				this.dealData();
+			} else {
+				//ajax请求数据，这里的数据是模拟数据，后台查询的数据需要进行处理
+				this.master = {
+					name: '江海流',
+					age: 30,
+					code: 1200,
+					telphone: '13885788345',
+					views: 30,
+					yuyue: 9,
+					type: '油漆涂料施工',
+					serviceArea: '市辖区、思明区、沧海区、湖里区、集美区、同安区、翔安区',
+					project: '装修队',
+					address: {
+						province: '北京',
+						city: '北京市',
+						district: '海淀区',
+						street: '阜石路甲69号'
 					},
-					{
-						url: 'http://img.168bgt.com/upload/2016/05/22/20160522172528_408.jpg'
-					},
-					{
-						url: 'http://img.168bgt.com/upload/2016/05/22/20160522172528_408.jpg'
-					}
-				]
+					introduction: '团队服务，质量保障，价格低廉，一条龙服务。',
+					masterimgs: [{
+							url: 'http://img.168bgt.com/upload/2016/05/22/20160522172528_408.jpg'
+						},
+						{
+							url: 'http://img.168bgt.com/upload/2016/05/22/20160522172528_408.jpg'
+						},
+						{
+							url: 'http://img.168bgt.com/upload/2016/05/22/20160522172528_408.jpg'
+						}
+					]
+				};
 			}
 		},
 		methods: {
+			dealData() {
+				this.master.workerTypesDis = '';
+				this.master.serviceAreaDis = '';
+				for(var wt of this.master.workerTypes) {
+					if(!this.master.workerTypesDis) {
+						this.master.workerTypesDis = wt.typeName;
+					} else {
+						this.master.workerTypesDis += '、' + wt.typeName;
+					}
+				}
+				for(var sa of this.master.serviceArea) {
+					if(!this.master.serviceAreaDis) {
+						this.master.serviceAreaDis = sa.areaNname;
+					} else {
+						this.master.serviceAreaDis += '、' + sa.areaNname;
+					}
+				}
+			},
 			positioning: function() {
 				muiUtils.openWindow('../../commonpage/map/selectaddress.html', '../../commonpage/map/selectaddress.html', {
 					extras: {
@@ -186,6 +212,7 @@
 	
 	#head-img {
 		border-radius: 50%;
+		margin-right: 20px;
 	}
 	
 	.mui-media {
@@ -239,6 +266,10 @@
 		padding-right: 0;
 	}
 	
+	.mui-table-view-chevron .mui-table-view-cell:first-child {
+		padding-bottom: 5px;
+	}
+	
 	.yuyue {
 		width: 50%;
 		float: left;
@@ -257,14 +288,14 @@
 	}
 	
 	.mui-table-view-cell .tel-btn {
-		background-color: rgb(255, 98, 48);
+		background-color: #26c6da;
 		color: #fff;
-		/*float: left;*/
-		width: 40%;
-		margin-right: 20px;
-		padding: 10px 15px;
+		float: right;
+		margin: 5px 50px;
+		padding: 7px 25px;
 		border-radius: 5px;
 		position: relative;
+		text-indent: 22px;
 	}
 	
 	.mui-table-view-cell .yuyue-btn {
@@ -280,11 +311,9 @@
 	
 	.icon-span {
 		position: absolute;
-		top: 10px;
-		left: -10px;
-		padding: 0 0 20px 20px;
+		top: 7px;
+		left: -4px;
 		color: #fff;
-		font-size: 26px;
 	}
 	
 	.btn {
@@ -299,16 +328,23 @@
 	.jieshao {
 		font-size: 17px;
 		color: #000;
+		padding-right: 35px;
+		padding-left: 45px;
 	}
 	
-	.jieshao i {
-		margin-left: 10px;
+	.jieshao span:first-child {
+		position: absolute;
+		left: 13px;
+		top: 13px;
+		line-height: 1;
 	}
 	
 	.icon-shoucang1 {
 		font-size: 25px;
 		color: #E41A1A;
-		float: right;
+		position: absolute;
+		right: 11px;
+		top: 13px;
 	}
 	
 	.info-text {
@@ -328,5 +364,11 @@
 		padding: 0 0 20px 20px;
 		color: #0D80CC;
 		font-size: 26px;
+	}
+	
+	.realNameAuthentication img {
+		width: 19px;
+		height: 19px;
+		margin-top: 7px;
 	}
 </style>

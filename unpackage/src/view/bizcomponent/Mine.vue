@@ -199,8 +199,10 @@
 				}, function(e) {
 					mui.toast("分享失败!");
 				});
+			},
+			loadData() {
+				this.userInfo = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO);
 			}
-
 		},
 		ready: function() {
 			this.scroll = mui('.mui-scroll-wrapper.mine').scroll({

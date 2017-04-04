@@ -19,6 +19,13 @@ var header = new HeaderVue({
             },
             title: {
                 display: true
+            },
+            rightButton: {
+                display: true,
+                text: '首页',
+                onClick: function() {
+                    muiUtils.openIndexWindow();
+                }
             }
         }
 	},

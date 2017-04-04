@@ -83,17 +83,10 @@
 					isClose: true
 				});
 			},
-			gotoDetail: function(id) {
+			gotoDetail: function() {
 				muiUtils.openWindow('../../bizpage/master/masterinfo.html', '../../bizpage/master/masterinfo.html', {
 					extras: {
-						'id': id
-					}
-				});
-			},
-			gotoEdit: function(id) {
-				muiUtils.openWindow('../../bizpage/release/card.html', '../../bizpage/release/card.html', {
-					extras: {
-						'id': id
+						masterCard: this.masterCard
 					}
 				});
 			},

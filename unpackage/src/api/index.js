@@ -1,12 +1,13 @@
 'use strict';
 
 /* API_ROOT */
-const API_ROOT = 'http://192.168.2.66';
+const API_ROOT = 'http://192.168.79.2';
 const USER = '/user';
-const STORE = '/store';
 const SETTING = '/settings';
+const STORE = '/store';
 const PROJECT = '/project';
 const MASTER = '/masterCard';
+const EMPLOYMENTDEMAND = '/employmentDemand';
 const COMMON = '/common';
 
 /**
@@ -30,17 +31,17 @@ const APIS = {
 		sendCode: API_ROOT + USER + '/sendCode'
 	},
 	
+	settings: {
+		getSettings:　API_ROOT + SETTING + '/getSettings',
+		updateSettings:　API_ROOT + SETTING + '/updateSettings'
+	},
+	
 	store: {
 		getStore: API_ROOT + STORE + '/getStore',
 		getStoreByUserId: API_ROOT + STORE + '/getStoreByUserId',
 		getStoreList: API_ROOT + STORE + '/getStoreList',
 		saveStore: API_ROOT + STORE + '/saveStore',
 		updateStoreCt: API_ROOT + STORE + '/updateStoreCt'
-	},
-	
-	settings: {
-		getSettings:　API_ROOT + SETTING + '/getSettings',
-		updateSettings:　API_ROOT + SETTING + '/updateSettings'
 	},
 	
 	project: {
@@ -60,6 +61,16 @@ const APIS = {
 		updateMasterCardWorkState: API_ROOT + MASTER + '/updateMasterCardWorkState',
 		updateMasterCardState: API_ROOT + MASTER + '/updateMasterCardState',
 		deleteMasterCard: API_ROOT + MASTER + '/deleteMasterCard'
+	},
+	
+	employmentDemand: {
+		getUserEmploymentDemand: API_ROOT + EMPLOYMENTDEMAND + '/getUserEmploymentDemand',
+		getEmploymentDemandById: API_ROOT + EMPLOYMENTDEMAND + '/getEmploymentDemandById',
+		getEmploymentDemandList: API_ROOT + EMPLOYMENTDEMAND + '/getEmploymentDemandList',
+		saveEmploymentDemand: API_ROOT + EMPLOYMENTDEMAND + '/saveEmploymentDemand',
+		updateEmploymentDemandCt: API_ROOT + EMPLOYMENTDEMAND + '/updateEmploymentDemandCt',
+		updateEmploymentDemandState: API_ROOT + EMPLOYMENTDEMAND + '/updateEmploymentDemandState',
+		deleteEmploymentDemand: API_ROOT + EMPLOYMENTDEMAND + '/deleteEmploymentDemand',
 	},
 	
 	common: {

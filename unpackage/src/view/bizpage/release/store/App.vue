@@ -3,7 +3,7 @@
 		<div class="mui-scroll-wrapper releaseStore">
 			<div class="mui-scroll">
 				<div class="title">基本信息</div>
-				<div class="inputRow"><label>店铺名称</label><input type="text" placeholder="请输入店铺名称(必填)"></div>
+				<div class="inputRow"><label>店铺名称</label><input v-model="storeInfo.storeName" type="text" placeholder="请输入店铺名称(必填)"></div>
 				<div class="inputRow">
 					<label>设备类型</label>
 					<p v-if="storeTypeDis" class="storeType" @tap="selectStoreType">{{storeTypeDis}}</p>
@@ -12,11 +12,11 @@
 				</div>
 				<div class="inputRow textarea">
 					<label>店铺介绍</label>
-					<textarea id="textarea" placeholder="详细描述您的店铺信息" @input="textAreaInput"></textarea>
+					<textarea v-model="storeInfo.description" id="textarea" placeholder="详细描述您的店铺信息" @input="textAreaInput"></textarea>
 				</div>
 				<div class="title">联系方式</div>
-				<div class="inputRow"><label>商家电话</label><input type="text" placeholder="请输入商家电话(必填)"></div>
-				<div class="inputRow"><label>负责人</label><input type="text" placeholder="请输入负责人(必填)"></div>
+				<div class="inputRow"><label>商家电话</label><input v-model="storeInfo.mobileNumber" type="text" placeholder="请输入商家电话(必填)"></div>
+				<div class="inputRow"><label>负责人</label><input v-model="storeInfo.contact" type="text" placeholder="请输入负责人(必填)"></div>
 				<div class="inputRow">
 					<label>商家地址</label>
 					<p v-if="address" class="storeType" @tap="selectAddress">{{address.province + ' ' + address.city + ' ' + address.district + ' ' +address.street}}</p>
@@ -26,23 +26,23 @@
 				<div class="title">图片详情</div>
 				<div class="inputRow">
 					<p>请上传店招一张(必填)</p>
-					<upload :is-cut="isCut" :pictures.sync="shopSignPictures" :imagecount="1" dataid="shopSignPicture"></upload>
+					<upload :is-cut="isCut" :pictures.sync="storeInfo.shopSignPictures" :imagecount="1" dataid="shopSignPicture"></upload>
 				</div>
 				<div class="inputRow">
 					<p>请上传营业执照一张(选填)</p>
-					<upload :is-cut="isCut" :pictures.sync="licensePictures" :imagecount="1" dataid="licensePicture"></upload>
+					<upload :is-cut="isCut" :pictures.sync="storeInfo.licensePictures" :imagecount="1" dataid="licensePicture"></upload>
 				</div>
 				<div class="inputRow">
 					<p>请上传店内环境，最多3张(选填)</p>
-					<upload :is-cut="isCut" :pictures.sync="environmentPictures" :imagecount="3" dataid="environmentPicture"></upload>
+					<upload :is-cut="isCut" :pictures.sync="storeInfo.environmentPictures" :imagecount="3" dataid="environmentPicture"></upload>
 				</div>
 				<div class="inputRow">
 					<p>请上传产品图片，最多15张(选填)</p>
-					<upload :is-cut="isCut" :pictures.sync="productPictures" :imagecount="15" dataid="productPicture"></upload>
+					<upload :is-cut="isCut" :pictures.sync="storeInfo.productPictures" :imagecount="15" dataid="productPicture"></upload>
 				</div>
 				<div class="bottomBtn">
-					<a href="javascript:void(0)">保存草稿</a>
-					<a href="javascript:void(0)">提交审核</a>
+					<a href="javascript:void(0)" @tap="submit(0)">保存草稿</a>
+					<a href="javascript:void(0)" @tap="submit(2)">提交审核</a>
 				</div>
 			</div>
 		</div>
@@ -58,10 +58,12 @@
 	export default {
 		data: function() {
 			return {
-				shopSignPictures: [],
-				licensePictures: [],
-				environmentPictures: [],
-				productPictures: [],
+				storeInfo: {
+					shopSignPictures: [],
+					licensePictures: [],
+					environmentPictures: [],
+					productPictures: [],
+				},
 				isCut: false,
 				storeType: [{
 					value: '1',
@@ -161,6 +163,96 @@
 						fromPage: '../../bizpage/release/store.html'
 					}
 				});
+			},
+			submit(state) {
+				if(!this.storeInfo.storeName) {
+					mui.toast('请输入姓名');
+					return;
+				}
+				if(!this.storeTypeSelected || this.storeTypeSelected.length === 0) {
+					mui.toast('请选择设备类型');
+					return;
+				}
+				if(!this.storeInfo.mobileNumber) {
+					mui.toast('请输入商家电话');
+					return;
+				}
+				if(!/^1[3|4|5|7|8][0-9]{9}$/.test(this.storeInfo.mobileNumber)) {
+					mui.toast('请输入正确的手机号码');
+					return;
+				}
+				if(!this.storeInfo.contact) {
+					mui.toast('请输入负责人');
+					return;
+				}
+				if(!this.address) {
+					mui.toast('请选择商家地址');
+					return;
+				}
+				if(!this.storeInfo.shopSignPictures || this.storeInfo.shopSignPictures.length === 0) {
+					mui.toast('请上传店招');
+					return;
+				}
+				var data = JSON.parse(JSON.stringify(this.storeInfo));
+				data.state = state;
+				data.provinceId = this.address.provinceid;
+				data.provinceName = this.address.province;
+				data.cityId = this.address.cityid;
+				data.cityName = this.address.city;
+				data.countyId = this.address.districtid;
+				data.countyName = this.address.district;
+				data.street = this.address.street;
+				data.lng = this.address.lng;
+				data.lat = this.address.lat;
+				data.deviceTypes = [];
+				for(var storeType of this.storeTypeSelected) {
+					data.deviceTypes.push({
+						id: storeType.value,
+						typeName: storeType.text
+					});
+				}
+				for(var i = 0; i < data.shopSignPictures.length; i++) {
+					if(data.shopSignPictures[i].indexOf('http') != -1) {
+						data.shopSignPictures[i] = data.shopSignPictures[i].substring(data.shopSignPictures[i].lastIndexOf('/') + 1);
+					}
+				}
+				for(var i = 0; i < data.licensePictures.length; i++) {
+					if(data.licensePictures[i].indexOf('http') != -1) {
+						data.licensePictures[i] = data.licensePictures[i].substring(data.licensePictures[i].lastIndexOf('/') + 1);
+					}
+				}
+				for(var i = 0; i < data.environmentPictures.length; i++) {
+					if(data.environmentPictures[i].indexOf('http') != -1) {
+						data.environmentPictures[i] = data.environmentPictures[i].substring(data.environmentPictures[i].lastIndexOf('/') + 1);
+					}
+				}
+				for(var i = 0; i < data.productPictures.length; i++) {
+					if(data.productPictures[i].indexOf('http') != -1) {
+						data.productPictures[i] = data.productPictures[i].substring(data.productPictures[i].lastIndexOf('/') + 1);
+					}
+				}
+				data.shopSignPictures = data.shopSignPictures[0];
+				data.licensePictures = data.licensePictures.length > 0 ? data.licensePictures[0] : null;
+				muiUtils.muiAjax(api.APIS.store.saveStore, {
+					data: JSON.stringify(data),
+					contentType: 'application/json',
+					dataType: "json",
+					type: "post",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							mui.toast('保存成功！');
+							muiUtils.openWindow('../../commonpage/mine/mystore.html', '../../commonpage/mine/mystore.html', {
+								isValidLogin: true,
+								isClose: true
+							});
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。')
+					}
+				});
 			}
 		},
 		ready: function() {
@@ -215,7 +307,7 @@
 		overflow: hidden;
 	}
 	
-	.releaseStore .inputRow> input[type=text] {
+	.releaseStore .inputRow>input[type=text] {
 		line-height: normal;
 		width: inherit;
 		height: inherit;
@@ -228,7 +320,7 @@
 		right: 40px;
 	}
 	
-	.releaseStore .inputRow> .jxddicon.icon-jinru32 {
+	.releaseStore .inputRow>.jxddicon.icon-jinru32 {
 		position: absolute;
 		right: 10px;
 		top: 16px;

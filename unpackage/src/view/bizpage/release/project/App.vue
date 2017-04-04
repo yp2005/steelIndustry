@@ -3,11 +3,11 @@
 		<div class="mui-scroll-wrapper releaseProject">
 			<div class="mui-scroll">
 				<div class="title">公司信息</div>
-				<div class="inputRow"><label>公司名称</label><input type="text" placeholder="请输入公司名称(必填)"></div>
-				<div class="inputRow"><label>联系人</label><input type="text" placeholder="请输入联系人(必填)"></div>
-				<div class="inputRow"><label>联系电话</label><input type="text" placeholder="请输入联系电话(必填)"></div>
+				<div class="inputRow"><label>公司名称</label><input v-model="project.companyName" type="text" placeholder="请输入公司名称(必填)"></div>
+				<div class="inputRow"><label>联系人</label><input v-model="project.contact" type="text" placeholder="请输入联系人(必填)"></div>
+				<div class="inputRow"><label>联系电话</label><input v-model="project.mobileNumber" type="text" placeholder="请输入联系电话(必填)"></div>
 				<div class="title">工程信息</div>
-				<div class="inputRow"><label>工程名称</label><input type="text" placeholder="请输入工程名称(必填)"></div>
+				<div class="inputRow"><label>工程名称</label><input v-model="project.projectName" type="text" placeholder="请输入工程名称(必填)"></div>
 				<div class="inputRow">
 					<label>工程地址</label>
 					<p v-if="address" class="projectType" @tap="selectAddress">{{address.province + ' ' + address.city + ' ' + address.district + ' ' +address.street}}</p>
@@ -21,15 +21,15 @@
 				</div>
 				<div class="inputRow textarea">
 					<label>工程介绍</label>
-					<textarea id="textarea" placeholder="请详细描述工程信息" @input="textAreaInput"></textarea>
+					<textarea v-model="project.description" id="textarea" placeholder="请详细描述工程信息" @input="textAreaInput"></textarea>
 				</div>
 				<div class="inputRow">
 					<p>您可以上传图片辅助说明，最多5张(选填)</p>
-					<upload :is-cut="isCut" :pictures.sync="pictures" :imagecount="5"></upload>
+					<upload :is-cut="isCut" :pictures.sync="project.pictures" :imagecount="5"></upload>
 				</div>
 				<div class="bottomBtn">
-					<a href="javascript:void(0)">保存草稿</a>
-					<a href="javascript:void(0)">提交审核</a>
+					<a href="javascript:void(0)" @tap="submit(0)">保存草稿</a>
+					<a href="javascript:void(0)" @tap="submit(2)">提交审核</a>
 				</div>
 			</div>
 		</div>
@@ -45,10 +45,10 @@
 	export default {
 		data: function() {
 			return {
-				pictures: [],
 				isCut: false,
 				address: undefined,
-				dueTime: undefined
+				dueTime: undefined,
+				project: {pictures: []}
 			};
 		},
 		created: function() {
@@ -80,12 +80,77 @@
                     if(date < minDate) {
                         date = minDate;
                     }
-                    that.dueTime = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-                }, function() {
-                    //that.$validation.effectiveDate.touched = true;
-                },{
+                    that.dueTime = date.getFullYear() + "-" + ((date.getMonth() + 1) >= 10 ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + "-" + (date.getDate() > 10 ? date.getDate() : ('0' + date.getDate()));
+                }, function() {},{
                     minDate: minDate
                 });
+			},
+			submit(state) {
+				if(!this.project.companyName) {
+					mui.toast('请输入公司名称');
+					return;
+				}
+				if(!this.project.contact) {
+					mui.toast('请输入联系人');
+					return;
+				}
+				if(!this.project.mobileNumber) {
+					mui.toast('请输入联系电话');
+					return;
+				}
+				if(!/^1[3|4|5|7|8][0-9]{9}$/.test(this.project.mobileNumber)) {
+					mui.toast('请输入正确的手机号码');
+					return;
+				}
+				if(!this.project.projectName) {
+					mui.toast('请输入工程名称');
+					return;
+				}
+				if(!this.address) {
+					mui.toast('请选择工程地址');
+					return;
+				}
+				if(!this.dueTime) {
+					mui.toast('请选择到期时间');
+					return;
+				}
+				var data = this.project;
+				data.state = state;
+				data.dueTime = new Date(this.dueTime + ' 00:00:00').getTime();
+				data.provinceId = this.address.provinceid;
+				data.provinceName = this.address.province;
+				data.cityId = this.address.cityid;
+				data.cityName = this.address.city;
+				data.countyId = this.address.districtid;
+				data.countyName = this.address.district;
+				data.street = this.address.street;
+				data.lng = this.address.lng;
+				data.lat = this.address.lat;
+				for(var i = 0; i < data.pictures.length; i++) {
+					if(data.pictures[i].indexOf('http') != -1) {
+						data.pictures[i] = data.pictures[i].substring(data.pictures[i].lastIndexOf('/') + 1);
+					}
+				}
+				muiUtils.muiAjax(api.APIS.project.saveProject, {
+					data: JSON.stringify(data),
+					contentType: 'application/json',
+					dataType: "json",
+					type: "post",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							mui.toast('保存成功！');
+							muiUtils.openWindow('../../commonpage/mine/myproject.html', '../../commonpage/mine/myproject.html', {
+								isValidLogin: true,
+								isClose: true
+							});
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。')
+					}
+				});
 			}
 		},
 		ready: function() {

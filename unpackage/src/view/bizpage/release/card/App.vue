@@ -331,6 +331,11 @@
 						areaNname: area.text
 					});
 				}
+				for(var i = 0; i < data.pictures.length; i++) {
+					if(data.pictures[i].indexOf('http') != -1) {
+						data.pictures[i] = data.pictures[i].substring(data.pictures[i].lastIndexOf('/') + 1);
+					}
+				}
 				muiUtils.muiAjax(api.APIS.masterCard.saveMasterCard, {
 					data: JSON.stringify(data),
 					contentType: 'application/json',
