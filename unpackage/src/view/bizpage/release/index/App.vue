@@ -69,26 +69,161 @@
 						success: function(data) {
 							if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
 								if(data.result) {
-									that.masterCard = data.result;
-									switch(that.masterCard.state) {
+									var masterCard = data.result;
+									switch(masterCard.state) {
 										case 0:
-											that.masterCard.stateValue = '草稿';
+											masterCard.stateValue = '草稿';
 											break;
 										case 1:
-											that.masterCard.stateValue = '通过审核';
+											masterCard.stateValue = '通过审核';
 											break;
 										case 2:
-											that.masterCard.stateValue = '审核中';
+											masterCard.stateValue = '审核中';
 											break;
 										case 3:
-											that.masterCard.stateValue = '审核不通过';
+											masterCard.stateValue = '审核不通过';
 											break;
 									}
 									muiUtils.openWindow('../../commonpage/mine/mycard.html', '../../commonpage/mine/mycard.html', {
 										isValidLogin: true,
 										isClose: true,
 										extras: {
-											masterCard: that.masterCard
+											masterCard: masterCard
+										}
+									});
+								} else {
+									muiUtils.openWindow(url, url, {
+										isValidLogin: true,
+										isClose: true
+									});
+								}
+							} else {
+								mui.toast(data.erroCode + '：' + data.erroMsg);
+							}
+						},
+						error: function(xhr, type, errorThrown) {
+							mui.toast('服务器或网络异常，请稍后重试。')
+						}
+					});
+				} else if(url === '../../bizpage/release/store.html') {
+					muiUtils.muiAjax(api.APIS.store.getStore, {
+						dataType: "json",
+						type: "get",
+						success: function(data) {
+							if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+								if(data.result) {
+									var store = data.result;
+									switch(store.state) {
+										case 0:
+											store.stateValue = '草稿';
+											break;
+										case 1:
+											store.stateValue = '通过审核';
+											break;
+										case 2:
+											store.stateValue = '审核中';
+											break;
+										case 3:
+											store.stateValue = '审核不通过';
+											break;
+									}
+									muiUtils.openWindow('../../commonpage/mine/mystore.html', '../../commonpage/mine/mystore.html', {
+										isValidLogin: true,
+										isClose: true,
+										extras: {
+											store: store
+										}
+									});
+								} else {
+									muiUtils.openWindow(url, url, {
+										isValidLogin: true,
+										isClose: true
+									});
+								}
+							} else {
+								mui.toast(data.erroCode + '：' + data.erroMsg);
+							}
+						},
+						error: function(xhr, type, errorThrown) {
+							mui.toast('服务器或网络异常，请稍后重试。');
+						}
+					});
+				} else if(url === '../../bizpage/release/project.html') {
+					muiUtils.muiAjax(api.APIS.project.getUserProject, {
+						dataType: "json",
+						type: "get",
+						success: function(data) {
+							if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+								if(data.result && data.result.projectList.length >= 10) {
+									mui.toast('您最多发布十个工程信息！');
+									var projectList = data.result.projectList;
+									for(var project of projectList) {
+										switch(project.state) {
+											case 0:
+												project.stateValue = '草稿';
+												break;
+											case 1:
+												project.stateValue = '通过审核';
+												break;
+											case 2:
+												project.stateValue = '审核中';
+												break;
+											case 3:
+												project.stateValue = '审核不通过';
+												break;
+										}
+									}
+									muiUtils.openWindow('../../commonpage/mine/myproject.html', '../../commonpage/mine/myproject.html', {
+										isValidLogin: true,
+										isClose: true,
+										extras: {
+											projectList: projectList
+										}
+									});
+								} else {
+									muiUtils.openWindow(url, url, {
+										isValidLogin: true,
+										isClose: true
+									});
+								}
+							} else {
+								mui.toast(data.erroCode + '：' + data.erroMsg);
+							}
+						},
+						error: function(xhr, type, errorThrown) {
+							mui.toast('服务器或网络异常，请稍后重试。')
+						}
+					});
+				} else if(url === '../../bizpage/release/work.html') {
+					muiUtils.muiAjax(api.APIS.employmentDemand.getUserEmploymentDemand, {
+						dataType: "json",
+						type: "get",
+						success: function(data) {
+							if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+								if(data.result && data.result.employmentDemandList.length >= 10) {
+									mui.toast('您最多发布十个用工需求！');
+									var employmentDemandList = data.result.employmentDemandList;
+									for(employmentDemand of employmentDemandList) {
+										switch(employmentDemand.state) {
+											case 0:
+												employmentDemand.stateValue = '草稿';
+												break;
+											case 1:
+												employmentDemand.stateValue = '通过审核';
+												break;
+											case 2:
+												employmentDemand.stateValue = '审核中';
+												break;
+											case 3:
+												employmentDemand.stateValue = '审核不通过';
+												break;
+										}
+									}
+									muiUtils.openWindow('../../commonpage/mine/mywork.html', '../../commonpage/mine/mywork.html', {
+										isValidLogin: true,
+										isClose: true,
+										extras: {
+											employmentDemandList: employmentDemandList
 										}
 									});
 								} else {

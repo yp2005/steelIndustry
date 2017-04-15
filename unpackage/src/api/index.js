@@ -1,7 +1,7 @@
 'use strict';
 
 /* API_ROOT */
-const API_ROOT = 'http://192.168.79.2';
+const API_ROOT = 'http://192.168.79.5';
 const USER = '/user';
 const SETTING = '/settings';
 const STORE = '/store';
@@ -41,7 +41,9 @@ const APIS = {
 		getStoreByUserId: API_ROOT + STORE + '/getStoreByUserId',
 		getStoreList: API_ROOT + STORE + '/getStoreList',
 		saveStore: API_ROOT + STORE + '/saveStore',
-		updateStoreCt: API_ROOT + STORE + '/updateStoreCt'
+		updateStoreCt: API_ROOT + STORE + '/updateStoreCt',
+		updateStoreState: API_ROOT + STORE + '/updateStoreState',
+		deleteStore: API_ROOT + STORE + '/deleteStore',
 	},
 	
 	project: {
@@ -49,7 +51,9 @@ const APIS = {
 		getProjectById: API_ROOT + PROJECT + '/getProjectById',
 		getProjectList: API_ROOT + PROJECT + '/getProjectList',
 		saveProject: API_ROOT + PROJECT + '/saveProject',
-		updateProjectCt: API_ROOT + PROJECT + '/updateProjectCt'
+		updateProjectCt: API_ROOT + PROJECT + '/updateProjectCt',
+		updateProjectState: API_ROOT + PROJECT + '/updateProjectState',
+		deleteProject: API_ROOT + PROJECT + '/deleteProject'
 	},
 	
 	masterCard: {

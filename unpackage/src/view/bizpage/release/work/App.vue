@@ -50,80 +50,125 @@
 	import upload from 'component/upload/UploadImage';
 	export default {
 		data: function() {
+			var workInfo = plus.webview.currentWebview().employmentDemand;
+			var workType = [{
+				value: '1',
+				text: '彩钢厂',
+				children: [{
+					value: '11',
+					text: '车间管理',
+				}, {
+					value: '12',
+					text: '主机操作',
+				}, {
+					value: '13',
+					text: '副机操作',
+				}, {
+					value: '14',
+					text: '切割操作',
+				}, {
+					value: '15',
+					text: '剪板折弯',
+				}, {
+					value: '16',
+					text: '单板操作',
+				}, {
+					value: '17',
+					text: 'c-z型钢操作',
+				}, {
+					value: '18',
+					text: '其他',
+				}]
+			}, {
+				value: '2',
+				text: '钢结构厂',
+				children: [{
+					value: '21',
+					text: '数控切割',
+				}, {
+					value: '22',
+					text: '数控转床',
+				}, {
+					value: '23',
+					text: '阻焊',
+				}, {
+					value: '24',
+					text: '二保焊',
+				}, {
+					value: '25',
+					text: '铆工',
+				}, {
+					value: '26',
+					text: '其他',
+				}]
+			}, {
+				value: '3',
+				text: '工程安装',
+				children: [{
+					value: '31',
+					text: '焊工',
+				}, {
+					value: '32',
+					text: '打板',
+				}, {
+					value: '33',
+					text: '高空',
+				}, {
+					value: '34',
+					text: '其他',
+				}]
+			}];
+			var workTypeSelected = [];
+			var workTypeDis = '';
+			var address = undefined;
+			var dueTime = undefined;
+			if(workInfo) {
+				for(var wt of workInfo.workerTypes) {
+					workTypeSelected.push({
+						value: wt.id + '',
+						text: wt.typeName
+					});
+					if(workTypeDis === '') {
+						workTypeDis += wt.typeName;
+					} else {
+						workTypeDis += ',' + wt.typeName;
+					}
+				}
+				for(var wt of workType) {
+					wt.selectedNum = 0;
+					for(var wt2 of wt.children) {
+						wt2.selected = false;
+						for(var wts of workTypeSelected) {
+							if(wts.value === wt2.value) {
+								wt2.selected = true;
+								wt.selectedNum++;
+								break;
+							}
+						}
+					}
+				}
+				address = {};
+				address.provinceid = workInfo.provinceId;
+				address.province = workInfo.provinceName;
+				address.cityid = workInfo.cityId;
+				address.city = workInfo.cityName;
+				address.districtid = workInfo.countyId;
+				address.district = workInfo.countyName;
+				address.street = workInfo.street;
+				address.lng = workInfo.lng;
+				address.lat = workInfo.lat;
+				dueTime = workInfo.dueTime;
+			}
 			return {
-				workInfo: {pictures: []},
+				workInfo: workInfo || {
+					pictures: []
+				},
 				isCut: false,
-				workType: [{
-					value: '1',
-					text: '彩钢厂',
-					children: [{
-						value: '11',
-						text: '车间管理',
-					}, {
-						value: '12',
-						text: '主机操作',
-					}, {
-						value: '13',
-						text: '副机操作',
-					}, {
-						value: '14',
-						text: '切割操作',
-					}, {
-						value: '15',
-						text: '剪板折弯',
-					}, {
-						value: '16',
-						text: '单板操作',
-					}, {
-						value: '17',
-						text: 'c-z型钢操作',
-					}, {
-						value: '18',
-						text: '其他',
-					}]
-				}, {
-					value: '2',
-					text: '钢结构厂',
-					children: [{
-						value: '21',
-						text: '数控切割',
-					}, {
-						value: '22',
-						text: '数控转床',
-					}, {
-						value: '23',
-						text: '阻焊',
-					}, {
-						value: '24',
-						text: '二保焊',
-					}, {
-						value: '25',
-						text: '铆工',
-					}, {
-						value: '26',
-						text: '其他',
-					}]
-				}, {
-					value: '3',
-					text: '工程安装',
-					children: [{
-						value: '31',
-						text: '焊工',
-					}, {
-						value: '32',
-						text: '打板',
-					}, {
-						value: '33',
-						text: '高空',
-					}, {
-						value: '34',
-						text: '其他',
-					}]
-				}],
-				workTypeSelected: [],
-				workTypeDis: '',
-				address: undefined,
-				dueTime: undefined
+				workType: workType,
+				workTypeSelected: workTypeSelected,
+				workTypeDis: workTypeDis,
+				address: address,
+				dueTime: dueTime
 			};
 		},
 		created: function() {
@@ -158,20 +203,20 @@
 				});
 			},
 			selectDueTime() {
-                var that = this;
-                var minDate = new Date();
-                minDate.setDate(minDate.getDate() + 1);
-                plus.nativeUI.pickDate(function(e) {
-                    var date = e.date;
-                    if(date < minDate) {
-                        date = minDate;
-                    }
-                    that.dueTime = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-                }, function() {
-                    //that.$validation.effectiveDate.touched = true;
-                },{
-                    minDate: minDate
-                });
+				var that = this;
+				var minDate = new Date();
+				minDate.setDate(minDate.getDate() + 1);
+				plus.nativeUI.pickDate(function(e) {
+					var date = e.date;
+					if(date < minDate) {
+						date = minDate;
+					}
+					that.dueTime = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+				}, function() {
+					//that.$validation.effectiveDate.touched = true;
+				}, {
+					minDate: minDate
+				});
 			},
 			submit(state) {
 				if(!this.workInfo.companyName) {
@@ -208,6 +253,8 @@
 				}
 				var data = this.workInfo;
 				data.state = state;
+				delete data.stateValue;
+				delete data.picture;
 				data.dueTime = new Date(this.dueTime + ' 00:00:00').getTime();
 				data.provinceId = this.address.provinceid;
 				data.provinceName = this.address.province;
@@ -304,7 +351,7 @@
 		overflow: hidden;
 	}
 	
-	.releaseWork .inputRow> input[type=text] {
+	.releaseWork .inputRow>input[type=text] {
 		line-height: normal;
 		width: inherit;
 		height: inherit;
@@ -317,7 +364,7 @@
 		right: 40px;
 	}
 	
-	.releaseWork .inputRow> .jxddicon.icon-jinru32 {
+	.releaseWork .inputRow>.jxddicon.icon-jinru32 {
 		position: absolute;
 		right: 10px;
 		top: 16px;

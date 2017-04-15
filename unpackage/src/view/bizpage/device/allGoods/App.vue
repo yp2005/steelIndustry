@@ -4,8 +4,8 @@
 	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
 	<div class="mui-scroll-wrapper deviceInfo">
 		<div class="mui-scroll">
-			<template v-for="item in imageDatas">
-				<img :src="item.banner_img_url">
+			<template v-for="img in imageDatas">
+				<img :src="img">
 			</template>
 		</div>
 </template>

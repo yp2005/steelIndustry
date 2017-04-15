@@ -57,80 +57,123 @@
 	import upload from 'component/upload/UploadImage';
 	export default {
 		data: function() {
+			var storeInfo = plus.webview.currentWebview().store;
+			var storeType = [{
+				value: '1',
+				text: '全新',
+				children: [{
+					value: '11',
+					text: '彩钢流水线',
+				}, {
+					value: '12',
+					text: '单板机',
+				}, {
+					value: '13',
+					text: '剪板机',
+				}, {
+					value: '14',
+					text: '折弯机',
+				}, {
+					value: '15',
+					text: '数控切割机',
+				}, {
+					value: '16',
+					text: '阻焊机',
+				}, {
+					value: '17',
+					text: '抛丸机',
+				}, {
+					value: '18',
+					text: '二保焊机',
+				}, {
+					value: '19',
+					text: '其他',
+				}]
+			}, {
+				value: '2',
+				text: '二手',
+				children: [{
+					value: '21',
+					text: '彩钢流水线',
+				}, {
+					value: '22',
+					text: '单板机',
+				}, {
+					value: '23',
+					text: '剪板机',
+				}, {
+					value: '24',
+					text: '折弯机',
+				}, {
+					value: '25',
+					text: '数控切割机',
+				}, {
+					value: '26',
+					text: '阻焊机',
+				}, {
+					value: '27',
+					text: '抛丸机',
+				}, {
+					value: '28',
+					text: '二保焊机',
+				}, {
+					value: '29',
+					text: '其他',
+				}]
+			}];
+			var storeTypeSelected = [];
+			var storeTypeDis = '';
+			var address = undefined;
+			if(storeInfo) {
+				for(var dt of storeInfo.deviceTypes) {
+					storeTypeSelected.push({
+						value: dt.id + '',
+						text: dt.typeName
+					});
+					if(storeTypeDis === '') {
+						storeTypeDis += dt.typeName;
+					} else {
+						storeTypeDis += ',' + dt.typeName;
+					}
+				}
+				for(var st of storeType) {
+					st.selectedNum = 0;
+					for(var st2 of st.children) {
+						st2.selected = false;
+						for(var sts of storeTypeSelected) {
+							if(sts.value === st2.value) {
+								st2.selected = true;
+								st.selectedNum++;
+								break;
+							}
+						}
+					}
+				}
+				storeInfo.shopSignPictures = [storeInfo.imgServer + storeInfo.shopSignPictures];
+				storeInfo.licensePictures = [storeInfo.imgServer + storeInfo.licensePictures];
+				address = {};
+				address.provinceid = storeInfo.provinceId;
+				address.province = storeInfo.provinceName;
+				address.cityid = storeInfo.cityId;
+				address.city = storeInfo.cityName;
+				address.districtid = storeInfo.countyId;
+				address.district = storeInfo.countyName;
+				address.street = storeInfo.street;
+				address.lng = storeInfo.lng;
+				address.lat = storeInfo.lat;
+			}
 			return {
-				storeInfo: {
+				storeInfo: storeInfo ||　{
 					shopSignPictures: [],
 					licensePictures: [],
 					environmentPictures: [],
 					productPictures: [],
 				},
 				isCut: false,
-				storeType: [{
-					value: '1',
-					text: '全新',
-					children: [{
-						value: '11',
-						text: '彩钢流水线',
-					}, {
-						value: '12',
-						text: '单板机',
-					}, {
-						value: '13',
-						text: '剪板机',
-					}, {
-						value: '14',
-						text: '折弯机',
-					}, {
-						value: '15',
-						text: '数控切割机',
-					}, {
-						value: '16',
-						text: '阻焊机',
-					}, {
-						value: '17',
-						text: '抛丸机',
-					}, {
-						value: '18',
-						text: '二保焊机',
-					}, {
-						value: '19',
-						text: '其他',
-					}]
-				}, {
-					value: '2',
-					text: '二手',
-					children: [{
-						value: '21',
-						text: '彩钢流水线',
-					}, {
-						value: '22',
-						text: '单板机',
-					}, {
-						value: '23',
-						text: '剪板机',
-					}, {
-						value: '24',
-						text: '折弯机',
-					}, {
-						value: '25',
-						text: '数控切割机',
-					}, {
-						value: '26',
-						text: '阻焊机',
-					}, {
-						value: '27',
-						text: '抛丸机',
-					}, {
-						value: '28',
-						text: '二保焊机',
-					}, {
-						value: '29',
-						text: '其他',
-					}]
-				}],
-				storeTypeSelected: [],
-				storeTypeDis: '',
-				address: undefined
+				storeType: storeType,
+				storeTypeSelected: storeTypeSelected,
+				storeTypeDis: storeTypeDis,
+				address: address
 			};
 		},
 		created: function() {
@@ -195,6 +238,7 @@
 				}
 				var data = JSON.parse(JSON.stringify(this.storeInfo));
 				data.state = state;
+				delete data.stateValue;
 				data.provinceId = this.address.provinceid;
 				data.provinceName = this.address.province;
 				data.cityId = this.address.cityid;

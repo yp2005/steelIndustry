@@ -1,211 +1,250 @@
 <template>
-	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
-	<div class="deviceList">
-		<div id="scroll" class="mui-scroll-wrapper">
-			<div id="pullrefresh" class="mui-scroll">
-				<div class="oneStore" @tap="gotoDetail('id')">
-					<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
-					<div class="storeInfo">
-						<p class="mui-ellipsis">招聘标题</p>
-						<p>哈哈</p>
-						<p>2017-01-01</p>
-						<p>不知道说啥</p>
-						<p>
-							<a v-if="!submitFlag" @tap="cardSubmit($event)" href="javascript:void(0)">提交</a>
-							<a @tap="gotoEdit('id')" href="javascript:void(0)">编辑</a>
-							<a v-if="submitFlag" @tap="cardCancel('id',$event)" href="javascript:void(0)" style="color:red;border-color: red;">撤销</a>
-							<a v-if="!submitFlag" @tap="cardDelete('id',$event)" href="javascript:void(0)" style="color:red;border-color: red;">删除</a>
-						</p>
-					</div>
-				</div>
-				</a>
+	<div class="mywork">
+		<div class="oneRow" v-for="employmentDemand in employmentDemandList" @tap="gotoDetail(employmentDemand)">
+			<img :src="employmentDemand.picture" />
+			<div class="rowRight">
+				<p class="mui-ellipsis">{{employmentDemand.demandTitle}}</p>
+				<p>{{employmentDemand.workerTypes[0].typeName + '...'}}</p>
+				<p>{{employmentDemand.updateTime}}</p>
+				<p>{{employmentDemand.stateValue}}</p>
+				<p>
+					<a v-if="employmentDemand.state === 0" @tap="updateState($event, employmentDemand, 2)" href="javascript:void(0)">提交</a>
+					<a v-if="employmentDemand.state !== 2" @tap="edit($event, employmentDemand)" href="javascript:void(0)">编辑</a>
+					<a v-if="employmentDemand.state === 1 || employmentDemand.state === 2" @tap="updateState($event, employmentDemand, 0)" href="javascript:void(0)" class="red">撤销</a>
+					<a v-if="employmentDemand.state === 0 || employmentDemand.state === 3" @tap="delete($event, $index)" href="javascript:void(0)" class="red">删除</a>
+				</p>
 			</div>
 		</div>
+		<p class="noWork" v-show="!employmentDemandList || employmentDemandList.length === 0">
+			<a href="javascript:void(0)" @tap="releaseEmploymentDemand">发布用工需求</a>
+		</p>
 	</div>
 </template>
 
 <script>
-	import nonetworkmask from 'component/mask/NoNetWorkMask';
 	import muiUtils from 'common/muiUtils';
-	import log from 'common/logUtils';
 	import api from 'api';
 	import CONSTS from 'common/consts';
-	import {
-		cityData3Lev
-	} from 'common/cityData';
+	import cacheUtils from 'common/cacheUtils';
 	export default {
 		data: function() {
 			return {
-				submitFlag: false,
-				disnonetworkmask: false,
-				pullrefresh: null
+				userInfo: cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO),
+				employmentDemandList: plus.webview.currentWebview().employmentDemandList,
+				picture: '1'
 			};
 		},
+		created() {
+			var that = this;
+			if(!this.employmentDemandList) {
+				muiUtils.muiAjax(api.APIS.employmentDemand.getUserEmploymentDemand, {
+					dataType: "json",
+					type: "get",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							that.employmentDemandList = data.result.employmentDemandList;
+							if(!that.employmentDemandList) {
+								return;
+							}
+							for(var employmentDemand of that.employmentDemandList) {
+								employmentDemand.picture = employmentDemand.pictures.length > 0 ? employmentDemand.pictures[0] : '1';
+								switch(employmentDemand.state) {
+									case 0:
+										employmentDemand.stateValue = '草稿';
+										break;
+									case 1:
+										employmentDemand.stateValue = '通过审核';
+										break;
+									case 2:
+										employmentDemand.stateValue = '审核中';
+										break;
+									case 3:
+										employmentDemand.stateValue = '审核不通过';
+										break;
+								}
+							}
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。')
+					}
+				});
+			} else {
+				for(var employmentDemand of that.employmentDemandList) {
+					employmentDemand.picture = employmentDemand.pictures.length > 0 ? employmentDemand.pictures[0] : '1';
+				}
+			}
+		},
 		methods: {
-			gotoDetail: function(id) {
-				muiUtils.openWindow('../../bizpage/work/workinfo.html', 'bizpage_work_workinfo', {
-                    extras: {
-                        'id': id
-                    }
-                });
+			releaseEmploymentDemand() {
+				muiUtils.openWindow('../../bizpage/release/work.html', '../../bizpage/release/work.html', {
+					isClose: true
+				});
 			},
-			gotoEdit: function(id) {
-				muiUtils.openWindow('../../bizpage/release/work.html', 'bizpage_release_work', {
+			gotoDetail: function(employmentDemand) {
+				muiUtils.openWindow('../../bizpage/work/workinfo.html', '../../bizpage/work/workinfo.html', {
 					extras: {
-                        'id': id
+						employmentDemand: employmentDemand
 					}
 				});
 			},
-			cardSubmit: function(event){
-				mui.toast("提交成功！");
-				event.stopPropagation();
-			},
-			cardCancel: function(id,event){
-				mui.toast("撤销成功！");
-				event.stopPropagation();
-			},
-			cardDelete: function(id,event){
-				mui.toast("删除成功！");
-				event.stopPropagation();
-			},
-			getData() {
-				console.log('getData...');
-				this.pullrefresh.endPullDownToRefresh();
-				this.pullrefresh.refresh(true);
-			},
-			loadMore() {
-				console.log('loadMore...');
-				this.pullrefresh.endPullUpToRefresh(); 
-			}
-		},
-		ready: function() {
-			var deceleration = mui.os.ios ? 0.003 : 0.0009;
-			mui('.mui-scroll-wrapper').scroll({
-				bounce: true,
-				indicators: true, //是否显示滚动条
-				deceleration: deceleration
-			});
-			var that = this;
-			this.pullrefresh = mui('#pullrefresh').pullToRefresh({
-				down: {
-					auto: false,
-					offset: 50,
-					callback: function() {
-						that.getData();
+			updateState(event, employmentDemand, state) {
+				var that = this;
+				muiUtils.muiAjax(api.APIS.employmentDemand.updateEmploymentDemandState, {
+					data: JSON.stringify({
+						id: employmentDemand.id,
+						state: state
+					}),
+					contentType: 'application/json',
+					dataType: "json",
+					type: "post",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							employmentDemand.state = state;
+							switch(state) {
+								case 0:
+									employmentDemand.stateValue = '草稿';
+									break;
+								case 1:
+									employmentDemand.stateValue = '通过审核';
+									break;
+								case 2:
+									employmentDemand.stateValue = '审核中';
+									break;
+								case 3:
+									employmentDemand.stateValue = '审核不通过';
+									break;
+							}
+							employmentDemand = JSON.parse(JSON.stringify(employmentDemand));
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。');
 					}
-				},
-				up: {
-					offset: 50,
-					callback: function() {
-						that.loadMore();
+				});
+				event.stopPropagation();
+			},
+			edit(event, employmentDemand) {
+				muiUtils.openWindow('../../bizpage/release/work.html', '../../bizpage/release/work.html', {
+					isValidLogin: true,
+					isClose: true,
+					extras: {
+						employmentDemand: employmentDemand
 					}
-				}
-			});
-		},
-		components: {
-			nonetworkmask
+				});
+				event.stopPropagation();
+			},
+			delete(event, index) {
+				var btnArray = ['取消', '确定'];
+				var that = this;
+				mui.confirm('确认删除店铺？', '操作提示', btnArray, function(e) {
+					if(e.index == 1) {
+						muiUtils.muiAjax(api.APIS.employmentDemand.deleteEmploymentDemand + '?id=' + that.employmentDemandList[index].id, {
+							dataType: "json",
+							type: "delete",
+							success: function(data) {
+								if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+									that.employmentDemandList.splice(index, 1);
+								} else {
+									mui.toast(data.erroCode + '：' + data.erroMsg);
+								}
+							},
+							error: function(xhr, type, errorThrown) {
+								mui.toast('服务器或网络异常，请稍后重试。');
+							}
+						});
+					}
+				});
+				event.stopPropagation();
+			},
 		}
 	};
 </script>
 <style>
-	.deviceList {
+	.mywork {
 		position: absolute;
-		top: 0px;
+		top: 45px;
 		bottom: 0;
 		width: 100%;
 	}
 	
-	.deviceList .mui-scroll-wrapper {
-		top: 45px;
-	}
-	
-	.deviceList .conditions {
-		line-height: 25px;
-		padding: 10px 0;
-		text-align: center;
-	}
-	
-	.deviceList .conditions a {
-		color: #000;
-		width: 32%;
-		position: relative;
-	}
-	
-	.deviceList .conditions a:nth-child(1),
-	.deviceList .conditions a:nth-child(2) {
-		border-right: solid 1px #ddd;
-	}
-	
-	.deviceList .conditions a:after {
-		content: "";
-		position: absolute;
-		width: 4px;
-		height: 4px;
-		margin-left: 5px;
-		top: 10px;
-		box-sizing: border-box;
-		border-top: 4px solid #aaa;
-		border-right: 4px solid transparent;
-		border-left: 4px solid transparent;
-	}
-	
-	.deviceList .advertisement {
-		width: 100%;
-		height: 120px;
-		margin-bottom: 8px;
-	}
-	
-	.oneStore {
+	.oneRow {
 		padding: 10px;
 		background-color: #fff;
 		margin-bottom: 8px;
 	}
 	
-	.oneStore img {
+	.oneRow img {
 		float: left;
 		width: 106px;
 		height: 106px;
 	}
 	
-	.oneStore .storeInfo {
+	.oneRow .rowRight {
 		padding-left: 116px;
 		min-height: 80px;
 	}
 	
-	.oneStore .storeInfo p {
+	.oneRow .rowRight p {
 		font-size: 13px;
 	}
 	
-	.oneStore .storeInfo p:nth-child(1) {
+	.oneRow .rowRight p:nth-child(1) {
 		color: #000;
 		font-size: 14px;
 	}
 	
-	.oneStore .storeInfo p:nth-child(3) {
+	.oneRow .rowRight p:nth-child(3) {
 		overflow: hidden;
 		/*padding: 5px 0;*/
 	}
 	
-	.oneStore .storeInfo p:nth-child(3) img {
+	.oneRow .rowRight p:nth-child(3) img {
 		width: 19px;
 		height: 19px;
 		margin-right: 4px;
 	}
 	
-	.oneStore .storeInfo p:nth-child(5) a {
+	.oneRow .rowRight p:nth-child(5) a {
 		color: #26c6da;
 		line-height: 1;
 		padding: 5px 8px;
 		border-radius: 3px;
-		margin: 5px 0;
+		margin: 5px 5px 5px 0;
 		border: 1px solid #26c6da;
 	}
 	
-	.oneStore .storeInfo p:nth-child(5) span {
+	.oneRow .rowRight p:nth-child(5) span {
 		line-height: 1;
 		margin-top: 4px;
 		font-size: 19px;
 		font-weight: 800;
 		color: #777;
+	}
+	
+	.noWork {
+		line-height: 30px;
+		margin-top: -15px;
+		position: absolute;
+		top: 40%;
+		left: 0;
+		width: 100%;
+		text-align: center;
+	}
+	
+	.noWork a {
+		padding: 0 15px;
+		color: #26c6da;
+		border: solid 1px #26c6da;
+		border-radius: 3px;
+	}
+	
+	.oneRow .rowRight p:nth-child(5) a.red {
+		color: red;
+		border-color: red;
 	}
 </style>

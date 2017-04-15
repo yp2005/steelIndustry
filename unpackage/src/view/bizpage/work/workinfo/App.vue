@@ -1,51 +1,49 @@
-/** * @file 店铺详情 * @Author lxm * @private */
-
 <template>
 	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
-	<div class="mui-scroll-wrapper deviceInfo">
+	<div class="mui-scroll-wrapper workInfo">
 		<div class="mui-scroll">
 			<div class="context">
 				<ul class="mui-table-view mui-table-view-chevron">
 					<li class="mui-table-view-cell">
 						<p class="jieshao">
-							<span class="title">{{workInfo.title}}</span>
+							<span class="title">{{workInfo.demandTitle}}</span>
 							<span @tap="shoucang" class="jxddicon icon-shoucang1"></span>
 						</p>
 					</li>
 					<li class="mui-table-view-cell">
 						<label>发布时间</label>
-						<span class="info-text">{{workInfo.publishtime}}</span>
+						<span class="info-text">{{workInfo.updateTime}}</span>
 					</li>
 					<li class="mui-table-view-cell">
 						<label>到期时间</label>
-						<span class="info-text">{{workInfo.endtime}}</span>
+						<span class="info-text">{{workInfo.dueTime}}</span>
 					</li>
 					<li class="mui-table-view-cell">
 						<label>招工范围</label>
-						<span class="info-text">{{workInfo.type}}</span>
+						<span class="info-text">{{workInfo.workerTypesDis}}</span>
 					</li>
 					<li class="mui-table-view-cell">
 						<label>干活地点</label>
-						<span @tap="positioning" class="address info-text">{{workInfo.address.province + ' ' + workInfo.address.city + ' ' + workInfo.address.district + ' ' + workInfo.address.street}}</span>
+						<span @tap="positioning" class="address info-text">{{address.province + ' ' + address.city + ' ' + address.district + ' ' + address.street}}</span>
 						<span @tap="positioning" class="jxddicon icon-weizhi2 address-dingwei"></span>
 					</li>
 				</ul>
 				<ul class="mui-table-view mui-table-view-chevron shifu">
 					<li class="mui-table-view-cell">
-						<img class="mui-media-object mui-pull-left head-img" id="head-img" src="{{workInfo.userImg}}">
-						<p class="master-name">{{workInfo.name}}</p>
+						<img class="mui-media-object mui-pull-left head-img" id="head-img" :src="picture">
+						<p class="master-name">{{workInfo.contact}}</p>
 						<div class="yuyue">
-							<p class="counts">{{workInfo.yuyue}}</p>
-							<p>预约人数</p>
+							<p class="counts">{{workInfo.callTimes}}</p>
+							<p>咨询人次</p>
 						</div>
 						<div class="views">
-							<p class="counts">{{workInfo.views}}</p>
+							<p class="counts">{{workInfo.browseVolume}}</p>
 							<p>浏览量</p>
 						</div>
 					</li>
 					<li class="mui-table-view-cell btn">
 						<p>
-							<span @tap="callTel(workInfo.telphone)" class="tel-btn"><span class="mui-icon mui-icon-phone icon-span"></span>电话咨询</span>
+							<span @tap="callTel(workInfo.mobileNumber)" class="tel-btn"><span class="mui-icon mui-icon-phone icon-span"></span>电话咨询</span>
 						</p>
 						<!--<p>
 							<span class="yuyue-btn"><span class="jxddicon icon-yijianfankui icon-span"></span>立即预约</span>
@@ -57,16 +55,16 @@
 						<label>工作介绍</label>
 					</li>
 					<li class="mui-table-view-cell">
-						<span>{{workInfo.introduction}}</span>
+						<span>{{workInfo.description}}</span>
 					</li>
 					<li class="mui-table-view-cell master-images">
-						<template v-for="item in workInfo.workinfoimgs">
-							<img :src="item.url">
+						<template v-for="img in workInfo.pictures">
+							<img :src="img">
 						</template>
 					</li>
 					<li class="mui-table-view-cell store-title">
 						<p>
-							<span class="tishi">温馨提示（联系时请说明是在“XXX”上看到的）</span>
+							<span class="tishi">温馨提示（联系时请说明是在“彩钢精英”上看到的）</span>
 						</p>
 					</li>
 					<li class="mui-table-view-cell">
@@ -89,48 +87,45 @@
 
 	export default {
 		data: function() {
-			// 0 分享，非0未分享
-			let isShared = cacheUtils.localStorage(CONSTS.IS_SHARED).get(CONSTS.IS_SHARED);
+			var userInfo = cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS).shareSwitch;
+			var isShared = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO).isShared;
+			var workInfo = plus.webview.currentWebview().employmentDemand;
 			return {
-				workInfo: {},
-				isShared: isShared
+				workInfo: workInfo,
+				isShared: isShared,
+				address: {},
+				picture: ''
 			}
 		},
 		created: function() {
-			//ajax请求数据，这里的数据是模拟数据，后台查询的数据需要进行处理
-			this.workInfo = {
-				views: 30,
-				yuyue: 9,
-				name: '江海流',
-				telphone: '13885788345',
-				title: '岛内找人做吊顶，隔墙，240平包做办公室，非诚勿扰。',
-				type: '油漆涂料施工、车间管理',
-				endtime: '2017-3-26',
-				publishtime: '2017-2-1',
-				address: {
-					province: '北京',
-					city: '北京市',
-					district: '海淀区',
-					street: '阜石路甲69号'
-				},
-				introduction: '团队服务，质量保障，价格低廉，一条龙服务。',
-				workinfoimgs: [{
-						url: 'http://img.168bgt.com/upload/2016/05/22/20160522172528_408.jpg'
-					},
-					{
-						url: 'http://img.168bgt.com/upload/2016/05/22/20160522172528_408.jpg'
-					},
-					{
-						url: 'http://img.168bgt.com/upload/2016/05/22/20160522172528_408.jpg'
+			if(this.workInfo) {
+				this.picture = this.workInfo.pictures.length > 0 ? this.workInfo.pictures[0] : (this.userInfo.avatar || '1');
+				this.workInfo.workerTypesDis = '';
+				for(var wt of this.workInfo.workerTypes) {
+					if(!this.workInfo.workerTypesDis) {
+						this.workInfo.workerTypesDis = wt.typeName;
+					} else {
+						this.workInfo.workerTypesDis += '、' + wt.typeName;
 					}
-				]
+				}
+				var address = {};
+				address.provinceid = this.workInfo.provinceId;
+				address.province = this.workInfo.provinceName;
+				address.cityid = this.workInfo.cityId;
+				address.city = this.workInfo.cityName;
+				address.districtid = this.workInfo.countyId;
+				address.district = this.workInfo.countyName;
+				address.street = this.workInfo.street;
+				address.lng = this.workInfo.lng;
+				address.lat = this.workInfo.lat;
+				this.address = address;
 			}
 		},
 		methods: {
 			positioning: function() {
 				muiUtils.openWindow('../../commonpage/map/selectaddress.html', '../../commonpage/map/selectaddress.html', {
 					extras: {
-						address: this.workInfo.address,
+						address: this.address,
 						isPositioning: true,
 						fromPage: '../../bizpage/device/deviceinfo.html'
 					}
@@ -176,7 +171,7 @@
 	};
 </script>
 <style scoped>
-	.deviceInfo {
+	.workInfo {
 		position: absolute;
 		top: 45px;
 		bottom: 0;
@@ -260,14 +255,14 @@
 	}
 	
 	.mui-table-view-cell .tel-btn {
-		background-color: rgb(255, 98, 48);
+		background-color: #26c6da;
 		color: #fff;
-		/*float: left;*/
-		width: 40%;
-		margin-right: 20px;
-		padding: 10px 15px;
+		float: right;
+		margin: 15px 50px 5px 0;
+		padding: 7px 25px;
 		border-radius: 5px;
 		position: relative;
+		text-indent: 22px;
 	}
 	
 	.mui-table-view-cell .yuyue-btn {
@@ -283,11 +278,9 @@
 	
 	.icon-span {
 		position: absolute;
-		top: 10px;
-		left: -10px;
-		padding: 0 0 20px 20px;
+		top: 7px;
+		left: -4px;
 		color: #fff;
-		font-size: 26px;
 	}
 	
 	.btn {

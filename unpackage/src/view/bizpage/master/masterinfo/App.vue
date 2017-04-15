@@ -1,6 +1,6 @@
 <template>
 	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
-	<div class="mui-scroll-wrapper deviceInfo" style="bottom: {{isStoreManage ? '50px' : '0'}}">
+	<div class="mui-scroll-wrapper masterinfo" style="bottom: {{isStoreManage ? '50px' : '0'}}">
 		<div class="mui-scroll">
 			<div class="context">
 				<ul class="mui-table-view mui-table-view-chevron shifu">
@@ -90,15 +90,15 @@
 
 	export default {
 		data: function() {
-			// 0 分享，非0未分享
 			var userInfo = cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS).shareSwitch;
 			var isShared = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO).isShared;
 			var masterCard = plus.webview.currentWebview().masterCard;
 			return {
 				picture: '1',
 				userInfo: userInfo,
-				master: masterCard || {},
-				isShared: isShared
+				master: masterCard,
+				isShared: isShared,
+				address: {}
 			};
 		},
 		created: function() {
@@ -155,13 +155,24 @@
 						this.master.serviceAreaDis += '、' + sa.areaNname;
 					}
 				}
+				var address = {};
+				address.provinceid = this.master.provinceId;
+				address.province = this.master.provinceName;
+				address.cityid = this.master.cityId;
+				address.city = this.master.cityName;
+				address.districtid = this.master.countyId;
+				address.district = this.master.countyName;
+				address.street = this.master.street;
+				address.lng = this.master.lng;
+				address.lat = this.master.lat;
+				this.address = address;
 			},
 			positioning: function() {
 				muiUtils.openWindow('../../commonpage/map/selectaddress.html', '../../commonpage/map/selectaddress.html', {
 					extras: {
-						address: this.master.address,
+						address: this.address,
 						isPositioning: true,
-						fromPage: '../../bizpage/device/deviceinfo.html'
+						fromPage: '../../bizpage/device/masterinfo.html'
 					}
 				});
 			},
@@ -202,7 +213,7 @@
 	};
 </script>
 <style scoped>
-	.deviceInfo {
+	.masterinfo {
 		position: absolute;
 		top: 45px;
 		bottom: 0;
@@ -329,7 +340,7 @@
 		font-size: 17px;
 		color: #000;
 		padding-right: 35px;
-		padding-left: 45px;
+		padding-left: 80px;
 	}
 	
 	.jieshao span:first-child {
@@ -337,6 +348,7 @@
 		left: 13px;
 		top: 13px;
 		line-height: 1;
+		max-width: 70px;
 	}
 	
 	.icon-shoucang1 {

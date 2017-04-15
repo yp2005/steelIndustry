@@ -5,20 +5,20 @@
 			<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
 			<div class="mui-slider-item mui-slider-item-duplicate">
 				<a href="javascript: void(0)">
-					<img @tap="itemTap(img)" :src="images[images.length-1].banner_img_url | imageSizeFilter 720" id="{{images[images.length-1].banner_order}}">
+					<img @tap="itemTap(img)" :src="images[images.length-1].banner_img_url" id="{{images[images.length-1].banner_order}}">
 					<p class="mui-slider-title">{{images[images.length-1].banner_name}}</p>
 				</a>
 			</div>
 			<div v-for="img in images" class="mui-slider-item">
 				<a href="javascript: void(0)">
-					<img @tap="itemTap(img)" :src="img.banner_img_url ? img.banner_img_url : '../../static/img/placehold.png' | imageSizeFilter 720" id="{{img.banner_order}}" data-preview-src="" data-preview-group="1">
+					<img @tap="itemTap(img)" :src="img.banner_img_url ? img.banner_img_url : '../../static/img/placehold.png'" id="{{img.banner_order}}" data-preview-src="" data-preview-group="1">
 					<p class="mui-slider-title">{{img.banner_name}}</p>
 				</a>
 			</div>
 			<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
 			<div class="mui-slider-item mui-slider-item-duplicate">
 				<a href="javascript: void(0)">
-					<img @tap="itemTap(img)" :src="images[0].banner_img_url | imageSizeFilter 720" id="{{images[0].banner_order}}">
+					<img @tap="itemTap(img)" :src="images[0].banner_img_url" id="{{images[0].banner_order}}">
 					<p class="mui-slider-title">{{images[0].banner_name}}</p>
 				</a>
 			</div>

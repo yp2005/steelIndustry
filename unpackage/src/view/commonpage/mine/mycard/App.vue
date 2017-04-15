@@ -33,9 +33,7 @@
 			return {
 				userInfo: cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO),
 				masterCard: plus.webview.currentWebview().masterCard,
-				picture: '1',
-				disnonetworkmask: false,
-				pullrefresh: null
+				picture: '1'
 			};
 		},
 		created() {

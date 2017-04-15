@@ -44,11 +44,27 @@
 	import upload from 'component/upload/UploadImage';
 	export default {
 		data: function() {
+			var project = plus.webview.currentWebview().project;
+			var address = undefined;
+			var dueTime = undefined;
+			if(project) {
+				address = {};
+				address.provinceid = project.provinceId;
+				address.province = project.provinceName;
+				address.cityid = project.cityId;
+				address.city = project.cityName;
+				address.districtid = project.countyId;
+				address.district = project.countyName;
+				address.street = project.street;
+				address.lng = project.lng;
+				address.lat = project.lat;
+				dueTime = project.dueTime;
+			}
 			return {
 				isCut: false,
-				address: undefined,
-				dueTime: undefined,
-				project: {pictures: []}
+				address: address,
+				dueTime: dueTime,
+				project: project || {pictures: []}
 			};
 		},
 		created: function() {
@@ -116,6 +132,8 @@
 				}
 				var data = this.project;
 				data.state = state;
+				delete data.stateValue;
+				delete data.picture;
 				data.dueTime = new Date(this.dueTime + ' 00:00:00').getTime();
 				data.provinceId = this.address.provinceid;
 				data.provinceName = this.address.province;
