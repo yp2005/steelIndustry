@@ -1,11 +1,11 @@
 <template>
 	<div class="mapTop">
-		<p><span>城市</span><span @tap="selectAddress">{{address ? address.province + ' ' + address.city + ' ' + address.district : '请选择'}}</span><span class="jxddicon icon-weizhi2xianxing mui-pull-right" @tap="userLocation">我的位置</span></p>
+		<p><span>城市</span><span @tap="selectAddress">{{address ? address.province + ' ' + address.city + ' ' + address.district : '请选择'}}</span><span v-show="!isPositioning" class="jxddicon icon-weizhi2xianxing mui-pull-right" @tap="userLocation">我的位置</span></p>
 		<p>
 			<span>详细地址</span>
 			<input v-if="!isPositioning" type="text" v-model="address.street" id="street" @input="streetChange">
 			<span v-else type="text" id="street">{{address.street}}</span>
-			<a class="mui-pull-right" href="javascript:void(0)" @tap="back">确定</a>
+			<a v-show="!isPositioning" class="mui-pull-right" href="javascript:void(0)" @tap="back">确定</a>
 		</p>
 	</div>
 	<div id="map">
@@ -97,6 +97,9 @@
 				this.map.addOverlay(this.marker);
 			},
 			selectAddress: function() {
+				if(this.isPositioning) {
+					return;
+				}
 				var that = this;
 				this.cityPicker.show(function(items) {
 					that.address = {
@@ -179,6 +182,9 @@
 				});
 			}*/
 			this.map.onclick = function(point) {
+				if(that.isPositioning) {
+					return;
+				}
 				that.marker.setPoint(point);
 				plus.maps.Map.reverseGeocode(point, {}, function(event) {
 					var addressDetail = event.address;

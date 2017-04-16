@@ -95,6 +95,7 @@
 	import muiUtils from 'common/muiUtils';
 	import log from 'common/logUtils';
 	import slider from 'component/slider/ImageSlider';
+	import api from 'api';
 	import CONSTS from 'common/consts';
 	import cacheUtils from 'common/cacheUtils';
 
@@ -107,11 +108,34 @@
 				isShared: isShared,
 				store: store,
 				imageDatas: [],
-				address: {}
+				address: {},
+				userId: plus.webview.currentWebview().userId
 			}
 		},
 		created: function() {
+			var that = this;
 			if(this.store) {
+				this.dealData();
+			} else {
+				muiUtils.muiAjax(api.APIS.store.getStoreByUserId + '?userId=' + that.userId, {
+					dataType: "json",
+					type: "get",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							that.store = data.result;
+							that.dealData();
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。');
+					}
+				});
+			}
+		},
+		methods: {
+			dealData() {
 				var imgs = this.store.environmentPictures.concat(this.store.productPictures);
 				var imageDatas = [];
 				for(var i = 0; i < imgs.length; i++) {
@@ -141,11 +165,7 @@
 				address.lng = this.store.lng;
 				address.lat = this.store.lat;
 				this.address = address;
-			} else {
-				// TODO ajax请求数据
-			}
-		},
-		methods: {
+			},
 			open: function() {
 				cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.LOGIN_FORWORD, {
 					id: '../../bizpage/device/deviceinfo.html',
@@ -178,8 +198,7 @@
 				muiUtils.openWindow('../../commonpage/map/selectaddress.html', '../../commonpage/map/selectaddress.html', {
 					extras: {
 						address: this.address,
-						isPositioning: true,
-						fromPage: '../../bizpage/device/deviceinfo.html'
+						isPositioning: true
 					}
 				});
 			},

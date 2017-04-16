@@ -1,8 +1,4 @@
-/**
- * @file 店铺列表主组件 
- * @Author yupeng 
- * @private
- */
+/** * @file 店铺列表主组件 * @Author yupeng * @private */
 
 <template>
 	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
@@ -14,20 +10,22 @@
 		</p>
 		<div id="scroll" class="mui-scroll-wrapper">
 			<div id="pullrefresh" class="mui-scroll">
+				<!-- 广告位 -->
 				<img class="advertisement" src="http://img0.imgtn.bdimg.com/it/u=3660483257,1608558041&fm=15&gp=0.jpg">
-				<div class="oneStore" @tap="gotoDetail('id')">
-					<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
+				<div class="oneStore" v-for="store in storeList" @tap="gotoDetail(store.userId)">
+					<img :src="store.shopSignPictures" />
 					<div class="storeInfo">
-						<p class="mui-ellipsis">店铺名称店铺名称店铺名称店铺名称店铺名称店铺名称</p>
-						<p>北京 北京市 海淀区</p>
+						<p class="mui-ellipsis">{{store.storeName}}</p>
+						<p>{{store.address}}</p>
 						<p>
-							<img src="../../../../static/img/mine/shimingrenzheng.svg">
-							<img src="../../../../static/img/mine/noshimingrenzheng.svg">
-							<img src="../../../../static/img/mine/qiyerenzheng.svg">
-							<img src="../../../../static/img/mine/noqiyerenzheng.svg">
-							<span class="mui-pull-right">距离：9999KM</span>
+							<img v-show="store.realNameAuthentication == 1" src="../../../../static/img/mine/shimingrenzheng.svg">
+							<img v-else src="../../../../static/img/mine/noshimingrenzheng.svg">
+							<img v-show="store.enterpriseCertification == 1" src="../../../../static/img/mine/qiyerenzheng.svg">
+							<img v-else src="../../../../static/img/mine/noqiyerenzheng.svg">
+							<span class="mui-pull-right">距离：{{store.distance}}KM</span>
 						</p>
-						<p><a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
+						<p>
+							<a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
 					</div>
 				</div>
 				</a>
@@ -39,7 +37,6 @@
 <script>
 	import nonetworkmask from 'component/mask/NoNetWorkMask';
 	import muiUtils from 'common/muiUtils';
-	import log from 'common/logUtils';
 	import api from 'api';
 	import CONSTS from 'common/consts';
 	import {
@@ -172,9 +169,10 @@
 			return {
 				cityPicker: cityPicker,
 				typePicker: typePicker,
+				typeData: typeData,
 				sortTypePicker: sortTypePicker,
 				searchValue: plus.webview.currentWebview().searchValue || '',
-				address: {
+				address: plus.webview.currentWebview().address || {
 					province: '全国',
 					provinceid: -1,
 					city: null,
@@ -192,38 +190,143 @@
 					text: '默认排序',
 				},
 				disnonetworkmask: false,
-				pullrefresh: null
+				pullrefresh: null,
+				rowStartNumber: 0,
+				rowCount: 10,
+				storeList: [],
+				lng: undefined,
+				lat: undefined,
 			};
 		},
 		created: function() {
-
+			var that = this;
+			plus.geolocation.getCurrentPosition(function(position) {
+				if(!position.address || !position.address.province) {
+					return;
+				}
+				that.lng = position.coords.longitude;
+				that.lat = position.coords.latitude;
+				that.getData();
+			}, function(e) {}, {
+				provider: 'baidu'
+			});
 		},
 		methods: {
-			gotoDetail: function(id) {
+			gotoDetail: function(userId) {
 				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', {
-                    extras: {
-                        id: id,
-                        status: -1
-                    }
-               });
+					extras: {
+						userId: userId
+					}
+				});
 			},
 			doSearch: function() {
-				//this.$broadcast('reflashlist');
+				this.getData();
 			},
 			getData() {
-				console.log('getData...');
-				this.pullrefresh.endPullDownToRefresh();
-				this.pullrefresh.refresh(true);
+				var typeIds = [];
+				if(this.type.value > 0) {
+					if(this.type.child.value) {
+						typeIds.push(this.type.child.value);
+					} else {
+						for(var type of this.typeData) {
+							if(type.value == this.type.value) {
+								for(var type2 of type.children) {
+									typeIds.push(type2.value);
+								}
+								break;
+							}
+						}
+					}
+				}
+				var that = this;
+				muiUtils.muiAjax(api.APIS.store.getStoreList, {
+					dataType: "json",
+					contentType: 'application/json',
+					type: "post",
+					data: JSON.stringify({
+						rowStartNumber: 0,
+						rowCount: 10,
+						keyword: this.searchValue,
+						provinceId: this.address.provinceid,
+						cityId: this.address.cityid,
+						countyId: this.address.countyid,
+						typeIds: typeIds,
+						lng: this.lng,
+						lat: this.lat,
+						sortType: this.sortType.value
+					}),
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							that.storeList = data.result.storeList || [];
+							for(var store of that.storeList) {
+								store.shopSignPictures = data.result.imgServer + store.shopSignPictures;
+							}
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+						that.pullrefresh.endPullDownToRefresh();
+						that.pullrefresh.refresh(true);
+					},
+					error: function(xhr, type, errorThrown) {
+						that.pullrefresh.endPullDownToRefresh();
+						that.pullrefresh.refresh(true);
+						mui.toast('服务器或网络异常，请稍后重试。')
+					}
+				});
 			},
 			loadMore() {
-				console.log('loadMore...');
-				this.pullrefresh.endPullUpToRefresh(); 
-			},
-			itemtap: function(item) {
-
-			},
-			reload() {
-				//this.$broadcast('reflashlist');
+				var typeIds = [];
+				if(this.type.value > 0) {
+					if(this.type.child.value) {
+						typeIds.push(this.type.child.value);
+					} else {
+						for(var type of this.typeData) {
+							if(type.value == this.type.value) {
+								for(var type2 of type.children) {
+									typeIds.push(type2.value);
+								}
+								break;
+							}
+						}
+					}
+				}
+				var that = this;
+				muiUtils.muiAjax(api.APIS.store.getStoreList, {
+					dataType: "json",
+					contentType: 'application/json',
+					type: "post",
+					data: JSON.stringify({
+						rowStartNumber: this.storeList.length,
+						rowCount: 10,
+						keyword: this.searchValue,
+						provinceId: this.address.provinceid,
+						cityId: this.address.cityid,
+						countyId: this.address.countyid,
+						typeIds: typeIds,
+						lng: this.lng,
+						lat: this.lat,
+						sortType: this.sortType.value
+					}),
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							if(!data.result.storeList || data.result.storeList.length === 0) {
+								that.pullrefresh.endPullUpToRefresh(true);
+								return;
+							}
+							for(var store of data.result.storeList || []) {
+								store.shopSignPictures = data.result.imgServer + store.shopSignPictures;
+							}
+							that.storeList =  that.storeList.concat(data.result.storeList || []);
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+						that.pullrefresh.endPullUpToRefresh();
+					},
+					error: function(xhr, type, errorThrown) {
+						that.pullrefresh.endPullUpToRefresh();
+						mui.toast('服务器或网络异常，请稍后重试。')
+					}
+				});
 			},
 			selectAddress: function() {
 				var that = this;
@@ -261,11 +364,29 @@
 					}
 
 				});
+			},
+			getGeo() {
+
 			}
 		},
 		watch: {
 			searchValue: function() {
-				this.doSearch();
+				this.getData();
+			},
+			'type.value': function() {
+				this.getData();
+			},
+			'sortType.value': function() {
+				this.getData();
+			},
+			'address.provinceid': function() {
+				this.getData();
+			},
+			'address.cityid': function() {
+				this.getData();
+			},
+			'address.countyid': function() {
+				this.getData();
 			}
 		},
 		ready: function() {
@@ -397,5 +518,11 @@
 		font-size: 19px;
 		font-weight: 800;
 		color: #777;
+	}
+	
+	.mui-poppicker {
+		top: 90px;
+		bottom: auto;
+		transform: translateY(-390px);
 	}
 </style>

@@ -17,7 +17,8 @@ var header = new HeaderVue({
 			title: {
                 display: true
             }
-		}
+		},
+		title: '选择地址'
 	},
 	el: 'vheader'
 });
@@ -27,4 +28,5 @@ mui.init({
 });
 mui.plusReady(function() {
 	router.start(app, '#app');
+	header.title = plus.webview.currentWebview().isPositioning ? '地址详情' : '选择地址';
 });
