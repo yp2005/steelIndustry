@@ -10,8 +10,8 @@
 						<span class="statusFont"> → 认证成功</span>
 					</div>
 					<div class="title"></div>
-					<div class="inputRow"><label>法人姓名</label><input placeholder="请输入您的真实姓名"></div>
-					<div class="inputRow"><label>企业全称</label><input placeholder="请输入您的身份证号"></div>
+					<div class="inputRow"><label>法人姓名</label><input type="text" placeholder="请输入您的真实姓名"></div>
+					<div class="inputRow"><label>企业全称</label><input type="text" placeholder="请输入您的身份证号"></div>
 					<div class="title"></div>
 					<div class="inputRow">
 						<p>请上传二代企业营业执照(必填)</p>

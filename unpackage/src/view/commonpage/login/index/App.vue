@@ -7,16 +7,16 @@
 			<div class="mui-scroll">
 				<div class="input-row it">
 					<label>手机号(将作为登录账户)</label>
-					<input class="input-clear mui-input tel-input" maxlength="11" placeholder="请输入手机号" v-model="phone">
+					<input type="number" class="input-clear mui-input tel-input" maxlength="11" placeholder="请输入手机号" v-model="phone">
 				</div>
 				<div class="input-row it">
 					<label>图形验证码</label>
-					<input class="mui-input-clear mui-input" maxlength="4" placeholder="图形验证码" v-model="imgCode">
+					<input type="text" class="mui-input-clear mui-input" maxlength="4" placeholder="图形验证码" v-model="imgCode">
 					<img class="img-code" :src="imgCodeUrl" @tap="refresh" />
 				</div>
 				<div class="input-row it">
 					<label>手机验证码</label>
-					<input class="mui-input-clear mui-input" maxlength="4" placeholder="手机验证码" v-model="telCode">
+					<input type="text" class="mui-input-clear mui-input" maxlength="4" placeholder="手机验证码" v-model="telCode">
 					<a class="tel-code {{waitting ? 'disabled' : ''}}" @tap="sendCode">{{waitting ? ('重新发送(' + waittingNum + ')') : '免费发送'}}</a>
 				</div>
 				<div class="input-row">

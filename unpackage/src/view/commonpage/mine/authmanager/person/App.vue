@@ -10,8 +10,8 @@
 						<span class="statusFont"> → 认证成功</span>
 					</div>
 					<div class="title"></div>
-					<div class="inputRow"><label>姓名</label><input placeholder="请输入您的真实姓名"></div>
-					<div class="inputRow"><label>身份证号</label><input placeholder="请输入您的身份证号"></div>
+					<div class="inputRow"><label>姓名</label><input type="text" placeholder="请输入您的真实姓名"></div>
+					<div class="inputRow"><label>身份证号</label><input type="text" placeholder="请输入您的身份证号"></div>
 					<div class="title"></div>
 					<div class="inputRow">
 						<p>请上传身份证正面(必填)</p>

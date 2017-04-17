@@ -3,7 +3,7 @@
 		<div class="mui-scroll-wrapper releaseCard">
 			<div class="mui-scroll">
 				<div class="title"></div>
-				<div class="inputRow"><label>广告名称</label><input v-model="name" placeholder="请输入广告名称(必填)"></div>
+				<div class="inputRow"><label>广告名称</label><input type="text" v-model="name" placeholder="请输入广告名称(必填)"></div>
 				<div class="title"></div>
 				<div class="inputRow">
 					<p>请上传广告图片(必填)</p>
@@ -14,11 +14,11 @@
 					<form class="mui-input-group">
 						<div class="mui-input-row mui-radio mui-left">
 							<label>链接到地址</label>
-							<input name="radio1" type="radio" @tap="linkToUrl = !linkToUrl" :checked="linkToUrl" >
+							<input type="text" name="radio1" type="radio" @tap="linkToUrl = !linkToUrl" :checked="linkToUrl" >
 						</div>
 						<div class="mui-input-row mui-radio mui-left">
 							<label>链接到店铺</label>
-							<input name="radio1" type="radio" @tap="linkToUrl = !linkToUrl" :checked="!linkToUrl" >
+							<input type="text" name="radio1" type="radio" @tap="linkToUrl = !linkToUrl" :checked="!linkToUrl" >
 						</div>
 					</form>
 				</div>
