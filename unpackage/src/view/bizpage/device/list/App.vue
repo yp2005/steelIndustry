@@ -207,8 +207,13 @@
 				that.lng = position.coords.longitude;
 				that.lat = position.coords.latitude;
 				that.getData();
-			}, function(e) {}, {
-				provider: 'baidu'
+			}, function(e) {
+				that.lng = 1;
+				that.lat = 1;
+				that.getData();
+			}, {
+				provider: 'baidu',
+				timeout: 8000
 			});
 		},
 		methods: {

@@ -208,7 +208,7 @@
 	.input-row.it input {
 		border: 1px solid #BDB9B9;
 		border-radius: 5px;
-		padding: 10px 5px;
+		padding: 0 5px;
 		width: 40%;
 	}
 	

@@ -152,6 +152,7 @@ mui.plusReady(function() {
 		address.street = position.address.street || '';
 		header.address = address;
 	}, function(e) {}, {
-		provider: 'baidu'
+		provider: 'baidu',
+		timeout: 8000
 	});
 });

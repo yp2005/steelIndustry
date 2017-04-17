@@ -75,9 +75,9 @@
 				}, function(e) {
 					wt.close();
 					mui.toast('获取地址失败，请重试！');
-					that.back();
 				}, {
-					provider: 'baidu'
+					provider: 'baidu',
+					timeout: 8000
 				});
 			},
 			createMarker() {

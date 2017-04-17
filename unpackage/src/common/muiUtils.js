@@ -483,14 +483,15 @@ const ajaxBeforeSend = (options, url) => {
 	options.headers.instance_id = instanceId;
 	options.headers.access_token = (token === 'null' || token == null) ? '' : token;
 	var localTime = new Date().getTime();
-	options.headers.reqStartTime =  localTime// 请求开始时间
+
 	localTime = localTime + '';
+	options.headers.req_start_time =  localTime// 请求开始时间
 	var md5Times = ~~localTime.substring(localTime.length - 1) || 1;
 	var extraToken = localTime;
 	for(var i = 0; i < md5Times; i++) {
 		extraToken = md5(extraToken);
 	}
-	options.headers.extraToken = extraToken;
+	options.headers.extra_token = extraToken;
 	options.headers.url = url; // 打印而已
 	// 开启加载动画
 	if(options.loading === true) {
