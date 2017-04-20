@@ -10,7 +10,7 @@
 		</p>
 		<div id="scroll" class="mui-scroll-wrapper">
 			<div id="pullrefresh" class="mui-scroll">
-				<!-- 广告位 -->
+				<!-- 广告位 TODO -->
 				<img class="advertisement" src="http://img0.imgtn.bdimg.com/it/u=3660483257,1608558041&fm=15&gp=0.jpg">
 				<div class="oneStore" v-for="store in storeList" @tap="gotoDetail(store.userId)">
 					<img :src="store.shopSignPictures" />
@@ -28,7 +28,7 @@
 							<a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
 					</div>
 				</div>
-				</a>
+				<p v-show="!storeList || storeList.length === 0" class="noData">暂无数据</p>
 			</div>
 		</div>
 	</div>
@@ -191,8 +191,6 @@
 				},
 				disnonetworkmask: false,
 				pullrefresh: null,
-				rowStartNumber: 0,
-				rowCount: 10,
 				storeList: [],
 				lng: undefined,
 				lat: undefined,
@@ -201,11 +199,8 @@
 		created: function() {
 			var that = this;
 			plus.geolocation.getCurrentPosition(function(position) {
-				if(!position.address || !position.address.province) {
-					return;
-				}
-				that.lng = position.coords.longitude;
-				that.lat = position.coords.latitude;
+				that.lng = position.coords.longitude || 1;
+				that.lat = position.coords.latitude || 1;
 				that.getData();
 			}, function(e) {
 				that.lng = 1;
@@ -218,7 +213,7 @@
 		},
 		methods: {
 			gotoDetail: function(userId) {
-				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', {
+				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', '../../bizpage/device/deviceinfo.html', {
 					extras: {
 						userId: userId
 					}
@@ -369,9 +364,6 @@
 					}
 
 				});
-			},
-			getGeo() {
-
 			}
 		},
 		watch: {
@@ -529,5 +521,10 @@
 		top: 90px;
 		bottom: auto;
 		transform: translateY(-390px);
+	}
+	
+	.noData {
+		line-height: 250px;	
+		text-align: center;
 	}
 </style>

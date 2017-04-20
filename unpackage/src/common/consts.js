@@ -61,6 +61,8 @@ const SYSTEM = 'system';
 
 const APPSETTINGS = 'app_settings';
 
+const APPVERSIONINFO = 'app_version_info';
+
 const APPVERSION = '1.0';
 
 export default {

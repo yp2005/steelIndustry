@@ -16,6 +16,7 @@
 					<h4 class="mui-table-view-cell">{{store.storeName}}</h4>
 					<ul class="shop-data-list  am-list">
 						<li class="mui-table-view-cell">
+							<!--TODO 后台返回是否已收藏的状态 -->
 							<p @tap="shoucang">
 								<span>{{store.deviceTypesDis}}</span>
 								<span class="jxddicon icon-shoucang1"></span>
@@ -28,11 +29,11 @@
 								<span class="jxddicon icon-jinru32"></span>
 							</p>
 						</li>
-						<li class="mui-table-view-cell telphone">
+						<li class="mui-table-view-cell telphone" @tap="callTel">
 							<p>
 								<span class="mui-icon mui-icon-phone"></span>
-								<span class="text-context" v-show="isShared === 1" @tap="callTel(store.mobileNumber)">{{store.mobileNumber}}</span>
-								<span class="text-context" v-else @tap="toShare">电话咨询</span>
+								<span class="text-context" v-show="isShared === 1 && shareSwitch === 1">{{store.mobileNumber}}</span>
+								<span class="text-context" v-else>电话咨询</span>
 								<span class="jxddicon icon-jinru32"></span>
 							</p>
 						</li>
@@ -78,9 +79,10 @@
                         	作者：18710095921@163.com
                         	时间：2017-04-15
                         	描述：下面是广告
+                        	TODO
                         -->
 						<div class="list-ad-two">
-							<a href="http://8du.in/1p1M0Q"><img src="http://img.168bgt.com/upload/2016/07/24/20160724145643_62.jpg"></a>
+							<a href="javascript:void(0)"><img src="http://img.168bgt.com/upload/2016/07/24/20160724145643_62.jpg"></a>
 						</div>
 					</div>
 				</div>
@@ -88,6 +90,13 @@
 
 		</div>
 	</div>
+	<div class="share" v-show="showShare">
+		<span @tap="shareAction('weixin')"><img src="../../../../static/img/share/wx.png" /></span>
+		<span @tap="shareAction('qq')"><img src="../../../../static/img/share/qq.png" /></span>
+		<span @tap="shareAction('tencentweibo')"><img src="../../../../static/img/share/txwb.png" /></span>
+		<span @tap="shareAction('sinaweibo')"><img src="../../../../static/img/share/snwb.png" /></span>
+	</div>
+	<div class="shareMask" v-show="showShare" @tap="showShare = false"></div>
 </template>
 
 <script>
@@ -101,15 +110,20 @@
 
 	export default {
 		data: function() {
-			var userInfo = cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS).shareSwitch;
-			var isShared = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO).isShared;
+			var shareSwitch = cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS).shareSwitch;
+			var userInfo = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO) || {};
 			var store = plus.webview.currentWebview().store;
 			return {
-				isShared: isShared,
+				showShare: false,
+				isShared: userInfo.isShared || 0,
+				userInfo: userInfo,
+				shareSwitch: shareSwitch,
+				shares: {},
 				store: store,
 				imageDatas: [],
 				address: {},
-				userId: plus.webview.currentWebview().userId
+				userId: plus.webview.currentWebview().userId,
+				appVersionInfo: cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPVERSIONINFO)
 			}
 		},
 		created: function() {
@@ -175,24 +189,69 @@
 				muiUtils.loginValid(this.forwordPublishPage);
 			},
 			forwordPublishPage: function() {
-				let url = '../../bizpage/release/store.html';
-				let params = {};
-				let userInfo = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO);
-				if(userInfo && userInfo.hasStore) {
-					//已经开店了，直接进入店铺管理
-					url = '../../bizpage/device/storemanage.html';
-					params = {
-						isStoreManage: true,
-						id: this.store.id,
-						status: this.store.status
-					};
-				}
-				muiUtils.openWindow(url, url, {
-					extras: params
+				muiUtils.muiAjax(api.APIS.store.getStore, {
+					dataType: "json",
+					type: "get",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							if(data.result) {
+								var store = data.result;
+								switch(store.state) {
+									case 0:
+										store.stateValue = '草稿';
+										break;
+									case 1:
+										store.stateValue = '通过审核';
+										break;
+									case 2:
+										store.stateValue = '审核中';
+										break;
+									case 3:
+										store.stateValue = '审核不通过';
+										break;
+								}
+								muiUtils.openWindow('../../commonpage/mine/mystore.html', '../../commonpage/mine/mystore.html', {
+									isValidLogin: true,
+									isClose: true,
+									extras: {
+										store: store
+									}
+								});
+							} else {
+								muiUtils.openWindow(url, url, {
+									isValidLogin: true,
+									isClose: true
+								});
+							}
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。');
+					}
 				});
 			},
 			shoucang: function() {
-				mui.toast('收藏成功！');
+				muiUtils.muiAjax(api.APIS.collection.addCollection, {
+					data: {
+						type: 'store',
+						collectId: this.store.id
+					},
+					dataType: "json",
+					type: "post",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							mui.toast('收藏成功！');
+							// TODO 设置收藏状态
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。')
+					}
+				});
 			},
 			positioning: function() {
 				muiUtils.openWindow('../../commonpage/map/selectaddress.html', '../../commonpage/map/selectaddress.html', {
@@ -202,18 +261,116 @@
 					}
 				});
 			},
-			callTel: function(number) {
-				plus.device.dial(number, false);
+			callTel: function() {
+				cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.LOGIN_FORWORD, {
+					id: '../../bizpage/device/deviceinfo.html',
+					url: '../../bizpage/device/deviceinfo.html'
+				});
+				muiUtils.loginValid(this.doCall);
 			},
-			toShare: function() {
-				let self = this;
-				mui.alert('分享app即可获取联系电话！', '分享', '分享', function() {
-					mui.toast('分享成功！');
-					self.isShared = 0;
-					console.log('CONSTS.IS_SHARED:' + CONSTS.IS_SHARED);
-					cacheUtils.localStorage(CONSTS.IS_SHARED).set(CONSTS.IS_SHARED, self.isShared);
-					//入库
-					//@tudo
+			doCall() {
+				var that = this;
+				this.userInfo = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO);
+				this.isShared = this.userInfo.isShared;
+				if(this.userInfo.id === this.store.userId) {
+					mui.toast('这是您自己的店铺！');
+					return;
+				}
+				if(this.shareSwitch === 1 && this.isShared !== 1) {
+					var btnArray = ['取消', '分享'];
+					mui.confirm('一次分享即可免费联系，是否一键分享应用？', '提示', btnArray, function(e) {
+						if(e.index == 1) {
+							that.showShare = true;
+						}
+					});
+				} else {
+					plus.device.dial(this.store.mobileNumber, false);
+					muiUtils.muiAjax(api.APIS.store.updateStoreCt + '?id=' + that.store.id, {
+						dataType: "json",
+						type: "post",
+						success: function(data) {},
+						error: function(xhr, type, errorThrown) {}
+					});
+				}
+			},
+			shareMessage: function(shareOb) {
+				var url = mui.os.ios ? this.appVersionInfo.iOS.url : this.appVersionInfo.Android.url;
+				var msg = {
+					title: '彩钢精英',
+					content: "彩钢精英招工、找工作、找设备、找工程，行业交流，急你所需！",
+					href: url
+				};
+				var that = this;
+				if('weixin' == shareOb.id) {
+					plus.nativeUI.actionSheet({ title: "分享到微信", cancel: "取消", buttons: [{ title: "分享到微信朋友圈" }, { title: "发送给微信好友" }] }, function(e) {
+						if(e.index === 1) {
+							msg.extra = { scene: "WXSceneTimeline" };
+						} else if(e.index === 2) {
+							msg.extra = { scene: "WXSceneSession" };
+						} else {
+							return;
+						}
+						shareOb.send(msg, function() {
+							mui.toast("分享成功！");
+							that.shareSuccess();
+						}, function(e) {
+							mui.toast("分享失败!");
+						});
+					});
+				} else {
+					shareOb.send(msg, function() {
+						mui.toast("分享成功！");
+						that.shareSuccess();
+					}, function(e) {
+						mui.toast("分享失败!");
+					});
+				}
+			},
+			shareAction(type) {
+				this.showShare = false;
+				var that = this;
+				var shareOb;
+				switch(type) {
+					case 'weixin':
+						shareOb = this.shares.sharewx;
+						break;
+					case 'qq':
+						shareOb = this.shares.shareqq;
+						break;
+					case 'tencentweibo':
+						shareOb = this.shares.sharetxwb;
+						break;
+					case 'sinaweibo':
+						shareOb = this.shares.sharesnwb;
+						break;
+				}
+				shareOb.authorize(function() {
+					that.shareMessage(shareOb);
+				}, function(e) {
+					mui.toast("分享失败!");
+				});
+			},
+			shareSuccess() {
+				var that = this;
+				muiUtils.muiAjax(api.APIS.user.updateShareState, {
+					data: JSON.stringify({
+						shareState: 1
+					}),
+					contentType: 'application/json',
+					dataType: "json",
+					type: "post",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							that.isShared = 1;
+							that.userInfo.isShared = 1;
+							cacheUtils.localStorage(CONSTS.USER_INFO).setObject(CONSTS.USER_INFO, that.userInfo);
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。')
+					}
 				});
 			},
 			itemtap: function(item) {
@@ -260,15 +417,31 @@
 				});
 			}
 		},
-		watch: {
-
-		},
 		ready: function() {
 			var deceleration = mui.os.ios ? 0.003 : 0.0009;
 			mui('.mui-scroll-wrapper').scroll({
 				bounce: true,
 				indicators: false, //是否显示滚动条
 				deceleration: deceleration
+			});
+			var that = this;
+			plus.share.getServices(function(s) {
+				for(var i in s) {
+					if('weixin' == s[i].id) {
+						that.shares.sharewx = s[i];
+					}
+					if('qq' == s[i].id) {
+						that.shares.shareqq = s[i];
+					}
+					if('tencentweibo' == s[i].id) {
+						that.shares.sharetxwb = s[i];
+					}
+					if('sinaweibo' == s[i].id) {
+						that.shares.sharesnwb = s[i];
+					}
+				}
+			}, function(e) {
+				mui.toast("获取分享服务列表失败！");
 			});
 		},
 		components: {
@@ -477,5 +650,41 @@
 		padding: 5px 15px;
 		font-size: 16px;
 		width: 100px;
+	}
+	
+	.share {
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		background-color: #fff;
+		height: 80px;
+		z-index: 100;
+		padding: 0 10px;
+	}
+	
+	.share span {
+		position: relative;
+		width: 24%;
+		height: 100%;
+	}
+	
+	.share img {
+		width: 60px;
+		height: 60px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin-left: -30px;
+		margin-top: -30px;
+	}
+	
+	.shareMask {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		width: 100%;
+		background-color: #000;
+		opacity: 0.4;
+		z-index: 99;
 	}
 </style>

@@ -1,23 +1,25 @@
 <template>
-	<div class="mywork">
-		<div class="oneRow" v-for="employmentDemand in employmentDemandList" @tap="gotoDetail(employmentDemand)">
-			<img :src="employmentDemand.picture" />
-			<div class="rowRight">
-				<p class="mui-ellipsis">{{employmentDemand.demandTitle}}</p>
-				<p>{{employmentDemand.workerTypes[0].typeName + '...'}}</p>
-				<p>{{employmentDemand.updateTime}}</p>
-				<p>{{employmentDemand.stateValue}}</p>
-				<p>
-					<a v-if="employmentDemand.state === 0" @tap="updateState($event, employmentDemand, 2)" href="javascript:void(0)">提交</a>
-					<a v-if="employmentDemand.state !== 2" @tap="edit($event, employmentDemand)" href="javascript:void(0)">编辑</a>
-					<a v-if="employmentDemand.state === 1 || employmentDemand.state === 2" @tap="updateState($event, employmentDemand, 0)" href="javascript:void(0)" class="red">撤销</a>
-					<a v-if="employmentDemand.state === 0 || employmentDemand.state === 3" @tap="delete($event, $index)" href="javascript:void(0)" class="red">删除</a>
-				</p>
+	<div class="mui-scroll-wrapper mywork">
+		<div class="mui-scroll">
+			<div class="oneRow" v-for="employmentDemand in employmentDemandList" @tap="gotoDetail(employmentDemand)">
+				<img :src="employmentDemand.picture" />
+				<div class="rowRight">
+					<p class="mui-ellipsis">{{employmentDemand.demandTitle}}</p>
+					<p>{{employmentDemand.workerTypes[0].typeName + '...'}}</p>
+					<p>{{employmentDemand.updateTime}}</p>
+					<p>{{employmentDemand.stateValue}}</p>
+					<p>
+						<a v-if="employmentDemand.state === 0" @tap="updateState($event, employmentDemand, 2)" href="javascript:void(0)">提交</a>
+						<a v-if="employmentDemand.state !== 2" @tap="edit($event, employmentDemand)" href="javascript:void(0)">编辑</a>
+						<a v-if="employmentDemand.state === 1 || employmentDemand.state === 2" @tap="updateState($event, employmentDemand, 0)" href="javascript:void(0)" class="red">撤销</a>
+						<a v-if="employmentDemand.state === 0 || employmentDemand.state === 3" @tap="delete($event, $index)" href="javascript:void(0)" class="red">删除</a>
+					</p>
+				</div>
 			</div>
+			<p class="noWork" v-show="!employmentDemandList || employmentDemandList.length === 0">
+				<a href="javascript:void(0)" @tap="releaseEmploymentDemand">发布用工需求</a>
+			</p>
 		</div>
-		<p class="noWork" v-show="!employmentDemandList || employmentDemandList.length === 0">
-			<a href="javascript:void(0)" @tap="releaseEmploymentDemand">发布用工需求</a>
-		</p>
 	</div>
 </template>
 
@@ -160,7 +162,14 @@
 					}
 				});
 				event.stopPropagation();
-			},
+			}
+		},
+		ready() {
+			mui('.mui-scroll-wrapper.mywork').scroll({
+				bounce: true,
+				indicators: false, // 是否显示滚动条
+				deceleration: mui.os.ios ? 0.003 : 0.0009
+			});
 		}
 	};
 </script>

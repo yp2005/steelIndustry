@@ -1,23 +1,25 @@
 <template>
-	<div class="myproject">
-		<div class="oneRow" v-for="project in projectList" @tap="gotoDetail(project)">
-			<img :src="project.picture" />
-			<div class="rowRight">
-				<p class="mui-ellipsis">{{project.projectName}}</p>
-				<p>{{project.companyName}}</p>
-				<p>{{project.updateTime}}</p>
-				<p>{{project.stateValue}}</p>
-				<p>
-					<a v-if="project.state === 0" @tap="updateState($event, project, 2)" href="javascript:void(0)">提交</a>
-					<a v-if="project.state !== 2" @tap="edit($event, project)" href="javascript:void(0)">编辑</a>
-					<a v-if="project.state === 1 || project.state === 2" @tap="updateState($event, project, 0)" href="javascript:void(0)" class="red">撤销</a>
-					<a v-if="project.state === 0 || project.state === 3" @tap="delete($event, $index)" href="javascript:void(0)" class="red">删除</a>
-				</p>
+	<div class="mui-scroll-wrapper myproject">
+		<div class="mui-scroll">
+			<div class="oneRow" v-for="project in projectList" @tap="gotoDetail(project)">
+				<img :src="project.picture" />
+				<div class="rowRight">
+					<p class="mui-ellipsis">{{project.projectName}}</p>
+					<p>{{project.companyName}}</p>
+					<p>{{project.updateTime}}</p>
+					<p>{{project.stateValue}}</p>
+					<p>
+						<a v-if="project.state === 0" @tap="updateState($event, project, 2)" href="javascript:void(0)">提交</a>
+						<a v-if="project.state !== 2" @tap="edit($event, project)" href="javascript:void(0)">编辑</a>
+						<a v-if="project.state === 1 || project.state === 2" @tap="updateState($event, project, 0)" href="javascript:void(0)" class="red">撤销</a>
+						<a v-if="project.state === 0 || project.state === 3" @tap="delete($event, $index)" href="javascript:void(0)" class="red">删除</a>
+					</p>
+				</div>
 			</div>
+			<p class="noProject" v-show="!projectList || projectList.length === 0">
+				<a href="javascript:void(0)" @tap="releaseProject">发布工程</a>
+			</p>
 		</div>
-		<p class="noProject" v-show="!projectList || projectList.length === 0">
-			<a href="javascript:void(0)" @tap="releaseProject">发布工程</a>
-		</p>
 	</div>
 </template>
 <script>
@@ -159,7 +161,14 @@
 					}
 				});
 				event.stopPropagation();
-			},
+			}
+		},
+		ready() {
+			mui('.mui-scroll-wrapper.myproject').scroll({
+				bounce: true,
+				indicators: false, // 是否显示滚动条
+				deceleration: mui.os.ios ? 0.003 : 0.0009
+			});
 		}
 	};
 </script>

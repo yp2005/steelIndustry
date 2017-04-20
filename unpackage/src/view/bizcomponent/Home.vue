@@ -264,6 +264,9 @@
 									}
 								});
 							}
+							else {
+								cacheUtils.localStorage(CONSTS.SYSTEM).setObject(CONSTS.APPVERSIONINFO, data.result);
+							}
 						}
 					},
 					error: function(xhr, type, errorThrown) {}

@@ -1,9 +1,10 @@
 'use strict';
 
 /* API_ROOT */
-const API_ROOT = 'http://192.168.79.5';
+const API_ROOT = 'http://192.168.2.66';
 const USER = '/user';
 const SETTING = '/settings';
+const COLLECTION = '/collection';
 const STORE = '/store';
 const PROJECT = '/project';
 const MASTER = '/masterCard';
@@ -28,12 +29,22 @@ const APIS = {
 		getUser: API_ROOT + USER + '/getUser',
 		updateLatestLoginTime: API_ROOT + USER + '/updateLatestLoginTime',
 		updateUserState: API_ROOT + USER + '/updateUserState',
-		sendCode: API_ROOT + USER + '/sendCode'
+		sendCode: API_ROOT + USER + '/sendCode',
+		updateShareState: API_ROOT + USER + '/updateShareState'
 	},
 	
 	settings: {
 		getSettings:　API_ROOT + SETTING + '/getSettings',
 		updateSettings:　API_ROOT + SETTING + '/updateSettings'
+	},
+	
+	collection: {
+		getMasterCards:　API_ROOT + COLLECTION + '/getMasterCards',
+		getEmploymentDemands:　API_ROOT + COLLECTION + '/getEmploymentDemands',
+		getProjects:　API_ROOT + COLLECTION + '/getProjects',
+		getStores:　API_ROOT + COLLECTION + '/getStores',
+		delCollection:　API_ROOT + COLLECTION + '/delCollection',
+		addCollection:　API_ROOT + COLLECTION + '/addCollection'
 	},
 	
 	store: {

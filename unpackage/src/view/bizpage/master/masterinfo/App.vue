@@ -28,7 +28,7 @@
 					</li>
 					<li class="mui-table-view-cell btn">
 						<p>
-							<span @tap="callTel(master.mobileNumber)" class="tel-btn"><span class="mui-icon mui-icon-phone icon-span"></span>电话咨询</span>
+							<span @tap="callTel" class="tel-btn"><span class="mui-icon mui-icon-phone icon-span"></span>电话咨询</span>
 						</p>
 						<!--<p>
 							<span class="yuyue-btn"><span class="jxddicon icon-yijianfankui icon-span"></span>立即预约</span>
@@ -79,26 +79,39 @@
 
 		</div>
 	</div>
+	<div class="share" v-show="showShare">
+		<span @tap="shareAction('weixin')"><img src="../../../../static/img/share/wx.png" /></span>
+		<span @tap="shareAction('qq')"><img src="../../../../static/img/share/qq.png" /></span>
+		<span @tap="shareAction('tencentweibo')"><img src="../../../../static/img/share/txwb.png" /></span>
+		<span @tap="shareAction('sinaweibo')"><img src="../../../../static/img/share/snwb.png" /></span>
+	</div>
+	<div class="shareMask" v-show="showShare" @tap="showShare = false"></div>
 </template>
 
 <script>
 	import nonetworkmask from 'component/mask/NoNetWorkMask';
 	import muiUtils from 'common/muiUtils';
 	import log from 'common/logUtils';
+	import api from 'api';
 	import CONSTS from 'common/consts';
 	import cacheUtils from 'common/cacheUtils';
 
 	export default {
 		data: function() {
-			var userInfo = cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS).shareSwitch;
-			var isShared = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO).isShared;
+			var shareSwitch = cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS).shareSwitch;
+			var userInfo = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO) || {};
 			var masterCard = plus.webview.currentWebview().masterCard;
 			return {
-				picture: '1',
+				showShare: false,
+				isShared: userInfo.isShared || 0,
 				userInfo: userInfo,
+				shareSwitch: shareSwitch,
+				shares: {},
+				picture: '1',
 				master: masterCard,
-				isShared: isShared,
-				address: {}
+				address: {},
+				userId: plus.webview.currentWebview().userId,
+				appVersionInfo: cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPVERSIONINFO)
 			};
 		},
 		created: function() {
@@ -106,35 +119,23 @@
 				this.picture = this.master.pictures.length > 0 ? this.master.pictures[0] : (this.userInfo.avatar || '1');
 				this.dealData();
 			} else {
-				//ajax请求数据，这里的数据是模拟数据，后台查询的数据需要进行处理
-				this.master = {
-					name: '江海流',
-					age: 30,
-					code: 1200,
-					telphone: '13885788345',
-					views: 30,
-					yuyue: 9,
-					type: '油漆涂料施工',
-					serviceArea: '市辖区、思明区、沧海区、湖里区、集美区、同安区、翔安区',
-					project: '装修队',
-					address: {
-						province: '北京',
-						city: '北京市',
-						district: '海淀区',
-						street: '阜石路甲69号'
-					},
-					introduction: '团队服务，质量保障，价格低廉，一条龙服务。',
-					masterimgs: [{
-							url: 'http://img.168bgt.com/upload/2016/05/22/20160522172528_408.jpg'
-						},
-						{
-							url: 'http://img.168bgt.com/upload/2016/05/22/20160522172528_408.jpg'
-						},
-						{
-							url: 'http://img.168bgt.com/upload/2016/05/22/20160522172528_408.jpg'
+				var that = this;
+				muiUtils.muiAjax(api.APIS.masterCard.getMasterCardByUserId + '?userId=' + that.userId, {
+					dataType: "json",
+					type: "get",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							that.master = data.result;
+							that.picture = that.master.pictures.length > 0 ? that.master.pictures[0] : '1';
+							that.dealData();
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
 						}
-					]
-				};
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。');
+					}
+				});
 			}
 		},
 		methods: {
@@ -171,33 +172,125 @@
 				muiUtils.openWindow('../../commonpage/map/selectaddress.html', '../../commonpage/map/selectaddress.html', {
 					extras: {
 						address: this.address,
-						isPositioning: true,
-						fromPage: '../../bizpage/device/masterinfo.html'
+						isPositioning: true
 					}
 				});
 			},
 			callTel: function(number) {
-				if(isShared == 0) {
-					plus.device.dial(number, false);
+				cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.LOGIN_FORWORD, {
+					id: '../../bizpage/master/masterinfo.html',
+					url: '../../bizpage/master/masterinfo.html'
+				});
+				muiUtils.loginValid(this.doCall);
+			},
+			doCall() {
+				var that = this;
+				this.userInfo = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO);
+				this.isShared = this.userInfo.isShared;
+				if(this.userInfo.id === this.master.userId) {
+					mui.toast('这是您自己的名片！');
+					return;
+				}
+				if(this.shareSwitch === 1 && this.isShared !== 1) {
+					var btnArray = ['取消', '分享'];
+					mui.confirm('一次分享即可免费联系，是否一键分享应用？', '提示', btnArray, function(e) {
+						if(e.index == 1) {
+							that.showShare = true;
+						}
+					});
 				} else {
-					let self = this;
-					mui.alert('分享app即可获取联系电话！', '分享', '分享', function() {
-						mui.toast('分享成功！');
-						self.isShared = 0;
-						console.log('CONSTS.IS_SHARED:' + CONSTS.IS_SHARED);
-						cacheUtils.localStorage(CONSTS.IS_SHARED).set(CONSTS.IS_SHARED, self.isShared);
-						//入库
-						//@tudo
+					plus.device.dial(this.master.mobileNumber, false);
+					muiUtils.muiAjax(api.APIS.masterCard.updateMasterCardCt + '?id=' + that.master.id, {
+						dataType: "json",
+						type: "post",
+						success: function(data) {},
+						error: function(xhr, type, errorThrown) {}
 					});
 				}
-
+			},
+			shareMessage: function(shareOb) {
+				var url = mui.os.ios ? this.appVersionInfo.iOS.url : this.appVersionInfo.Android.url;
+				var msg = {
+					title: '彩钢精英',
+					content: "彩钢精英招工、找工作、找设备、找工程，行业交流，急你所需！\n" + url,
+					href: url
+				};
+				var that = this;
+				if('weixin' == shareOb.id) {
+					plus.nativeUI.actionSheet({ title: "分享到微信", cancel: "取消", buttons: [{ title: "分享到微信朋友圈" }, { title: "发送给微信好友" }] }, function(e) {
+						if(e.index === 1) {
+							msg.extra = { scene: "WXSceneTimeline" };
+						} else if(e.index === 2) {
+							msg.extra = { scene: "WXSceneSession" };
+						} else {
+							return;
+						}
+						shareOb.send(msg, function() {
+							mui.toast("分享成功！");
+							that.shareSuccess();
+						}, function(e) {
+							mui.toast("分享失败!");
+						});
+					});
+				} else {
+					shareOb.send(msg, function() {
+						mui.toast("分享成功！");
+						that.shareSuccess();
+					}, function(e) {
+						mui.toast("分享失败!");
+					});
+				}
+			},
+			shareAction(type) {
+				this.showShare = false;
+				var that = this;
+				var shareOb;
+				switch(type) {
+					case 'weixin':
+						shareOb = this.shares.sharewx;
+						break;
+					case 'qq':
+						shareOb = this.shares.shareqq;
+						break;
+					case 'tencentweibo':
+						shareOb = this.shares.sharetxwb;
+						break;
+					case 'sinaweibo':
+						shareOb = this.shares.sharesnwb;
+						break;
+				}
+				shareOb.authorize(function() {
+					that.shareMessage(shareOb);
+				}, function(e) {
+					mui.toast("分享失败!");
+				});
+			},
+			shareSuccess() {
+				var that = this;
+				muiUtils.muiAjax(api.APIS.user.updateShareState, {
+					data: JSON.stringify({
+						shareState: 1
+					}),
+					contentType: 'application/json',
+					dataType: "json",
+					type: "post",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							that.isShared = 1;
+							that.userInfo.isShared = 1;
+							cacheUtils.localStorage(CONSTS.USER_INFO).setObject(CONSTS.USER_INFO, that.userInfo);
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。')
+					}
+				});
 			},
 			shoucang: function() {
 				mui.toast('收藏成功！');
 			}
-		},
-		watch: {
-
 		},
 		ready: function() {
 			var deceleration = mui.os.ios ? 0.003 : 0.0009;
@@ -205,6 +298,25 @@
 				bounce: true,
 				indicators: false, //是否显示滚动条
 				deceleration: deceleration
+			});
+			var that = this;
+			plus.share.getServices(function(s) {
+				for(var i in s) {
+					if('weixin' == s[i].id) {
+						that.shares.sharewx = s[i];
+					}
+					if('qq' == s[i].id) {
+						that.shares.shareqq = s[i];
+					}
+					if('tencentweibo' == s[i].id) {
+						that.shares.sharetxwb = s[i];
+					}
+					if('sinaweibo' == s[i].id) {
+						that.shares.sharesnwb = s[i];
+					}
+				}
+			}, function(e) {
+				mui.toast("获取分享服务列表失败！");
 			});
 		},
 		components: {
@@ -382,5 +494,41 @@
 		width: 19px;
 		height: 19px;
 		margin-top: 7px;
+	}
+	
+	.share {
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		background-color: #fff;
+		height: 80px;
+		z-index: 100;
+		padding: 0 10px;
+	}
+	
+	.share span {
+		position: relative;
+		width: 24%;
+		height: 100%;
+	}
+	
+	.share img {
+		width: 60px;
+		height: 60px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin-left: -30px;
+		margin-top: -30px;
+	}
+	
+	.shareMask {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		width: 100%;
+		background-color: #000;
+		opacity: 0.4;
+		z-index: 99;
 	}
 </style>

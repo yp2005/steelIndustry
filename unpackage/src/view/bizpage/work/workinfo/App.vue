@@ -43,7 +43,7 @@
 					</li>
 					<li class="mui-table-view-cell btn">
 						<p>
-							<span @tap="callTel(workInfo.mobileNumber)" class="tel-btn"><span class="mui-icon mui-icon-phone icon-span"></span>电话咨询</span>
+							<span @tap="callTel" class="tel-btn"><span class="mui-icon mui-icon-phone icon-span"></span>电话咨询</span>
 						</p>
 						<!--<p>
 							<span class="yuyue-btn"><span class="jxddicon icon-yijianfankui icon-span"></span>立即预约</span>
@@ -67,39 +67,77 @@
 							<span class="tishi">温馨提示（联系时请说明是在“彩钢精英”上看到的）</span>
 						</p>
 					</li>
-					<li class="mui-table-view-cell">
+					<!--<li class="mui-table-view-cell">
 						<p class="fabu">
 							<a @tap="publishWorkInfo">我要发布用工需求<i id="box"></i></a>
 						</p>
-					</li>
+					</li>-->
 				</ul>
 			</div>
 		</div>
 	</div>
+	<div class="share" v-show="showShare">
+		<span @tap="shareAction('weixin')"><img src="../../../../static/img/share/wx.png" /></span>
+		<span @tap="shareAction('qq')"><img src="../../../../static/img/share/qq.png" /></span>
+		<span @tap="shareAction('tencentweibo')"><img src="../../../../static/img/share/txwb.png" /></span>
+		<span @tap="shareAction('sinaweibo')"><img src="../../../../static/img/share/snwb.png" /></span>
+	</div>
+	<div class="shareMask" v-show="showShare" @tap="showShare = false"></div>
 </template>
 
 <script>
 	import nonetworkmask from 'component/mask/NoNetWorkMask';
 	import muiUtils from 'common/muiUtils';
 	import log from 'common/logUtils';
+	import api from 'api';
 	import CONSTS from 'common/consts';
 	import cacheUtils from 'common/cacheUtils';
 
 	export default {
 		data: function() {
-			var userInfo = cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS).shareSwitch;
-			var isShared = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO).isShared;
+			var shareSwitch = cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS).shareSwitch;
+			var userInfo = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO) || {};
 			var workInfo = plus.webview.currentWebview().employmentDemand;
 			return {
+				showShare: false,
+				isShared: userInfo.isShared || 0,
+				userInfo: userInfo,
+				shareSwitch: shareSwitch,
+				shares: {},
 				workInfo: workInfo,
-				isShared: isShared,
 				address: {},
-				picture: ''
+				picture: '',
+				appVersionInfo: cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPVERSIONINFO),
+				id: plus.webview.currentWebview().workId
 			}
 		},
 		created: function() {
 			if(this.workInfo) {
 				this.picture = this.workInfo.pictures.length > 0 ? this.workInfo.pictures[0] : (this.userInfo.avatar || '1');
+				this.dealData();
+			}
+			else {
+				var that = this;
+				muiUtils.muiAjax(api.APIS.employmentDemand.getEmploymentDemandById + '?id=' + that.id, {
+					dataType: "json",
+					type: "get",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							that.workInfo = data.result;
+							that.picture = that.workInfo.pictures.length > 0 ? that.workInfo.pictures[0] : '1';
+							that.dealData();
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。');
+					}
+				});
+			}
+		},
+		methods: {
+			dealData() {
 				this.workInfo.workerTypesDis = '';
 				for(var wt of this.workInfo.workerTypes) {
 					if(!this.workInfo.workerTypesDis) {
@@ -119,43 +157,130 @@
 				address.lng = this.workInfo.lng;
 				address.lat = this.workInfo.lat;
 				this.address = address;
-			}
-		},
-		methods: {
+			},
 			positioning: function() {
 				muiUtils.openWindow('../../commonpage/map/selectaddress.html', '../../commonpage/map/selectaddress.html', {
 					extras: {
 						address: this.address,
-						isPositioning: true,
-						fromPage: '../../bizpage/device/deviceinfo.html'
+						isPositioning: true
 					}
 				});
 			},
 			callTel: function(number) {
-				if(isShared == 0) {
-					plus.device.dial(number, false);
+				cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.LOGIN_FORWORD, {
+					id: '../../bizpage/work/workinfo.html',
+					url: '../../bizpage/work/workinfo.html'
+				});
+				muiUtils.loginValid(this.doCall);
+			},
+			doCall() {
+				var that = this;
+				this.userInfo = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO);
+				this.isShared = this.userInfo.isShared;
+				if(this.userInfo.id === this.workInfo.userId) {
+					mui.toast('这是您自己的发布的用工需求！');
+					return;
+				}
+				if(this.shareSwitch === 1 && this.isShared !== 1) {
+					var btnArray = ['取消', '分享'];
+					mui.confirm('一次分享即可免费联系，是否一键分享应用？', '提示', btnArray, function(e) {
+						if(e.index == 1) {
+							that.showShare = true;
+						}
+					});
 				} else {
-					let self = this;
-					mui.alert('分享app即可获取联系电话！', '分享', '分享', function() {
-						mui.toast('分享成功！');
-						self.isShared = 0;
-						console.log('CONSTS.IS_SHARED:' + CONSTS.IS_SHARED);
-						cacheUtils.localStorage(CONSTS.IS_SHARED).set(CONSTS.IS_SHARED, self.isShared);
-						//入库
-						//@tudo
+					plus.device.dial(this.workInfo.mobileNumber, false);
+					muiUtils.muiAjax(api.APIS.employmentDemand.updateEmploymentDemandCt + '?id=' + that.workInfo.id, {
+						dataType: "json",
+						type: "post",
+						success: function(data) {},
+						error: function(xhr, type, errorThrown) {}
 					});
 				}
 			},
+			shareMessage: function(shareOb) {
+				var url = mui.os.ios ? this.appVersionInfo.iOS.url : this.appVersionInfo.Android.url;
+				var msg = {
+					title: '彩钢精英',
+					content: "彩钢精英招工、找工作、找设备、找工程，行业交流，急你所需！\n" + url,
+					href: url
+				};
+				var that = this;
+				if('weixin' == shareOb.id) {
+					plus.nativeUI.actionSheet({ title: "分享到微信", cancel: "取消", buttons: [{ title: "分享到微信朋友圈" }, { title: "发送给微信好友" }] }, function(e) {
+						if(e.index === 1) {
+							msg.extra = { scene: "WXSceneTimeline" };
+						} else if(e.index === 2) {
+							msg.extra = { scene: "WXSceneSession" };
+						} else {
+							return;
+						}
+						shareOb.send(msg, function() {
+							mui.toast("分享成功！");
+							that.shareSuccess();
+						}, function(e) {
+							mui.toast("分享失败!");
+						});
+					});
+				} else {
+					shareOb.send(msg, function() {
+						mui.toast("分享成功！");
+						that.shareSuccess();
+					}, function(e) {
+						mui.toast("分享失败!");
+					});
+				}
+			},
+			shareAction(type) {
+				this.showShare = false;
+				var that = this;
+				var shareOb;
+				switch(type) {
+					case 'weixin':
+						shareOb = this.shares.sharewx;
+						break;
+					case 'qq':
+						shareOb = this.shares.shareqq;
+						break;
+					case 'tencentweibo':
+						shareOb = this.shares.sharetxwb;
+						break;
+					case 'sinaweibo':
+						shareOb = this.shares.sharesnwb;
+						break;
+				}
+				shareOb.authorize(function() {
+					that.shareMessage(shareOb);
+				}, function(e) {
+					mui.toast("分享失败!");
+				});
+			},
+			shareSuccess() {
+				var that = this;
+				muiUtils.muiAjax(api.APIS.user.updateShareState, {
+					data: JSON.stringify({
+						shareState: 1
+					}),
+					contentType: 'application/json',
+					dataType: "json",
+					type: "post",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							that.isShared = 1;
+							that.userInfo.isShared = 1;
+							cacheUtils.localStorage(CONSTS.USER_INFO).setObject(CONSTS.USER_INFO, that.userInfo);
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。')
+					}
+				});
+			},
 			shoucang: function() {
 				mui.toast('收藏成功！');
-			},
-			publishWorkInfo: function() {
-				let url = '../../bizpage/release/work.html';
-				muiUtils.openWindow(url, url);
 			}
-		},
-		watch: {
-
 		},
 		ready: function() {
 			var deceleration = mui.os.ios ? 0.003 : 0.0009;
@@ -163,6 +288,25 @@
 				bounce: true,
 				indicators: false, //是否显示滚动条
 				deceleration: deceleration
+			});
+			var that = this;
+			plus.share.getServices(function(s) {
+				for(var i in s) {
+					if('weixin' == s[i].id) {
+						that.shares.sharewx = s[i];
+					}
+					if('qq' == s[i].id) {
+						that.shares.shareqq = s[i];
+					}
+					if('tencentweibo' == s[i].id) {
+						that.shares.sharetxwb = s[i];
+					}
+					if('sinaweibo' == s[i].id) {
+						that.shares.sharesnwb = s[i];
+					}
+				}
+			}, function(e) {
+				mui.toast("获取分享服务列表失败！");
 			});
 		},
 		components: {
@@ -351,5 +495,41 @@
 		position: absolute;
 		top: 5px;
 		margin-left: 5px;
+	}
+	
+	.share {
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		background-color: #fff;
+		height: 80px;
+		z-index: 100;
+		padding: 0 10px;
+	}
+	
+	.share span {
+		position: relative;
+		width: 24%;
+		height: 100%;
+	}
+	
+	.share img {
+		width: 60px;
+		height: 60px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin-left: -30px;
+		margin-top: -30px;
+	}
+	
+	.shareMask {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		width: 100%;
+		background-color: #000;
+		opacity: 0.4;
+		z-index: 99;
 	}
 </style>
