@@ -16,10 +16,10 @@
 					</p>
 				</div>
 			</div>
-			<p class="noWork" v-show="!employmentDemandList || employmentDemandList.length === 0">
-				<a href="javascript:void(0)" @tap="releaseEmploymentDemand">发布用工需求</a>
-			</p>
 		</div>
+		<p class="noWork" v-show="!employmentDemandList || employmentDemandList.length === 0">
+			<a href="javascript:void(0)" @tap="releaseEmploymentDemand">发布用工需求</a>
+		</p>
 	</div>
 </template>
 

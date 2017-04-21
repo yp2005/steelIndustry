@@ -1,6 +1,6 @@
 <template>
 	<div class="mui-scroll-wrapper home">
-		<div class="mui-scroll">
+		<div id="pullrefresh" class="mui-scroll">
 			<imageslider :images="imageDatas" :item-tap="bannerTap"></imageslider>
 			<ul class="mui-table-view mui-grid-view">
 				<li class="mui-table-view-cell mui-media mui-col-xs-6">
@@ -30,142 +30,45 @@
 			</ul>
 			<div class="systemMessage">
 				<span>钢行业头条！</span>
-				<div>
-					<p class="mui-ellipsis-2" v-for="message in messages">{{message.text}}</p>
+				<div class="lunbo{{messages.length - 1}}">
+					<p class="mui-ellipsis-2" v-for="message in messages" @tap="messageDetail(message)">{{message.title + ' ' + message.content}}</p>
 				</div>
 			</div>
 
 			<p class="title">设备推荐</p>
-			<div class="oneStore">
-				<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
+			<div class="oneStore" v-for="store in storeList" @tap="gotoStoreDetail(store.userId)">
+				<img :src="store.shopSignPictures" />
 				<div class="storeInfo">
-					<p class="mui-ellipsis">店铺名称店铺名称店铺名称店铺名称店铺名称店铺名称</p>
-					<p>北京 北京市 海淀区</p>
+					<p class="mui-ellipsis">{{store.storeName}}</p>
+					<p>{{store.address}}</p>
 					<p>
-						<img src="../../static/img/mine/shimingrenzheng.svg">
-						<img src="../../static/img/mine/noshimingrenzheng.svg">
-						<img src="../../static/img/mine/qiyerenzheng.svg">
-						<img src="../../static/img/mine/noqiyerenzheng.svg">
-						<span class="mui-pull-right">距离：9999KM</span>
+						<img v-show="store.realNameAuthentication == 1" src="../../static/img/mine/shimingrenzheng.svg">
+						<img v-else src="../../static/img/mine/noshimingrenzheng.svg">
+						<img v-show="store.enterpriseCertification == 1" src="../../static/img/mine/qiyerenzheng.svg">
+						<img v-else src="../../static/img/mine/noqiyerenzheng.svg">
 					</p>
 					<p>
 						<a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
 				</div>
 			</div>
-			<div class="oneStore">
-				<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
-				<div class="storeInfo">
-					<p class="mui-ellipsis">店铺名称店铺名称店铺名称店铺名称店铺名称店铺名称</p>
-					<p>北京 北京市 海淀区</p>
-					<p>
-						<img src="../../static/img/mine/shimingrenzheng.svg">
-						<img src="../../static/img/mine/noshimingrenzheng.svg">
-						<img src="../../static/img/mine/qiyerenzheng.svg">
-						<img src="../../static/img/mine/noqiyerenzheng.svg">
-						<span class="mui-pull-right">距离：9999KM</span>
-					</p>
-					<p>
-						<a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
-				</div>
-			</div>
-			<div class="oneStore">
-				<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
-				<div class="storeInfo">
-					<p class="mui-ellipsis">店铺名称店铺名称店铺名称店铺名称店铺名称店铺名称</p>
-					<p>北京 北京市 海淀区</p>
-					<p>
-						<img src="../../static/img/mine/shimingrenzheng.svg">
-						<img src="../../static/img/mine/noshimingrenzheng.svg">
-						<img src="../../static/img/mine/qiyerenzheng.svg">
-						<img src="../../static/img/mine/noqiyerenzheng.svg">
-						<span class="mui-pull-right">距离：9999KM</span>
-					</p>
-					<p>
-						<a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
-				</div>
-			</div>
-			<div class="oneStore">
-				<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
-				<div class="storeInfo">
-					<p class="mui-ellipsis">店铺名称店铺名称店铺名称店铺名称店铺名称店铺名称</p>
-					<p>北京 北京市 海淀区</p>
-					<p>
-						<img src="../../static/img/mine/shimingrenzheng.svg">
-						<img src="../../static/img/mine/noshimingrenzheng.svg">
-						<img src="../../static/img/mine/qiyerenzheng.svg">
-						<img src="../../static/img/mine/noqiyerenzheng.svg">
-						<span class="mui-pull-right">距离：9999KM</span>
-					</p>
-					<p>
-						<a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
-				</div>
-			</div>
-
+			<p class="noData" v-show="!storeList || storeList.length === 0" class="noData">暂无数据</p>
 			<p class="title">热门岗位</p>
-			<div class="oneWork">
-				<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
+			<div class="oneWork" v-for="work in workList" @tap="gotoWorkDetail(work.id)">
+				<img :src="work.imgName" />
 				<div class="workStore">
-					<p class="mui-ellipsis">用工需求标题用工需求标题用工需求标题用工需求标题用工需求标题</p>
-					<p>2016-01-10<span class="mui-pull-right">北京 北京市 海淀区</span></p>
+					<p class="mui-ellipsis">{{work.demandTitle}}</p>
+					<p>{{work.createTime}}<span class="mui-pull-right">{{work.address}}</span></p>
 					<p>
-						<img src="../../static/img/mine/shimingrenzheng.svg">
-						<img src="../../static/img/mine/noshimingrenzheng.svg">
-						<img src="../../static/img/mine/qiyerenzheng.svg">
-						<img src="../../static/img/mine/noqiyerenzheng.svg">
-						<span class="mui-pull-right">距离：9999KM</span>
+						<img v-show="work.realNameAuthentication == 1" src="../../static/img/mine/shimingrenzheng.svg">
+						<img v-else src="../../static/img/mine/noshimingrenzheng.svg">
+						<img v-show="work.enterpriseCertification == 1" src="../../static/img/mine/qiyerenzheng.svg">
+						<img v-else src="../../static/img/mine/noqiyerenzheng.svg">
 					</p>
 					<p>
 						<a href="javascript:void(0)">立即预约</a><span class="mui-pull-right">...</span></p>
 				</div>
 			</div>
-			<div class="oneWork">
-				<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
-				<div class="workStore">
-					<p class="mui-ellipsis">用工需求标题用工需求标题用工需求标题用工需求标题用工需求标题</p>
-					<p>2016-01-10<span class="mui-pull-right">北京 北京市 海淀区</span></p>
-					<p>
-						<img src="../../static/img/mine/shimingrenzheng.svg">
-						<img src="../../static/img/mine/noshimingrenzheng.svg">
-						<img src="../../static/img/mine/qiyerenzheng.svg">
-						<img src="../../static/img/mine/noqiyerenzheng.svg">
-						<span class="mui-pull-right">距离：9999KM</span>
-					</p>
-					<p>
-						<a href="javascript:void(0)">立即预约</a><span class="mui-pull-right">...</span></p>
-				</div>
-			</div>
-			<div class="oneWork">
-				<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
-				<div class="workStore">
-					<p class="mui-ellipsis">用工需求标题用工需求标题用工需求标题用工需求标题用工需求标题</p>
-					<p>2016-01-10<span class="mui-pull-right">北京 北京市 海淀区</span></p>
-					<p>
-						<img src="../../static/img/mine/shimingrenzheng.svg">
-						<img src="../../static/img/mine/noshimingrenzheng.svg">
-						<img src="../../static/img/mine/qiyerenzheng.svg">
-						<img src="../../static/img/mine/noqiyerenzheng.svg">
-						<span class="mui-pull-right">距离：9999KM</span>
-					</p>
-					<p>
-						<a href="javascript:void(0)">立即预约</a><span class="mui-pull-right">...</span></p>
-				</div>
-			</div>
-			<div class="oneWork">
-				<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
-				<div class="workStore">
-					<p class="mui-ellipsis">用工需求标题用工需求标题用工需求标题用工需求标题用工需求标题</p>
-					<p>2016-01-10<span class="mui-pull-right">北京 北京市 海淀区</span></p>
-					<p>
-						<img src="../../static/img/mine/shimingrenzheng.svg">
-						<img src="../../static/img/mine/noshimingrenzheng.svg">
-						<img src="../../static/img/mine/qiyerenzheng.svg">
-						<img src="../../static/img/mine/noqiyerenzheng.svg">
-						<span class="mui-pull-right">距离：9999KM</span>
-					</p>
-					<p>
-						<a href="javascript:void(0)">立即预约</a><span class="mui-pull-right">...</span></p>
-				</div>
-			</div>
+			<p class="noData" v-show="!workList || workList.length === 0" class="noData">暂无数据</p>
 		</div>
 	</div>
 </template>
@@ -182,28 +85,22 @@
 				scroll: undefined,
 				imageDatas: [{
 					banner_img_url: 'http://img2.imgtn.bdimg.com/it/u=1942697624,2080778166&fm=23&gp=0.jpg',
-					banner_url: 'http://www.baidu.com',
+					banner_url: '',
 					banner_name: '1',
 					banner_order: 1
 				}, {
 					banner_img_url: 'http://img2.imgtn.bdimg.com/it/u=2114919032,3638938282&fm=23&gp=0.jpg',
-					banner_url: 'http://www.baidu.com',
+					banner_url: '',
 					banner_name: '2',
 					banner_order: 2
 				}],
 				messages: [{
-					text: '这是第一条测试用的公告这是第一条测试用的公告这是第一条测试用的公告这是第一条测试用的公告这是第一条测试用的公告这是第一条测试用的公告'
-				}, {
-					text: '这是第二条测试用的公告这是第二条测试用的公告这是第二条测试用的公告这是第二条测试用的公告这是第二条测试用的公告这是第二条测试用的公告'
-				}, {
-					text: '这是第三条测试用的公告这是第三条测试用的公告这是第三条测试用的公告这是第三条测试用的公告这是第三条测试用的公告这是第三条测试用的公告'
-				}, {
-					text: '这是第四条测试用的公告这是第四条测试用的公告这是第四条测试用的公告这是第四条测试用的公告这是第四条测试用的公告这是第四条测试用的公告'
-				}, {
-					text: '这是第五条测试用的公告这是第五条测试用的公告这是第五条测试用的公告这是第五条测试用的公告这是第五条测试用的公告这是第五条测试用的公告'
-				}, {
-					text: '这是第一条测试用的公告这是第一条测试用的公告这是第一条测试用的公告这是第一条测试用的公告这是第一条测试用的公告这是第一条测试用的公告'
-				}]
+					title: '暂无公告',
+					content: ''
+				}],
+				homeData: {},
+				storeList: [],
+				workList: []
 			};
 		},
 		props: {
@@ -216,8 +113,33 @@
 			imageslider
 		},
 		methods: {
+			messageDetail(message) {
+				muiUtils.openWindow('../../commonpage/noticemanager/noticedetail.html', '../../commonpage/noticemanager/noticedetail.html', {
+					extras: {
+						message: message
+					}
+				});
+			},
 			bannerTap(item) {
-				//muiUtils.openWindow(item.banner_url);
+				if(item.linkType == 'innerLink') {
+					this.gotoStoreDetail(item.banner_url);
+				} else if(item.linkType == 'outerLink') {
+					plus.runtime.openURL(item.banner_url);
+				}
+			},
+			gotoStoreDetail(userId) {
+				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', '../../bizpage/device/deviceinfo.html', {
+					extras: {
+						userId: userId
+					}
+				});
+			},
+			gotoWorkDetail(id) {
+				muiUtils.openWindow('../../bizpage/work/workinfo.html', '../../bizpage/work/workinfo.html', {
+					extras: {
+						workId: id
+					}
+				});
 			},
 			open(url) {
 				muiUtils.openWindow(url, url, {
@@ -263,13 +185,76 @@
 										}
 									}
 								});
-							}
-							else {
+							} else {
 								cacheUtils.localStorage(CONSTS.SYSTEM).setObject(CONSTS.APPVERSIONINFO, data.result);
 							}
 						}
 					},
 					error: function(xhr, type, errorThrown) {}
+				});
+			},
+			getData() {
+				var that = this;
+				muiUtils.muiAjax(api.APIS.common.homeData, {
+					contentType: 'application/json',
+					type: "get",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							that.homeData = data.result;
+							if(that.homeData.advertisement && that.homeData.advertisement.length > 0) {
+								var imageDatas = [];
+								for(var ad of that.homeData.advertisement) {
+									if(ad.linkType === 'innerLink') {
+										imageDatas.push({
+											banner_img_url: data.result.imgServer + ad.img,
+											banner_url: ad.storeId,
+											banner_name: ad.title,
+											banner_order: ad.id,
+											linkType: 'innerLink'
+										});
+									} else {
+										imageDatas.push({
+											banner_img_url: data.result.imgServer + ad.img,
+											banner_url: ad.url,
+											banner_name: ad.title,
+											banner_order: ad.id,
+											linkType: 'outerLink'
+										});
+									}
+								}
+								that.imageDatas = imageDatas;
+							}
+							if(that.homeData.systemNotice && that.homeData.systemNotice.length > 0) {
+								var messages = that.homeData.systemNotice;
+								if(messages.length > 1) {
+									var endMsg = JSON.parse(JSON.stringify(messages[0]));
+									messages.push(endMsg);
+								}
+								that.messages = messages;
+							}
+							if(that.homeData.hotStore && that.homeData.hotStore.length > 0) {
+								for(var store of that.homeData.hotStore) {
+									store.shopSignPictures = data.result.imgServer + store.shopSignPictures;
+								}
+								that.storeList = that.homeData.hotStore;
+							}
+							if(that.homeData.hotWork && that.homeData.hotWork.length > 0) {
+								for(var work of that.homeData.hotWork) {
+									work.imgName = work.imgName ? (data.result.imgServer + work.imgName) : '1';
+								}
+								that.workList = that.homeData.hotWork;
+							}
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+						that.pullrefresh.endPullDownToRefresh();
+						that.pullrefresh.refresh(true);
+					},
+					error: function(xhr, type, errorThrown) {
+						that.pullrefresh.endPullDownToRefresh();
+						that.pullrefresh.refresh(true);
+						mui.toast('服务器或网络异常，请稍后重试。')
+					}
 				});
 			}
 		},
@@ -295,6 +280,19 @@
 			document.addEventListener("resume", function() {
 				that.getAppSettings();
 			});
+			this.pullrefresh = mui('#pullrefresh').pullToRefresh({
+				down: {
+					auto: false,
+					offset: 50,
+					callback: function() {
+						that.getData();
+					}
+				},
+				up: {
+					callback: false
+				}
+			});
+			that.getData();
 		}
 	};
 </script>
@@ -379,12 +377,99 @@
 	}
 	
 	.systemMessage div {
-		animation: lunbo 10s 1s infinite;
 		position: relative;
 		padding-left: 85px;
 	}
 	
-	@keyframes lunbo {
+	.systemMessage div.lunbo2 {
+		animation: lunbo2 4s 1s infinite;
+	}
+	
+	.systemMessage div.lunbo3 {
+		animation: lunbo3 6s 1s infinite;
+	}
+	
+	.systemMessage div.lunbo4 {
+		animation: lunbo4 8s 1s infinite;
+	}
+	
+	.systemMessage div.lunbo5 {
+		animation: lunbo5 10s 1s infinite;
+	}
+	
+	@keyframes lunbo2 {
+		0% {
+			top: 0;
+		}
+		25% {
+			top: -52px;
+		}
+		50% {
+			top: -52px;
+		}
+		75% {
+			top: -104px;
+		}
+		100% {
+			top: -104px;
+		}
+	}
+	
+	@keyframes lunbo3 {
+		0% {
+			top: 0;
+		}
+		16% {
+			top: -52px;
+		}
+		33% {
+			top: -52px;
+		}
+		50% {
+			top: -104px;
+		}
+		66% {
+			top: -104px;
+		}
+		83% {
+			top: -156px;
+		}
+		100% {
+			top: -156px;
+		}
+	}
+	
+	@keyframes lunbo4 {
+		0% {
+			top: 0;
+		}
+		12% {
+			top: -52px;
+		}
+		25% {
+			top: -52px;
+		}
+		37% {
+			top: -104px;
+		}
+		50% {
+			top: -104px;
+		}
+		62% {
+			top: -156px;
+		}
+		75% {
+			top: -156px;
+		}
+		87% {
+			top: -208px;
+		}
+		100% {
+			top: -208px;
+		}
+	}
+	
+	@keyframes lunbo5 {
 		0% {
 			top: 0;
 		}
@@ -559,5 +644,12 @@
 	
 	.mui-slider .mui-slider-group .mui-slider-item img {
 		height: 150px;
+	}
+	
+	p.noData {
+		line-height: 124px;
+		text-align: center;
+		margin-bottom: 2px;
+		background-color: #fff;
 	}
 </style>

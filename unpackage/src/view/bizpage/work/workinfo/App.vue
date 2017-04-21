@@ -7,7 +7,8 @@
 					<li class="mui-table-view-cell">
 						<p class="jieshao">
 							<span class="title">{{workInfo.demandTitle}}</span>
-							<span @tap="shoucang" class="jxddicon icon-shoucang1"></span>
+							<span @tap="shoucang" v-show="workInfo.isCollected == 1" class="jxddicon icon-shoucangxuanzhong"></span>
+							<span @tap="shoucang" v-else class="jxddicon icon-shoucang1"></span>
 						</p>
 					</li>
 					<li class="mui-table-view-cell">
@@ -202,7 +203,7 @@
 				var url = mui.os.ios ? this.appVersionInfo.iOS.url : this.appVersionInfo.Android.url;
 				var msg = {
 					title: '彩钢精英',
-					content: "彩钢精英招工、找工作、找设备、找工程，行业交流，急你所需！\n" + url,
+					content: "《彩钢精英》助你招工、找工作、找设备、找工程，行业交流，急你所需！\n" + url,
 					href: url
 				};
 				var that = this;
@@ -278,8 +279,39 @@
 					}
 				});
 			},
-			shoucang: function() {
-				mui.toast('收藏成功！');
+			shoucang() {
+				cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.LOGIN_FORWORD, {
+					id: '../../bizpage/work/workinfo.html',
+					url: '../../bizpage/work/workinfo.html'
+				});
+				muiUtils.loginValid(this.doShoucang);
+			},
+			doShoucang() {
+				if(this.userInfo.id === this.workInfo.userId) {
+					mui.toast('这是您自己的发布的用工需求！');
+					return;
+				}
+				var that = this;
+				var url = this.workInfo.isCollected == 1 ? api.APIS.collection.deleteCollection : api.APIS.collection.addCollection;
+				muiUtils.muiAjax(url, {
+					data: {
+						type: 'work',
+						collectId: this.workInfo.id
+					},
+					dataType: "json",
+					type: "post",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							mui.toast(that.workInfo.isCollected == 1 ? '已取消收藏' : '收藏成功！');
+							that.workInfo.isCollected = that.workInfo.isCollected == 1 ? 0 : 1;
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。')
+					}
+				});
 			}
 		},
 		ready: function() {
@@ -446,7 +478,8 @@
 		padding-right: 30px;
 	}
 	
-	.icon-shoucang1 {
+	.icon-shoucang1,
+	.icon-shoucangxuanzhong {
 		font-size: 25px;
 		color: #E41A1A;
 		position: absolute;

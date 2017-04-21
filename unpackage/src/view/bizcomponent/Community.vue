@@ -2,7 +2,7 @@
 	<div class="mui-scroll-wrapper community">
 		<div class="mui-scroll">
 			<ul class="mui-table-view mui-table-view-chevron">
-				<li class="mui-table-view-cell mui-media">
+				<li @tap="gotoDetail" class="mui-table-view-cell mui-media">
 					<a class="mui-navigate-right">
 						<img class="mui-media-object mui-pull-left" src="../../static/img/device.jpg">
 						<div class="mui-media-body">
@@ -10,7 +10,7 @@
 						</div>
 					</a>
 				</li>
-				<li class="mui-table-view-cell mui-media">
+				<li @tap="gotoDetail" class="mui-table-view-cell mui-media">
 					<a class="mui-navigate-right">
 						<img class="mui-media-object mui-pull-left" src="../../static/img/gangjiegou.jpg">
 						<div class="mui-media-body">
@@ -18,7 +18,7 @@
 						</div>
 					</a>
 				</li>
-				<li class="mui-table-view-cell mui-media">
+				<li @tap="gotoDetail" class="mui-table-view-cell mui-media">
 					<a class="mui-navigate-right">
 						<img class="mui-media-object mui-pull-left" src="../../static/img/coloursteel.jpg">
 						<div class="mui-media-body">
@@ -26,7 +26,7 @@
 						</div>
 					</a>
 				</li>
-				<li class="mui-table-view-cell mui-media">
+				<li @tap="gotoDetail" class="mui-table-view-cell mui-media">
 					<a class="mui-navigate-right">
 						<img class="mui-media-object mui-pull-left" src="../../static/img/install.jpg">
 						<div class="mui-media-body">
@@ -51,7 +51,9 @@
 
 		},
 		methods: {
-
+			gotoDetail() {
+				mui.toast('论坛功能开发中，敬请期待...');
+			}
 		},
 		ready: function() {
 			this.scroll = mui('.mui-scroll-wrapper.community').scroll({

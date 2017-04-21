@@ -313,7 +313,7 @@
 							for(var master of data.result.masterCardList || []) {
 								master.imgName = master.imgName ? (data.result.imgServer + master.imgName) : '1';
 							}
-							that.masterList =  that.masterList.concat(data.result.masterCardList || []);
+							that.masterList = that.masterList.concat(data.result.masterCardList || []);
 						} else {
 							mui.toast(data.erroCode + '：' + data.erroMsg);
 						}
@@ -524,7 +524,13 @@
 	}
 	
 	.noData {
-		line-height: 250px;	
+		line-height: 250px;
 		text-align: center;
+	}
+	
+	.mui-poppicker {
+		top: 90px;
+		bottom: auto;
+		transform: translateY(-390px);
 	}
 </style>

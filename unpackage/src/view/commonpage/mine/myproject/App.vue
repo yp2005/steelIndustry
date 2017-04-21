@@ -16,10 +16,10 @@
 					</p>
 				</div>
 			</div>
-			<p class="noProject" v-show="!projectList || projectList.length === 0">
-				<a href="javascript:void(0)" @tap="releaseProject">发布工程</a>
-			</p>
 		</div>
+		<p class="noProject" v-show="!projectList || projectList.length === 0">
+			<a href="javascript:void(0)" @tap="releaseProject">发布工程</a>
+		</p>
 	</div>
 </template>
 <script>

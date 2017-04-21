@@ -26,7 +26,7 @@
 				<div class="clear"></div>
 			</div>
 		</div>
-		<div id="confirmImgDiv_{{dataid}}" style="width:100%;height: 100%;position: fixed;top:0;left: 0;display: none;z-index: 22;background-color: gray;text-align: center;">
+		<div id="confirmImgDiv_{{dataid}}" style="width:100%;height: 100%;position: fixed;top:0;left: 0;display: none;z-index: 999;background-color: gray;text-align: center;">
 			<span class="confirmImgSpan" style="display: table-cell;vertical-align: middle">
 				<img id="confirmImg_{{dataid}}" style="max-height: 100%;max-width: 100%;">
 			</span>
@@ -42,9 +42,9 @@
 			</div>
 		</div>
 		<!-- 用于防止tap事件点击影响下层页面 -->
-		<div id="showEditBg_{{dataid}}" style="width:100%;height: 100%;position: fixed;top:0;left: 0;display: none;z-index: 22;background-color: gray;">
+		<div id="showEditBg_{{dataid}}" style="width:100%;height: 100%;position: fixed;top:0;left: 0;display: none;z-index: 999;background-color: gray;">
 		</div>
-		<div id="showEdit_{{dataid}}" style="width:100%;height: {{resolutionHeight}};position: fixed;top:0;left: 0;display: none;z-index: 23;background-color: gray;">
+		<div id="showEdit_{{dataid}}" style="width:100%;height: {{resolutionHeight}};position: fixed;top:0;left: 0;display: none;z-index: 1000;background-color: gray;">
 			<div id="report_{{dataid}}" class="edit-div-report">
 				<img id="readyimg_{{dataid}}" class="edit-div-readyimg">
 			</div>
@@ -360,8 +360,8 @@
 				let instanceId = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).get(CONSTS.APP_INSTANCE_ID);
 				task.setRequestHeader('instance_id', instanceId);
 				task.setRequestHeader('access_token', token);
-				task.addData('business_type', that.businessType);
-				task.addData('type', 'img');
+//				task.addData('business_type', that.businessType);
+//				task.addData('type', 'img');
 				for(var i = 0; i < files.length; i++) {
 					var f = files[i];
 					log.log('add file path:' + f.path);

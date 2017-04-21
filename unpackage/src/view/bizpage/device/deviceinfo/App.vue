@@ -16,10 +16,10 @@
 					<h4 class="mui-table-view-cell">{{store.storeName}}</h4>
 					<ul class="shop-data-list  am-list">
 						<li class="mui-table-view-cell">
-							<!--TODO 后台返回是否已收藏的状态 -->
 							<p @tap="shoucang">
 								<span>{{store.deviceTypesDis}}</span>
-								<span class="jxddicon icon-shoucang1"></span>
+								<span v-show="store.isCollected == 1" class="jxddicon icon-shoucangxuanzhong"></span>
+								<span v-else class="jxddicon icon-shoucang1"></span>
 							</p>
 						</li>
 						<li class="mui-table-view-cell">
@@ -55,7 +55,7 @@
 					</li>
 					<div class="aboveWords">
 						<ul class="mui-table-view mui-grid-view columns4 goods-list">
-							<template v-for="img in store.productPictures">
+							<template v-for="img in productPictures">
 								<li @tap="itemtap" class="mui-table-view-cell mui-media mui-col-xs-6">
 									<a class="{{$index%2==0?'one':''}}">
 										<img class="mui-media-object" :src="img">
@@ -151,6 +151,9 @@
 		methods: {
 			dealData() {
 				var imgs = this.store.environmentPictures.concat(this.store.productPictures);
+				if(this.store.productPictures.length > 4) {
+					this.productPictures = this.store.productPictures.slice(0, 4);
+				}
 				var imageDatas = [];
 				for(var i = 0; i < imgs.length; i++) {
 					imageDatas.push({
@@ -218,7 +221,7 @@
 									}
 								});
 							} else {
-								muiUtils.openWindow(url, url, {
+								muiUtils.openWindow('../../bizpage/release/store.html', '../../bizpage/release/store.html', {
 									isValidLogin: true,
 									isClose: true
 								});
@@ -232,8 +235,21 @@
 					}
 				});
 			},
-			shoucang: function() {
-				muiUtils.muiAjax(api.APIS.collection.addCollection, {
+			shoucang() {
+				cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.LOGIN_FORWORD, {
+					id: '../../bizpage/device/deviceinfo.html',
+					url: '../../bizpage/device/deviceinfo.html'
+				});
+				muiUtils.loginValid(this.doShoucang);
+			},
+			doShoucang() {
+				if(this.userInfo.id === this.store.userId) {
+					mui.toast('这是您自己的店铺！');
+					return;
+				}
+				var that = this;
+				var url = this.store.isCollected == 1 ? api.APIS.collection.deleteCollection : api.APIS.collection.addCollection;
+				muiUtils.muiAjax(url, {
 					data: {
 						type: 'store',
 						collectId: this.store.id
@@ -242,8 +258,8 @@
 					type: "post",
 					success: function(data) {
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
-							mui.toast('收藏成功！');
-							// TODO 设置收藏状态
+							mui.toast(that.store.isCollected == 1 ? '已取消收藏' : '收藏成功！');
+							that.store.isCollected = that.store.isCollected == 1 ? 0 : 1;
 						} else {
 							mui.toast(data.erroCode + '：' + data.erroMsg);
 						}
@@ -297,7 +313,7 @@
 				var url = mui.os.ios ? this.appVersionInfo.iOS.url : this.appVersionInfo.Android.url;
 				var msg = {
 					title: '彩钢精英',
-					content: "彩钢精英招工、找工作、找设备、找工程，行业交流，急你所需！",
+					content: "《彩钢精英》助你招工、找工作、找设备、找工程，行业交流，急你所需！",
 					href: url
 				};
 				var that = this;
@@ -483,7 +499,8 @@
 		font-size: 24px;
 	}
 	
-	.icon-shoucang1 {
+	.icon-shoucang1,
+	.icon-shoucangxuanzhong {
 		color: #FA4747;
 	}
 	

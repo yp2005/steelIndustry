@@ -30,7 +30,8 @@ const APIS = {
 		updateLatestLoginTime: API_ROOT + USER + '/updateLatestLoginTime',
 		updateUserState: API_ROOT + USER + '/updateUserState',
 		sendCode: API_ROOT + USER + '/sendCode',
-		updateShareState: API_ROOT + USER + '/updateShareState'
+		updateShareState: API_ROOT + USER + '/updateShareState',
+		updateUserAvatar: API_ROOT + USER + '/updateUserAvatar'
 	},
 	
 	settings: {
@@ -43,7 +44,7 @@ const APIS = {
 		getEmploymentDemands:　API_ROOT + COLLECTION + '/getEmploymentDemands',
 		getProjects:　API_ROOT + COLLECTION + '/getProjects',
 		getStores:　API_ROOT + COLLECTION + '/getStores',
-		delCollection:　API_ROOT + COLLECTION + '/delCollection',
+		deleteCollection:　API_ROOT + COLLECTION + '/deleteCollection',
 		addCollection:　API_ROOT + COLLECTION + '/addCollection'
 	},
 	
@@ -90,7 +91,8 @@ const APIS = {
 	
 	common: {
 		uploadImage: API_ROOT + COMMON + '/uploadImage',
-		appupdate: API_ROOT + COMMON + '/appUpdate'
+		appupdate: API_ROOT + COMMON + '/appUpdate',
+		homeData: API_ROOT + COMMON + '/homeData'
 	}
 };
 

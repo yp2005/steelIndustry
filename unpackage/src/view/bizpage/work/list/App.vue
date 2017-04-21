@@ -519,6 +519,12 @@
 		color: #777;
 	}
 	
+	.mui-poppicker {
+		top: 90px;
+		bottom: auto;
+		transform: translateY(-390px);
+	}
+	
 	.noData {
 		line-height: 250px;	
 		text-align: center;

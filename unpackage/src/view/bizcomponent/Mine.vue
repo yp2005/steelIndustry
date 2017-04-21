@@ -11,7 +11,7 @@
 					<!--<span class="gold">金币<img src="../../static/img/mine/gold.svg">: 5000 </span>-->
 				</p>
 				<p>积分: {{userInfo.points}}</p>
-				<span class="jxddicon icon-shezhi44" @tap="open('../../commonpage/mine/adminsetting.html')"></span>
+				<span v-show="userInfo.isAdmin == 1" class="jxddicon icon-shezhi44" @tap="open('../../commonpage/mine/adminsetting.html')"></span>
 				<div class="authinfo">
 					<img v-if="userInfo.realNameAuthentication === 1" src="../../static/img/mine/shimingrenzheng.svg">
 					<img v-else src="../../static/img/mine/noshimingrenzheng.svg">
@@ -20,13 +20,6 @@
 				</div>
 			</div>
 			<ul class="mui-table-view content-list">
-				<!--<li class="mui-table-view-cell">
-					<p>
-						<img src="../../static/img/mine/myinformation.svg" />
-						<span>个人信息</span>
-						<span class="jxddicon icon-jinru32"></span>
-					</p>
-				</li>-->
 				<li class="mui-table-view-cell" @tap="open('../../commonpage/mine/mycard.html')">
 					<p>
 						<img src="../../static/img/mine/mycard.svg" />
@@ -55,14 +48,14 @@
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
-				<li class="mui-table-view-cell">
+				<li class="mui-table-view-cell" @tap="gotoMyTiezi">
 					<p>
 						<img src="../../static/img/mine/tiezi.svg" />
 						<span>我的帖子</span>
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
-				<li class="mui-table-view-cell">
+				<li class="mui-table-view-cell" @tap="gotoMyHuifu">
 					<p>
 						<img src="../../static/img/mine/mymessage.svg" />
 						<span>我的回复</span>
@@ -76,7 +69,6 @@
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
-
 				<li class="mui-table-view-cell" @tap="open('../../commonpage/mine/usersetting.html')">
 					<p>
 						<img src="../../static/img/mine/myinformation.svg" />
@@ -140,6 +132,12 @@
 						url: url
 					}
 				});
+			},
+			gotoMyTiezi() {
+				mui.toast('论坛功能开发中，敬请期待...');
+			},
+			gotoMyHuifu() {
+				mui.toast('论坛功能开发中，敬请期待...');
 			},
 			shareMessage(shareOb) {
 				var msg = {
