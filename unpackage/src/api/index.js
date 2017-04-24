@@ -10,7 +10,8 @@ const PROJECT = '/project';
 const MASTER = '/masterCard';
 const EMPLOYMENTDEMAND = '/employmentDemand';
 const COMMON = '/common';
-
+const REALNAMEAUTHENTICATION = '/realNameAuthentication';
+const ENTERPRISECERTIFICATION = '/enterpriseCertification'
 /**
  * api的版本，鉴于api的版本可能会出现不统一的情况，所以还是在url里面进行拼接
  */
@@ -30,8 +31,12 @@ const APIS = {
 		updateLatestLoginTime: API_ROOT + USER + '/updateLatestLoginTime',
 		updateUserState: API_ROOT + USER + '/updateUserState',
 		sendCode: API_ROOT + USER + '/sendCode',
+		sendCodeForUpdate: API_ROOT + USER + '/sendCodeForUpdate',
 		updateShareState: API_ROOT + USER + '/updateShareState',
-		updateUserAvatar: API_ROOT + USER + '/updateUserAvatar'
+		updateUserAvatar: API_ROOT + USER + '/updateUserAvatar',
+		updateMobileNumber: API_ROOT + USER + '/updateMobileNumber',
+		updateUserInfo: API_ROOT + USER + '/updateUserInfo',
+		updateCompanyInfo: API_ROOT + USER + '/updateCompanyInfo'
 	},
 	
 	settings: {
@@ -93,13 +98,28 @@ const APIS = {
 		uploadImage: API_ROOT + COMMON + '/uploadImage',
 		appupdate: API_ROOT + COMMON + '/appUpdate',
 		homeData: API_ROOT + COMMON + '/homeData'
+	},
+	
+	realNameAuthentication: {
+		saveRealNameAuthentication: API_ROOT + REALNAMEAUTHENTICATION + '/saveRealNameAuthentication',
+		updateRealNameAuthenticationState: API_ROOT + REALNAMEAUTHENTICATION + '/updateRealNameAuthenticationState',
+		getRealNameAuthentication: API_ROOT + REALNAMEAUTHENTICATION + '/getRealNameAuthentication',
+		getRealNameAuthenticationById: API_ROOT + REALNAMEAUTHENTICATION + '/getRealNameAuthenticationById',
+		getRealNameAuthenticationList: API_ROOT + REALNAMEAUTHENTICATION + '/getRealNameAuthenticationList'
+	},
+	
+	enterpriseCertification: {
+		saveEnterpriseCertification: API_ROOT + ENTERPRISECERTIFICATION + '/saveEnterpriseCertification',
+		updateEnterpriseCertificationState: API_ROOT + ENTERPRISECERTIFICATION + '/updateEnterpriseCertificationState',
+		getEnterpriseCertification: API_ROOT + ENTERPRISECERTIFICATION + '/getEnterpriseCertification',
+		getEnterpriseCertificationById: API_ROOT + ENTERPRISECERTIFICATION + '/getEnterpriseCertificationById',
+		getEnterpriseCertificationList: API_ROOT + ENTERPRISECERTIFICATION + '/getEnterpriseCertificationList'
 	}
 };
 
 const PAGE_URL = {
 	// 首页
 	index: {
-		// 默认的主webview容器ID，当前必须写HBuilder
 		id: 'main',
 		url: '../../buyer/index/main.html'
 	},

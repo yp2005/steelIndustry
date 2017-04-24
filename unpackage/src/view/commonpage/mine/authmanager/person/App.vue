@@ -1,41 +1,38 @@
 <template>
 	<div class="mui-content">
 		<template v-if="authStep == 0">
-			<div class="mui-scroll-wrapper releaseCard">
+			<div class="mui-scroll-wrapper authmanagerPerson">
 				<div class="mui-scroll">
-					<div class="title"></div>
 					<div class="inputRow" style="text-align: center;">
 						<span class="statusFont1">提交信息</span>
 						<span class="statusFont"> → 等待审核</span>
 						<span class="statusFont"> → 认证成功</span>
 					</div>
-					<div class="title"></div>
-					<div class="inputRow"><label>姓名</label><input type="text" placeholder="请输入您的真实姓名"></div>
-					<div class="inputRow"><label>身份证号</label><input type="text" placeholder="请输入您的身份证号"></div>
-					<div class="title"></div>
+					<div class="inputRow"><label>姓名</label><input v-model="name" type="text" placeholder="请输入您的真实姓名"></div>
+					<div class="inputRow"><label>身份证号</label><input v-model="cardId" type="text" placeholder="请输入您的身份证号"></div>
 					<div class="inputRow">
 						<p>请上传身份证正面(必填)</p>
-						<upload :is-cut="isCut" :pictures.sync="pictures" :imagecount="1" :dataid="sfz_zhengmian"></upload>
+						<upload :is-cut="isCut" :pictures.sync="pictures1" :imagecount="1" dataid="sfz_zhengmian"></upload>
+						<img src="../../../../../static/img/mine/sfzfanmian.jpg" />
 					</div>
-					<div class="title"></div>
 					<div class="inputRow">
 						<p>请上传身份证反面(必填)</p>
-						<upload :is-cut="isCut" :pictures.sync="pictures" :imagecount="1" :dataid="sfz_fanmian"></upload>
+						<upload :is-cut="isCut" :pictures.sync="pictures2" :imagecount="1" dataid="sfz_fanmian"></upload>
+						<img src="../../../../../static/img/mine/sfzfanmian.jpg" />
 					</div>
-					<div class="title"></div>
 					<div class="inputRow">
 						<p>请上传1张本人手持身份证的照片(必填)</p>
-						<upload :is-cut="isCut" :pictures.sync="pictures" :imagecount="1" :dataid="sfz_shouchi"></upload>
+						<upload :is-cut="isCut" :pictures.sync="pictures3" :imagecount="1" dataid="sfz_shouchi"></upload>
+						<img src="../../../../../static/img/mine/sfzfanmian.jpg" />
 					</div>
-					<div class="title"></div>
 					<div class="inputRow">
 						<p>请上传1张本人正面照(必填)</p>
-						<upload :is-cut="isCut" :pictures.sync="pictures" :imagecount="1" :dataid="benren_zhengmian"></upload>
+						<upload :is-cut="isCut" :pictures.sync="pictures4" :imagecount="1" dataid="benren_zhengmian"></upload>
+						<img src="../../../../../static/img/mine/sfzfanmian.jpg" />
 					</div>
-					<div class="title"></div>
-					<div class="inputRow" style="font-size: 14px;">
-						<input style="margin:0px 5px;" type="checkbox" /><span>我阅读并同意</span>
-						<span class="statusFont1" @tap="declarationWindow(true)">《包工头个人师傅签约规则》</span></div>
+					<div class="inputRow declare">
+						<input v-model="agree" type="checkbox" /><span>我阅读并同意</span>
+						<span class="statusFont1" @tap="declarationWindow(true)">《彩钢精英》个人师傅签约规则</span></div>
 					<div class="bottomBtn">
 						<a style="width:100%;" href="javascript:void(0)" @tap="stepNext(1)">提交审核</a>
 					</div>
@@ -43,7 +40,7 @@
 			</div>
 		</template>
 		<template v-if="authStep == 1">
-			<div class="title backTitleBg releaseCard">
+			<div class="title backTitleBg authmanagerPerson">
 				<div class="title"></div>
 				<div class="inputRow" style="text-align: center;">
 					<span class="statusFont1">提交信息</span>
@@ -58,18 +55,20 @@
 				</div>
 			</div>
 			<div class="bottomBackBtn">
-				<a style="width:100%;color: #26c6da;" href="javascript:void(0)" @tap="goback">返回个人中心</a>
+				<a href="javascript:void(0)" @tap="goback">返回个人中心</a>
 			</div>
 		</template>
 	</div>
-    <div v-show="disStatement" class="declarationWindow">
-        <h4>包工头个人师傅签约规则</h4>
-        <p>内容</p>
-        <p>内容</p>
-        <p><a href="javascript:void(0)" @tap="declarationWindow(false)">确定</a></p>
-    </div>
-    <div v-show="disStatement" class="mask">
-    </div>
+	<div v-show="disStatement" class="declarationWindow">
+		<h4>《彩钢精英》个人师傅签约规则</h4>
+		<p>内容</p>
+		<p>内容</p>
+		<p>
+			<a href="javascript:void(0)" @tap="declarationWindow(false)">确定</a>
+		</p>
+	</div>
+	<div v-show="disStatement" class="mask">
+	</div>
 </template>
 
 <script>
@@ -78,24 +77,120 @@
 	import api from 'api';
 	import CONSTS from 'common/consts';
 	import upload from 'component/upload/UploadImage';
+	import cacheUtils from 'common/cacheUtils';
 	import {
 		cityData3Lev
 	} from 'common/cityData';
 	export default {
 		data: function() {
+			var data = plus.webview.currentWebview().data;
+			var id = null;
+			var name = '';
+			var cardId = '';
+			var pictures1 = [];
+			var pictures2 = [];
+			var pictures3 = [];
+			var pictures4 = [];
+			if(data) {
+				id = data.id;
+				name = data.realName;
+				cardId = data.cardId;
+				pictures1.push(data.imgServer + data.cardPictureObverse);
+				pictures2.push(data.imgServer + data.cardPictureReverse);
+				pictures3.push(data.imgServer + data.handCardPicture);
+				pictures4.push(data.imgServer + data.fullFacePicture);
+			}
 			return {
-				pictures: [],
+				id: id,
+				name: name,
+				cardId: cardId,
+				pictures1: pictures1, //身份证正面
+				pictures2: pictures2, //身份证反面
+				pictures3: pictures3, //手持身份证照片
+				pictures4: pictures4, //本人正面照
 				isCut: false,
 				authStep: 0,
-				disStatement: false
+				disStatement: false,
+				agree: false
 			};
-		},
-		created: function() {
-
 		},
 		methods: {
 			stepNext(step) {
-				this.authStep = step;
+				if(!this.name) {
+					mui.toast('请输入您的真实姓名！');
+					return;
+				}
+				if(!this.cardId) {
+					mui.toast('请输入您的身份证号！');
+					return;
+				}
+				if(this.pictures1.length == 0) {
+					mui.toast('请上传身份证正面照！');
+					return;
+				}
+				if(this.pictures2.length == 0) {
+					mui.toast('请上传身份证反面照！');
+					return;
+				}
+				if(this.pictures3.length == 0) {
+					mui.toast('请上传手持身份证照片！');
+					return;
+				}
+				if(this.pictures4.length == 0) {
+					mui.toast('请上传本人正面照！');
+					return;
+				}
+				if(!this.agree) {
+					mui.toast('请阅读《彩钢精英》个人师傅签约规则，并同意！');
+					return;
+				}
+				var that = this;
+				var data = {
+					realName: that.name,
+					cardId: that.cardId,
+					cardPictureObverse: that.pictures1[0],
+					cardPictureReverse: that.pictures2[0],
+					handCardPicture: that.pictures3[0],
+					fullFacePicture: that.pictures4[0],
+					state: 2
+				};
+				if(that.id) {
+					data.id = that.id;
+				}
+				if(data.cardPictureObverse.indexOf('http') == 0) {
+					data.cardPictureObverse = data.cardPictureObverse.substring(data.cardPictureObverse.lastIndexOf('/') + 1);
+				}
+				if(data.cardPictureReverse.indexOf('http') == 0) {
+					data.cardPictureReverse = data.cardPictureReverse.substring(data.cardPictureReverse.lastIndexOf('/') + 1);
+				}
+				if(data.handCardPicture.indexOf('http') == 0) {
+					data.handCardPicture = data.handCardPicture.substring(data.handCardPicture.lastIndexOf('/') + 1);
+				}
+				if(data.fullFacePicture.indexOf('http') == 0) {
+					data.fullFacePicture = data.fullFacePicture.substring(data.fullFacePicture.lastIndexOf('/') + 1);
+				}
+				muiUtils.muiAjax(api.APIS.realNameAuthentication.saveRealNameAuthentication, {
+					data: JSON.stringify(data),
+					contentType: 'application/json',
+					dataType: "json",
+					type: "post",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							that.authStep = step;
+							var userInfo = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.USER_INFO);
+							userInfo.realNameAuthentication = 2;
+							cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.USER_INFO, userInfo);
+							mui.fire(plus.webview.getWebviewById('main'), 'updateUserInfo');
+							mui.fire(plus.webview.getWebviewById('../../commonpage/mine/authmanager.html'), 'updateUserInfo');
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。');
+					}
+				});
+
 			},
 			declarationWindow(isshow) {
 				this.disStatement = isshow;
@@ -105,7 +200,7 @@
 			}
 		},
 		ready: function() {
-			mui('.mui-scroll-wrapper.releaseCard').scroll({
+			mui('.mui-scroll-wrapper.authmanagerPerson').scroll({
 				bounce: true,
 				indicators: false, // 是否显示滚动条
 				deceleration: mui.os.ios ? 0.003 : 0.0009
@@ -119,20 +214,20 @@
 	};
 </script>
 <style>
-	.releaseCard {
+	.authmanagerPerson {
 		position: absolute;
 		top: 45px;
 		bottom: 0;
 		width: 100%;
 	}
 	
-	.releaseCard input,
-	.releaseCard textarea,
-	.releaseCard label {
+	.authmanagerPerson input,
+	.authmanagerPerson textarea,
+	.authmanagerPerson label {
 		font-size: 14px;
 	}
 	
-	.releaseCard .inputRow {
+	.authmanagerPerson .inputRow {
 		color: #333;
 		line-height: 30px;
 		padding: 10px;
@@ -141,7 +236,20 @@
 		overflow: hidden;
 	}
 	
-	.releaseCard .inputRow:after {
+	.authmanagerPerson .inputRow>input[type=text] {
+		line-height: normal;
+		width: inherit;
+		height: inherit;
+		margin: 0;
+		padding: 1px 0px;
+		border: none;
+		position: absolute;
+		top: 15px;
+		left: 80px;
+		right: 40px;
+	}
+	
+	.authmanagerPerson .inputRow:after {
 		content: "";
 		height: 1px;
 		position: absolute;
@@ -152,64 +260,21 @@
 		transform: scaleY(0.5);
 	}
 	
-	.releaseCard .title {
+	.authmanagerPerson .title {
 		background-color: #ddd;
 		padding: 5px;
 		font-size: 15px;
 		color: #222;
 	}
 	
-	.releaseCard .inputRow label {
+	.authmanagerPerson .inputRow label {
 		width: 70px;
 		float: left;
 	}
 	
-	.releaseCard .inputRow .area,
-	.releaseCard .inputRow .area p:nth-child(2) span:nth-child(2),
-	.releaseCard .inputRow .workType {
-		padding-left: 70px;
-	}
-	
-	.releaseCard .inputRow .area p,
-	.releaseCard .inputRow .workType {
-		color: #333;
-	}
-	
-	.releaseCard .inputRow .area p:nth-child(2) {
-		line-height: 20px;
-	}
-	
-	.releaseCard .inputRow .area p:nth-child(2) span {
-		display: inherit;
-	}
-	
-	.releaseCard .mui-numbox .mui-input-numbox {
-		width: 36px !important;
-		padding: 0 !important;
-	}
-	
-	.releaseCard .inputRow.textarea {
-		overflow: hidden;
-	}
-	
-	.releaseCard .inputRow.textarea label,
-	.releaseCard .inputRow.textarea textarea {
-		float: left;
-	}
-	
-	.releaseCard textarea {
-		font-size: 14px;
-		color: #666666;
-		border: 0;
-		padding: 5px 0;
-		min-height: 80px;
-		margin-bottom: 0;
-		width: 200px;
-	}
-	
 	.bottomBtn {
 		padding: 15px 10%;
-		/*background-color: #fff;*/
+		background-color: #fff;
 	}
 	
 	.bottomBtn a {
@@ -225,21 +290,6 @@
 		border: solid 1px #26c6da;
 		border-radius: 3px;
 	}
-	/*.bottomBtn a:nth-child(1) {
-		margin-right: 3%;
-		color: #333;
-		background-color: #fff;
-		border: solid 1px #d7d7d7;
-		border-radius: 3px;
-	}
-	
-	.bottomBtn a:nth-child(2) {
-		margin-left: 3%;
-		color: #fff;
-		background-color: #26c6da;
-		border: solid 1px #26c6da;
-		border-radius: 3px;
-	}*/
 	
 	.backTitleBg {
 		position: fixed;
@@ -247,7 +297,6 @@
 		bottom: 0;
 		left: 0;
 		right: 0;
-		/*padding: 50px 0px;*/
 		background-color: #ddd;
 		text-align: center;
 	}
@@ -263,67 +312,90 @@
 		z-index: 1;
 	}
 	
-	.statusFont{
-		color:#666;
+	.bottomBackBtn a {
+		width: 100%;
+		color: #26c6da;
 	}
 	
-	.statusFont1{
-		color:#26c6da;
+	.statusFont {
+		color: #666;
 	}
 	
-    .mask {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        background-color: #000000;
-        opacity: 0.6;
-        z-index: 11;
-    }
-    
-    .declarationWindow {
-        position: fixed;
-        top: 10%;
-        bottom: 10%;
-        left: 5%;
-        right: 5%;
-        padding: 15px 12px;
-        z-index: 12;
-        opacity: 1;
-        background-color: #ffffff;
-        border: solid 1px #d7d7d7;
-    }
-    
-    .declarationWindow h4 {
-        font-size: 15px;
-        color: #222222;
-        text-align: center;
-        line-height: 35px;
-        font-weight: 600;
-    }
-    
-    .declarationWindow p {
-        text-indent: 28px;
-        font-size: 14px;
-        color: #666666;
-        margin-bottom: 10px;
-        line-height: 25px;
-    }
-    
-    .declarationWindow p:last-of-type {
-        text-indent: 0;
-        position: absolute;
-        left: 0;
-        bottom: 15px;
-        text-align: center;
-        width: 100%;
-    }
-    
-    .declarationWindow p a {
-        font-size: 14px;
-        line-height: 26px;
-        padding: 0 10px;
-        border: solid 1px #26c6da;
-        border-radius: 5px;
-        color: #26c6da;
-    }
+	.statusFont1 {
+		color: #26c6da;
+	}
+	
+	.mask {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		background-color: #000000;
+		opacity: 0.6;
+		z-index: 11;
+	}
+	
+	.declarationWindow {
+		position: fixed;
+		top: 10%;
+		bottom: 10%;
+		left: 5%;
+		right: 5%;
+		padding: 15px 12px;
+		z-index: 12;
+		opacity: 1;
+		background-color: #ffffff;
+		border: solid 1px #d7d7d7;
+	}
+	
+	.declarationWindow h4 {
+		font-size: 15px;
+		color: #222222;
+		text-align: center;
+		line-height: 35px;
+		font-weight: 600;
+	}
+	
+	.declarationWindow p {
+		text-indent: 28px;
+		font-size: 14px;
+		color: #666666;
+		margin-bottom: 10px;
+		line-height: 25px;
+	}
+	
+	.declarationWindow p:last-of-type {
+		text-indent: 0;
+		position: absolute;
+		left: 0;
+		bottom: 15px;
+		text-align: center;
+		width: 100%;
+	}
+	
+	.declarationWindow p a {
+		font-size: 14px;
+		line-height: 26px;
+		padding: 0 10px;
+		border: solid 1px #26c6da;
+		border-radius: 5px;
+		color: #26c6da;
+	}
+	
+	.authmanagerPerson .inputRow.declare {
+		font-size: 14px;
+		padding-left: 29px;
+	}
+	
+	.declare input[type=checkbox] {
+		position: absolute;
+		top: 19px;
+		left: 12px;
+	}
+	
+	.inputRow>img {
+		position: absolute;
+		height: 80px;
+		top: 47px;
+		right: 45px;
+	}
 </style>

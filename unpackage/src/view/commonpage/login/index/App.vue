@@ -1,7 +1,5 @@
-/** * @file 用户登录 * @Author lxm * @private */
 
 <template>
-	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
 	<div class="mui-content">
 		<div class="mui-scroll-wrapper login">
 			<div class="mui-scroll">
@@ -32,13 +30,12 @@
 </template>
 
 <script>
-	import nonetworkmask from 'component/mask/NoNetWorkMask';
 	import muiUtils from 'common/muiUtils';
 	import log from 'common/logUtils';
 	import CONSTS from 'common/consts';
 	import cacheUtils from 'common/cacheUtils';
 	import pageUrl from 'api';
-
+	import utils from 'common/utils';
 	export default {
 		data: function() {
 			var instanceId = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).get(CONSTS.APP_INSTANCE_ID);
@@ -100,7 +97,7 @@
 					success: function(data) {
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
 							mui.toast('登录成功');
-							cacheUtils.localStorage(CONSTS.USER_INFO).setObject(CONSTS.USER_INFO, data.result);
+							cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.USER_INFO, data.result);
 							cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).set(CONSTS.LOGIN_ACCESS_TOKEN, data.result.accessToken);
 							muiUtils.openPreWindow();
 						} else {
@@ -170,9 +167,6 @@
 				indicators: false, //是否显示滚动条
 				deceleration: deceleration
 			});
-		},
-		components: {
-			nonetworkmask
 		}
 	};
 </script>

@@ -25,7 +25,7 @@
 						<li class="mui-table-view-cell">
 							<p @tap="positioning">
 								<span class="jxddicon icon-weizhi2"></span>
-								<span class="text-context">{{store.provinceName + ' ' + store.cityName + ' ' + store.countyName + ' ' +store.street}}</span>
+								<span class="text-context">{{(address.province || '') + ' ' + (address.city || '') + ' ' + (address.district || '') + ' ' + (address.street || '')}}</span>
 								<span class="jxddicon icon-jinru32"></span>
 							</p>
 						</li>
@@ -43,7 +43,7 @@
 							<p>门店介绍<span class="readTimes">浏览量：{{store.browseVolume}}</span></p>
 						</li>
 						<li class="mui-table-view-cell jieshao">
-							<p>{{store.description}}</p>
+							<p class="description">{{store.description}}</p>
 						</li>
 					</div>
 					<li class="mui-table-view-cell store-title">
@@ -111,7 +111,7 @@
 	export default {
 		data: function() {
 			var shareSwitch = cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS).shareSwitch;
-			var userInfo = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO) || {};
+			var userInfo = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.USER_INFO) || {};
 			var store = plus.webview.currentWebview().store;
 			return {
 				showShare: false,
@@ -286,7 +286,7 @@
 			},
 			doCall() {
 				var that = this;
-				this.userInfo = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO);
+				this.userInfo = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.USER_INFO);
 				this.isShared = this.userInfo.isShared;
 				if(this.userInfo.id === this.store.userId) {
 					mui.toast('这是您自己的店铺！');
@@ -379,7 +379,7 @@
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
 							that.isShared = 1;
 							that.userInfo.isShared = 1;
-							cacheUtils.localStorage(CONSTS.USER_INFO).setObject(CONSTS.USER_INFO, that.userInfo);
+							cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.USER_INFO, that.userInfo);
 						} else {
 							mui.toast(data.erroCode + '：' + data.erroMsg);
 						}
@@ -483,7 +483,7 @@
 	}
 	
 	.text-context {
-		margin-left: 20px;
+		padding: 0 20px;
 	}
 	
 	.mui-table-view-cell:after {
@@ -703,5 +703,9 @@
 		background-color: #000;
 		opacity: 0.4;
 		z-index: 99;
+	}
+	
+	.description {
+		white-space: pre-wrap;
 	}
 </style>

@@ -1,17 +1,17 @@
 <template>
 	<div class="mui-content">
-		<div class="mui-scroll-wrapper releaseCard">
+		<div class="mui-scroll-wrapper editCompany">
 			<div class="mui-scroll">
 				<div class="title">公司信息</div>
-				<div class="inputRow"><label>公司名称</label><input type="text" v-model="name" placeholder="请输入姓名(必填)"></div>
+				<div class="inputRow"><label>公司名称</label><input type="text" v-model="name" placeholder="请输入公司名称"></div>
 				<div class="inputRow">
 					<label>公司地址</label>
 					<p v-if="address" class="workType" @tap="selectAddress">{{address.province + ' ' + (address.city || '') + ' ' + (address.county || '')}}</p>
-					<input type="text" v-else placeholder="请选择联系地址(必填)" readonly @tap="selectAddress">
+					<input type="text" v-else placeholder="请选择公司地址" readonly @tap="selectAddress">
 				</div>
 				<div class="inputRow textarea">
 					<label>详细地址</label>
-					<textarea id="textarea" placeholder="请输入详细地址" @input="textAreaInput"></textarea>
+					<textarea id="textarea" placeholder="请输入详细地址" @input="textAreaInput" v-model="addressDetail"></textarea>
 				</div>
 				<div class="bottomBtn">
 					<a href="javascript:void(0)" @tap="saveInfo">保存修改</a>
@@ -26,7 +26,7 @@
 	import log from 'common/logUtils';
 	import api from 'api';
 	import CONSTS from 'common/consts';
-	import upload from 'component/upload/UploadImage';
+	import cacheUtils from 'common/cacheUtils';
 		import {
 		cityData3Lev
 	} from 'common/cityData';
@@ -35,45 +35,13 @@
 			var cityPicker = new mui.PopPicker({
 				layer: 3
 			});
-			for(var cityData of cityData3Lev) {
-				for(var city of cityData.children) {;
-					city.children.unshift({
-						value: -1,
-						area_parent_id: city.value,
-						text: '全' + city.text,
-						area_sort: 0,
-						area_deep: 3,
-						description: null
-					});
-				}
-				cityData.children.unshift({
-					value: -1,
-					area_parent_id: cityData.value,
-					text: '全' + cityData.text,
-					area_sort: 0,
-					area_deep: 2,
-					description: null
-				});
-			}
 			cityPicker.setData(cityData3Lev);
-			
 			return {
 				cityPicker: cityPicker,
-				pictures: [],
-				isCut: false,
-				address: plus.webview.currentWebview().address || {
-					province: '全国',
-					provinceid: 0,
-					city: null,
-					cityid: null,
-					county: null,
-					countyid: null
-				},
-				name: ''
+				address: null,
+				name: '',
+				addressDetail: ''
 			};
-		},
-		created: function() {
-
 		},
 		methods: {
 			selectAddress: function() {
@@ -98,38 +66,75 @@
 				}
 			},
 			saveInfo() {
-				mui.toast("保存成功");
-				mui.back();
+				var  that = this;
+				if(!that.name) {
+					mui.toast('请输入公司名称！');
+					return;
+				}
+				if(!that.address) {
+					mui.toast('请选择公司地址！');
+					return;
+				}
+				if(!that.addressDetail) {
+					mui.toast('请输入详细地址！');
+					return;
+				}
+				muiUtils.muiAjax(api.APIS.user.updateCompanyInfo, {
+					data: JSON.stringify({
+						companyName: that.name,
+						companyAddress: that.address.province + ' ' + that.address.city + ' ' + that.address.county + ' ' + that.addressDetail
+					}),
+					contentType: 'application/json',
+					dataType: "json",
+					type: "post",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							mui.toast('修改成功');
+							cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.USER_INFO, data.result);
+							cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).set(CONSTS.LOGIN_ACCESS_TOKEN, data.result.accessToken);
+							mui.fire(plus.webview.getWebviewById('main'), 'updateUserInfo');
+							mui.fire(plus.webview.getWebviewById('../../commonpage/mine/usersetting.html'), 'updateUserInfo');
+							mui.back();
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。');
+					}
+				});
 			}
 		},
 		ready: function() {
-			mui('.mui-scroll-wrapper.releaseCard').scroll({
+			mui('.mui-scroll-wrapper.editCompany').scroll({
 				bounce: true,
 				indicators: false, // 是否显示滚动条
 				deceleration: mui.os.ios ? 0.003 : 0.0009
 			});
 			mui('.mui-numbox').numbox();
-		},
-		components: {
-			upload
 		}
 	};
 </script>
 <style>
-	.releaseCard {
+	.editCompany {
 		position: absolute;
 		top: 45px;
 		bottom: 0;
 		width: 100%;
 	}
 	
-	.releaseCard input,
-	.releaseCard textarea,
-	.releaseCard label {
+	.mui-scroll {
+		min-height: 100%;
+		background-color: #fff;
+	}
+	
+	.editCompany input,
+	.editCompany textarea,
+	.editCompany label {
 		font-size: 14px;
 	}
 	
-	.releaseCard .inputRow {
+	.editCompany .inputRow {
 		color: #333;
 		line-height: 30px;
 		padding: 10px;
@@ -138,7 +143,7 @@
 		overflow: hidden;
 	}
 	
-	.releaseCard .inputRow > input[type=text] {
+	.editCompany .inputRow > input[type=text] {
 		line-height: normal;
 		width: inherit;
 		height: inherit;
@@ -151,7 +156,7 @@
 		right: 40px;
 	}
 	
-	.releaseCard .inputRow > .jxddicon.icon-jinru32 {
+	.editCompany .inputRow > .jxddicon.icon-jinru32 {
 		position: absolute;
 		right: 10px;
 		top: 16px;
@@ -160,7 +165,7 @@
 		color: #999;
 	}
 	
-	.releaseCard .inputRow:after {
+	.editCompany .inputRow:after {
 		content: "";
 		height: 1px;
 		position: absolute;
@@ -171,57 +176,34 @@
 		transform: scaleY(0.5);
 	}
 	
-	.releaseCard .title {
+	.editCompany .title {
 		background-color: #ddd;
 		padding: 5px;
 		font-size: 15px;
 		color: #222;
 	}
 	
-	.releaseCard .inputRow label {
+	.editCompany .inputRow label {
 		width: 70px;
 		float: left;
 	}
 	
-	.releaseCard .inputRow .area,
-	.releaseCard .inputRow .area p:nth-child(2) span:nth-child(2),
-	.releaseCard .inputRow .workType {
-		padding-left: 70px;
-	}
 	
-	.releaseCard .inputRow .area,
-	.releaseCard .inputRow .workType {
-		padding-right: 30px;
-	}
-	
-	.releaseCard .inputRow .area p,
-	.releaseCard .inputRow .workType {
-		color: #333;
-	}
-	
-	.releaseCard .inputRow .area p:nth-child(2) {
-		line-height: 20px;
-	}
-	
-	.releaseCard .inputRow .area p:nth-child(2) span {
-		display: inherit;
-	}
-	
-	.releaseCard .mui-numbox .mui-input-numbox {
+	.editCompany .mui-numbox .mui-input-numbox {
 		width: 36px !important;
 		padding: 0 !important;
 	}
 	
-	.releaseCard .inputRow.textarea {
+	.editCompany .inputRow.textarea {
 		overflow: hidden;
 	}
 	
-	.releaseCard .inputRow.textarea label,
-	.releaseCard .inputRow.textarea textarea {
+	.editCompany .inputRow.textarea label,
+	.editCompany .inputRow.textarea textarea {
 		float: left;
 	}
 	
-	.releaseCard textarea {
+	.editCompany textarea {
 		font-size: 14px;
 		color: #666666;
 		border: 0;
@@ -233,7 +215,10 @@
 	
 	.bottomBtn {
 		padding: 15px 10%;
-		/*background-color: #fff;*/
+		background-color: #fff;
+		position: fixed;
+		width: 100%;
+		bottom: 0;
 	}
 	
 	.bottomBtn a {

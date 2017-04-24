@@ -28,6 +28,8 @@ const APP_INSTANCE_ID = 'instance_id';
 // 账户的token标识
 const LOGIN_ACCESS_TOKEN = 'access_token';
 
+const LOGIN_COMPUTER_EVENT = 'login_computer_event';
+
 const ERROR_CODE = {
 	UNKOWNERROR: 1000,//未知异常
 	SUCCESS: 2000, // 成功
@@ -81,7 +83,9 @@ export default {
 	HAS_CARD,
 	SYSTEM,
 	APPSETTINGS,
-	APPVERSION
+	APPVERSION,
+	APPVERSIONINFO,
+	LOGIN_COMPUTER_EVENT
 };
 
 export {
@@ -100,5 +104,7 @@ export {
 	HAS_CARD,
 	SYSTEM,
 	APPSETTINGS,
-	APPVERSION
+	APPVERSION,
+	APPVERSIONINFO,
+	LOGIN_COMPUTER_EVENT
 };

@@ -54,7 +54,7 @@
 					</li>-->
 					<li class="mui-table-view-cell">
 						<label>联系地址</label>
-						<span @tap="positioning" class="address info-text">{{master.provinceName + ' ' + master.cityName + ' ' + master.countyName + ' ' + master.street}}</span>
+						<span @tap="positioning" class="address info-text">{{(address.province || '') + ' ' + (address.city || '') + ' ' + (address.district || '') + ' ' + (address.street || '')}}</span>
 						<span @tap="positioning" class="jxddicon icon-weizhi2 address-dingwei"></span>
 					</li>
 				</ul>
@@ -63,7 +63,7 @@
 						<label>师傅介绍</label>
 					</li>
 					<li class="mui-table-view-cell">
-						<span>{{master.description}}</span>
+						<span class="description">{{master.description}}</span>
 					</li>
 					<li class="mui-table-view-cell master-images">
 						<template v-for="picture in master.pictures">
@@ -100,7 +100,7 @@
 	export default {
 		data: function() {
 			var shareSwitch = cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS).shareSwitch;
-			var userInfo = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO) || {};
+			var userInfo = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.USER_INFO) || {};
 			var masterCard = plus.webview.currentWebview().masterCard;
 			return {
 				showShare: false,
@@ -186,7 +186,7 @@
 			},
 			doCall() {
 				var that = this;
-				this.userInfo = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO);
+				this.userInfo = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.USER_INFO);
 				this.isShared = this.userInfo.isShared;
 				if(this.userInfo.id === this.master.userId) {
 					mui.toast('这是您自己的名片！');
@@ -279,7 +279,7 @@
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
 							that.isShared = 1;
 							that.userInfo.isShared = 1;
-							cacheUtils.localStorage(CONSTS.USER_INFO).setObject(CONSTS.USER_INFO, that.userInfo);
+							cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.USER_INFO, that.userInfo);
 						} else {
 							mui.toast(data.erroCode + '：' + data.erroMsg);
 						}
@@ -508,6 +508,7 @@
 		width: 75%;
 		float: left;
 		margin-left: 10px;
+		padding-right: 10px;
 	}
 	
 	.tishi {
@@ -563,5 +564,9 @@
 		background-color: #000;
 		opacity: 0.4;
 		z-index: 99;
+	}
+	
+	.description {
+		white-space: pre-wrap;
 	}
 </style>

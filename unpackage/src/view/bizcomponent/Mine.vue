@@ -83,7 +83,7 @@
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
-				<li class="mui-table-view-cell" @tap="showShareBar">
+				<li v-show="shareSwitch == 1" class="mui-table-view-cell" @tap="showShareBar">
 					<p>
 						<img src="../../static/img/share/share.svg" />
 						<span>分享</span>
@@ -108,23 +108,37 @@
 	import muiUtils from 'common/muiUtils';
 	import cacheUtils from 'common/cacheUtils';
 	import CONSTS from 'common/consts';
+	import api from 'api';
 	export default {
 		data: function() {
-			var userInfo = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO);
+			var userInfo = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.USER_INFO);
 			return {
 				scroll: undefined,
 				userInfo: userInfo,
 				shares: {},
-				showShare: false
+				showShare: false,
+				shareSwitch: cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS).shareSwitch,
+				appVersionInfo: cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPVERSIONINFO)
 			};
 		},
 		created: function() {
-
-		},
-		components: {
-
+			this.getUserInfo();
 		},
 		methods: {
+			getUserInfo() {
+				var that = this;
+				muiUtils.muiAjax(api.APIS.user.getUser, {
+					contentType: 'application/json',
+					type: "get",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.USER_INFO, data.result);
+							that.userInfo = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.USER_INFO);
+						}
+					},
+					error: function(xhr, type, errorThrown) {}
+				});
+			},
 			open(url) {
 				muiUtils.openWindow(url, url, {
 					isValidLogin: true,
@@ -139,11 +153,34 @@
 			gotoMyHuifu() {
 				mui.toast('论坛功能开发中，敬请期待...');
 			},
+			shareSuccess() {
+				var that = this;
+				muiUtils.muiAjax(api.APIS.user.updateShareState, {
+					data: JSON.stringify({
+						shareState: 1
+					}),
+					contentType: 'application/json',
+					dataType: "json",
+					type: "post",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							that.userInfo.isShared = 1;
+							cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.USER_INFO, that.userInfo);
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。')
+					}
+				});
+			},
 			shareMessage(shareOb) {
+				var url = mui.os.ios ? this.appVersionInfo.iOS.url : this.appVersionInfo.Android.url;
 				var msg = {
-					title: '分享测试标题',
-					content: "这是一条分享测试信息...",
-					href: "http://www.baidu.com"
+					title: '彩钢精英',
+					content: "《彩钢精英》助你招工、找工作、找设备、找工程，行业交流，急你所需！",
+					href: url
 				};
 				var that = this;
 				if('weixin' == shareOb.id) {
@@ -152,12 +189,12 @@
 							msg.extra = { scene: "WXSceneTimeline" };
 						} else if(e.index === 2) {
 							msg.extra = { scene: "WXSceneSession" };
-						}
-						else {
+						} else {
 							return;
 						}
 						shareOb.send(msg, function() {
 							mui.toast("分享成功！");
+							that.shareSuccess();
 						}, function(e) {
 							mui.toast("分享失败!");
 						});
@@ -165,6 +202,7 @@
 				} else {
 					shareOb.send(msg, function() {
 						mui.toast("分享成功！");
+						that.shareSuccess();
 					}, function(e) {
 						mui.toast("分享失败!");
 					});
@@ -198,8 +236,14 @@
 					mui.toast("分享失败!");
 				});
 			},
-			loadData() {
-				this.userInfo = cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO);
+			loadData(fromServer) {
+				if(fromServer) {
+					this.getUserInfo();
+				}
+				else {
+					this.userInfo = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.USER_INFO);
+				}
+				
 			}
 		},
 		ready: function() {
@@ -226,6 +270,9 @@
 				}
 			}, function(e) {
 				mui.toast("获取分享服务列表失败！");
+			});
+			window.addEventListener('updateUserInfo', function() {
+				that.loadData(false);
 			});
 		}
 	};

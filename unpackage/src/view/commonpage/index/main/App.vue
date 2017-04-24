@@ -40,7 +40,7 @@
 					this.$refs.calculator.scroll.scrollTo(0, 0, 0);
 				} else if(this.index === 3) {
 					this.$refs.mine.scroll.scrollTo(0, 0, 0);
-					this.$refs.mine.loadData();
+					this.$refs.mine.loadData(true);
 				}
 			}
 		},

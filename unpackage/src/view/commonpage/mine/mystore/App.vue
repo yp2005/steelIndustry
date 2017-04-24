@@ -29,7 +29,7 @@
 	export default {
 		data: function() {
 			return {
-				userInfo: cacheUtils.localStorage(CONSTS.USER_INFO).getObject(CONSTS.USER_INFO),
+				userInfo: cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.USER_INFO),
 				store: plus.webview.currentWebview().store,
 				picture: '1'
 			};

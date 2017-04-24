@@ -55,15 +55,8 @@
 		ready: function() {
 			var that = this;
 			window.addEventListener('home_nav', function(event) {
-				var index = event.detail.index;
 				that.display({
-					index: index,
-					self: that
-				});
-			});
-			window.addEventListener(CONSTS.LOGIN_OUT_EVENT, function() {
-				that.display({
-					index: 0,
+					index: event.detail.index || 0,
 					self: that
 				});
 			});
@@ -85,7 +78,7 @@
 			},
 			switch: function(index) {
 				if(index === 3) {
-					// 临时解决回首页登录成功之后，跳转不到首页的问题
+					// 解决回首页登录成功之后，跳转不到首页的问题
 					let id = 'main';
 					let url = '../../buyer/index/main.html';
 					cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.LOGIN_FORWORD, {

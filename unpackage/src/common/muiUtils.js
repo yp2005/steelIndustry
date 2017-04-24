@@ -80,7 +80,7 @@ const openWindow = (url, id, options) => {
 	}
 	//强制将要离开的界面关闭键盘(ios7.0 bug)
 	hideKeyBord();
-	setStatusStyleForPageId(id);
+	//setStatusStyleForPageId(id);
 	let gotoPage = plus.webview.getWebviewById(id);
 	let pagelist = propUtils.getProperty('webview.preload.whiltlist', 'urlprops');
 	if(gotoPage && !options.createNew) {
@@ -102,9 +102,9 @@ const openWindow = (url, id, options) => {
 			closWebview();
 		}, 1100);
 	}
-	setTimeout(function() {
-		popGestureEvent(gotoPage);
-	}, 300);
+//	setTimeout(function() {
+//		popGestureEvent(gotoPage);
+//	}, 300);
 	return gotoPage;
 };
 
@@ -267,10 +267,6 @@ const openPreWindow = (options) => {
 			gotoPage.hide();
 			gotoPage.show(options.show.aniShow, options.show.duration);
 		}, 300);
-		if(login === false) {
-			mui.fire(plus.webview.getWebviewById(o.id), CONSTS.LOGIN_OUT_EVENT, {});
-			return;
-		}
 		mui.fire(gotoPage, CONSTS.LOGIN_COMPUTER_EVENT, {});
 		setTimeout(function() {
 			closWebview();
@@ -278,10 +274,10 @@ const openPreWindow = (options) => {
 	} else if(gotoPage) {
 		// 纯按钮操作，不涉及页面, 必须将去向页面show处理，中间有几个页面，仅仅关闭当前页面是不够的
 		mui.fire(gotoPage, CONSTS.LOGIN_COMPUTER_EVENT, {});
-		//      setTimeout(() => {
-		//          gotoPage.hide();
-		//          gotoPage.show(options.show.aniShow, options.show.duration);
-		//      }, 300);
+		setTimeout(() => {
+			gotoPage.hide();
+			gotoPage.show(options.show.aniShow, options.show.duration);
+		}, 300);
 		setTimeout(() => {
 			plus.webview.currentWebview().close('none');
 		}, 1000);
@@ -485,7 +481,7 @@ const ajaxBeforeSend = (options, url) => {
 	var localTime = new Date().getTime();
 
 	localTime = localTime + '';
-	options.headers.req_start_time =  localTime// 请求开始时间
+	options.headers.req_start_time = localTime // 请求开始时间
 	var md5Times = ~~localTime.substring(localTime.length - 1) || 1;
 	var extraToken = localTime;
 	for(var i = 0; i < md5Times; i++) {
@@ -527,17 +523,13 @@ const ajaxInspect = (data, xhr, setting) => {
 				setting.error();
 				return false;
 			}
-		}
-		else if(data.erroCode !== undefined && data.erroCode === CONSTS.ERROR_CODE.NOPERMISSON) {
+		} else if(data.erroCode !== undefined && data.erroCode === CONSTS.ERROR_CODE.NOPERMISSON) {
 			logger.log('没有权限', 'ajaxInspect');
-		}
-		else if(data.erroCode !== undefined && data.erroCode === CONSTS.ERROR_CODE.REMOTELOGIN) {
+		} else if(data.erroCode !== undefined && data.erroCode === CONSTS.ERROR_CODE.REMOTELOGIN) {
 			logger.log('其他客户端登录', 'ajaxInspect');
-		}
-		else if(data.erroCode !== undefined && data.erroCode === CONSTS.ERROR_CODE.ILLEGALACCESS) {
+		} else if(data.erroCode !== undefined && data.erroCode === CONSTS.ERROR_CODE.ILLEGALACCESS) {
 			logger.log('非法访问', 'ajaxInspect');
-		}
-		else if(data.erroCode !== undefined && data.erroCode === CONSTS.ERROR_CODE.TIMEEXCEPTION) {
+		} else if(data.erroCode !== undefined && data.erroCode === CONSTS.ERROR_CODE.TIMEEXCEPTION) {
 			logger.log('时间异常', 'ajaxInspect');
 		}
 		/*let instanceId = xhr.getResponseHeader(CONSTS.APP_INSTANCE_ID);

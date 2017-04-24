@@ -8,12 +8,6 @@
  *
  */
 
-exports.props = {
-    'site.static.url': 'http://static.jxdd.com/suppliers',
-    'test': 'hello xdd',
-    'site.image.url': 'http://192.168.2.61:8888/zqb/api/facade/test_upload/upload_image'
-};
-
 /**
  * 日志相关配置
  */
@@ -32,7 +26,6 @@ exports.urlprops = {
     'webview.id.blacklist': [
         'account_login_password',
         'protocol'
-        
     ],
   // 预加载页面id,这些页面需要处理showevent事件
     'webview.preload.whiltlist': [
