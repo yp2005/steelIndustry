@@ -51,7 +51,7 @@
 		data: function() {
 			var userInfo = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.USER_INFO);
 			return {
-				userInfo: cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.USER_INFO),
+				userInfo: userInfo,
 				uploadtype: 'userhead',
 				showimage: userInfo.avatar || '../../static/img/mine/nohp.png',
 				uploadUserHead: function(result) {

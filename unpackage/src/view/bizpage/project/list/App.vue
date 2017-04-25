@@ -1,7 +1,4 @@
-/** * @file 工程列表主组件 * @Author yupeng * @private */
-
 <template>
-	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
 	<div class="projectList">
 		<p class="conditions">
 			<a href="javascript: void(0)" @tap="selectAddress">{{address.county || address.city || address.province}}</a>
@@ -33,7 +30,6 @@
 </template>
 
 <script>
-	import nonetworkmask from 'component/mask/NoNetWorkMask';
 	import muiUtils from 'common/muiUtils';
 	import log from 'common/logUtils';
 	import api from 'api';
@@ -171,7 +167,8 @@
 						that.pullrefresh.endPullDownToRefresh();
 						that.pullrefresh.refresh(true);
 						mui.toast('服务器或网络异常，请稍后重试。')
-					}
+					},
+					loading: false
 				});
 			},
 			loadMore() {
@@ -209,7 +206,8 @@
 					error: function(xhr, type, errorThrown) {
 						that.pullrefresh.endPullUpToRefresh();
 						mui.toast('服务器或网络异常，请稍后重试。')
-					}
+					},
+					loading: false
 				});
 			},
 			selectAddress: function() {
@@ -276,9 +274,6 @@
 					}
 				}
 			});
-		},
-		components: {
-			nonetworkmask
 		}
 	};
 </script>

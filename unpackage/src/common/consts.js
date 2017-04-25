@@ -53,6 +53,8 @@ const MASTER_LIST = 'master_list';
 
 const WORK_LIST = 'work_list';
 
+const USER_LIST = 'user_list';
+
 const SEARCH_HISTORY_KEY = 'searchhistory';
 
 const IS_SHARED = 'is_shared';

@@ -1,65 +1,80 @@
 <template>
-	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
-	<div class="deviceList">
-		<listctrl :noresultmsg="noresultmsg" :childlist="childlist" @getlistdata="getdata" @comlist_itemtap="itemtap" :toptipheight="45" :showdelete="showdelete"></listctrl>
+	<div class="mui-scroll-wrapper noticemanager">
+		<div class="mui-scroll">
+			<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed">
+				<li v-for="notice in noticeList" class="mui-table-view-cell" @tap="gotoEdit(notice)">
+					<div class="mui-slider-right mui-disabled">
+						<a class="mui-btn mui-btn-red" @tap="delete($index, $event)">删除</a>
+					</div>
+					<div class="mui-slider-handle mui-table">
+						<div class="mui-table-cell mui-col-xs-10">
+							<h4 class="mui-ellipsis">{{notice.title}}</h4>
+							<h5>{{notice.createTime}}</h5>
+							<p class="mui-h6 mui-ellipsis">{{notice.content}}</p>
+						</div>
+					</div>
+				</li>
+			</ul>
+			<p v-show="!noticeList || noticeList.length === 0" class="noData">暂无公告</p>
+		</div>
 	</div>
 </template>
 
 <script>
-	import nonetworkmask from 'component/mask/NoNetWorkMask';
 	import muiUtils from 'common/muiUtils';
-	import log from 'common/logUtils';
-	import listctrl from 'src/component/list/ListCtrl';
-	import list from './List';
 	import api from 'api';
 	import CONSTS from 'common/consts';
-	import {
-		cityData3Lev
-	} from 'common/cityData';
 	export default {
 		data: function() {
 			return {
-				childlist: list,
-				filterType: 0,
-				disnonetworkmask: false,
-				showdelete: false,
-				pullrefresh: null
+				noticeList: []
 			};
 		},
+		created() {
+			this.getData();
+		},
 		methods: {
-			getdata: function(pager, callback) {
+			gotoEdit(notice) {
+				muiUtils.openWindow('../../commonpage/noticemanager/noticenew.html', '../../commonpage/noticemanager/noticenew.html', {
+					extras: {
+						notice: notice
+					}
+				});
+			},
+			getData() {
 				var that = this;
-				var params = {
-					page_index: pager.row_start_number,
-					page_size: pager.row_count
-				};
-				muiUtils.muiAjax(api.COMMON_API.test_api, {
-					type: "post",
-					data: params,
-					contentType: 'application/json',
+				muiUtils.muiAjax(api.APIS.systemNotice.getSystemNoticeList, {
 					dataType: "json",
+					type: "get",
 					success: function(data) {
-//						callback(data.result_data);
-						if(data.error_code === CONSTS.ERROR_CODE.SUCCESS) {
-							callback(data.result_data);
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							that.noticeList = data.result;
 						} else {
-							mui.toast(data.error_message);
-							callback(null);
+							mui.toast(data.erroCode + '：' + data.erroMsg);
 						}
 					},
 					error: function(xhr, type, errorThrown) {
-						mui.toast("数据请求失败！");
-						callback(null);
-					},
-					loading: false
-				});
-			},
-			itemtap: function(item) {
-				muiUtils.openWindow('../../commonpage/noticemanager/noticedetail.html', 'commonpage_noticemanager_noticedetail', {
-					extras: {
-						id: 'id'
+						mui.toast('服务器或网络异常，请稍后重试。')
 					}
 				});
+			},
+			delete(index, e) {
+				var that = this;
+				muiUtils.muiAjax(api.APIS.systemNotice.deleteSystemNotice + '?id=' + that.noticeList[index].id, {
+					dataType: "json",
+					type: "delete",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							that.noticeList.splice(index, 1);
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。')
+					}
+				});
+				e.stopPropagation();
 			}
 		},
 		ready: function() {
@@ -67,66 +82,57 @@
 			var deceleration = mui.os.ios ? 0.003 : 0.0009;
 			mui('.mui-scroll-wrapper').scroll({
 				bounce: true,
-				indicators: true, //是否显示滚动条
+				indicators: false,
 				deceleration: deceleration
 			});
-		},
-		components: {
-			nonetworkmask,
-			listctrl
+			window.addEventListener('noticenew', function() {
+				that.getData();
+			});
 		}
 	};
 </script>
 <style>
-	.deviceList {
+	.noticemanager {
 		position: absolute;
 		top: 45px;
 		bottom: 0;
 		width: 100%;
 	}
 	
-	.deviceList .mui-scroll-wrapper {
-		/*top: 45px;*/
+	.mui-table h4,
+	.mui-table h5,
+	.mui-table .mui-h5,
+	.mui-table .mui-h6,
+	.mui-table p {
+		margin-top: 0;
 	}
 	
-	.deviceList .conditions {
-		line-height: 25px;
-		padding: 10px 0;
-		text-align: center;
+	.mui-table h4 {
+		line-height: 21px;
+		font-weight: 500;
+		font-size: 16px;
 	}
 	
-	.deviceList .conditions a {
-		color: #000;
-		width: 23%;
-		position: relative;
+	.mui-table h5 {
+		line-height: 23px;
 	}
 	
-	.deviceList .conditions a:nth-child(1) ,
-	.deviceList .conditions a:nth-child(2) ,
-	.deviceList .conditions a:nth-child(3) {
-		border-right: solid 1px #ddd;
+	.mui-table p {
+		font-size: 13px;
 	}
 	
-	/*.deviceList .conditions a:after {
-		content: "";
+	.mui-table .oa-icon {
 		position: absolute;
-		width: 4px;
-		height: 4px;
-		margin-left: 5px;
-		top: 10px;
-		box-sizing: border-box;
-		border-top: 4px solid #aaa;
-		border-right: 4px solid transparent;
-		border-left: 4px solid transparent;
-	}*/
-	
-	.deviceList .advertisement {
-		width: 100%;
-		height: 120px;
-		margin-bottom: 8px;
+		right: 0;
+		bottom: 0;
 	}
 	
-	.filterActive{
-		color:#26c6da !important;
+	.mui-table .oa-icon-star-filled {
+		color: #f14e41;
+	}
+	
+	.noData {
+		line-height: 250px;
+		text-align: center;
 	}
 </style>

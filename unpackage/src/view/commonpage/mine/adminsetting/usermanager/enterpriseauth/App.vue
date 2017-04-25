@@ -1,34 +1,19 @@
 <template>
-	<div class="mui-scroll-wrapper personauth">
+	<div class="mui-scroll-wrapper enterpriseauth">
 		<div class="mui-scroll">
 			<div class="title"></div>
 			<div class="inputRow">
-				<label>姓名</label>
-				<span class="info-text">{{name}}</span>
+				<label>法人姓名</label>
+				<span class="info-text">{{legalPersonName}}</span>
 			</div>
 			<div class="inputRow">
-				<label>身份证号</label>
-				<span class="info-text">{{cardId}}</span>
-			</div>
-			<div class="title"></div>
-			<div class="inputRow">
-				<p>身份证正面</p>
-				<img :src="pictures1" class="personAuthImg">
+				<label>企业全称</label>
+				<span class="info-text">{{companyName}}</span>
 			</div>
 			<div class="title"></div>
 			<div class="inputRow">
-				<p>身份证反面</p>
-				<img :src="pictures2" class="personAuthImg">
-			</div>
-			<div class="title"></div>
-			<div class="inputRow">
-				<p>本人手持身份证的照片</p>
-				<img :src="pictures3" class="personAuthImg">
-			</div>
-			<div class="title"></div>
-			<div class="inputRow">
-				<p>本人正面照</p>
-				<img :src="pictures4" class="personAuthImg">
+				<p>营业执照照片</p>
+				<img :src="license" class="enterpriseAuthImg">
 			</div>
 			<div class="bottomBtn">
 				<a href="javascript:void(0)" @tap="shenhe(1)">审核通过</a>
@@ -47,27 +32,21 @@
 		data: function() {
 			return {
 				userId: plus.webview.currentWebview().userId,
-				name: '',
-				cardId: '',
-				pictures1: '', //身份证正面
-				pictures2: '', //身份证反面
-				pictures3: '', //手持身份证照片
-				pictures4: '', //本人正面照
+				legalPersonName: '',
+				companyName: '',
+				license: ''
 			};
 		},
 		created() {
 			var that = this;
-			muiUtils.muiAjax(api.APIS.realNameAuthentication.getRealNameAuthenticationByUserId + '?userId=' + that.userId, {
+			muiUtils.muiAjax(api.APIS.enterpriseCertification.getEnterpriseCertificationByUserId + '?userId=' + that.userId, {
 				contentType: 'application/json',
 				type: "get",
 				success: function(data) {
 					if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
-						that.name = data.result.realName;
-						that.cardId = data.result.cardId;
-						that.pictures1 = data.result.imgServer + data.result.cardPictureObverse;
-						that.pictures2 = data.result.imgServer + data.result.cardPictureReverse;
-						that.pictures3 = data.result.imgServer + data.result.handCardPicture;
-						that.pictures4 = data.result.imgServer + data.result.fullFacePicture;
+						that.legalPersonName = data.result.legalPersonName;
+						that.companyName = data.result.companyName;
+						that.license = data.result.imgServer + data.result.license;
 					} else {
 						mui.toast(data.erroCode + '：' + data.erroMsg);
 					}
@@ -80,7 +59,7 @@
 		methods: {
 			shenhe(state) {
 				var that = this;
-				muiUtils.muiAjax(api.APIS.realNameAuthentication.updateRealNameAuthenticationState, {
+				muiUtils.muiAjax(api.APIS.enterpriseCertification.updateEnterpriseCertificationState, {
 					data: JSON.stringify({
 						userId: that.userId,
 						state: state,
@@ -104,7 +83,7 @@
 			}
 		},
 		ready: function() {
-			mui('.mui-scroll-wrapper.personauth').scroll({
+			mui('.mui-scroll-wrapper.enterpriseauth').scroll({
 				bounce: true,
 				indicators: false, // 是否显示滚动条
 				deceleration: mui.os.ios ? 0.003 : 0.0009
@@ -113,18 +92,18 @@
 	};
 </script>
 <style>
-	.personauth {
+	.enterpriseauth {
 		position: absolute;
 		top: 45px;
 		bottom: 0;
 		width: 100%;
 	}
 	
-	.personauth label {
+	.enterpriseauth label {
 		font-size: 14px;
 	}
 	
-	.personauth .inputRow {
+	.enterpriseauth .inputRow {
 		color: #333;
 		line-height: 30px;
 		padding: 10px;
@@ -133,7 +112,7 @@
 		overflow: hidden;
 	}
 	
-	.personauth .inputRow:after {
+	.enterpriseauth .inputRow:after {
 		content: "";
 		height: 1px;
 		position: absolute;
@@ -144,14 +123,14 @@
 		transform: scaleY(0.5);
 	}
 	
-	.personauth .title {
+	.enterpriseauth .title {
 		background-color: #f3f5f7;
 		padding: 5px;
 		font-size: 15px;
 		color: #222;
 	}
 	
-	.personauth .inputRow label {
+	.enterpriseauth .inputRow label {
 		width: 70px;
 		float: left;
 	}
@@ -204,7 +183,7 @@
 		z-index: 1;
 	}
 	
-	.personAuthImg {
+	.enterpriseAuthImg {
 		width: 100%;
 	}
 </style>

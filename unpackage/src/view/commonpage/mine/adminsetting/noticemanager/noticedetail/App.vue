@@ -34,9 +34,9 @@
 	}
 	
 	p {
-		text-indent: 2em;
 		padding: 0px 10px;
 		color: #555;
+		white-space: pre-wrap;
 	}
 	
 	.titlespan {

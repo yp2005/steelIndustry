@@ -11,7 +11,8 @@ const MASTER = '/masterCard';
 const EMPLOYMENTDEMAND = '/employmentDemand';
 const COMMON = '/common';
 const REALNAMEAUTHENTICATION = '/realNameAuthentication';
-const ENTERPRISECERTIFICATION = '/enterpriseCertification'
+const ENTERPRISECERTIFICATION = '/enterpriseCertification';
+const SYSTEMNOTICE = '/systemNotice';
 /**
  * api的版本，鉴于api的版本可能会出现不统一的情况，所以还是在url里面进行拼接
  */
@@ -28,6 +29,7 @@ const APIS = {
 		getImage: API_ROOT + USER + '/getImage',
 		login: API_ROOT + USER + '/login',
 		getUser: API_ROOT + USER + '/getUser',
+		getUserById: API_ROOT + USER + '/getUserById',
 		updateLatestLoginTime: API_ROOT + USER + '/updateLatestLoginTime',
 		updateUserState: API_ROOT + USER + '/updateUserState',
 		sendCode: API_ROOT + USER + '/sendCode',
@@ -36,7 +38,8 @@ const APIS = {
 		updateUserAvatar: API_ROOT + USER + '/updateUserAvatar',
 		updateMobileNumber: API_ROOT + USER + '/updateMobileNumber',
 		updateUserInfo: API_ROOT + USER + '/updateUserInfo',
-		updateCompanyInfo: API_ROOT + USER + '/updateCompanyInfo'
+		updateCompanyInfo: API_ROOT + USER + '/updateCompanyInfo',
+		getUserList: API_ROOT + USER + '/getUserList'
 	},
 	
 	settings: {
@@ -104,7 +107,7 @@ const APIS = {
 		saveRealNameAuthentication: API_ROOT + REALNAMEAUTHENTICATION + '/saveRealNameAuthentication',
 		updateRealNameAuthenticationState: API_ROOT + REALNAMEAUTHENTICATION + '/updateRealNameAuthenticationState',
 		getRealNameAuthentication: API_ROOT + REALNAMEAUTHENTICATION + '/getRealNameAuthentication',
-		getRealNameAuthenticationById: API_ROOT + REALNAMEAUTHENTICATION + '/getRealNameAuthenticationById',
+		getRealNameAuthenticationByUserId: API_ROOT + REALNAMEAUTHENTICATION + '/getRealNameAuthenticationByUserId',
 		getRealNameAuthenticationList: API_ROOT + REALNAMEAUTHENTICATION + '/getRealNameAuthenticationList'
 	},
 	
@@ -112,8 +115,15 @@ const APIS = {
 		saveEnterpriseCertification: API_ROOT + ENTERPRISECERTIFICATION + '/saveEnterpriseCertification',
 		updateEnterpriseCertificationState: API_ROOT + ENTERPRISECERTIFICATION + '/updateEnterpriseCertificationState',
 		getEnterpriseCertification: API_ROOT + ENTERPRISECERTIFICATION + '/getEnterpriseCertification',
-		getEnterpriseCertificationById: API_ROOT + ENTERPRISECERTIFICATION + '/getEnterpriseCertificationById',
+		getEnterpriseCertificationByUserId: API_ROOT + ENTERPRISECERTIFICATION + '/getEnterpriseCertificationByUserId',
 		getEnterpriseCertificationList: API_ROOT + ENTERPRISECERTIFICATION + '/getEnterpriseCertificationList'
+	},
+	
+	systemNotice: {
+		getSystemNotice: API_ROOT + SYSTEMNOTICE + '/getSystemNotice',
+		saveSystemNotice: API_ROOT + SYSTEMNOTICE + '/saveSystemNotice',
+		getSystemNoticeList: API_ROOT + SYSTEMNOTICE + '/getSystemNoticeList',
+		deleteSystemNotice: API_ROOT + SYSTEMNOTICE + '/deleteSystemNotice'
 	}
 };
 

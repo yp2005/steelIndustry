@@ -1,16 +1,14 @@
 <template>
-	<div class="mui-content">
-		<div class="mui-scroll-wrapper releaseCard">
-			<div class="mui-scroll">
-				<div class="title">公告信息</div>
-				<div class="inputRow"><label>标题</label><input type="text" v-model="title" placeholder="请输入公告标题(必填)"></div>
-				<div class="inputRow textarea">
-					<label>详细地址</label>
-					<textarea style="min-height: 280px;" id="textarea" placeholder="请输入公告内容(必填)" v-model="content" @input="textAreaInput"></textarea>
-				</div>
-				<div class="bottomBtn">
-					<a href="javascript:void(0)" @tap="releaseNotice">发布</a>
-				</div>
+	<div class="mui-scroll-wrapper noticenew">
+		<div class="mui-scroll">
+			<div class="title">公告信息</div>
+			<div class="inputRow"><label>标题</label><input type="text" v-model="notice.title" placeholder="请输入公告标题(必填)"></div>
+			<div class="inputRow textarea">
+				<label>详细地址</label>
+				<textarea id="textarea" placeholder="请输入公告内容(必填)" v-model="notice.content" @input="textAreaInput"></textarea>
+			</div>
+			<div class="bottomBtn">
+				<a href="javascript:void(0)" @tap="releaseNotice">发布</a>
 			</div>
 		</div>
 	</div>
@@ -24,8 +22,10 @@
 	export default {
 		data: function() {
 			return {
-				title: '',
-				content: ''
+				notice: plus.webview.currentWebview().notice || {
+					title: '',
+					content: ''
+				}
 			};
 		},
 		methods: {
@@ -38,37 +38,59 @@
 				}
 			},
 			releaseNotice() {
-				mui.toast("发布成功");
-				mui.back();
+				if(!this.notice.title) {
+					mui.toast('请输入公告标题！');
+					return;
+				}
+				if(!this.notice.content) {
+					mui.toast('请输入公告内容！');
+					return;
+				}
+				var that = this;
+				muiUtils.muiAjax(api.APIS.systemNotice.saveSystemNotice, {
+					data: JSON.stringify(that.notice),
+					contentType: 'application/json',
+					dataType: "json",
+					type: "post",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							mui.toast('保存成功！');
+							mui.fire(plus.webview.getWebviewById('../../commonpage/adminsetting/noticemanager.html'), 'noticenew');
+							mui.back();
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。')
+					}
+				});
 			}
 		},
 		ready: function() {
-			mui('.mui-scroll-wrapper.releaseCard').scroll({
+			mui('.mui-scroll-wrapper.noticenew').scroll({
 				bounce: true,
 				indicators: false, // 是否显示滚动条
 				deceleration: mui.os.ios ? 0.003 : 0.0009
 			});
-			mui('.mui-numbox').numbox();
 		},
-		components: {
-		}
 	};
 </script>
 <style>
-	.releaseCard {
+	.noticenew {
 		position: absolute;
 		top: 45px;
 		bottom: 0;
 		width: 100%;
 	}
 	
-	.releaseCard input,
-	.releaseCard textarea,
-	.releaseCard label {
+	.noticenew input,
+	.noticenew textarea,
+	.noticenew label {
 		font-size: 14px;
 	}
 	
-	.releaseCard .inputRow {
+	.noticenew .inputRow {
 		color: #333;
 		line-height: 30px;
 		padding: 10px;
@@ -77,7 +99,7 @@
 		overflow: hidden;
 	}
 	
-	.releaseCard .inputRow > input[type=text] {
+	.noticenew .inputRow>input[type=text] {
 		line-height: normal;
 		width: inherit;
 		height: inherit;
@@ -90,7 +112,7 @@
 		right: 40px;
 	}
 	
-	.releaseCard .inputRow > .jxddicon.icon-jinru32 {
+	.noticenew .inputRow>.jxddicon.icon-jinru32 {
 		position: absolute;
 		right: 10px;
 		top: 16px;
@@ -99,7 +121,7 @@
 		color: #999;
 	}
 	
-	.releaseCard .inputRow:after {
+	.noticenew .inputRow:after {
 		content: "";
 		height: 1px;
 		position: absolute;
@@ -110,69 +132,39 @@
 		transform: scaleY(0.5);
 	}
 	
-	.releaseCard .title {
+	.noticenew .title {
 		background-color: #ddd;
 		padding: 5px;
 		font-size: 15px;
 		color: #222;
 	}
 	
-	.releaseCard .inputRow label {
+	.noticenew .inputRow label {
 		width: 70px;
 		float: left;
 	}
 	
-	.releaseCard .inputRow .area,
-	.releaseCard .inputRow .area p:nth-child(2) span:nth-child(2),
-	.releaseCard .inputRow .workType {
-		padding-left: 70px;
-	}
-	
-	.releaseCard .inputRow .area,
-	.releaseCard .inputRow .workType {
-		padding-right: 30px;
-	}
-	
-	.releaseCard .inputRow .area p,
-	.releaseCard .inputRow .workType {
-		color: #333;
-	}
-	
-	.releaseCard .inputRow .area p:nth-child(2) {
-		line-height: 20px;
-	}
-	
-	.releaseCard .inputRow .area p:nth-child(2) span {
-		display: inherit;
-	}
-	
-	.releaseCard .mui-numbox .mui-input-numbox {
-		width: 36px !important;
-		padding: 0 !important;
-	}
-	
-	.releaseCard .inputRow.textarea {
+	.noticenew .inputRow.textarea {
 		overflow: hidden;
 	}
 	
-	.releaseCard .inputRow.textarea label,
-	.releaseCard .inputRow.textarea textarea {
+	.noticenew .inputRow.textarea label,
+	.noticenew .inputRow.textarea textarea {
 		float: left;
 	}
 	
-	.releaseCard textarea {
+	.noticenew textarea {
 		font-size: 14px;
 		color: #666666;
 		border: 0;
 		padding: 5px 0;
-		min-height: 80px;
+		min-height: 280px;
 		margin-bottom: 0;
 		width: 200px;
 	}
 	
 	.bottomBtn {
 		padding: 15px 10%;
-		/*background-color: #fff;*/
 	}
 	
 	.bottomBtn a {

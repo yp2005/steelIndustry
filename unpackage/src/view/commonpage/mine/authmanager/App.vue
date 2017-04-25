@@ -17,7 +17,6 @@
 										<span v-if="userInfo.realNameAuthentication == 3" class="auth-renzheng-span">认证审核未通过</span>
 										<p class='mui-ellipsis'>实名认证可提高帐号的安全性和信任级别</p>
 									</div>
-									<!--<div class="auth-renzheng-div">立即认证</div>-->
 								</a>
 							</li>
 						</ul>
@@ -34,7 +33,6 @@
 										<span v-if="userInfo.enterpriseCertification == 3" class="auth-renzheng-span">认证审核未通过</span>
 										<p class='mui-ellipsis'>企业认证可提高帐号的安全性和信任级别</p>
 									</div>
-									<!--<div class="auth-renzheng-div">立即认证</div>-->
 								</a>
 							</li>
 						</ul>
@@ -60,12 +58,6 @@
 	import muiUtils from 'common/muiUtils';
 	import CONSTS from 'common/consts';
 	import api from 'api';
-	import utils from 'common/utils';
-	import {
-		getFileSize
-	} from 'common/image-utils';
-	//	var localStorage = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN);
-	var that = null;
 	export default {
 		data: function() {
 			return {
@@ -102,6 +94,16 @@
 				},
 				error: function(xhr, type, errorThrown) {}
 			});
+			muiUtils.muiAjax(api.APIS.enterpriseCertification.getEnterpriseCertification, {
+				contentType: 'application/json',
+				type: "get",
+				success: function(data) {
+					if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+						that.enterpriseInfo = data.result;
+					}
+				},
+				error: function(xhr, type, errorThrown) {}
+			});
 		},
 		methods: {
 			open(url, state, data) {
@@ -121,7 +123,7 @@
 			}
 		},
 		ready: function() {
-			that = this;
+			var that = this;
 			window.addEventListener('updateUserInfo', function() {
 				that.loadData();
 			});

@@ -1,6 +1,6 @@
 <template>
 	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
-	<div class="mui-scroll-wrapper deviceInfo" style="bottom: {{isStoreManage ? '50px' : '0'}}">
+	<div class="mui-scroll-wrapper deviceInfo">
 		<div class="mui-scroll">
 			<!--<div class="error-div" v-if="isStoreManage && !isPreview && store.status!=0">
 				<p>{{store.message}}</p>
@@ -405,33 +405,33 @@
 					}
 				});
 			},
-			gotoStorePage: function() {
-				let url = '';
-				let id = '';
-				let params = {};
-				if(this.store.status === -1) { // 店铺预览
-					url = '../../bizpage/device/storemanage.html';
-					id = 'storemanage_preview';
-					params = {
-						isPreview: true,
-						isStoreManage: true,
-						isClose: true,
-						createNew: true,
-						id: this.store.id,
-						status: this.store.status
-					}
-				} else { // 店铺管理
-					url = '../../bizpage/device/editstore.html';
-					params = {
-						id: this.store.id,
-						status: this.store.status
-					}
-				}
-
-				muiUtils.openWindow(url, id || url, {
-					extras: params
-				});
-			}
+//			gotoStorePage: function() {
+//				let url = '';
+//				let id = '';
+//				let params = {};
+//				if(this.store.status === -1) { // 店铺预览
+//					url = '../../bizpage/device/storemanage.html';
+//					id = 'storemanage_preview';
+//					params = {
+//						isPreview: true,
+//						isStoreManage: true,
+//						isClose: true,
+//						createNew: true,
+//						id: this.store.id,
+//						status: this.store.status
+//					}
+//				} else { // 店铺管理
+//					url = '../../bizpage/device/editstore.html';
+//					params = {
+//						id: this.store.id,
+//						status: this.store.status
+//					}
+//				}
+//
+//				muiUtils.openWindow(url, id || url, {
+//					extras: params
+//				});
+//			}
 		},
 		ready: function() {
 			var deceleration = mui.os.ios ? 0.003 : 0.0009;

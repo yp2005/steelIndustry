@@ -3,7 +3,7 @@
 		<template v-if="authStep == 0">
 			<div class="mui-scroll-wrapper authmanagerPerson">
 				<div class="mui-scroll">
-					<div class="inputRow" style="text-align: center;">
+					<div class="inputRow center">
 						<span class="statusFont1">提交信息</span>
 						<span class="statusFont"> → 等待审核</span>
 						<span class="statusFont"> → 认证成功</span>
@@ -34,23 +34,22 @@
 						<input v-model="agree" type="checkbox" /><span>我阅读并同意</span>
 						<span class="statusFont1" @tap="declarationWindow(true)">《彩钢精英》个人师傅签约规则</span></div>
 					<div class="bottomBtn">
-						<a style="width:100%;" href="javascript:void(0)" @tap="stepNext(1)">提交审核</a>
+						<a href="javascript:void(0)" @tap="stepNext(1)">提交审核</a>
 					</div>
 				</div>
 			</div>
 		</template>
 		<template v-if="authStep == 1">
-			<div class="title backTitleBg authmanagerPerson">
-				<div class="title"></div>
-				<div class="inputRow" style="text-align: center;">
+			<div class="backTitleBg">
+				<div class="inputRow center">
 					<span class="statusFont1">提交信息</span>
 					<span class="statusFont1"> → 等待审核</span>
 					<span class="statusFont"> → 认证成功</span>
 				</div>
-				<div style="margin-top:100px;color:#21A30D;font-size:22px;">
+				<div>
 					您的实名认证申请提交成功
 				</div>
-				<div style="margin-top:20px;color:#666;">
+				<div>
 					我们将在一个工作日内完成审核，请耐心等待
 				</div>
 			</div>
@@ -78,9 +77,6 @@
 	import CONSTS from 'common/consts';
 	import upload from 'component/upload/UploadImage';
 	import cacheUtils from 'common/cacheUtils';
-	import {
-		cityData3Lev
-	} from 'common/cityData';
 	export default {
 		data: function() {
 			var data = plus.webview.currentWebview().data;
@@ -151,8 +147,7 @@
 					cardPictureObverse: that.pictures1[0],
 					cardPictureReverse: that.pictures2[0],
 					handCardPicture: that.pictures3[0],
-					fullFacePicture: that.pictures4[0],
-					state: 2
+					fullFacePicture: that.pictures4[0]
 				};
 				if(that.id) {
 					data.id = that.id;
@@ -260,13 +255,6 @@
 		transform: scaleY(0.5);
 	}
 	
-	.authmanagerPerson .title {
-		background-color: #ddd;
-		padding: 5px;
-		font-size: 15px;
-		color: #222;
-	}
-	
 	.authmanagerPerson .inputRow label {
 		width: 70px;
 		float: left;
@@ -275,6 +263,7 @@
 	.bottomBtn {
 		padding: 15px 10%;
 		background-color: #fff;
+		text-align: center;
 	}
 	
 	.bottomBtn a {
@@ -282,9 +271,6 @@
 		text-align: center;
 		font-size: 15px;
 		width: 45%;
-	}
-	
-	.bottomBtn a:nth-child(1) {
 		color: #fff;
 		background-color: #26c6da;
 		border: solid 1px #26c6da;
@@ -299,6 +285,22 @@
 		right: 0;
 		background-color: #ddd;
 		text-align: center;
+	}
+	
+	.backTitleBg>div:nth-child(1) {
+		line-height: 50px;
+		background-color: #fff;
+	}
+	
+	.backTitleBg>div:nth-child(2) {
+		margin-top: 100px;
+		color: #21A30D;
+		font-size: 22px;
+	}
+	
+	.backTitleBg>div:nth-child(3) {
+		margin-top: 20px;
+		color: #666;
 	}
 	
 	.bottomBackBtn {
@@ -397,5 +399,9 @@
 		height: 80px;
 		top: 47px;
 		right: 45px;
+	}
+	
+	.center {
+		text-align: center;
 	}
 </style>

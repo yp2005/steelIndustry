@@ -1,57 +1,59 @@
 <template>
 	<div class="mui-content">
-		<div class="mui-scroll-wrapper releaseCard">
+		<div class="mui-scroll-wrapper appsetting">
 			<div class="mui-scroll">
 				<div class="title"></div>
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell">
 						<span class="userSwitchSpan">分享获取联系方式</span>
-						<div class="mui-switch {{islianxi ? 'mui-active' : ''}}">
+						<div class="mui-switch {{appSetting.shareSwitch == 1 ? 'mui-active' : ''}}">
 							<div class="mui-switch-handle" @tap="changeSwitch(0)"></div>
 						</div>
 					</li>
 					<li class="mui-table-view-cell">
 						<span class="userSwitchSpan">店铺审核</span>
-						<div class="mui-switch {{isdianpu ? 'mui-active' : ''}}">
+						<div class="mui-switch {{appSetting.isCheckStore == 1 ? 'mui-active' : ''}}">
 							<div class="mui-switch-handle" @tap="changeSwitch(1)"></div>
 						</div>
 					</li>
 					<li class="mui-table-view-cell">
 						<span class="userSwitchSpan">工程审核</span>
-					<div class="mui-switch {{isgongcheng ? 'mui-active' : ''}}">
-						<div class="mui-switch-handle" @tap="changeSwitch(2)"></div>
-					</div>
+						<div class="mui-switch {{appSetting.isCheckProject == 1 ? 'mui-active' : ''}}">
+							<div class="mui-switch-handle" @tap="changeSwitch(2)"></div>
+						</div>
 					</li>
 					<li class="mui-table-view-cell">
 						<span class="userSwitchSpan">名片审核</span>
-					<div class="mui-switch {{ismingpian ? 'mui-active' : ''}}">
-						<div class="mui-switch-handle" @tap="changeSwitch(3)"></div>
-					</div>
+						<div class="mui-switch {{appSetting.isCheckCard == 1 ? 'mui-active' : ''}}">
+							<div class="mui-switch-handle" @tap="changeSwitch(3)"></div>
+						</div>
 					</li>
 					<li class="mui-table-view-cell">
 						<span class="userSwitchSpan">用工需求审核</span>
-					<div class="mui-switch {{isyonggong ? 'mui-active' : ''}}">
-						<div class="mui-switch-handle" @tap="changeSwitch(4)"></div>
-					</div>
+						<div class="mui-switch {{appSetting.isCheckWork == 1 ? 'mui-active' : ''}}">
+							<div class="mui-switch-handle" @tap="changeSwitch(4)"></div>
+						</div>
 					</li>
 				</ul>
 				<div class="title"></div>
-				<div class="inputRow"><label>主题帖积分</label><input type="text" v-model="bddate" placeholder="请输入主题帖积分"></div>
-				<div class="inputRow"><label>回帖积分</label><input type="text" v-model="gender.text" placeholder="请输入回帖积分"></div>
+				<div class="inputRow"><label>主题帖积分</label><input type="text" v-model="appSetting.mainPostPoints" placeholder="请输入发布主题帖积分"></div>
+				<div class="inputRow"><label>回帖积分</label><input type="text" v-model="appSetting.replyingPoints" placeholder="请输入回帖积分"></div>
 				<div class="inputRow">
 					<label>首页广告位</label>
-					<p class="workType">{{shouyetypestr}}</p>
-				</div><div class="inputRow">
+					<p class="adType">轮播图</p>
+				</div>
+				<div class="inputRow">
 					<label>列表页广告位</label>
-					<p v-if="liebiaotype" class="workType" @tap="selectAddress()">{{liebiaotypestr}}</p>
-					<input type="text" v-else placeholder="请选择广告类型" readonly @tap="selectAddress()">
-				</div><div class="inputRow">
+					<p v-if="appSetting.listPageAdType" class="adType" @tap="selectListPageAdType()">{{listPageAdTypeName}}</p>
+					<input type="text" v-else placeholder="请选择广告类型" readonly @tap="selectListPageAdType()">
+				</div>
+				<div class="inputRow">
 					<label>详情页广告位</label>
-					<p v-if="xiangqingtype" class="workType" @tap="selectAddress2()">{{xiangqingtypestr}}</p>
-					<input type="text" v-else placeholder="请选择广告类型" readonly @tap="selectAddress2()">
+					<p v-if="appSetting.detailPageAdType" class="adType" @tap="selectDetailPageAdType()">{{detailPageAdTypeName}}</p>
+					<input type="text" v-else placeholder="请选择广告类型" readonly @tap="selectDetailPageAdType()">
 				</div>
 				<div class="bottomBtn">
-					<a href="javascript:void(0)" @tap="saveInfo">保存修改</a>
+					<a href="javascript:void(0)" @tap="submit">保存修改</a>
 				</div>
 			</div>
 		</div>
@@ -60,9 +62,9 @@
 
 <script>
 	import muiUtils from 'common/muiUtils';
-	import log from 'common/logUtils';
 	import api from 'api';
 	import CONSTS from 'common/consts';
+	import cacheUtils from 'common/cacheUtils';
 	export default {
 		data: function() {
 			var pickerData = [{
@@ -75,108 +77,114 @@
 				value: 'alliance',
 				text: '广告联盟',
 			}];
-			var advertisingPicker = new mui.PopPicker({
+			var listPagePicker = new mui.PopPicker({
 				layer: 1
 			});
-			advertisingPicker.setData(pickerData);
-			
-			var advertisingPicker2 = new mui.PopPicker({
+			listPagePicker.setData(pickerData);
+
+			var detailPagePicker = new mui.PopPicker({
 				layer: 1
 			});
-			advertisingPicker.setData(pickerData);
-			
+			detailPagePicker.setData(pickerData);
+			var appSetting = cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS);
 			return {
-				liebiaoPicker: advertisingPicker,
-				xiangqingPicker: advertisingPicker2,
-				islianxi: false,
-				isdianpu: true,
-				isgongcheng: true,
-				ismingpian: true,
-				isyonggong: true,
-				shouyetype:'loopImg',
-				liebiaotype:'loopImg',
-				xiangqingtype:'loopImg',
-				shouyetypestr:'轮播图',
-				liebiaotypestr:'轮播图',
-				xiangqingtypestr:'轮播图',
-				name: '',
-				bddate: ''
+				appSetting: appSetting,
+				listPagePicker: listPagePicker,
+				detailPagePicker: detailPagePicker,
+				listPageAdTypeName: appSetting.listPageAdType == 'alliance' ? '广告联盟': (appSetting.listPageAdType == 'loopImg' ? '轮播图' : '单个图片'),
+				detailPageAdTypeName: appSetting.detailPageAdType == 'alliance' ? '广告联盟': (appSetting.listPageAdType == 'loopImg' ? '轮播图' : '单个图片')
 			};
 		},
-		created: function() {
-
-		},
 		methods: {
-			selectAddress: function() {
+			selectListPageAdType: function() {
 				var that = this;
-				this.liebiaoPicker.show(function(items) {
-					that.liebiaotypestr = items[0].text;
-					that.liebiaotype = items[0].value;
+				this.listPagePicker.show(function(items) {
+					that.listPageAdTypeName = items[0].text;
+					that.appSetting.listPageAdType = items[0].value;
 				});
 			},
-			selectAddress2: function() {
+			selectDetailPageAdType: function() {
 				var that = this;
-				this.xiangqingPicker.show(function(items) {
-					that.xiangqingtypestr = items[0].text;
-					that.xiangqingtype = items[0].value;
+				this.detailPagePicker.show(function(items) {
+					that.detailPageAdTypeName = items[0].text;
+					that.appSetting.detailPageAdType = items[0].value;
 				});
 			},
-			changeSwitch: function(_switch){
-				switch(_switch){
+			changeSwitch: function(_switch) {
+				switch(_switch) {
 					case 0:
-						this.islianxi = !this.islianxi;
-						console.log('this.islianxi:::::'+this.islianxi);
+						this.appSetting.shareSwitch = this.appSetting.shareSwitch == 0 ? 1 : 0;
 						break;
 					case 1:
-						this.isdianpu = !this.isdianpu;
-						console.log('this.isdianpu:::::'+this.isdianpu);
+						this.appSetting.isCheckStore = this.appSetting.isCheckStore == 0 ? 1 : 0;
 						break;
 					case 2:
-						this.isgongcheng = !this.isgongcheng;
-						console.log('this.isgongcheng:::::'+this.isgongcheng);
+						this.appSetting.isCheckProject = this.appSetting.isCheckProject == 0 ? 1 : 0;
 						break;
 					case 3:
-						this.ismingpian = !this.ismingpian;
-						console.log('this.ismingpian:::::'+this.ismingpian);
+						this.appSetting.isCheckCard = this.appSetting.isCheckCard == 0 ? 1 : 0;
 						break;
 					case 4:
-						this.isyonggong = !this.isyonggong;
-						console.log('this.isyonggong:::::'+this.isyonggong);
+						this.appSetting.isCheckWork = this.appSetting.isCheckWork == 0 ? 1 : 0;
 						break;
 				}
 			},
-			saveInfo() {
-				mui.toast("保存成功");
-				mui.back();
+			checkInt(val) {
+				return /^\d+$/.test(val) && parseInt(val) > 0;
+			},
+			submit() {
+				if(!this.checkInt(this.appSetting.mainPostPoints)) {
+					mui.toast('主题帖积分须为大于0的整数！');
+					return;
+				}
+				if(!this.checkInt(this.appSetting.replyingPoints)) {
+					mui.toast('回帖积分须为大于0的整数！');
+					return;
+				}
+				var that = this;
+				muiUtils.muiAjax(api.APIS.settings.updateSettings, {
+					data: JSON.stringify(that.appSetting),
+					contentType: 'application/json',
+					dataType: "json",
+					type: "post",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							mui.toast('保存成功！');
+							cacheUtils.localStorage(CONSTS.SYSTEM).setObject(CONSTS.APPSETTINGS, that.appSetting);
+							mui.back();
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。')
+					}
+				});
 			}
 		},
 		ready: function() {
-			mui('.mui-scroll-wrapper.releaseCard').scroll({
+			mui('.mui-scroll-wrapper.appsetting').scroll({
 				bounce: true,
 				indicators: false, // 是否显示滚动条
 				deceleration: mui.os.ios ? 0.003 : 0.0009
 			});
-			mui('.mui-numbox').numbox();
-		},
-		components: {
 		}
 	};
 </script>
 <style>
-	.releaseCard {
+	.appsetting {
 		position: absolute;
 		top: 45px;
 		bottom: 0;
 		width: 100%;
 	}
 	
-	.releaseCard input,
-	.releaseCard textarea,
-	.releaseCard label {
+	.appsetting input,
+	.appsetting label {
 		font-size: 14px;
 	}
 	
-	.releaseCard .inputRow {
+	.appsetting .inputRow {
 		color: #333;
 		line-height: 30px;
 		padding: 10px;
@@ -185,7 +193,7 @@
 		overflow: hidden;
 	}
 	
-	.releaseCard .inputRow > input[type=text] {
+	.appsetting .inputRow>input[type=text] {
 		line-height: normal;
 		width: inherit;
 		height: inherit;
@@ -198,7 +206,7 @@
 		right: 40px;
 	}
 	
-	.releaseCard .inputRow > .jxddicon.icon-jinru32 {
+	.appsetting .inputRow>.jxddicon.icon-jinru32 {
 		position: absolute;
 		right: 10px;
 		top: 16px;
@@ -207,7 +215,7 @@
 		color: #999;
 	}
 	
-	.releaseCard .inputRow:after {
+	.appsetting .inputRow:after {
 		content: "";
 		height: 1px;
 		position: absolute;
@@ -218,69 +226,32 @@
 		transform: scaleY(0.5);
 	}
 	
-	.releaseCard .title {
-		background-color: #ddd;
+	.appsetting .title {
+		background-color: #f3f5f7;
 		padding: 5px;
 		font-size: 15px;
 		color: #222;
 	}
 	
-	.releaseCard .inputRow label {
+	.appsetting .inputRow label {
 		width: 100px;
 		float: left;
 	}
 	
-	.releaseCard .inputRow .area,
-	.releaseCard .inputRow .area p:nth-child(2) span:nth-child(2),
-	.releaseCard .inputRow .workType {
+	.appsetting .inputRow .adType {
 		padding-left: 110px;
 	}
 	
-	.releaseCard .inputRow .area,
-	.releaseCard .inputRow .workType {
+	.appsetting .inputRow .adType {
 		padding-right: 30px;
 	}
 	
-	.releaseCard .inputRow .area p,
-	.releaseCard .inputRow .workType {
+	.appsetting .inputRow .adType {
 		color: #333;
-	}
-	
-	.releaseCard .inputRow .area p:nth-child(2) {
-		line-height: 20px;
-	}
-	
-	.releaseCard .inputRow .area p:nth-child(2) span {
-		display: inherit;
-	}
-	
-	.releaseCard .mui-numbox .mui-input-numbox {
-		width: 36px !important;
-		padding: 0 !important;
-	}
-	
-	.releaseCard .inputRow.textarea {
-		overflow: hidden;
-	}
-	
-	.releaseCard .inputRow.textarea label,
-	.releaseCard .inputRow.textarea textarea {
-		float: left;
-	}
-	
-	.releaseCard textarea {
-		font-size: 14px;
-		color: #666666;
-		border: 0;
-		padding: 5px 0;
-		min-height: 80px;
-		margin-bottom: 0;
-		width: 200px;
 	}
 	
 	.bottomBtn {
 		padding: 15px 10%;
-		/*background-color: #fff;*/
 	}
 	
 	.bottomBtn a {
@@ -294,8 +265,8 @@
 		border-radius: 3px;
 	}
 	
-	.userSwitchSpan{
+	.userSwitchSpan {
 		color: #222;
-		font-size:14px;
+		font-size: 14px;
 	}
 </style>

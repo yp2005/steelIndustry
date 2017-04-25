@@ -141,10 +141,7 @@
 			},
 			open(url) {
 				muiUtils.openWindow(url, url, {
-					isValidLogin: true,
-					extras: {
-						url: url
-					}
+					isValidLogin: true
 				});
 			},
 			gotoMyTiezi() {

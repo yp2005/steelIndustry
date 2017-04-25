@@ -48,18 +48,37 @@
 				value: 1,
 				text: '女',
 			}]);
-
+			var userInfo = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.USER_INFO);
+			var address = null;
+			var addressDetail = '';
+			if(userInfo.address) {
+				var add = userInfo.address.split(' ');
+				address = {
+					province: add[0],
+					city: add[1],
+					county: add[2]
+				};
+				var addStr = add[0] + ' ' + add[1] + ' ' + add[2] + ' ';
+				addressDetail = userInfo.address.substring(addStr.length);
+			}
+			var sex = {
+				value: 0,
+				text: '男',
+			};
+			if(userInfo.sex == '女') {
+				sex = {
+					value: 1,
+					text: '女',
+				};
+			}
 			return {
 				cityPicker: cityPicker,
 				genderPicker: genderPicker,
-				address: null,
-				name: '',
-				bddate: '',
-				gender: {
-					value: 0,
-					text: '男',
-				},
-				addressDetail: ''
+				address: address,
+				name: userInfo.userName || '',
+				bddate: userInfo.birthday || '',
+				gender: sex,
+				addressDetail: addressDetail
 			};
 		},
 		methods: {

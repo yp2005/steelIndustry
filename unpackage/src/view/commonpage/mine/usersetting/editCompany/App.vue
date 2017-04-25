@@ -27,7 +27,7 @@
 	import api from 'api';
 	import CONSTS from 'common/consts';
 	import cacheUtils from 'common/cacheUtils';
-		import {
+	import {
 		cityData3Lev
 	} from 'common/cityData';
 	export default {
@@ -36,11 +36,24 @@
 				layer: 3
 			});
 			cityPicker.setData(cityData3Lev);
+			var userInfo = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.USER_INFO);
+			var address = null;
+			var addressDetail = '';
+			if(userInfo.companyAddress) {
+				var add = userInfo.companyAddress.split(' ');
+				address = {
+					province: add[0],
+					city: add[1],
+					county: add[2]
+				};
+				var addStr = add[0] + ' ' + add[1] + ' ' + add[2] + ' ';
+				addressDetail = userInfo.companyAddress.substring(addStr.length);
+			}
 			return {
 				cityPicker: cityPicker,
-				address: null,
-				name: '',
-				addressDetail: ''
+				address: address,
+				name: userInfo.companyName || '',
+				addressDetail: addressDetail
 			};
 		},
 		methods: {
@@ -66,7 +79,7 @@
 				}
 			},
 			saveInfo() {
-				var  that = this;
+				var that = this;
 				if(!that.name) {
 					mui.toast('请输入公司名称！');
 					return;
@@ -143,7 +156,7 @@
 		overflow: hidden;
 	}
 	
-	.editCompany .inputRow > input[type=text] {
+	.editCompany .inputRow>input[type=text] {
 		line-height: normal;
 		width: inherit;
 		height: inherit;
@@ -156,7 +169,7 @@
 		right: 40px;
 	}
 	
-	.editCompany .inputRow > .jxddicon.icon-jinru32 {
+	.editCompany .inputRow>.jxddicon.icon-jinru32 {
 		position: absolute;
 		right: 10px;
 		top: 16px;
@@ -187,7 +200,6 @@
 		width: 70px;
 		float: left;
 	}
-	
 	
 	.editCompany .mui-numbox .mui-input-numbox {
 		width: 36px !important;
