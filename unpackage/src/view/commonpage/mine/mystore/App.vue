@@ -197,7 +197,10 @@
 	
 	.oneRow .rowRight p:nth-child(3) {
 		overflow: hidden;
-		/*padding: 5px 0;*/
+	}
+	
+	.oneRow .rowRight p:nth-child(4) {
+		color: green;
 	}
 	
 	.oneRow .rowRight p:nth-child(3) img {

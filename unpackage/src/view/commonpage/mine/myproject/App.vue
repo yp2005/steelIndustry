@@ -217,6 +217,10 @@
 		margin-right: 4px;
 	}
 	
+	.oneRow .rowRight p:nth-child(4) {
+		color: green;
+	}
+	
 	.oneRow .rowRight p:nth-child(5) a {
 		color: #26c6da;
 		line-height: 1;

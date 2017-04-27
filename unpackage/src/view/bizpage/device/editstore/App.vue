@@ -1,5 +1,4 @@
-/** * @file 店铺管理 * @Author lxm * @private */
-
+<!-- 没用到这个页面 -->
 <template>
 	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
 	<div class="mui-scroll-wrapper deviceInfo">

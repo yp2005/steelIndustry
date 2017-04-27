@@ -24,7 +24,7 @@ var header = new HeaderVue({
             	iconClass: 'mui-icon mui-icon-plusempty',
             	text: '',
             	onClick: function(_this){
-					muiUtils.openWindow('../../commonpage/advertisingmanager/editadvertising.html', 'commonpage_advertisingmanager_editadvertising');
+					muiUtils.openWindow('../../commonpage/advertisingmanager/editadvertising.html', '../../commonpage/advertisingmanager/editadvertising.html');
             	}
             }
         }

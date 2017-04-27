@@ -38,20 +38,6 @@
 				<div class="title"></div>
 				<div class="inputRow"><label>主题帖积分</label><input type="text" v-model="appSetting.mainPostPoints" placeholder="请输入发布主题帖积分"></div>
 				<div class="inputRow"><label>回帖积分</label><input type="text" v-model="appSetting.replyingPoints" placeholder="请输入回帖积分"></div>
-				<div class="inputRow">
-					<label>首页广告位</label>
-					<p class="adType">轮播图</p>
-				</div>
-				<div class="inputRow">
-					<label>列表页广告位</label>
-					<p v-if="appSetting.listPageAdType" class="adType" @tap="selectListPageAdType()">{{listPageAdTypeName}}</p>
-					<input type="text" v-else placeholder="请选择广告类型" readonly @tap="selectListPageAdType()">
-				</div>
-				<div class="inputRow">
-					<label>详情页广告位</label>
-					<p v-if="appSetting.detailPageAdType" class="adType" @tap="selectDetailPageAdType()">{{detailPageAdTypeName}}</p>
-					<input type="text" v-else placeholder="请选择广告类型" readonly @tap="selectDetailPageAdType()">
-				</div>
 				<div class="bottomBtn">
 					<a href="javascript:void(0)" @tap="submit">保存修改</a>
 				</div>
@@ -67,49 +53,12 @@
 	import cacheUtils from 'common/cacheUtils';
 	export default {
 		data: function() {
-			var pickerData = [{
-				value: 'loopImg',
-				text: '轮播图',
-			}, {
-				value: 'oneImg',
-				text: '单个图片',
-			}, {
-				value: 'alliance',
-				text: '广告联盟',
-			}];
-			var listPagePicker = new mui.PopPicker({
-				layer: 1
-			});
-			listPagePicker.setData(pickerData);
-
-			var detailPagePicker = new mui.PopPicker({
-				layer: 1
-			});
-			detailPagePicker.setData(pickerData);
 			var appSetting = cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS);
 			return {
-				appSetting: appSetting,
-				listPagePicker: listPagePicker,
-				detailPagePicker: detailPagePicker,
-				listPageAdTypeName: appSetting.listPageAdType == 'alliance' ? '广告联盟': (appSetting.listPageAdType == 'loopImg' ? '轮播图' : '单个图片'),
-				detailPageAdTypeName: appSetting.detailPageAdType == 'alliance' ? '广告联盟': (appSetting.listPageAdType == 'loopImg' ? '轮播图' : '单个图片')
+				appSetting: appSetting
 			};
 		},
 		methods: {
-			selectListPageAdType: function() {
-				var that = this;
-				this.listPagePicker.show(function(items) {
-					that.listPageAdTypeName = items[0].text;
-					that.appSetting.listPageAdType = items[0].value;
-				});
-			},
-			selectDetailPageAdType: function() {
-				var that = this;
-				this.detailPagePicker.show(function(items) {
-					that.detailPageAdTypeName = items[0].text;
-					that.appSetting.detailPageAdType = items[0].value;
-				});
-			},
 			changeSwitch: function(_switch) {
 				switch(_switch) {
 					case 0:
@@ -236,18 +185,6 @@
 	.appsetting .inputRow label {
 		width: 100px;
 		float: left;
-	}
-	
-	.appsetting .inputRow .adType {
-		padding-left: 110px;
-	}
-	
-	.appsetting .inputRow .adType {
-		padding-right: 30px;
-	}
-	
-	.appsetting .inputRow .adType {
-		color: #333;
 	}
 	
 	.bottomBtn {

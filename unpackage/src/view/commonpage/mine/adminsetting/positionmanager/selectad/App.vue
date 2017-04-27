@@ -1,19 +1,24 @@
 <template>
 	<div id="scroll" class="mui-scroll-wrapper adList">
 		<div id="pullrefresh" class="mui-scroll">
-			<div class="oneAd" v-for="ad in adList">
+			<div class="oneAd" v-for="ad in adList" @tap="select($index)">
+				<input />
 				<img :src="ad.img" />
 				<div class="adInfo">
 					<p class="mui-ellipsis">{{ad.title}}</p>
 					<p>{{ad.linkType == 'innerLink' ? '内部链接' : (ad.linkType == 'outerLink' ? '外部链接' : '广告联盟')}}</p>
 					<p>
 						<a href="javascript:void(0)" @tap="edit(ad)">编辑</a>
-						<a href="javascript:void(0)" @tap="delete($index)">删除</a>
 					</p>
 				</div>
+				<span v-show="ad.selected" class="mui-icon mui-icon-checkmarkempty"></span>
 			</div>
 			<p v-show="!adList || adList.length === 0" class="noData">暂无数据</p>
 		</div>
+	</div>
+	<div class="bottomBtn">
+		<span>已选广告：{{selectedNum}}个</span>
+		<a href="javascript:void(0)" class="{{selectedNum > 0 ? 'active' : ''}}" @tap="save">确定</a>
 	</div>
 </template>
 
@@ -26,41 +31,41 @@
 		data: function() {
 			return {
 				pullrefresh: null,
-				adList: []
+				adList: [],
+				selectedNum: 0,
+				position: plus.webview.currentWebview().position
 			};
 		},
 		created: function() {
 			this.getData();
 		},
 		methods: {
+			save() {
+				var adverts = [];
+				for(var ad of this.adList) {
+					if(ad.selected) {
+						adverts.push(ad);
+					}
+				}
+				mui.fire(plus.webview.getWebviewById('../../commonpage/adminsetting/positionmanager.html'), 'position_advertpick', {
+					position: this.position,
+					adverts: adverts
+				});
+				mui.back();
+			},
+			select(index) {
+				this.adList[index].selected = !this.adList[index].selected
+				if(this.adList[index].selected) {
+					this.selectedNum++;
+				} else {
+					this.selectedNum--;
+				}
+			},
 			edit(ad) {
 				muiUtils.openWindow('../../commonpage/advertisingmanager/editadvertising.html', '../../commonpage/advertisingmanager/editadvertising.html', {
 					extras: {
 						ad: ad,
-						fromPage: '../../commonpage/adminsetting/advertisingmanager.html'
-					}
-				});
-			},
-			delete(index) {
-				var that = this;
-				var btnArray = ['取消', '确定'];
-				mui.confirm('确认删除工程？', '操作提示', btnArray, function(e) {
-					if(e.index == 1) {
-						muiUtils.muiAjax(api.APIS.advertisement.advertisement + '/' + that.adList[index].id, {
-							dataType: "json",
-							type: "delete",
-							success: function(data) {
-								if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
-									mui.toast('删除成功！');
-									that.adList.splice(index, 1);
-								} else {
-									mui.toast(data.erroCode + '：' + data.erroMsg);
-								}
-							},
-							error: function(xhr, type, errorThrown) {
-								mui.toast('服务器或网络异常，请稍后重试。');
-							}
-						});
+						fromPage: '../../commonpage/positionmanager/selectad.html'
 					}
 				});
 			},
@@ -79,6 +84,7 @@
 							var adList = data.result.adList || [];
 							for(var ad of adList) {
 								ad.img = ad.img ? (data.result.imgServer + ad.img) : '1';
+								ad.selected = false;
 							}
 							that.adList = adList;
 						} else {
@@ -113,6 +119,7 @@
 							}
 							for(var ad of data.result.adList || []) {
 								ad.img = ad.img ? (data.result.imgServer + ad.img) : '1';
+								ad.selected = false;
 							}
 							that.adList = that.adList.concat(data.result.adList || []);
 						} else {
@@ -161,7 +168,7 @@
 	.adList {
 		position: absolute;
 		top: 45px;
-		bottom: 0;
+		bottom: 50px;
 		width: 100%;
 	}
 	
@@ -205,12 +212,23 @@
 		padding: 10px;
 		background-color: #fff;
 		margin-bottom: 8px;
+		position: relative;
 	}
 	
 	.oneAd img {
 		float: left;
 		width: 80px;
 		height: 80px;
+	}
+	
+	.oneAd .mui-icon-checkmarkempty {
+		color: #26c6da;
+		font-weight: 600;
+		position: absolute;
+		top: 22px;
+		right: 15px;
+		font-size: 80px;
+		z-index: 1;
 	}
 	
 	.oneAd .adInfo {
@@ -260,5 +278,31 @@
 	.noData {
 		line-height: 250px;
 		text-align: center;
+	}
+	
+	.bottomBtn {
+		position: fixed;
+		bottom: 0;
+		height: 50px;
+		width: 100%;
+		background-color: #fff;
+	}
+	
+	.bottomBtn span {
+		line-height: 40px;
+		padding-left: 15px;
+		color: #26c6da;
+	}
+	
+	.bottomBtn a {
+		line-height: 50px;
+		color: #fff;
+		background-color: #ccc;
+		padding: 0 30px;
+		float: right;
+	}
+	
+	.bottomBtn a.active {
+		background-color: #26c6da;
 	}
 </style>

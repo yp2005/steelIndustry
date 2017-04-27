@@ -150,7 +150,9 @@ mui.plusReady(function() {
 			}
 		}
 		address.street = position.address.street || '';
-		header.address = address;
+		router.afterEach(route => {
+			header.address = address;
+		});
 	}, function(e) {}, {
 		provider: 'baidu',
 		timeout: 8000

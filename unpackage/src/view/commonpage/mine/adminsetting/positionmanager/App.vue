@@ -1,107 +1,96 @@
 <template>
-	<div class="mui-content">
-		<div class="mui-scroll-wrapper releaseCard">
-			<div class="mui-scroll">
-				
-				<div class="title">首页广告位</div>
-				<div class="inputRow">
-					<label>广告类型</label>
-					<p class="workType">{{shouyetypestr}}</p>
-				</div>
-				<div v-show="shouyetype == 'alliance'" class="inputRow">
-					<p>广告联盟</p>
-					<div>
-						<textarea id="textarea" v-model="advertUrl" placeholder="请输入地址" @input="textAreaInput"></textarea>
-					</div>
-				</div>
-				<div v-show="shouyetype != 'alliance'" class="inputRow">
-					<ul class="mui-table-view mui-grid-view">
-						<template v-for="(index,advert) in shouyeAdverts">
-							<li class="mui-table-view-cell mui-col-xs-3">
-								<img :src="advert.image_url" @tap="gotoAdvert(advert)">
-								<div>
-									<p class="div-p mui-ellipsis">{{advert.title}}</p>
-								</div>
-								<a href="javascript:void(0);" @tap="delAdvert(0,index)" class="mui-btn mui-btn-primary mui-btn-outlined"><span class="mui-icon mui-icon-trash"></span></a>
-							</li>
-						</template>
+	<div class="mui-scroll-wrapper positionmanager">
+		<div class="mui-scroll">
+			<div class="title">首页广告位</div>
+			<div class="inputRow">
+				<label>广告类型</label>
+				<span>轮播图</span>
+			</div>
+			<div class="inputRow">
+				<ul class="mui-table-view mui-grid-view">
+					<template v-for="(index,advert) in homePage">
 						<li class="mui-table-view-cell mui-col-xs-3">
-							<div class="positionAddAdvertDiv" @tap="pickAdvert(0,shouyetype)">
-								<a href="javascript:void(0)" style="font-size: 40px;height: 30px;color: #999;" class="positionAddAdvertDiv_add mui-icon mui-icon-plusempty">
-								</a>
-								<span>选择广告</span>
+							<img :src="advert.img">
+							<div>
+								<p class="div-p mui-ellipsis">{{advert.title}}</p>
 							</div>
+							<a href="javascript:void(0);" @tap="delAdvert(0,index)" class="mui-btn mui-btn-primary mui-btn-outlined"><span class="mui-icon mui-icon-trash"></span></a>
 						</li>
-					</ul>
+					</template>
+					<li class="mui-table-view-cell mui-col-xs-3">
+						<div class="positionAddAdvertDiv" @tap="pickAdvert(0)">
+							<a href="javascript:void(0)" class="positionAddAdvertDiv_add mui-icon mui-icon-plusempty">
+							</a>
+							<span>选择广告</span>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="title">列表广告位</div>
+			<div class="inputRow" @tap="selectListPageAdType()">
+				<label>广告类型</label>
+				<span>{{listPageAdTypeName}}</span>
+			</div>
+			<div v-if="appSetting.listPageAdType == 'alliance'" class="inputRow">
+				<p>广告联盟代码</p>
+				<div>
+					<textarea id="textarea" v-model="alliance.content" placeholder="请输入广告联盟代码" @input="textAreaInput"></textarea>
 				</div>
-				
-				<div class="title">列表广告位</div>
-				<div class="inputRow">
-					<label>广告类型</label>
-					<p class="workType">{{liebiaotypestr}}</p>
-				</div>
-				<div v-show="liebiaotype == 'alliance'" class="inputRow">
-					<p>广告联盟</p>
-					<div>
-						<textarea id="textarea" v-model="advertUrl" placeholder="请输入地址" @input="textAreaInput"></textarea>
-					</div>
-				</div>
-				<div v-show="liebiaotype != 'alliance'" class="inputRow">
-					<ul class="mui-table-view mui-grid-view">
-						<template v-for="(index,advert) in liebiaoAdverts">
-							<li class="mui-table-view-cell mui-col-xs-3">
-								<img :src="advert.image_url" @tap="gotoAdvert(advert)">
-								<div>
-									<p class="div-p mui-ellipsis">{{advert.title}}</p>
-								</div>
-								<a href="javascript:void(0);" @tap="delAdvert(1,index)" class="mui-btn mui-btn-primary mui-btn-outlined"><span class="mui-icon mui-icon-trash"></span></a>
-							</li>
-						</template>
+			</div>
+			<div v-else class="inputRow">
+				<ul class="mui-table-view mui-grid-view">
+					<template v-for="(index,advert) in listPage">
 						<li class="mui-table-view-cell mui-col-xs-3">
-							<div class="positionAddAdvertDiv" @tap="pickAdvert(1,liebiaotype)">
-								<a href="javascript:void(0)" style="font-size: 40px;height: 30px;color: #999;" class="positionAddAdvertDiv_add mui-icon mui-icon-plusempty">
-								</a>
-								<span>选择广告</span>
+							<img :src="advert.img">
+							<div>
+								<p class="div-p mui-ellipsis">{{advert.title}}</p>
 							</div>
+							<a href="javascript:void(0);" @tap="delAdvert(1,index)" class="mui-btn mui-btn-primary mui-btn-outlined"><span class="mui-icon mui-icon-trash"></span></a>
 						</li>
-					</ul>
+					</template>
+					<li class="mui-table-view-cell mui-col-xs-3">
+						<div class="positionAddAdvertDiv" @tap="pickAdvert(1)">
+							<a href="javascript:void(0)" class="positionAddAdvertDiv_add mui-icon mui-icon-plusempty">
+							</a>
+							<span>选择广告</span>
+						</div>
+					</li>
+				</ul>
+			</div>
+
+			<div class="title">详情广告位</div>
+			<div class="inputRow" @tap="selectDetailPageAdType()">
+				<label>广告类型</label>
+				<span>{{detailPageAdTypeName}}</span>
+			</div>
+			<div v-if="appSetting.detailPageAdType == 'alliance'" class="inputRow">
+				<p>广告联盟代码</p>
+				<div>
+					<textarea id="textarea" v-model="alliance.content" placeholder="请输入广告联盟代码" @input="textAreaInput"></textarea>
 				</div>
-				
-				<div class="title">详情广告位</div>
-				<div class="inputRow">
-					<label>广告类型</label>
-					<p class="workType">{{xiangqingtypestr}}</p>
-				</div>
-				<div v-show="xiangqingtype == 'alliance'" class="inputRow">
-					<p>广告联盟</p>
-					<div>
-						<textarea id="textarea" v-model="advertUrl" placeholder="请输入地址" @input="textAreaInput"></textarea>
-					</div>
-				</div>
-				<div v-show="xiangqingtype != 'alliance'" class="inputRow">
-					<ul class="mui-table-view mui-grid-view">
-						<template v-for="(index,advert) in xiangqingAdverts">
-							<li class="mui-table-view-cell mui-col-xs-3">
-								<img :src="advert.image_url" @tap="gotoAdvert(advert)">
-								<div>
-									<p class="div-p mui-ellipsis">{{advert.title}}</p>
-								</div>
-								<a href="javascript:void(0);" @tap="delAdvert(2,index)" class="mui-btn mui-btn-primary mui-btn-outlined"><span class="mui-icon mui-icon-trash"></span></a>
-							</li>
-						</template>
+			</div>
+			<div v-else class="inputRow">
+				<ul class="mui-table-view mui-grid-view">
+					<template v-for="(index,advert) in detailPage">
 						<li class="mui-table-view-cell mui-col-xs-3">
-							<div class="positionAddAdvertDiv" @tap="pickAdvert(2,xiangqingtype)">
-								<a href="javascript:void(0)" style="font-size: 40px;height: 30px;color: #999;" class="positionAddAdvertDiv_add mui-icon mui-icon-plusempty">
-								</a>
-								<span>选择广告</span>
+							<img :src="advert.img">
+							<div>
+								<p class="div-p mui-ellipsis">{{advert.title}}</p>
 							</div>
+							<a href="javascript:void(0);" @tap="delAdvert(2,index)" class="mui-btn mui-btn-primary mui-btn-outlined"><span class="mui-icon mui-icon-trash"></span></a>
 						</li>
-					</ul>
-				</div>
-				
-				<div class="bottomBtn">
-					<a href="javascript:void(0)" @tap="saveInfo">保存修改</a>
-				</div>
+					</template>
+					<li class="mui-table-view-cell mui-col-xs-3">
+						<div class="positionAddAdvertDiv" @tap="pickAdvert(2)">
+							<a href="javascript:void(0)" class="positionAddAdvertDiv_add mui-icon mui-icon-plusempty">
+							</a>
+							<span>选择广告</span>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="bottomBtn">
+				<a href="javascript:void(0)" @tap="sumbmit">保存修改</a>
 			</div>
 		</div>
 	</div>
@@ -112,8 +101,10 @@
 	import log from 'common/logUtils';
 	import api from 'api';
 	import CONSTS from 'common/consts';
+	import cacheUtils from 'common/cacheUtils';
 	export default {
 		data: function() {
+			var appSetting = cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS);
 			var pickerData = [{
 				value: 'loopImg',
 				text: '轮播图',
@@ -124,117 +115,207 @@
 				value: 'alliance',
 				text: '广告联盟',
 			}];
-			var advertisingPicker = new mui.PopPicker({
+			var listPagePicker = new mui.PopPicker({
 				layer: 1
 			});
-			advertisingPicker.setData(pickerData);
-			
-			var advertisingPicker2 = new mui.PopPicker({
+			listPagePicker.setData(pickerData);
+
+			var detailPagePicker = new mui.PopPicker({
 				layer: 1
 			});
-			advertisingPicker2.setData(pickerData);
-			
+			detailPagePicker.setData(pickerData);
 			return {
-				positionEmpty: require('static/img/upload_empty.jpg'),
-				shouyeAdverts:[],
-				liebiaoAdverts:[],
-				xiangqingAdverts:[],
-				liebiaoPicker: advertisingPicker,
-				xiangqingPicker: advertisingPicker2,
-				islianxi: false,
-				isdianpu: true,
-				isgongcheng: true,
-				ismingpian: true,
-				isyonggong: true,
-				shouyetype:'loopImg',
-				liebiaotype:'loopImg',
-				xiangqingtype:'loopImg',
-				shouyetypestr:'轮播图',
-				liebiaotypestr:'轮播图',
-				xiangqingtypestr:'轮播图',
-				name: '',
-				bddate: ''
+				appSetting: appSetting,
+				homePage: [],
+				listPage: [],
+				detailPage: [],
+				alliance: {
+					content: ''
+				},
+				listPageAdTypeName: appSetting.listPageAdType == 'alliance' ? '广告联盟' : (appSetting.listPageAdType == 'loopImg' ? '轮播图' : '单个图片'),
+				detailPageAdTypeName: appSetting.detailPageAdType == 'alliance' ? '广告联盟' : (appSetting.listPageAdType == 'loopImg' ? '轮播图' : '单个图片'),
+				listPagePicker: listPagePicker,
+				detailPagePicker: detailPagePicker
 			};
 		},
+		created() {
+			var that = this;
+			muiUtils.muiAjax(api.APIS.adRelation.getAdInfo, {
+				dataType: "json",
+				type: "get",
+				success: function(data) {
+					if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+						for(var ad of data.result.homePage || []) {
+							ad.img = data.result.imgServer + ad.img;
+						}
+						for(var ad of data.result.listPage || []) {
+							ad.img = data.result.imgServer + ad.img;
+						}
+						for(var ad of data.result.detailPage || []) {
+							ad.img = data.result.imgServer + ad.img;
+						}
+						that.homePage = data.result.homePage || [];
+						that.listPage = data.result.listPage || [];
+						that.detailPage = data.result.detailPage || [];
+						that.alliance = data.result.alliance || {
+							content: ''
+						};
+					} else {
+						mui.toast(data.erroCode + '：' + data.erroMsg);
+					}
+				},
+				error: function(xhr, type, errorThrown) {
+					mui.toast('服务器或网络异常，请稍后重试。');
+				}
+			});
+		},
 		methods: {
-			selectAddress: function() {
+			selectListPageAdType: function() {
 				var that = this;
-				this.liebiaoPicker.show(function(items) {
-					that.liebiaotypestr = items[0].text;
-					that.liebiaotype = items[0].value;
-					if(items[0].value == 'oneImg'){
-						if(that.liebiaoAdverts.length>0){
-							var firstitem = that.liebiaoAdverts[0];
-							that.liebiaoAdverts = [firstitem];
-						}
-					}
+				this.listPagePicker.show(function(items) {
+					that.listPageAdTypeName = items[0].text;
+					that.appSetting.listPageAdType = items[0].value;
 				});
 			},
-			selectAddress2: function() {
+			selectDetailPageAdType: function() {
 				var that = this;
-				this.xiangqingPicker.show(function(items) {
-					that.xiangqingtypestr = items[0].text;
-					that.xiangqingtype = items[0].value;
-					if(items[0].value == 'oneImg'){
-						if(that.xiangqingAdverts.length>0){
-							var firstitem = that.xiangqingAdverts[0];
-							that.xiangqingAdverts = [firstitem];
-						}
-					}
+				this.detailPagePicker.show(function(items) {
+					that.detailPageAdTypeName = items[0].text;
+					that.appSetting.detailPageAdType = items[0].value;
 				});
 			},
-			pickAdvert: function(_page,type){
-				muiUtils.openWindow('../../commonpage/positionmanager/advert.html', 'commonpage_positionmanager_advert',{
+			pickAdvert: function(position) {
+				muiUtils.openWindow('../../commonpage/positionmanager/selectad.html', '../../commonpage/positionmanager/selectad.html', {
 					extras: {
-						page: _page,
-						type:type
+						position: position
 					}
 				});
 			},
-			delAdvert: function(_page,index){
-				switch(_page){
+			delAdvert: function(position, index) {
+				switch(position) {
 					case 0:
-						this.shouyeAdverts.splice(index, 1);
+						this.homePage.splice(index, 1);
 						break;
 					case 1:
-						this.liebiaoAdverts.splice(index, 1);
+						this.listPage.splice(index, 1);
 						break;
 					case 2:
-						this.xiangqingAdverts.splice(index, 1);
+						this.detailPage.splice(index, 1);
 						break;
 				}
 			},
-			gotoAdvert: function(advert){
-				muiUtils.openWindow('../../commonpage/advertisingmanager/editadvertising.html', 'commonpage_advertisingmanager_editadvertising', {
-					extras: {
-						id: 'id'
+			sumbmit() {
+				if(!this.homePage || this.homePage.length === 0) {
+					mui.toast("请设置首页广告！");
+					return;
+				}
+				if(this.appSetting.listPageAdType != 'alliance' && (!this.listPage || this.listPage.length === 0)) {
+					mui.toast("请设置列表页广告！");
+					return;
+				}
+				if(this.appSetting.detailPageAdType != 'alliance' && (!this.detailPage || this.detailPage.length === 0)) {
+					mui.toast("请设置详情页页广告！");
+					return;
+				}
+				if((this.appSetting.listPageAdType == 'alliance' || this.appSetting.detailPageAdType == 'alliance') && !this.alliance.content) {
+					mui.toast("请输入广告联盟代码！");
+					return;
+				}
+				var data = {
+					listPageAdType: this.appSetting.listPageAdType,
+					detailPageAdType: this.appSetting.detailPageAdType
+				};
+				var hasAlliance = false;
+				var homePage = [];
+				for(var ad of this.homePage) {
+					homePage.push(ad.id);
+				}
+				var listPage = [];
+				if(this.appSetting.listPageAdType != 'alliance') {
+					for(var ad of this.listPage) {
+						listPage.push(ad.id);
+					}
+				} else {
+					hasAlliance = true;
+				}
+				var detailPage = [];
+				if(this.appSetting.detailPageAdType != 'alliance') {
+					for(var ad of this.detailPage) {
+						detailPage.push(ad.id);
+					}
+				} else {
+					hasAlliance = true;
+				}
+				data.homePage = homePage;
+				data.listPage = listPage;
+				data.detailPage = detailPage;
+				if(hasAlliance) {
+					this.saveAlliance(data);
+				} else {
+					this.saveAppAdvertisement(data);
+				}
+			},
+			saveAlliance(adData) {
+				var that = this;
+				that.alliance.title = '广告联盟';
+				that.alliance.linkType = 'alliance';
+				muiUtils.muiAjax(api.APIS.advertisement.advertisement, {
+					dataType: "json",
+					contentType: 'application/json',
+					type: "post",
+					data: JSON.stringify(that.alliance),
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							that.saveAppAdvertisement(adData);
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。');
 					}
 				});
 			},
-			saveInfo() {
-				mui.toast("保存成功");
-				mui.back();
+			saveAppAdvertisement(data) {
+				var that = this;
+				muiUtils.muiAjax(api.APIS.adRelation.saveAppAdvertisement, {
+					data: JSON.stringify(data),
+					contentType: 'application/json',
+					dataType: "json",
+					type: "post",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							mui.toast('修改成功');
+							cacheUtils.localStorage(CONSTS.SYSTEM).setObject(CONSTS.APPSETTINGS, that.appSetting);
+							mui.back();
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。');
+					}
+				});
 			}
 		},
 		ready: function() {
 			var that = this;
-			mui('.mui-scroll-wrapper.releaseCard').scroll({
+			mui('.mui-scroll-wrapper.positionmanager').scroll({
 				bounce: true,
 				indicators: false, // 是否显示滚动条
 				deceleration: mui.os.ios ? 0.003 : 0.0009
 			});
-			mui('.mui-numbox').numbox();
 			window.addEventListener('position_advertpick', function(e) {
-				var page = e.detail.page;
-				switch(page){
+				var position = e.detail.position;
+				switch(position) {
 					case 0:
-						that.shouyeAdverts = e.detail.adverts;
+						that.homePage = e.detail.adverts;
 						break;
 					case 1:
-						that.liebiaoAdverts = e.detail.adverts;
+						that.listPage = e.detail.adverts;
 						break;
 					case 2:
-						that.xiangqingAdverts = e.detail.adverts;
+						that.detailPage = e.detail.adverts;
 						break;
 				}
 			});
@@ -242,20 +323,19 @@
 	};
 </script>
 <style>
-	.releaseCard {
+	.positionmanager {
 		position: absolute;
 		top: 45px;
 		bottom: 0;
 		width: 100%;
 	}
 	
-	.releaseCard input,
-	.releaseCard textarea,
-	.releaseCard label {
+	.positionmanager textarea,
+	.positionmanager label {
 		font-size: 14px;
 	}
 	
-	.releaseCard .inputRow {
+	.positionmanager .inputRow {
 		color: #333;
 		line-height: 30px;
 		padding: 10px;
@@ -264,29 +344,7 @@
 		overflow: hidden;
 	}
 	
-	.releaseCard .inputRow > input[type=text] {
-		line-height: normal;
-		width: inherit;
-		height: inherit;
-		margin: 0;
-		padding: 1px 0px;
-		border: none;
-		position: absolute;
-		top: 15px;
-		left: 120px;
-		right: 40px;
-	}
-	
-	.releaseCard .inputRow > .jxddicon.icon-jinru32 {
-		position: absolute;
-		right: 10px;
-		top: 16px;
-		line-height: 20px;
-		font-size: 20px;
-		color: #999;
-	}
-	
-	.releaseCard .inputRow:after {
+	.positionmanager .inputRow:after {
 		content: "";
 		height: 1px;
 		position: absolute;
@@ -297,57 +355,23 @@
 		transform: scaleY(0.5);
 	}
 	
-	.releaseCard .title {
+	.positionmanager .title {
 		background-color: #ddd;
 		padding: 5px;
 		font-size: 15px;
 		color: #222;
 	}
 	
-	.releaseCard .inputRow label {
+	.positionmanager .inputRow label {
 		width: 100px;
 		float: left;
 	}
 	
-	.releaseCard .inputRow .area,
-	.releaseCard .inputRow .area p:nth-child(2) span:nth-child(2),
-	.releaseCard .inputRow .workType {
-		padding-left: 110px;
+	.positionmanager .inputRow>span {
+		font-size: 15px;
 	}
 	
-	.releaseCard .inputRow .area,
-	.releaseCard .inputRow .workType {
-		padding-right: 30px;
-	}
-	
-	.releaseCard .inputRow .area p,
-	.releaseCard .inputRow .workType {
-		color: #333;
-	}
-	
-	.releaseCard .inputRow .area p:nth-child(2) {
-		line-height: 20px;
-	}
-	
-	.releaseCard .inputRow .area p:nth-child(2) span {
-		display: inherit;
-	}
-	
-	.releaseCard .mui-numbox .mui-input-numbox {
-		width: 36px !important;
-		padding: 0 !important;
-	}
-	
-	.releaseCard .inputRow.textarea {
-		overflow: hidden;
-	}
-	
-	.releaseCard .inputRow.textarea label,
-	.releaseCard .inputRow.textarea textarea {
-		float: left;
-	}
-	
-	.releaseCard textarea {
+	.positionmanager textarea {
 		font-size: 14px;
 		color: #666666;
 		border: 0;
@@ -359,7 +383,6 @@
 	
 	.bottomBtn {
 		padding: 15px 10%;
-		/*background-color: #fff;*/
 	}
 	
 	.bottomBtn a {
@@ -372,23 +395,6 @@
 		border: solid 1px #26c6da;
 		border-radius: 3px;
 	}
-	
-	.userSwitchSpan{
-		color: #222;
-		font-size:14px;
-	}
-	
-	
-	.advertising_storepick{
-		border: 1px solid #ccc;
-		text-align: center;
-	}
-	.advertising_storepick a{
-		margin:10px;
-		font-size: 20px;
-	}
-	
-	/****************************/
 	
 	.mui-input-row .mui-btn {
 		float: none;
@@ -409,8 +415,8 @@
 	}
 	
 	.mui-table-view-cell img {
-		max-width: 100%;
-		max-height: 76px;
+		height: 45px;
+		width: 75px;
 	}
 	
 	.mui-table-view-cell>.mui-btn {
@@ -425,26 +431,24 @@
 		margin-right: 0;
 	}
 	
-	/****************************/
-	
-	.positionAddAdvertDiv{
+	.positionAddAdvertDiv {
 		width: 75px;
 		height: 75px;
 		background-color: #f3f5f7;
 		text-align: center;
 		padding: 10px;
 	}
-	.positionAddAdvertDiv span{
+	
+	.positionAddAdvertDiv span {
 		color: #999;
 		font-size: 12px;
 		margin: -10px 0px 0px 0px;
 		display: inherit;
-		/*color: #999;
-		width: 50px;
-		line-height: 20px;
-		margin-top: 5px;*/
 	}
-	.positionAddAdvertDiv_add{
-		font-size: 25px;
+	
+	.positionAddAdvertDiv_add {
+		font-size: 40px;
+		height: 30px;
+		color: #999;
 	}
 </style>

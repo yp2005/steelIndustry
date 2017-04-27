@@ -13,6 +13,8 @@ const COMMON = '/common';
 const REALNAMEAUTHENTICATION = '/realNameAuthentication';
 const ENTERPRISECERTIFICATION = '/enterpriseCertification';
 const SYSTEMNOTICE = '/systemNotice';
+const ADVERTISEMENT = '/advertisement';
+const ADRELATION= '/adRelation';
 /**
  * api的版本，鉴于api的版本可能会出现不统一的情况，所以还是在url里面进行拼接
  */
@@ -124,6 +126,19 @@ const APIS = {
 		saveSystemNotice: API_ROOT + SYSTEMNOTICE + '/saveSystemNotice',
 		getSystemNoticeList: API_ROOT + SYSTEMNOTICE + '/getSystemNoticeList',
 		deleteSystemNotice: API_ROOT + SYSTEMNOTICE + '/deleteSystemNotice'
+	},
+	
+	advertisement: {
+		advertisement: API_ROOT + ADVERTISEMENT,
+		getPositionAds: API_ROOT + ADVERTISEMENT + '/getPositionAds',
+		updateAllianceAd: API_ROOT + ADVERTISEMENT + '/updateAllianceAd',
+		getAdList: API_ROOT + ADVERTISEMENT + '/list'
+	},
+	
+	adRelation: {
+		adRelation: API_ROOT + ADRELATION,
+		getAdInfo: API_ROOT + ADRELATION + '/getAdInfo',
+		saveAppAdvertisement: API_ROOT + ADRELATION + '/saveAppAdvertisement',
 	}
 };
 

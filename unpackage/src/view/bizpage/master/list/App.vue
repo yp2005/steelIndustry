@@ -183,7 +183,6 @@
 					value: 0,
 					text: '默认排序',
 				},
-				disnonetworkmask: false,
 				pullrefresh: null,
 				masterList: [],
 				lng: undefined,

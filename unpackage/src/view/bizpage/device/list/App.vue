@@ -11,7 +11,7 @@
 			<div id="pullrefresh" class="mui-scroll">
 				<!-- 广告位 TODO -->
 				<img class="advertisement" src="http://img0.imgtn.bdimg.com/it/u=3660483257,1608558041&fm=15&gp=0.jpg">
-				<div class="oneStore" v-for="store in storeList" @tap="gotoDetail(store.userId)">
+				<div class="oneStore" v-for="store in storeList" @tap="gotoDetail(store)">
 					<img :src="store.shopSignPictures" />
 					<div class="storeInfo">
 						<p class="mui-ellipsis">{{store.storeName}}</p>
@@ -165,6 +165,7 @@
 				text: '距离',
 			}]);
 			return {
+				selectStore: plus.webview.currentWebview().selectStore,
 				cityPicker: cityPicker,
 				typePicker: typePicker,
 				typeData: typeData,
@@ -187,7 +188,6 @@
 					value: 0,
 					text: '默认排序',
 				},
-				disnonetworkmask: false,
 				pullrefresh: null,
 				storeList: [],
 				lng: undefined,
@@ -210,12 +210,18 @@
 			});
 		},
 		methods: {
-			gotoDetail: function(userId) {
-				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', '../../bizpage/device/deviceinfo.html', {
-					extras: {
-						userId: userId
-					}
-				});
+			gotoDetail: function(store) {
+				if(this.selectStore) {
+					var fromPage = plus.webview.getWebviewById('../../commonpage/advertisingmanager/editadvertising.html');
+					mui.fire(fromPage, 'advertising_storepick', {store:store});
+					mui.back();
+				} else {
+					muiUtils.openWindow('../../bizpage/device/deviceinfo.html', '../../bizpage/device/deviceinfo.html', {
+						extras: {
+							userId: store.userId
+						}
+					});
+				}
 			},
 			doSearch: function() {
 				this.getData();
@@ -315,7 +321,7 @@
 							for(var store of data.result.storeList || []) {
 								store.shopSignPictures = data.result.imgServer + store.shopSignPictures;
 							}
-							that.storeList =  that.storeList.concat(data.result.storeList || []);
+							that.storeList = that.storeList.concat(data.result.storeList || []);
 						} else {
 							mui.toast(data.erroCode + '：' + data.erroMsg);
 						}
@@ -521,7 +527,7 @@
 	}
 	
 	.noData {
-		line-height: 250px;	
+		line-height: 250px;
 		text-align: center;
 	}
 </style>

@@ -16,7 +16,7 @@
 				<img class="advertisement" src="http://img0.imgtn.bdimg.com/it/u=3660483257,1608558041&fm=15&gp=0.jpg">
 				<div class="oneWork" v-for="work in workList" @tap="gotoDetail(work.id)">
 					<img :src="work.imgName" />
-					<div class="workStore">
+					<div class="workInfo">
 						<p class="mui-ellipsis">{{work.demandTitle}}</p>
 						<p>{{work.createTime}}<span class="mui-pull-right">{{work.address}}</span></p>
 						<p>
@@ -188,7 +188,6 @@
 					value: 0,
 					text: '默认排序',
 				},
-				disnonetworkmask: false,
 				pullrefresh: null,
 				workList: [],
 				lng: undefined,
@@ -474,32 +473,32 @@
 		height: 106px;
 	}
 	
-	.oneWork .workStore {
+	.oneWork .workInfo {
 		padding-left: 116px;
 		min-height: 80px;
 	}
 	
-	.oneWork .workStore p {
+	.oneWork .workInfo p {
 		font-size: 13px;
 	}
 	
-	.oneWork .workStore p:nth-child(1) {
+	.oneWork .workInfo p:nth-child(1) {
 		color: #000;
 		font-size: 14px;
 	}
 	
-	.oneWork .workStore p:nth-child(3) {
+	.oneWork .workInfo p:nth-child(3) {
 		overflow: hidden;
 		padding: 5px 0;
 	}
 	
-	.oneWork .workStore p:nth-child(3) img {
+	.oneWork .workInfo p:nth-child(3) img {
 		width: 19px;
 		height: 19px;
 		margin-right: 4px;
 	}
 	
-	.oneWork .workStore p:nth-child(4) a {
+	.oneWork .workInfo p:nth-child(4) a {
 		color: #fff;
 		background-color: #26c6da;
 		line-height: 1;
@@ -508,7 +507,7 @@
 		margin: 5px 0;
 	}
 	
-	.oneWork .workStore p:nth-child(4) span {
+	.oneWork .workInfo p:nth-child(4) span {
 		line-height: 1;
 		margin-top: 4px;
 		font-size: 19px;

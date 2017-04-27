@@ -1,61 +1,47 @@
 <template>
 	<div class="mui-content">
-		<div class="mui-scroll-wrapper releaseCard">
+		<div class="mui-scroll-wrapper editadvertising">
 			<div class="mui-scroll">
-				<div class="title"></div>
-				<div class="inputRow"><label>广告名称</label><input type="text" v-model="name" placeholder="请输入广告名称(必填)"></div>
-				<div class="title"></div>
+				<div class="inputRow"><label>广告标题</label><input type="text" v-model="title" placeholder="请输入广告标题"></div>
 				<div class="inputRow">
-					<p>请上传广告图片(必填)</p>
-					<upload :is-cut="isCut" :pictures.sync="pictures" :imagecount="1" :dataid="gg_guanggao"></upload>
+					<p>请上传广告图片</p>
+					<p>推荐尺寸：首页720 * 300，详情页和列表页720 * 240</p>
+					<upload :is-cut="isCut" :pictures.sync="pictures" :imagecount="1"></upload>
 				</div>
-				<div class="title"></div>
-				<div class="mui-card1">
-					<form class="mui-input-group">
-						<div class="mui-input-row mui-radio mui-left">
-							<label>链接到地址</label>
-							<input type="text" name="radio1" type="radio" @tap="linkToUrl = !linkToUrl" :checked="linkToUrl" >
-						</div>
-						<div class="mui-input-row mui-radio mui-left">
-							<label>链接到店铺</label>
-							<input type="text" name="radio1" type="radio" @tap="linkToUrl = !linkToUrl" :checked="!linkToUrl" >
-						</div>
-					</form>
+				<div class="inputRow">
+					<label>链接类型</label>
+					<input readonly type="text" v-model="linkType.text" @tap="selectLinkType" placeholder="请选择链接类型">
 				</div>
-				<div v-show="linkToUrl" class="inputRow">
-					<p>请输入地址</p>
+				<div v-show="linkType.value == 'outerLink'" class="inputRow">
+					<p>链接地址</p>
 					<div>
-						<textarea id="textarea" v-model="advertUrl" placeholder="请输入地址" @input="textAreaInput"></textarea>
+						<textarea id="textarea" v-model="advertUrl" placeholder="请输入链接地址" @input="textAreaInput"></textarea>
 					</div>
 				</div>
-				<div v-show="!linkToUrl" class="inputRow">
+				<div v-show="linkType.value == 'innerLink'" class="inputRow">
 					<div>
-						<div v-if="advertStore" class="oneStore">
-							<img src="http://img1.imgtn.bdimg.com/it/u=1945716465,2733267266&fm=23&gp=0.jpg" />
+						<div v-if="advertStore" class="oneStore" @tap="gotoDetail(advertStore.userId)">
+							<img :src="advertStore.shopSignPictures" />
 							<div class="storeInfo">
-								<p class="mui-ellipsis">店铺名称店铺名称店铺名称店铺名称店铺名称店铺名称</p>
-								<p>北京 北京市 海淀区</p>
+								<p class="mui-ellipsis">{{advertStore.storeName}}</p>
+								<p>{{advertStore.address || ((advertStore.provinceName || '') + ' ' + (advertStore.cityName || '') + ' ' + (advertStore.countyName || '') + ' ' + (advertStore.street || ''))}}</p>
 								<p>
-									<img v-if="item.shiming" :src="shimingpicpath">
-									<img v-else :src="noshimingpicpath">
-									<img v-if="item.qiye" :src="qiyepicpath">
-									<img v-else :src="noqiyepicpath">
-									<span class="mui-pull-right">距离：9999KM</span>
+									<img v-show="advertStore.realNameAuthentication == 1" src="../../../../../../static/img/mine/shimingrenzheng.svg">
+									<img v-else src="../../../../../../static/img/mine/noshimingrenzheng.svg">
+									<img v-show="advertStore.enterpriseCertification == 1" src="../../../../../../static/img/mine/qiyerenzheng.svg">
+									<img v-else src="../../../../../../static/img/mine/noqiyerenzheng.svg">
 								</p>
 								<p>
-									<a href="javascript:void(0)" @tap="gotoStore">进入店铺</a>
-									<a href="javascript:void(0)" @tap="pickStore">重新选择</a>
-									<span class="mui-pull-right">...</span>
-								</p>
+									<a href="javascript:void(0)" @tap="selectStore($event)">重新选择</a><span class="mui-pull-right">...</span></p>
 							</div>
 						</div>
-						<div v-else class="advertising_storepick" @tap="pickStore">
-	                        <a href="javascript:void(0)">请选择店铺</a>
-	                    </div>
+						<div v-else class="advertising_storepick" @tap="selectStore">
+							<a href="javascript:void(0)">请选择店铺</a>
+						</div>
 					</div>
 				</div>
 				<div class="bottomBtn">
-					<a style="width:100%;" href="javascript:void(0)" @tap="save()">保存</a>
+					<a style="width:100%;" href="javascript:void(0)" @tap="submit()">保存</a>
 				</div>
 			</div>
 		</div>
@@ -64,41 +50,98 @@
 
 <script>
 	import muiUtils from 'common/muiUtils';
-	import log from 'common/logUtils';
 	import api from 'api';
 	import CONSTS from 'common/consts';
 	import upload from 'component/upload/UploadImage';
-	import {
-		cityData3Lev
-	} from 'common/cityData';
 	export default {
 		data: function() {
+			var linkTypePicker = new mui.PopPicker({
+				layer: 1
+			});
+			linkTypePicker.setData([{
+				value: 'innerLink',
+				text: '内部链接',
+			}, {
+				value: 'outerLink',
+				text: '外部链接',
+			}]);
+			var ad = plus.webview.currentWebview().ad;
+			var id = undefined;
+			var storeId = undefined;
+			var title = '';
+			var pictures = [];
+			var linkType = {
+				value: 'innerLink',
+				text: '内部链接',
+			};
+			var advertUrl = '';
+			if(ad) {
+				id = ad.id;
+				storeId = ad.storeId;
+				title = ad.title;
+				pictures.push(ad.img);
+				if(ad.linkType == 'outerLink') {
+					linkType = {
+						value: 'outerLink',
+						text: '外部链接',
+					};
+					advertUrl = ad.url;
+				}
+			}
 			return {
-				
-				shimingpicpath: require('static/img/mine/shimingrenzheng.svg'),
-				noshimingpicpath: require('static/img/mine/noshimingrenzheng.svg'),
-				qiyepicpath: require('static/img/mine/qiyerenzheng.svg'),
-				noqiyepicpath: require('static/img/mine/noqiyerenzheng.svg'),
-				
-				name: '',
-				pictures: [],
+				linkTypePicker: linkTypePicker,
+				id: id,
+				storeId: storeId,
+				title: title,
+				pictures: pictures,
 				isCut: false,
-				linkToUrl: true,
-				advertUrl: '',
-				advertStore:null
+				linkType: linkType,
+				advertUrl: advertUrl,
+				advertStore: null,
+				fromPage: plus.webview.currentWebview().fromPage
 			};
 		},
-		created: function() {
-
+		created() {
+			var that = this;
+			if(this.id && this.linkType.value == 'innerLink') {
+				muiUtils.muiAjax(api.APIS.store.getStoreByUserId + '?userId=' + that.storeId, {
+					dataType: "json",
+					type: "get",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							that.advertStore = data.result;
+							if(!that.advertStore) {
+								mui.toast('店铺不存在，可能已被用户删除，请从新选择！');
+							}
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。');
+					}
+				});
+			}
 		},
 		methods: {
-			pickStore() {
-				muiUtils.openWindow('../../commonpage/advertisingmanager/store.html', 'commonpage_advertisingmanager_store');
+			selectLinkType() {
+				var that = this;
+				this.linkTypePicker.show(function(items) {
+					that.linkType = items[0];
+				});
 			},
-			gotoStore: function() {
-				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', 'bizpage_device_deviceinfo', {
+			selectStore(e) {
+				muiUtils.openWindow('../../bizpage/device/list.html', '../../bizpage/device/list.html', {
 					extras: {
-						store: this.advertStore
+						selectStore: true
+					}
+				});
+				e && e.stopPropagation();
+			},
+			gotoDetail: function(userId) {
+				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', '../../bizpage/device/deviceinfo.html', {
+					extras: {
+						userId: userId
 					}
 				});
 			},
@@ -110,22 +153,69 @@
 					textarea.style.height = scrollHeight + 'px';
 				}
 			},
-			save() {
-				this.goback();
-			},
-			goback() {
-				mui.back();
+			submit() {
+				if(!this.title) {
+					mui.toast('请输入广告标题！');
+					return;
+				}
+				if(!this.pictures || this.pictures.length == 0) {
+					mui.toast('请上传广告图片！');
+					return;
+				}
+				if(this.linkType.value == 'innerLink' && !this.advertStore) {
+					mui.toast('请选择店铺！');
+					return;
+				}
+				if(this.linkType.value == 'outerLink' && !this.advertUrl) {
+					mui.toast('请输入链接地址！');
+					return;
+				}
+				var data = {
+					title: this.title,
+					linkType: this.linkType.value,
+					img: this.pictures[0]
+				};
+				if(data.img.indexOf('http') == 0) {
+					data.img = data.img.substring(data.img.lastIndexOf('/') + 1);
+				}
+				if(this.linkType.value == 'innerLink') {
+					data.storeId = this.advertStore.userId;
+				}
+				if(this.linkType.value == 'outerLink') {
+					data.url = this.advertUrl;
+				}
+				if(this.id) {
+					data.id = this.id;
+				}
+				var that = this;
+				muiUtils.muiAjax(api.APIS.advertisement.advertisement, {
+					dataType: "json",
+					contentType: 'application/json',
+					type: "post",
+					data: JSON.stringify(data),
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							mui.toast('保存成功！');
+							var fromPage = plus.webview.getWebviewById(that.fromPage);
+							mui.fire(fromPage, 'getData');
+							mui.back();
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。');
+					}
+				});
 			}
 		},
 		ready: function() {
-			mui('.mui-scroll-wrapper.releaseCard').scroll({
+			mui('.mui-scroll-wrapper.editadvertising').scroll({
 				bounce: true,
 				indicators: false, // 是否显示滚动条
 				deceleration: mui.os.ios ? 0.003 : 0.0009
 			});
-			mui('.mui-numbox').numbox();
 			var that = this;
-			//
 			window.addEventListener('advertising_storepick', function(e) {
 				that.advertStore = e.detail.store;
 			});
@@ -136,20 +226,20 @@
 	};
 </script>
 <style>
-	.releaseCard {
+	.editadvertising {
 		position: absolute;
 		top: 45px;
 		bottom: 0;
 		width: 100%;
 	}
 	
-	.releaseCard input,
-	.releaseCard textarea,
-	.releaseCard label {
+	.editadvertising input,
+	.editadvertising textarea,
+	.editadvertising label {
 		font-size: 14px;
 	}
 	
-	.releaseCard .inputRow {
+	.editadvertising .inputRow {
 		color: #333;
 		line-height: 30px;
 		padding: 10px;
@@ -158,7 +248,7 @@
 		overflow: hidden;
 	}
 	
-	.releaseCard .inputRow:after {
+	.editadvertising .inputRow:after {
 		content: "";
 		height: 1px;
 		position: absolute;
@@ -169,52 +259,21 @@
 		transform: scaleY(0.5);
 	}
 	
-	.releaseCard .title {
-		background-color: #ddd;
-		padding: 5px;
-		font-size: 15px;
-		color: #222;
-	}
-	
-	.releaseCard .inputRow label {
+	.editadvertising .inputRow label {
 		width: 70px;
 		float: left;
 	}
 	
-	.releaseCard .inputRow .area,
-	.releaseCard .inputRow .area p:nth-child(2) span:nth-child(2),
-	.releaseCard .inputRow .workType {
-		padding-left: 70px;
-	}
-	
-	.releaseCard .inputRow .area p,
-	.releaseCard .inputRow .workType {
-		color: #333;
-	}
-	
-	.releaseCard .inputRow .area p:nth-child(2) {
-		line-height: 20px;
-	}
-	
-	.releaseCard .inputRow .area p:nth-child(2) span {
-		display: inherit;
-	}
-	
-	.releaseCard .mui-numbox .mui-input-numbox {
-		width: 36px !important;
-		padding: 0 !important;
-	}
-	
-	.releaseCard .inputRow.textarea {
+	.editadvertising .inputRow.textarea {
 		overflow: hidden;
 	}
 	
-	.releaseCard .inputRow.textarea label,
-	.releaseCard .inputRow.textarea textarea {
+	.editadvertising .inputRow.textarea label,
+	.editadvertising .inputRow.textarea textarea {
 		float: left;
 	}
 	
-	.releaseCard textarea {
+	.editadvertising textarea {
 		font-size: 14px;
 		color: #666666;
 		border: 0;
@@ -236,114 +295,12 @@
 		width: 45%;
 	}
 	
-	.bottomBtn a:nth-child(1) {
+	.bottomBtn a {
 		color: #fff;
 		background-color: #26c6da;
 		border: solid 1px #26c6da;
 		border-radius: 3px;
 	}
-	/*.bottomBtn a:nth-child(1) {
-		margin-right: 3%;
-		color: #333;
-		background-color: #fff;
-		border: solid 1px #d7d7d7;
-		border-radius: 3px;
-	}
-	
-	.bottomBtn a:nth-child(2) {
-		margin-left: 3%;
-		color: #fff;
-		background-color: #26c6da;
-		border: solid 1px #26c6da;
-		border-radius: 3px;
-	}*/
-	
-	.backTitleBg {
-		position: fixed;
-		top: 45px;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		/*padding: 50px 0px;*/
-		background-color: #ddd;
-		text-align: center;
-	}
-	
-	.bottomBackBtn {
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		line-height: 40px;
-		text-align: center;
-		background-color: #fff;
-		z-index: 1;
-	}
-	
-	.statusFont{
-		color:#666;
-	}
-	
-	.statusFont1{
-		color:#26c6da;
-	}
-	
-    .mask {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        background-color: #000000;
-        opacity: 0.6;
-        z-index: 11;
-    }
-    
-    .declarationWindow {
-        position: fixed;
-        top: 10%;
-        bottom: 10%;
-        left: 5%;
-        right: 5%;
-        padding: 15px 12px;
-        z-index: 12;
-        opacity: 1;
-        background-color: #ffffff;
-        border: solid 1px #d7d7d7;
-    }
-    
-    .declarationWindow h4 {
-        font-size: 15px;
-        color: #222222;
-        text-align: center;
-        line-height: 35px;
-        font-weight: 600;
-    }
-    
-    .declarationWindow p {
-        text-indent: 28px;
-        font-size: 14px;
-        color: #666666;
-        margin-bottom: 10px;
-        line-height: 25px;
-    }
-    
-    .declarationWindow p:last-of-type {
-        text-indent: 0;
-        position: absolute;
-        left: 0;
-        bottom: 15px;
-        text-align: center;
-        width: 100%;
-    }
-    
-    .declarationWindow p a {
-        font-size: 14px;
-        line-height: 26px;
-        padding: 0 10px;
-        border: solid 1px #26c6da;
-        border-radius: 5px;
-        color: #26c6da;
-    }
-	/*new*/
 	
 	.oneStore {
 		background-color: #fff;
@@ -358,6 +315,7 @@
 	.oneStore .storeInfo {
 		padding-left: 116px;
 		min-height: 80px;
+		line-height: 21px;
 	}
 	
 	.oneStore .storeInfo p {
@@ -396,12 +354,27 @@
 		font-weight: 800;
 		color: #777;
 	}
-	.advertising_storepick{
+	
+	.advertising_storepick {
 		border: 1px solid #ccc;
 		text-align: center;
 	}
-	.advertising_storepick a{
-		margin:10px;
+	
+	.advertising_storepick a {
+		margin: 10px;
 		font-size: 20px;
+	}
+	
+	.editadvertising .inputRow>input[type=text] {
+		line-height: normal;
+		width: inherit;
+		height: inherit;
+		margin: 0;
+		padding: 1px 0px;
+		border: none;
+		position: absolute;
+		top: 15px;
+		left: 80px;
+		right: 40px;
 	}
 </style>
