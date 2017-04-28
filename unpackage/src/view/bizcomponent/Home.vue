@@ -83,7 +83,7 @@
 		data: function() {
 			return {
 				scroll: undefined,
-				imageDatas: [{
+				imageDatasDefault: [{
 					banner_img_url: 'http://img2.imgtn.bdimg.com/it/u=1942697624,2080778166&fm=23&gp=0.jpg',
 					banner_url: '',
 					banner_name: '1',
@@ -94,6 +94,7 @@
 					banner_name: '2',
 					banner_order: 2
 				}],
+				imageDatas: [],
 				messages: [{
 					title: '暂无公告',
 					content: ''
@@ -223,6 +224,9 @@
 									}
 								}
 								that.imageDatas = imageDatas;
+							}
+							else {
+								that.imageDatas = that.imageDatasDefault;
 							}
 							if(that.homeData.systemNotice && that.homeData.systemNotice.length > 0) {
 								var messages = that.homeData.systemNotice;

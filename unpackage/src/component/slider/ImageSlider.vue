@@ -1,6 +1,5 @@
 <template>
-
-	<div id="slider" class="mui-slider">
+	<div id="{{sliderid}}" class="mui-slider">
 		<div class="mui-slider-group mui-slider-loop">
 			<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
 			<div class="mui-slider-item mui-slider-item-duplicate">
@@ -27,7 +26,6 @@
 			<div v-for="(index, img) in images" class="mui-indicator {{index == 0 ? 'mui-active':''}}"></div>
 		</div>
 	</div>
-
 </template>
 
 <script>
@@ -57,9 +55,6 @@
 	export default {
 		// 定义全局变量
 		data: function() {
-			return {
-				indicatorDisplay: true
-			};
 		},
 		// 传入参数定义
 		props: {
@@ -73,6 +68,14 @@
 				default: function() {
 					console.log('default itemTap!');
 				}
+			},
+			indicatorDisplay: {
+				type: Boolean,
+				default: true
+			},
+			sliderid: {
+				type: String,
+				default: 'slider'
 			}
 		},
 		// 方法集合
@@ -80,11 +83,11 @@
 			loadImage: function() {
 				// console.log('this.images.length:' + this.images.length);
 				if(this.images.length > 1) {
-					var slider = mui('#slider');
+					var slider = mui('#' + this.sliderid);
 					slider.slider({
 						interval: 1000
 					});
-					this.indicatorDisplay = true;
+					this.indicatorDisplay = this.indicatorDisplay ? true : 'none';
 				} else {
 					this.indicatorDisplay = 'none';
 				}

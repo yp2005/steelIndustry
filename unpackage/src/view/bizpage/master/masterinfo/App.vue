@@ -1,5 +1,4 @@
 <template>
-	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
 	<div class="mui-scroll-wrapper masterinfo" style="bottom: {{isStoreManage ? '50px' : '0'}}">
 		<div class="mui-scroll">
 			<div class="context">
@@ -76,8 +75,12 @@
 						</p>
 					</li>
 				</ul>
+				<div class="list-ad-two">
+					<img v-if="adType == 'oneImg'" :src="imageDatas[0].banner_img_url" @tap="bannerTap(imageDatas[0])">
+					<imageslider v-if="adType == 'loopImg'" sliderid="ad-slider" :images="imageDatas" :item-tap="bannerTap" :indicator-display="indicatorDisplay"></imageslider>
+					<template v-if="adType == 'alliance'">{{{allianceCode}}}</template>
+				</div>
 			</div>
-
 		</div>
 	</div>
 	<div class="share" v-show="showShare">
@@ -90,13 +93,12 @@
 </template>
 
 <script>
-	import nonetworkmask from 'component/mask/NoNetWorkMask';
 	import muiUtils from 'common/muiUtils';
 	import log from 'common/logUtils';
 	import api from 'api';
 	import CONSTS from 'common/consts';
 	import cacheUtils from 'common/cacheUtils';
-
+	import imageslider from 'component/slider/ImageSlider';
 	export default {
 		data: function() {
 			var shareSwitch = cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS).shareSwitch;
@@ -112,7 +114,13 @@
 				master: masterCard,
 				address: {},
 				userId: plus.webview.currentWebview().userId,
-				appVersionInfo: cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPVERSIONINFO)
+				appVersionInfo: cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPVERSIONINFO),
+				adType: 'oneImg',
+				imageDatas: [{
+					banner_img_url: 'http://img0.imgtn.bdimg.com/it/u=3660483257,1608558041&fm=15&gp=0.jpg',
+				}],
+				allianceCode: '',
+				indicatorDisplay: false
 			};
 		},
 		created: function() {
@@ -138,8 +146,87 @@
 					}
 				});
 			}
+			muiUtils.muiAjax(api.APIS.advertisement.getPositionAds + '?position=detailPage', {
+				dataType: "json",
+				type: "get",
+				success: function(data) {
+					if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+						if(data.result.adType == 'alliance') {
+							if(data.result.adData) {
+								that.adType = 'alliance';
+								that.allianceCode = data.result.adData;
+							}
+						} else if(data.result.adType == 'loopImg') {
+							if(data.result.adData && data.result.adData.length > 0) {
+								var imageDatas = [];
+								for(var ad of data.result.adData) {
+									if(ad.linkType === 'innerLink') {
+										imageDatas.push({
+											banner_img_url: data.result.imgServer + ad.img,
+											banner_url: ad.storeId,
+											banner_name: ad.title,
+											banner_order: ad.id,
+											linkType: 'innerLink'
+										});
+									} else {
+										imageDatas.push({
+											banner_img_url: data.result.imgServer + ad.img,
+											banner_url: ad.url,
+											banner_name: ad.title,
+											banner_order: ad.id,
+											linkType: 'outerLink'
+										});
+									}
+								}
+								that.adType = 'loopImg';
+								that.imageDatas = imageDatas;
+							}
+						} else if(data.result.adType == 'oneImg') {
+							if(data.result.adData) {
+								var imageDatas = [];
+								var ad = data.result.adData;
+								if(ad.linkType === 'innerLink') {
+									imageDatas.push({
+										banner_img_url: data.result.imgServer + ad.img,
+										banner_url: ad.storeId,
+										banner_name: ad.title,
+										banner_order: ad.id,
+										linkType: 'innerLink'
+									});
+								} else {
+									imageDatas.push({
+										banner_img_url: data.result.imgServer + ad.img,
+										banner_url: ad.url,
+										banner_name: ad.title,
+										banner_order: ad.id,
+										linkType: 'outerLink'
+									});
+								}
+								that.adType = 'oneImg';
+								that.imageDatas = imageDatas;
+							}
+						}
+					}
+				},
+				error: function(xhr, type, errorThrown) {},
+				loading: false
+			});
 		},
 		methods: {
+			bannerTap(item) {
+				if(item.linkType == 'innerLink') {
+					this.gotoStoreDetail(item.banner_url);
+				} else if(item.linkType == 'outerLink') {
+					plus.runtime.openURL(item.banner_url);
+				}
+			},
+			gotoStoreDetail(userId) {
+				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', '../../bizpage/device/deviceinfo.html', {
+					extras: {
+						userId: userId
+					}
+				});
+			},
 			dealData() {
 				this.master.workerTypesDis = '';
 				this.master.serviceAreaDis = '';
@@ -352,7 +439,7 @@
 			});
 		},
 		components: {
-			nonetworkmask
+			imageslider
 		}
 	};
 </script>
@@ -568,5 +655,24 @@
 	
 	.description {
 		white-space: pre-wrap;
+	}
+	
+	.list-ad-two {
+		background-color: #f3f5f7;
+		padding: 10px 0;
+		height: 140px;
+	}
+	
+	.list-ad-two img {
+		width: 100%;
+		height: 120px;
+	}
+	
+	.list-ad-two .mui-slider {
+		height: 120px;
+	}
+	
+	.list-ad-two .mui-slider .mui-slider-group .mui-slider-item img {
+		height: 120px;
 	}
 </style>

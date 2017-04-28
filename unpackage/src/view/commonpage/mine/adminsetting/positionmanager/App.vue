@@ -205,7 +205,7 @@
 				}
 			},
 			sumbmit() {
-				if(!this.homePage || this.homePage.length === 0) {
+				/*if(!this.homePage || this.homePage.length === 0) {
 					mui.toast("请设置首页广告！");
 					return;
 				}
@@ -220,7 +220,7 @@
 				if((this.appSetting.listPageAdType == 'alliance' || this.appSetting.detailPageAdType == 'alliance') && !this.alliance.content) {
 					mui.toast("请输入广告联盟代码！");
 					return;
-				}
+				}*/
 				var data = {
 					listPageAdType: this.appSetting.listPageAdType,
 					detailPageAdType: this.appSetting.detailPageAdType

@@ -9,8 +9,11 @@
 		</p>
 		<div id="scroll" class="mui-scroll-wrapper">
 			<div id="pullrefresh" class="mui-scroll">
-				<!-- 广告位 TODO -->
-				<img class="advertisement" src="http://img0.imgtn.bdimg.com/it/u=3660483257,1608558041&fm=15&gp=0.jpg">
+				<div class="advertisement">
+					<img v-if="adType == 'oneImg'" :src="imageDatas[0].banner_img_url" @tap="bannerTap(imageDatas[0])">
+					<imageslider v-if="adType == 'loopImg'" :images="imageDatas" :item-tap="bannerTap" :indicator-display="indicatorDisplay"></imageslider>
+					<template v-if="adType == 'alliance'">{{{allianceCode}}}</template>
+				</div>
 				<div class="oneStore" v-for="store in storeList" @tap="gotoDetail(store)">
 					<img :src="store.shopSignPictures" />
 					<div class="storeInfo">
@@ -40,6 +43,7 @@
 	import {
 		cityData3Lev
 	} from 'common/cityData';
+	import imageslider from 'component/slider/ImageSlider';
 	export default {
 		data: function() {
 			var cityPicker = new mui.PopPicker({
@@ -192,6 +196,12 @@
 				storeList: [],
 				lng: undefined,
 				lat: undefined,
+				adType: 'oneImg',
+				imageDatas: [{
+					banner_img_url: 'http://img0.imgtn.bdimg.com/it/u=3660483257,1608558041&fm=15&gp=0.jpg',
+				}],
+				allianceCode: '',
+				indicatorDisplay: false
 			};
 		},
 		created: function() {
@@ -208,12 +218,91 @@
 				provider: 'baidu',
 				timeout: 8000
 			});
+			muiUtils.muiAjax(api.APIS.advertisement.getPositionAds + '?position=listPage', {
+				dataType: "json",
+				type: "get",
+				success: function(data) {
+					if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+						if(data.result.adType == 'alliance') {
+							if(data.result.adData) {
+								that.adType = 'alliance';
+								that.allianceCode = data.result.adData;
+							}
+						} else if(data.result.adType == 'loopImg') {
+							if(data.result.adData && data.result.adData.length > 0) {
+								var imageDatas = [];
+								for(var ad of data.result.adData) {
+									if(ad.linkType === 'innerLink') {
+										imageDatas.push({
+											banner_img_url: data.result.imgServer + ad.img,
+											banner_url: ad.storeId,
+											banner_name: ad.title,
+											banner_order: ad.id,
+											linkType: 'innerLink'
+										});
+									} else {
+										imageDatas.push({
+											banner_img_url: data.result.imgServer + ad.img,
+											banner_url: ad.url,
+											banner_name: ad.title,
+											banner_order: ad.id,
+											linkType: 'outerLink'
+										});
+									}
+								}
+								that.adType = 'loopImg';
+								that.imageDatas = imageDatas;
+							}
+						} else if(data.result.adType == 'oneImg') {
+							if(data.result.adData) {
+								var imageDatas = [];
+								var ad = data.result.adData;
+								if(ad.linkType === 'innerLink') {
+									imageDatas.push({
+										banner_img_url: data.result.imgServer + ad.img,
+										banner_url: ad.storeId,
+										banner_name: ad.title,
+										banner_order: ad.id,
+										linkType: 'innerLink'
+									});
+								} else {
+									imageDatas.push({
+										banner_img_url: data.result.imgServer + ad.img,
+										banner_url: ad.url,
+										banner_name: ad.title,
+										banner_order: ad.id,
+										linkType: 'outerLink'
+									});
+								}
+								that.adType = 'oneImg';
+								that.imageDatas = imageDatas;
+							}
+						}
+					}
+				},
+				error: function(xhr, type, errorThrown) {},
+				loading: false
+			});
 		},
 		methods: {
+			bannerTap(item) {
+				if(item.linkType == 'innerLink') {
+					this.gotoStoreDetail(item.banner_url);
+				} else if(item.linkType == 'outerLink') {
+					plus.runtime.openURL(item.banner_url);
+				}
+			},
+			gotoStoreDetail(userId) {
+				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', '../../bizpage/device/deviceinfo.html', {
+					extras: {
+						userId: userId
+					}
+				});
+			},
 			gotoDetail: function(store) {
 				if(this.selectStore) {
 					var fromPage = plus.webview.getWebviewById('../../commonpage/advertisingmanager/editadvertising.html');
-					mui.fire(fromPage, 'advertising_storepick', {store:store});
+					mui.fire(fromPage, 'advertising_storepick', { store: store });
 					mui.back();
 				} else {
 					muiUtils.openWindow('../../bizpage/device/deviceinfo.html', '../../bizpage/device/deviceinfo.html', {
@@ -392,6 +481,9 @@
 				this.getData();
 			}
 		},
+		components: {
+			imageslider
+		},
 		ready: function() {
 			var deceleration = mui.os.ios ? 0.003 : 0.0009;
 			mui('.mui-scroll-wrapper').scroll({
@@ -466,6 +558,11 @@
 		margin-bottom: 8px;
 	}
 	
+	.deviceList .advertisement img {
+		width: 100%;
+		height: 120px;
+	}
+	
 	.oneStore {
 		padding: 10px;
 		background-color: #fff;
@@ -529,5 +626,9 @@
 	.noData {
 		line-height: 250px;
 		text-align: center;
+	}
+	
+	.mui-slider {
+		height: 120px;
 	}
 </style>

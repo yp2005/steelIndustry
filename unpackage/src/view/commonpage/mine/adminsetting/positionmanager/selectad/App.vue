@@ -2,7 +2,6 @@
 	<div id="scroll" class="mui-scroll-wrapper adList">
 		<div id="pullrefresh" class="mui-scroll">
 			<div class="oneAd" v-for="ad in adList" @tap="select($index)">
-				<input />
 				<img :src="ad.img" />
 				<div class="adInfo">
 					<p class="mui-ellipsis">{{ad.title}}</p>

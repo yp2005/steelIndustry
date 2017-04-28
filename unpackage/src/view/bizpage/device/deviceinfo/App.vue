@@ -1,5 +1,4 @@
 <template>
-	<nonetworkmask :disnonetworkmask.sync="disnonetworkmask" :top="45" :bottom="0"></nonetworkmask>
 	<div class="mui-scroll-wrapper deviceInfo">
 		<div class="mui-scroll">
 			<!--<div class="error-div" v-if="isStoreManage && !isPreview && store.status!=0">
@@ -9,7 +8,7 @@
 			<div v-else class="context">
 				<!--轮播图-->
 				<div>
-					<slider :images="imageDatas"></slider>
+					<imageslider sliderid="store-slider" :images="storeImageDatas"></imageslider>
 				</div>
 				<!--文字说明 -->
 				<div class="shop-data-box">
@@ -75,19 +74,14 @@
 								<a @tap="open">我要发布店铺<i id="box"></i></a>
 							</p>
 						</li>
-						<!--
-                        	作者：18710095921@163.com
-                        	时间：2017-04-15
-                        	描述：下面是广告
-                        	TODO
-                        -->
 						<div class="list-ad-two">
-							<a href="javascript:void(0)"><img src="http://img.168bgt.com/upload/2016/07/24/20160724145643_62.jpg"></a>
+							<img v-if="adType == 'oneImg'" :src="imageDatas[0].banner_img_url" @tap="bannerTap(imageDatas[0])">
+							<imageslider v-if="adType == 'loopImg'" sliderid="ad-slider" :images="imageDatas" :item-tap="bannerTap" :indicator-display="indicatorDisplay"></imageslider>
+							<template v-if="adType == 'alliance'">{{{allianceCode}}}</template>
 						</div>
 					</div>
 				</div>
 			</div>
-
 		</div>
 	</div>
 	<div class="share" v-show="showShare">
@@ -100,14 +94,11 @@
 </template>
 
 <script>
-	import nonetworkmask from 'component/mask/NoNetWorkMask';
 	import muiUtils from 'common/muiUtils';
-	import log from 'common/logUtils';
-	import slider from 'component/slider/ImageSlider';
 	import api from 'api';
 	import CONSTS from 'common/consts';
 	import cacheUtils from 'common/cacheUtils';
-
+	import imageslider from 'component/slider/ImageSlider';
 	export default {
 		data: function() {
 			var shareSwitch = cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS).shareSwitch;
@@ -120,10 +111,16 @@
 				shareSwitch: shareSwitch,
 				shares: {},
 				store: store,
-				imageDatas: [],
+				storeImageDatas: [],
 				address: {},
 				userId: plus.webview.currentWebview().userId,
-				appVersionInfo: cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPVERSIONINFO)
+				appVersionInfo: cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPVERSIONINFO),
+				adType: 'oneImg',
+				imageDatas: [{
+					banner_img_url: 'http://img0.imgtn.bdimg.com/it/u=3660483257,1608558041&fm=15&gp=0.jpg',
+				}],
+				allianceCode: '',
+				indicatorDisplay: false
 			}
 		},
 		created: function() {
@@ -147,8 +144,87 @@
 					}
 				});
 			}
+			muiUtils.muiAjax(api.APIS.advertisement.getPositionAds + '?position=detailPage', {
+				dataType: "json",
+				type: "get",
+				success: function(data) {
+					if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+						if(data.result.adType == 'alliance') {
+							if(data.result.adData) {
+								that.adType = 'alliance';
+								that.allianceCode = data.result.adData;
+							}
+						} else if(data.result.adType == 'loopImg') {
+							if(data.result.adData && data.result.adData.length > 0) {
+								var imageDatas = [];
+								for(var ad of data.result.adData) {
+									if(ad.linkType === 'innerLink') {
+										imageDatas.push({
+											banner_img_url: data.result.imgServer + ad.img,
+											banner_url: ad.storeId,
+											banner_name: ad.title,
+											banner_order: ad.id,
+											linkType: 'innerLink'
+										});
+									} else {
+										imageDatas.push({
+											banner_img_url: data.result.imgServer + ad.img,
+											banner_url: ad.url,
+											banner_name: ad.title,
+											banner_order: ad.id,
+											linkType: 'outerLink'
+										});
+									}
+								}
+								that.adType = 'loopImg';
+								that.imageDatas = imageDatas;
+							}
+						} else if(data.result.adType == 'oneImg') {
+							if(data.result.adData) {
+								var imageDatas = [];
+								var ad = data.result.adData;
+								if(ad.linkType === 'innerLink') {
+									imageDatas.push({
+										banner_img_url: data.result.imgServer + ad.img,
+										banner_url: ad.storeId,
+										banner_name: ad.title,
+										banner_order: ad.id,
+										linkType: 'innerLink'
+									});
+								} else {
+									imageDatas.push({
+										banner_img_url: data.result.imgServer + ad.img,
+										banner_url: ad.url,
+										banner_name: ad.title,
+										banner_order: ad.id,
+										linkType: 'outerLink'
+									});
+								}
+								that.adType = 'oneImg';
+								that.imageDatas = imageDatas;
+							}
+						}
+					}
+				},
+				error: function(xhr, type, errorThrown) {},
+				loading: false
+			});
 		},
 		methods: {
+			bannerTap(item) {
+				if(item.linkType == 'innerLink') {
+					this.gotoStoreDetail(item.banner_url);
+				} else if(item.linkType == 'outerLink') {
+					plus.runtime.openURL(item.banner_url);
+				}
+			},
+			gotoStoreDetail(userId) {
+				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', '../../bizpage/device/deviceinfo.html', {
+					extras: {
+						userId: userId
+					}
+				});
+			},
 			dealData() {
 				var imgs = this.store.environmentPictures.concat(this.store.productPictures);
 				if(this.store.productPictures.length > 4) {
@@ -162,7 +238,7 @@
 						"banner_order": i
 					});
 				}
-				this.imageDatas = imageDatas;
+				this.storeImageDatas = imageDatas;
 				this.store.deviceTypesDis = '';
 				for(var dt of this.store.deviceTypes) {
 					if(!this.store.deviceTypesDis) {
@@ -405,33 +481,33 @@
 					}
 				});
 			},
-//			gotoStorePage: function() {
-//				let url = '';
-//				let id = '';
-//				let params = {};
-//				if(this.store.status === -1) { // 店铺预览
-//					url = '../../bizpage/device/storemanage.html';
-//					id = 'storemanage_preview';
-//					params = {
-//						isPreview: true,
-//						isStoreManage: true,
-//						isClose: true,
-//						createNew: true,
-//						id: this.store.id,
-//						status: this.store.status
-//					}
-//				} else { // 店铺管理
-//					url = '../../bizpage/device/editstore.html';
-//					params = {
-//						id: this.store.id,
-//						status: this.store.status
-//					}
-//				}
-//
-//				muiUtils.openWindow(url, id || url, {
-//					extras: params
-//				});
-//			}
+			//			gotoStorePage: function() {
+			//				let url = '';
+			//				let id = '';
+			//				let params = {};
+			//				if(this.store.status === -1) { // 店铺预览
+			//					url = '../../bizpage/device/storemanage.html';
+			//					id = 'storemanage_preview';
+			//					params = {
+			//						isPreview: true,
+			//						isStoreManage: true,
+			//						isClose: true,
+			//						createNew: true,
+			//						id: this.store.id,
+			//						status: this.store.status
+			//					}
+			//				} else { // 店铺管理
+			//					url = '../../bizpage/device/editstore.html';
+			//					params = {
+			//						id: this.store.id,
+			//						status: this.store.status
+			//					}
+			//				}
+			//
+			//				muiUtils.openWindow(url, id || url, {
+			//					extras: params
+			//				});
+			//			}
 		},
 		ready: function() {
 			var deceleration = mui.os.ios ? 0.003 : 0.0009;
@@ -461,8 +537,7 @@
 			});
 		},
 		components: {
-			nonetworkmask,
-			slider
+			imageslider
 		}
 	};
 </script>
@@ -537,6 +612,7 @@
 	.jieshao:after {
 		height: 20px;
 		left: 0;
+		background-color: #ddd;
 	}
 	
 	.jieshao p {
@@ -581,7 +657,7 @@
 		content: '';
 		-webkit-transform: scaleY(.5);
 		transform: scaleY(.5);
-		background-color: #c8c7cc;
+		background-color: #ddd;
 	}
 	
 	.goods-list a {
@@ -622,12 +698,14 @@
 	}
 	
 	.list-ad-two {
-		background-color: #c8c7cc;
+		background-color: #f3f5f7;
 		padding: 10px 0;
+		height: 140px;
 	}
 	
 	.list-ad-two img {
 		width: 100%;
+		height: 120px;
 	}
 	
 	.store-manage-btn {
@@ -707,5 +785,13 @@
 	
 	.description {
 		white-space: pre-wrap;
+	}
+	
+	.list-ad-two .mui-slider {
+		height: 120px;
+	}
+	
+	.list-ad-two .mui-slider .mui-slider-group .mui-slider-item img {
+		height: 120px;
 	}
 </style>
