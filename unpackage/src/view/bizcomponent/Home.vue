@@ -84,15 +84,10 @@
 			return {
 				scroll: undefined,
 				imageDatasDefault: [{
-					banner_img_url: 'http://img2.imgtn.bdimg.com/it/u=1942697624,2080778166&fm=23&gp=0.jpg',
+					banner_img_url: require('static/img/homeBanner.jpg'),
 					banner_url: '',
 					banner_name: '1',
 					banner_order: 1
-				}, {
-					banner_img_url: 'http://img2.imgtn.bdimg.com/it/u=2114919032,3638938282&fm=23&gp=0.jpg',
-					banner_url: '',
-					banner_name: '2',
-					banner_order: 2
 				}],
 				imageDatas: [],
 				messages: [{
@@ -264,8 +259,8 @@
 		},
 		ready: function() {
 			var that = this;
-			if(plus.webview.getWebviewById('HBuilder')) {
-				plus.webview.getWebviewById('HBuilder').close('none');
+			if(plus.webview.getWebviewById(plus.runtime.appid)) {
+				plus.webview.getWebviewById(plus.runtime.appid).close('none');
 			}
 			setTimeout(function() {
 				var launchFlag = plus.storage.getItem('launchFlag');

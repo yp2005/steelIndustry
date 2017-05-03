@@ -24,14 +24,7 @@
 							<p class="counts">{{master.browseVolume}}</p>
 							<p>浏览量</p>
 						</div>
-					</li>
-					<li class="mui-table-view-cell btn">
-						<p>
-							<span @tap="callTel" class="tel-btn"><span class="mui-icon mui-icon-phone icon-span"></span>电话咨询</span>
-						</p>
-						<!--<p>
-							<span class="yuyue-btn"><span class="jxddicon icon-yijianfankui icon-span"></span>立即预约</span>
-						</p>-->
+						<span class="mui-icon mui-icon-phone" @tap="callTel"></span>
 					</li>
 				</ul>
 				<ul class="mui-table-view">
@@ -86,8 +79,8 @@
 	<div class="share" v-show="showShare">
 		<span @tap="shareAction('weixin')"><img src="../../../../static/img/share/wx.png" /></span>
 		<span @tap="shareAction('qq')"><img src="../../../../static/img/share/qq.png" /></span>
-		<span @tap="shareAction('tencentweibo')"><img src="../../../../static/img/share/txwb.png" /></span>
-		<span @tap="shareAction('sinaweibo')"><img src="../../../../static/img/share/snwb.png" /></span>
+		<!--<span @tap="shareAction('tencentweibo')"><img src="../../../../static/img/share/txwb.png" /></span>
+		<span @tap="shareAction('sinaweibo')"><img src="../../../../static/img/share/snwb.png" /></span>-->
 	</div>
 	<div class="shareMask" v-show="showShare" @tap="showShare = false"></div>
 </template>
@@ -117,7 +110,7 @@
 				appVersionInfo: cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPVERSIONINFO),
 				adType: 'oneImg',
 				imageDatas: [{
-					banner_img_url: 'http://img0.imgtn.bdimg.com/it/u=3660483257,1608558041&fm=15&gp=0.jpg',
+					banner_img_url: require('static/img/listPageBanner.jpg'),
 				}],
 				allianceCode: '',
 				indicatorDisplay: false
@@ -470,11 +463,11 @@
 	
 	.mui-table-view .mui-media-body {
 		overflow: hidden;
-		padding-top: 15px;
+		padding-top: 7px;
 	}
 	
 	.mui-table-view {
-		margin-bottom: 10px;
+		margin-bottom: 7px;
 	}
 	
 	.mui-table-view-cell label {
@@ -509,18 +502,18 @@
 	}
 	
 	.mui-table-view-chevron .mui-table-view-cell:first-child {
-		padding-bottom: 5px;
+		padding-bottom: 0;
 	}
 	
 	.yuyue {
-		width: 50%;
+		width: 35%;
 		float: left;
 		text-align: center;
 	}
 	
 	.views {
-		width: 50%;
-		float: right;
+		width: 35%;
+		float: left;
 		border-left: 1px solid #D7D7D7;
 		text-align: center;
 	}
@@ -529,37 +522,15 @@
 		color: #000;
 	}
 	
-	.mui-table-view-cell .tel-btn {
-		background-color: #26c6da;
-		color: #fff;
-		float: right;
-		margin: 5px 50px;
-		padding: 7px 25px;
-		border-radius: 5px;
-		position: relative;
-		text-indent: 22px;
-	}
-	
-	.mui-table-view-cell .yuyue-btn {
-		background-color: rgb(38, 198, 218);
-		color: #fff;
-		float: right;
-		width: 40%;
-		margin-right: 20px;
-		padding: 10px 15px;
-		border-radius: 5px;
-		position: relative;
-	}
-	
-	.icon-span {
+	.mui-table-view-cell .mui-icon-phone {
 		position: absolute;
-		top: 7px;
-		left: -4px;
+		bottom: 11px;
+		right: 0;
+		line-height: 42px;
+		padding: 0 25px;
+		background-color: #26d0ca;
 		color: #fff;
-	}
-	
-	.btn {
-		text-align: center;
+		font-size: 33px
 	}
 	
 	.master-images img {
@@ -629,7 +600,7 @@
 	
 	.share span {
 		position: relative;
-		width: 24%;
+		width: 48%;
 		height: 100%;
 	}
 	
@@ -659,8 +630,7 @@
 	
 	.list-ad-two {
 		background-color: #f3f5f7;
-		padding: 10px 0;
-		height: 140px;
+		height: 120px;
 	}
 	
 	.list-ad-two img {

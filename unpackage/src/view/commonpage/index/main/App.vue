@@ -6,8 +6,8 @@
 	<div class="share" v-show="$refs.mine.showShare">
 		<span @tap="$refs.mine.shareAction('weixin')"><img src="../../../../static/img/share/wx.png" /></span>
 		<span @tap="$refs.mine.shareAction('qq')"><img src="../../../../static/img/share/qq.png" /></span>
-		<span @tap="$refs.mine.shareAction('tencentweibo')"><img src="../../../../static/img/share/txwb.png" /></span>
-		<span @tap="$refs.mine.shareAction('sinaweibo')"><img src="../../../../static/img/share/snwb.png" /></span>
+		<!--<span @tap="$refs.mine.shareAction('tencentweibo')"><img src="../../../../static/img/share/txwb.png" /></span>
+		<span @tap="$refs.mine.shareAction('sinaweibo')"><img src="../../../../static/img/share/snwb.png" /></span>-->
 	</div>
 	<div class="shareMask" v-show="$refs.mine.showShare" @tap="$refs.mine.showShare = false"></div>
 </template>
@@ -65,7 +65,7 @@
 	
 	.share span {
 		position: relative;
-		width: 24%;
+		width: 48%;
 		height: 100%;
 	}
 	

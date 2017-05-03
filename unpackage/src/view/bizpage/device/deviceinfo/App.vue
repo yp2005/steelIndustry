@@ -1,85 +1,68 @@
 <template>
 	<div class="mui-scroll-wrapper deviceInfo">
 		<div class="mui-scroll">
-			<!--<div class="error-div" v-if="isStoreManage && !isPreview && store.status!=0">
-				<p>{{store.message}}</p>
-				<a @tap="gotoStorePage">{{store.statusBtn}}</a>
-			</div>-->
-			<div v-else class="context">
-				<!--轮播图-->
-				<div>
-					<imageslider sliderid="store-slider" :images="storeImageDatas"></imageslider>
-				</div>
-				<!--文字说明 -->
-				<div class="shop-data-box">
-					<h4 class="mui-table-view-cell">{{store.storeName}}</h4>
-					<ul class="shop-data-list  am-list">
-						<li class="mui-table-view-cell">
-							<p @tap="shoucang">
-								<span>{{store.deviceTypesDis}}</span>
-								<span v-show="store.isCollected == 1" class="jxddicon icon-shoucangxuanzhong"></span>
-								<span v-else class="jxddicon icon-shoucang1"></span>
-							</p>
-						</li>
-						<li class="mui-table-view-cell">
-							<p @tap="positioning">
-								<span class="jxddicon icon-weizhi2"></span>
-								<span class="text-context">{{(address.province || '') + ' ' + (address.city || '') + ' ' + (address.district || '') + ' ' + (address.street || '')}}</span>
-								<span class="jxddicon icon-jinru32"></span>
-							</p>
-						</li>
-						<li class="mui-table-view-cell telphone" @tap="callTel">
-							<p>
-								<span class="mui-icon mui-icon-phone"></span>
-								<span class="text-context" v-show="isShared === 1 && shareSwitch === 1">{{store.mobileNumber}}</span>
-								<span class="text-context" v-else>电话咨询</span>
-								<span class="jxddicon icon-jinru32"></span>
-							</p>
-						</li>
-					</ul>
-					<div>
-						<li class="jieshao-title">
-							<p>门店介绍<span class="readTimes">浏览量：{{store.browseVolume}}</span></p>
-						</li>
-						<li class="mui-table-view-cell jieshao">
-							<p class="description">{{store.description}}</p>
-						</li>
-					</div>
-					<li class="mui-table-view-cell store-title">
-						<p class="goods">
-							<span class="bendian">本店商品</span>
-							<span class="getAll" @tap="itemtap">查看全部</span>
-							<span class="mui-icon mui-icon-forward"></span>
+			<div>
+				<imageslider sliderid="store-slider" :images="storeImageDatas"></imageslider>
+			</div>
+			<div class="shop-data-box">
+				<ul class="shop-data-list  am-list">
+					<li class="mui-table-view-cell">
+						<p class="storeName">{{store.storeName}}</p>
+					</li>
+					<li class="mui-table-view-cell">
+						<p @tap="shoucang">
+							<span>{{store.deviceTypesDis}}</span>
+							<span v-show="store.isCollected == 1" class="jxddicon icon-shoucangxuanzhong"></span>
+							<span v-else class="jxddicon icon-shoucang1"></span>
 						</p>
 					</li>
-					<div class="aboveWords">
-						<ul class="mui-table-view mui-grid-view columns4 goods-list">
-							<template v-for="img in productPictures">
-								<li @tap="itemtap" class="mui-table-view-cell mui-media mui-col-xs-6">
-									<a class="{{$index%2==0?'one':''}}">
-										<img class="mui-media-object" :src="img">
-									</a>
-								</li>
-							</template>
-						</ul>
-					</div>
-					<div class="store-info">
-						<li class="mui-table-view-cell store-title">
-							<p class="goods">
-								<span class="tishi">温馨提示（联系时请说明是在“彩钢精英”上看到的）</span>
-							</p>
-						</li>
-						<li class="mui-table-view-cell">
-							<p class="fabu">
-								<a @tap="open">我要发布店铺<i id="box"></i></a>
-							</p>
-						</li>
-						<div class="list-ad-two">
-							<img v-if="adType == 'oneImg'" :src="imageDatas[0].banner_img_url" @tap="bannerTap(imageDatas[0])">
-							<imageslider v-if="adType == 'loopImg'" sliderid="ad-slider" :images="imageDatas" :item-tap="bannerTap" :indicator-display="indicatorDisplay"></imageslider>
-							<template v-if="adType == 'alliance'">{{{allianceCode}}}</template>
-						</div>
-					</div>
+					<li class="mui-table-view-cell">
+						<p @tap="positioning">
+							<span class="jxddicon icon-weizhi2"></span>
+							<span class="text-context">{{(address.province || '') + ' ' + (address.city || '') + ' ' + (address.district || '') + ' ' + (address.street || '')}}</span>
+							<span class="jxddicon icon-jinru32"></span>
+						</p>
+					</li>
+					<li class="mui-table-view-cell telphone" @tap="callTel">
+						<p>
+							<span class="mui-icon mui-icon-phone"></span>
+							<span class="text-context" v-show="isShared === 1 && shareSwitch === 1">{{store.mobileNumber}}</span>
+							<span class="text-context" v-else>电话咨询</span>
+							<span class="jxddicon icon-jinru32"></span>
+						</p>
+					</li>
+				</ul>
+				<div class="description">
+					<p>店铺介绍<span class="mui-pull-right">浏览量：{{store.browseVolume}}</span></p>
+					<p>{{store.description}}</p>
+				</div>
+				<div class="aboveWords">
+					<p class="goods" @tap="allGoods">
+						<span class="bendian">本店商品</span>
+						<span class="mui-pull-right">查看全部<span class="mui-icon mui-icon-forward"></span></span>
+					</p>
+					<ul class="mui-table-view mui-grid-view columns4 goods-list">
+						<template v-for="img in productPictures">
+							<li @tap="itemtap" class="mui-table-view-cell mui-media mui-col-xs-6">
+								<a class="{{$index%2==0?'one':''}}">
+									<img class="mui-media-object" :src="img">
+								</a>
+							</li>
+						</template>
+					</ul>
+				</div>
+				<div class="bottomInfo">
+					<p class="goods">
+						<span class="tishi">温馨提示（联系时请说明是在“彩钢精英”上看到的）</span>
+					</p>
+					<p class="fabu">
+						<a @tap="open">我要发布店铺<i id="box"></i></a>
+					</p>
+				</div>
+				<div class="list-ad-two">
+					<img v-if="adType == 'oneImg'" :src="imageDatas[0].banner_img_url" @tap="bannerTap(imageDatas[0])">
+					<imageslider v-if="adType == 'loopImg'" sliderid="ad-slider" :images="imageDatas" :item-tap="bannerTap" :indicator-display="indicatorDisplay"></imageslider>
+					<template v-if="adType == 'alliance'">{{{allianceCode}}}</template>
 				</div>
 			</div>
 		</div>
@@ -87,8 +70,8 @@
 	<div class="share" v-show="showShare">
 		<span @tap="shareAction('weixin')"><img src="../../../../static/img/share/wx.png" /></span>
 		<span @tap="shareAction('qq')"><img src="../../../../static/img/share/qq.png" /></span>
-		<span @tap="shareAction('tencentweibo')"><img src="../../../../static/img/share/txwb.png" /></span>
-		<span @tap="shareAction('sinaweibo')"><img src="../../../../static/img/share/snwb.png" /></span>
+		<!--<span @tap="shareAction('tencentweibo')"><img src="../../../../static/img/share/txwb.png" /></span>
+		<span @tap="shareAction('sinaweibo')"><img src="../../../../static/img/share/snwb.png" /></span>-->
 	</div>
 	<div class="shareMask" v-show="showShare" @tap="showShare = false"></div>
 </template>
@@ -117,7 +100,7 @@
 				appVersionInfo: cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPVERSIONINFO),
 				adType: 'oneImg',
 				imageDatas: [{
-					banner_img_url: 'http://img0.imgtn.bdimg.com/it/u=3660483257,1608558041&fm=15&gp=0.jpg',
+					banner_img_url: require('static/img/listPageBanner.jpg'),
 				}],
 				allianceCode: '',
 				indicatorDisplay: false
@@ -465,7 +448,7 @@
 					}
 				});
 			},
-			itemtap: function(item) {
+			allGoods: function(item) {
 				muiUtils.openWindow('../../bizpage/device/allGoods.html', {
 					extras: {
 						'imageDatas': this.store.productPictures
@@ -551,6 +534,8 @@
 	
 	.mui-slider {
 		height: 256px;
+		background-color: #fff;
+		margin-bottom: 7px;
 	}
 	
 	.mui-slider .mui-slider-group .mui-slider-item img {
@@ -630,34 +615,13 @@
 	}
 	
 	.goods .bendian {
-		float: left;
-		color: #000;
-	}
-	
-	.goods .getAll {
-		float: right;
-		padding-right: 5px;
-	}
-	
-	.goods .mui-icon {
-		right: 0px;
-		top: 10px;
-		position: absolute;
+		color: #222;
 	}
 	
 	.aboveWords {
 		padding: 10px;
-	}
-	
-	.aboveWords:after {
-		position: absolute;
-		right: 0;
-		left: 0;
-		height: 20px;
-		content: '';
-		-webkit-transform: scaleY(.5);
-		transform: scaleY(.5);
-		background-color: #ddd;
+		background-color: #fff;
+		margin-bottom: 7px;
 	}
 	
 	.goods-list a {
@@ -699,8 +663,7 @@
 	
 	.list-ad-two {
 		background-color: #f3f5f7;
-		padding: 10px 0;
-		height: 140px;
+		height: 120px;
 	}
 	
 	.list-ad-two img {
@@ -759,7 +722,7 @@
 	
 	.share span {
 		position: relative;
-		width: 24%;
+		width: 48%;
 		height: 100%;
 	}
 	
@@ -784,7 +747,23 @@
 	}
 	
 	.description {
+		background-color: #fff;
+		margin-bottom: 7px;
+		padding: 15px;
+	}
+	
+	.description p {
 		white-space: pre-wrap;
+	}
+	
+	.description p:first-child {
+		line-height: 21px;
+		margin-bottom: 10px;
+		color: #222;
+	}
+	
+	.description p:nth-child(2) {
+		color: #666;
 	}
 	
 	.list-ad-two .mui-slider {
@@ -793,5 +772,24 @@
 	
 	.list-ad-two .mui-slider .mui-slider-group .mui-slider-item img {
 		height: 120px;
+	}
+	
+	.storeName {
+		color: #222;
+		font-size: 15px;
+	}
+	
+	.shop-data-list,
+	.bottomInfo {
+		background-color: #fff;
+		margin-bottom: 7px;
+	}
+	
+	.bottomInfo {
+		padding: 15px;
+	}
+	
+	.bottomInfo p:first-child {
+		padding-bottom: 10px;
 	}
 </style>

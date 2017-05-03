@@ -40,14 +40,7 @@
 							<p class="counts">{{projectInfo.browseVolume}}</p>
 							<p>浏览量</p>
 						</div>
-					</li>
-					<li class="mui-table-view-cell btn">
-						<p>
-							<span @tap="callTel" class="tel-btn"><span class="mui-icon mui-icon-phone icon-span"></span>电话咨询</span>
-						</p>
-						<!--<p>
-							<span class="yuyue-btn"><span class="jxddicon icon-yijianfankui icon-span"></span>立即预约</span>
-						</p>-->
+						<span class="mui-icon mui-icon-phone" @tap="callTel" ></span>
 					</li>
 				</ul>
 				<ul class="mui-table-view shifu">
@@ -67,11 +60,6 @@
 							<span class="tishi">温馨提示（联系时请说明是在“彩钢精英”上看到的）</span>
 						</p>
 					</li>
-					<!--<li class="mui-table-view-cell">
-						<p class="fabu">
-							<a @tap="publishprojectInfo">我要发布工程<i id="box"></i></a>
-						</p>
-					</li>-->
 				</ul>
 				<div class="list-ad-two">
 					<img v-if="adType == 'oneImg'" :src="imageDatas[0].banner_img_url" @tap="bannerTap(imageDatas[0])">
@@ -84,8 +72,8 @@
 	<div class="share" v-show="showShare">
 		<span @tap="shareAction('weixin')"><img src="../../../../static/img/share/wx.png" /></span>
 		<span @tap="shareAction('qq')"><img src="../../../../static/img/share/qq.png" /></span>
-		<span @tap="shareAction('tencentweibo')"><img src="../../../../static/img/share/txwb.png" /></span>
-		<span @tap="shareAction('sinaweibo')"><img src="../../../../static/img/share/snwb.png" /></span>
+		<!--<span @tap="shareAction('tencentweibo')"><img src="../../../../static/img/share/txwb.png" /></span>
+		<span @tap="shareAction('sinaweibo')"><img src="../../../../static/img/share/snwb.png" /></span>-->
 	</div>
 	<div class="shareMask" v-show="showShare" @tap="showShare = false"></div>
 </template>
@@ -115,7 +103,7 @@
 				id: plus.webview.currentWebview().projectId,
 				adType: 'oneImg',
 				imageDatas: [{
-					banner_img_url: 'http://img0.imgtn.bdimg.com/it/u=3660483257,1608558041&fm=15&gp=0.jpg',
+					banner_img_url: require('static/img/listPageBanner.jpg'),
 				}],
 				allianceCode: '',
 				indicatorDisplay: false
@@ -455,7 +443,7 @@
 	}
 	
 	.mui-table-view {
-		margin-bottom: 10px;
+		margin-bottom: 7px;
 	}
 	
 	.mui-table-view-cell label {
@@ -464,11 +452,11 @@
 		float: left;
 	}
 	
-	.master-name {
-		color: #000;
-		margin-bottom: 20px;
-		font-size: 17px;
-		padding-left: 90px;
+	.mui-table-view-cell p.master-name {
+		color: #222;
+		margin-bottom: 10px;
+		font-size: 16px;
+		padding-left: 95px;
 	}
 	
 	.master-age {
@@ -509,15 +497,15 @@
 		color: #000;
 	}
 	
-	.mui-table-view-cell .tel-btn {
-		background-color: #26c6da;
+	.mui-table-view-cell .mui-icon-phone {
+		position: absolute;
+		top: 2px;
+		right: 0;
+		line-height: 90px;
+		padding: 0 18px;
+		background-color: #26d0ca;
 		color: #fff;
-		float: right;
-		margin: 15px 50px 5px 0;
-		padding: 7px 25px;
-		border-radius: 5px;
-		position: relative;
-		text-indent: 22px;
+		font-size: 35px;
 	}
 	
 	.mui-table-view-cell .yuyue-btn {
@@ -529,18 +517,6 @@
 		padding: 10px 15px;
 		border-radius: 5px;
 		position: relative;
-	}
-	
-	.icon-span {
-		position: absolute;
-		top: 7px;
-		left: -4px;
-		color: #fff;
-	}
-	
-	.btn {
-		text-align: center;
-		margin-top: -20px;
 	}
 	
 	.master-images img {
@@ -562,7 +538,7 @@
 		font-size: 25px;
 		color: #E41A1A;
 		position: absolute;
-		top: 40%;
+		top: 12px;
 		right: 15px;
 	}
 	
@@ -622,7 +598,7 @@
 	
 	.share span {
 		position: relative;
-		width: 24%;
+		width: 48%;
 		height: 100%;
 	}
 	
@@ -653,8 +629,7 @@
 		
 	.list-ad-two {
 		background-color: #f3f5f7;
-		padding: 10px 0;
-		height: 140px;
+		height: 120px;
 	}
 	
 	.list-ad-two img {
@@ -669,4 +644,5 @@
 	.list-ad-two .mui-slider .mui-slider-group .mui-slider-item img {
 		height: 120px;
 	}
+	
 </style>

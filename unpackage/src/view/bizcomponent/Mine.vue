@@ -3,7 +3,7 @@
 		<div class="mui-scroll">
 			<div class="header">
 				<div class="portraitImgWrap">
-					<img class="head-portrait" src="{{userInfo.avatar || '../../static/img/mine/nohp.png'}}">
+					<img class="head-portrait" :src="avatar">
 				</div>
 				<p>
 					<span>{{userInfo.userName || '姓名未填写'}}</span>
@@ -113,11 +113,12 @@
 		data: function() {
 			var userInfo = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.USER_INFO);
 			return {
+				avatar: require('static/img/mine/nohp.png'),
 				scroll: undefined,
-				userInfo: userInfo,
+				userInfo: userInfo || {},
 				shares: {},
 				showShare: false,
-				shareSwitch: cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS).shareSwitch,
+				shareSwitch: (cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS) || {}).shareSwitch || 0,
 				appVersionInfo: cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPVERSIONINFO)
 			};
 		},
@@ -134,6 +135,9 @@
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
 							cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.USER_INFO, data.result);
 							that.userInfo = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.USER_INFO);
+							that.avatar = that.userInfo.avatar || that.avatar;
+							that.shareSwitch = (cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS) || {}).shareSwitch || 0;
+							that.appVersionInfo = cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPVERSIONINFO);
 						}
 					},
 					error: function(xhr, type, errorThrown) {}
@@ -201,6 +205,7 @@
 						mui.toast("分享成功！");
 						that.shareSuccess();
 					}, function(e) {
+						console.log(JSON.stringify(e))
 						mui.toast("分享失败!");
 					});
 				}
@@ -230,6 +235,7 @@
 				shareOb.authorize(function() {
 					that.shareMessage(shareOb);
 				}, function(e) {
+					console.log(JSON.stringify(e))
 					mui.toast("分享失败!");
 				});
 			},

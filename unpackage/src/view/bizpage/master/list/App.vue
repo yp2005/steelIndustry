@@ -194,7 +194,7 @@
 				lat: undefined,
 				adType: 'oneImg',
 				imageDatas: [{
-					banner_img_url: 'http://img0.imgtn.bdimg.com/it/u=3660483257,1608558041&fm=15&gp=0.jpg',
+					banner_img_url: require('static/img/listPageBanner.jpg'),
 				}],
 				allianceCode: '',
 				indicatorDisplay: false

@@ -102,9 +102,9 @@ const openWindow = (url, id, options) => {
 			closWebview();
 		}, 1100);
 	}
-//	setTimeout(function() {
-//		popGestureEvent(gotoPage);
-//	}, 300);
+	//	setTimeout(function() {
+	//		popGestureEvent(gotoPage);
+	//	}, 300);
 	return gotoPage;
 };
 
@@ -519,13 +519,17 @@ const ajaxInspect = (data, xhr, setting) => {
 		logger.log('require data:' + JSON.stringify(data));
 		if(data.erroCode !== undefined && data.erroCode === CONSTS.ERROR_CODE.NOTLOGIN) {
 			logger.log('未登录', 'ajaxInspect');
-			if(loginValid() === false) {
-				setting.error();
-				return false;
-			}
 		} else if(data.erroCode !== undefined && data.erroCode === CONSTS.ERROR_CODE.NOPERMISSON) {
 			logger.log('没有权限', 'ajaxInspect');
 		} else if(data.erroCode !== undefined && data.erroCode === CONSTS.ERROR_CODE.REMOTELOGIN) {
+			var btnArray = ['取消', '重新登录'];
+			var that = this;
+			mui.confirm('您的账号已在其他设备登录，是否重新登录？', '提醒', btnArray, function(e) {
+				if(e.index == 1) {
+					window.localStorage.clear();
+					loginValid();
+				}
+			});
 			logger.log('其他客户端登录', 'ajaxInspect');
 		} else if(data.erroCode !== undefined && data.erroCode === CONSTS.ERROR_CODE.ILLEGALACCESS) {
 			logger.log('非法访问', 'ajaxInspect');
