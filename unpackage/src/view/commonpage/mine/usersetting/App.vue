@@ -63,7 +63,6 @@
 						type: "post",
 						success: function(data) {
 							if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
-								mui.toast('上传成功！');
 								var userInfo = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.USER_INFO);
 								userInfo.avatar = data.result;
 								cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.USER_INFO, userInfo);

@@ -93,11 +93,6 @@
 					"weixin": {
 						"appid": "wx78d199c2b18a4691",
 						"appsecret": "dda36f96c18f83aea0b00e9ed57d0912"
-					},
-					"sina": {
-						"appkey": "135079237",
-						"appsecret": "ef421cc51ccda6021633b7492d5acc87",
-						"redirect_uri": "dist/commonpage/index/index.html"
 					}
 				},
 				"maps": {
@@ -117,18 +112,6 @@
 					"qq": {
 						"appid": "1105928855",
 						"description": "QQ分享"
-					},
-					"sina": {
-						"appkey": "135079237",
-						"appsecret": "ef421cc51ccda6021633b7492d5acc87",
-						"redirect_uri": "dist/commonpage/index/index.html",
-						"description": "可选，新浪微博分享"
-					},
-					"tencent": {
-						"appkey": "xxx",
-						"appsecret": "xxxx",
-						"redirect_uri": "dist/commonpage/index/index.html",
-						"description": "可选，腾讯微博分享"
 					}
 				},
 				"push": {}

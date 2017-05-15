@@ -343,7 +343,7 @@
 							log.log('upload callbackpath：' + imgName);
 							if(callback) {
 								callback(imgName);
-								plus.nativeUI.toast('上传成功');
+								plus.nativeUI.toast('上传成功！');
 							}
 							if(pictures) {
 								pictures.push(imgName);

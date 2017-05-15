@@ -242,11 +242,13 @@
 			loadData(fromServer) {
 				if(fromServer) {
 					this.getUserInfo();
-				}
-				else {
+				} else {
 					this.userInfo = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.USER_INFO);
+					this.avatar = this.userInfo.avatar || this.avatar;
+					this.shareSwitch = (cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS) || {}).shareSwitch || 0;
+					this.appVersionInfo = cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPVERSIONINFO);
 				}
-				
+
 			}
 		},
 		ready: function() {
