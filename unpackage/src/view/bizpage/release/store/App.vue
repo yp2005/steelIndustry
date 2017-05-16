@@ -4,10 +4,10 @@
 			<div class="mui-scroll">
 				<div class="title">基本信息</div>
 				<div class="inputRow"><label>店铺名称</label><input v-model="storeInfo.storeName" type="text" placeholder="请输入店铺名称(必填)"></div>
-				<div class="inputRow">
+				<div class="inputRow" @tap="selectStoreType">
 					<label>设备类型</label>
-					<p v-if="storeTypeDis" class="storeType" @tap="selectStoreType">{{storeTypeDis}}</p>
-					<input type="text" v-else placeholder="请选择设备类型(必填)" v-model="storeTypeDis" readonly @tap="selectStoreType">
+					<p v-if="storeTypeDis" class="storeType">{{storeTypeDis}}</p>
+					<input type="text" v-else placeholder="请选择设备类型(必填)" v-model="storeTypeDis" readonly>
 					<span class="jxddicon icon-jinru32"></span>
 				</div>
 				<div class="inputRow textarea">
@@ -17,10 +17,10 @@
 				<div class="title">联系方式</div>
 				<div class="inputRow"><label>商家电话</label><input v-model="storeInfo.mobileNumber" type="text" placeholder="请输入商家电话(必填)"></div>
 				<div class="inputRow"><label>负责人</label><input v-model="storeInfo.contact" type="text" placeholder="请输入负责人(必填)"></div>
-				<div class="inputRow">
+				<div class="inputRow" @tap="selectAddress">
 					<label>商家地址</label>
-					<p v-if="address" class="storeType" @tap="selectAddress">{{address.province + ' ' + address.city + ' ' + address.district + ' ' +address.street}}</p>
-					<input type="text" v-else placeholder="请选择商家地址(必填)" readonly @tap="selectAddress">
+					<p v-if="address" class="storeType">{{address.province + ' ' + address.city + ' ' + address.district + ' ' +address.street}}</p>
+					<input type="text" v-else placeholder="请选择商家地址(必填)" readonly>
 					<span class="jxddicon icon-jinru32"></span>
 				</div>
 				<div class="title">图片详情</div>

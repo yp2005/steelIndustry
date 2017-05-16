@@ -8,15 +8,15 @@
 				<div class="inputRow"><label>联系电话</label><input v-model="project.mobileNumber" type="text" placeholder="请输入联系电话(必填)"></div>
 				<div class="title">工程信息</div>
 				<div class="inputRow"><label>工程名称</label><input v-model="project.projectName" type="text" placeholder="请输入工程名称(必填)"></div>
-				<div class="inputRow">
+				<div class="inputRow" @tap="selectAddress">
 					<label>工程地址</label>
-					<p v-if="address" class="projectType" @tap="selectAddress">{{address.province + ' ' + address.city + ' ' + address.district + ' ' +address.street}}</p>
-					<input type="text" v-else placeholder="请选择工程地址(必填)" readonly @tap="selectAddress">
+					<p v-if="address" class="projectType">{{address.province + ' ' + address.city + ' ' + address.district + ' ' +address.street}}</p>
+					<input type="text" v-else placeholder="请选择工程地址(必填)" readonly>
 					<span class="jxddicon icon-jinru32"></span>
 				</div>
-				<div class="inputRow">
+				<div class="inputRow" @tap="selectDueTime">
 					<label>到期时间</label>
-					<input type="text" placeholder="请选择到期时间(必填)" v-model="dueTime" readonly @tap="selectDueTime">
+					<input type="text" placeholder="请选择到期时间(必填)" v-model="dueTime" readonly>
 					<span class="jxddicon icon-jinru32"></span>
 				</div>
 				<div class="inputRow textarea">

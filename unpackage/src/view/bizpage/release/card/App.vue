@@ -5,10 +5,10 @@
 				<div class="title">基本信息</div>
 				<div class="inputRow"><label>联系人</label><input v-model="masterCard.contact" type="text" placeholder="请输入姓名(必填)"></div>
 				<div class="inputRow"><label>联系方式</label><input v-model="masterCard.mobileNumber" type="text" placeholder="请输入您的联系方式(必填)"></div>
-				<div class="inputRow">
+				<div class="inputRow" @tap="selectAddress">
 					<label>联系地址</label>
-					<p v-if="address" class="workType" @tap="selectAddress">{{address.province + ' ' + address.city + ' ' + address.district + ' ' +address.street}}</p>
-					<input type="text" v-else placeholder="请选择联系地址(必填)" readonly @tap="selectAddress">
+					<p v-if="address" class="workType">{{address.province + ' ' + address.city + ' ' + address.district + ' ' +address.street}}</p>
+					<input type="text" v-else placeholder="请选择联系地址(必填)" readonly>
 					<span class="jxddicon icon-jinru32"></span>
 				</div>
 				<div class="inputRow">
@@ -21,19 +21,19 @@
 				</div>
 				<div class="title">求职信息</div>
 				<div class="inputRow"><label>标题</label><input v-model="masterCard.cardTitle" type="text" placeholder="姓名加工种(必填)"></div>
-				<div class="inputRow">
+				<div class="inputRow" @tap="selectWorkType">
 					<label>工种</label>
-					<p v-if="workTypeDis" class="workType" @tap="selectWorkType">{{workTypeDis}}</p>
-					<input type="text" v-else placeholder="请选择工种(必填)" v-model="workTypeDis" readonly @tap="selectWorkType">
+					<p v-if="workTypeDis" class="workType">{{workTypeDis}}</p>
+					<input type="text" v-else placeholder="请选择工种(必填)" v-model="workTypeDis" readonly>
 					<span class="jxddicon icon-jinru32"></span>
 				</div>
-				<div class="inputRow">
+				<div class="inputRow" @tap="selectArea">
 					<label>服务区域</label>
-					<div class="area" v-if="city" @tap="selectArea">
+					<div class="area" v-if="city">
 						<p>服务城市：{{city.province + ' ' + city.city}}</p>
 						<p><span class="mui-pull-left">服务区域：</span><span>{{cityDataDis}}</span></p>
 					</div>
-					<input type="text" v-else v-model="cityDataDis" readonly placeholder="请选择服务区域(必填)" @tap="selectArea">
+					<input type="text" v-else v-model="cityDataDis" readonly placeholder="请选择服务区域(必填)">
 					<span class="jxddicon icon-jinru32"></span>
 				</div>
 				<div class="inputRow textarea">
