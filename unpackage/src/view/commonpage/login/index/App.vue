@@ -20,7 +20,7 @@
 				<div class="input-row">
 					<div class="mui-checkbox mui-left">
 						<input id="agree-checkbox" v-model="agreeMe" type="checkbox">
-						<label class="agree-proc" for="agree-checkbox">我阅读并同意</label><i class="go-protocol" @tap="gotoProtocol">《彩钢精英用户协议》</i>
+						<label class="agree-proc" for="agree-checkbox">我阅读并同意</label><i class="go-protocol" @tap="gotoProtocol">彩钢精英许可与服务协议</i>
 					</div>
 				</div>
 				<a @tap="login" class="login-btn">立即登录</a>
@@ -81,7 +81,7 @@
 					return;
 				}
 				if(!this.agreeMe) {
-					mui.toast('请阅读用户协议并勾选同意');
+					mui.toast('请阅读彩钢精英许可与服务协议并勾选同意');
 					return;
 				}
 				var data = {
@@ -261,7 +261,7 @@
 	
 	#agree-checkbox {
 		left: 5px;
-		top: 0px;
+		top: -1px;
 	}
 	
 	.go-protocol {

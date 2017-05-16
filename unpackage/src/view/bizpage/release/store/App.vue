@@ -33,7 +33,7 @@
 					<upload :is-cut="isCut" :pictures.sync="storeInfo.licensePictures" :imagecount="1" dataid="licensePicture"></upload>
 				</div>
 				<div class="inputRow">
-					<p>请上传店内环境，最多3张(选填)</p>
+					<p>请上传厂区照片，最多3张(选填)</p>
 					<upload :is-cut="isCut" :pictures.sync="storeInfo.environmentPictures" :imagecount="3" dataid="environmentPicture"></upload>
 				</div>
 				<div class="inputRow">

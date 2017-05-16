@@ -86,7 +86,7 @@
 									}
 									muiUtils.openWindow('../../commonpage/mine/mycard.html', '../../commonpage/mine/mycard.html', {
 										isValidLogin: true,
-										isClose: true,
+										isClose: false,
 										extras: {
 											masterCard: masterCard
 										}
@@ -94,7 +94,7 @@
 								} else {
 									muiUtils.openWindow(url, url, {
 										isValidLogin: true,
-										isClose: true
+										isClose: false
 									});
 								}
 							} else {
@@ -129,7 +129,7 @@
 									}
 									muiUtils.openWindow('../../commonpage/mine/mystore.html', '../../commonpage/mine/mystore.html', {
 										isValidLogin: true,
-										isClose: true,
+										isClose: false,
 										extras: {
 											store: store
 										}
@@ -137,7 +137,7 @@
 								} else {
 									muiUtils.openWindow(url, url, {
 										isValidLogin: true,
-										isClose: true
+										isClose: false
 									});
 								}
 							} else {
@@ -175,7 +175,7 @@
 									}
 									muiUtils.openWindow('../../commonpage/mine/myproject.html', '../../commonpage/mine/myproject.html', {
 										isValidLogin: true,
-										isClose: true,
+										isClose: false,
 										extras: {
 											projectList: projectList
 										}
@@ -183,7 +183,7 @@
 								} else {
 									muiUtils.openWindow(url, url, {
 										isValidLogin: true,
-										isClose: true
+										isClose: false
 									});
 								}
 							} else {
@@ -221,7 +221,7 @@
 									}
 									muiUtils.openWindow('../../commonpage/mine/mywork.html', '../../commonpage/mine/mywork.html', {
 										isValidLogin: true,
-										isClose: true,
+										isClose: false,
 										extras: {
 											employmentDemandList: employmentDemandList
 										}
@@ -229,7 +229,7 @@
 								} else {
 									muiUtils.openWindow(url, url, {
 										isValidLogin: true,
-										isClose: true
+										isClose: false
 									});
 								}
 							} else {
@@ -243,7 +243,7 @@
 				} else {
 					muiUtils.openWindow(url, url, {
 						isValidLogin: true,
-						isClose: true
+						isClose: false
 					});
 				}
 			}

@@ -209,7 +209,7 @@
 				});
 			},
 			dealData() {
-				var imgs = this.store.environmentPictures.concat(this.store.productPictures);
+				var imgs = [this.store.imgServer + this.store.shopSignPictures].concat(this.store.environmentPictures.concat(this.store.productPictures));
 				if(this.store.productPictures.length > 4) {
 					this.productPictures = this.store.productPictures.slice(0, 4);
 				}

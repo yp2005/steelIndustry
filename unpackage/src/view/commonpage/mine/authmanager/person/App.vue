@@ -13,7 +13,7 @@
 					<div class="inputRow">
 						<p>请上传身份证正面(必填)</p>
 						<upload :is-cut="isCut" :pictures.sync="pictures1" :imagecount="1" dataid="sfz_zhengmian"></upload>
-						<img src="../../../../../static/img/mine/sfzfanmian.jpg" />
+						<img src="../../../../../static/img/mine/szfzhengmian.jpg" />
 					</div>
 					<div class="inputRow">
 						<p>请上传身份证反面(必填)</p>
@@ -23,12 +23,12 @@
 					<div class="inputRow">
 						<p>请上传1张本人手持身份证的照片(必填)</p>
 						<upload :is-cut="isCut" :pictures.sync="pictures3" :imagecount="1" dataid="sfz_shouchi"></upload>
-						<img src="../../../../../static/img/mine/sfzfanmian.jpg" />
+						<img src="../../../../../static/img/mine/shouchi.jpg" />
 					</div>
 					<div class="inputRow">
 						<p>请上传1张本人正面照(必填)</p>
 						<upload :is-cut="isCut" :pictures.sync="pictures4" :imagecount="1" dataid="benren_zhengmian"></upload>
-						<img src="../../../../../static/img/mine/sfzfanmian.jpg" />
+						<img src="../../../../../static/img/mine/zhengmian.jpg" />
 					</div>
 					<div class="inputRow declare">
 						<input v-model="agree" type="checkbox" /><span>我阅读并同意</span>
@@ -58,11 +58,19 @@
 			</div>
 		</template>
 	</div>
-	<div v-show="disStatement" class="declarationWindow">
-		<h4>《彩钢精英》个人师傅签约规则</h4>
-		<p>内容</p>
-		<p>内容</p>
-		<p>
+
+	<div v-show="disStatement" class="declarationWindow mui-scroll-wrapper">
+		<div class="mui-scroll">
+			<h4>《彩钢精英》个人师傅认证规则</h4>
+			<p>为了使用工单位能更好的了解您和以后的本系统的优先推荐请你进行实名认证。</p>
+			<p>1.会员须按照彩钢精英认证要求，提供本人真实有效的信息，提供的信息包括但不限于：身份信息、有效联系方式、真实地址等证明身份真实性、有效性、一致性的信息;对于信息不全、无效或虚假的，将无法通过认证。</p>
+			<p>2.为保障会员认证信息的持续真实有效，对已经通过彩钢精英认证的会员，彩钢精英将视情况通过定期或不定期复核的方式，验证认证信息的真实有效性。如在复核过程中发现会员提供的认证信息不全、无效或虚假的，彩钢精英将依据情形严重程度，采取限制发布任何信息、封闭账号等临时性的市场监管措施。</p>
+			<p>彩钢精英认证的真实性、有效性、一致性指的是什么?</p>
+			<p>真实性是指认证信息真实，不得提供做假的信息，包括但不限于个人证件(如身份证、护照等)、企业相关证件、上传的照片等均须真实且未经过PS等。</p>
+			<p>有效性是指上传的证件须在相关机构备案且在有效期内，包括但不限于大陆个人身份证须是二代身份证且在有效期内，企业相关证件须在相关机构备案且在有效期内等。</p>
+			<p>一致性是指提供的信息之间或信息与实际均须保持一致，包括但不限于证件对应主体须一致，提供的个人身份信息或企业信息须与实际经营主体一致等。</p>
+		</div>
+		<p class="bottom">
 			<a href="javascript:void(0)" @tap="declarationWindow(false)">确定</a>
 		</p>
 	</div>
@@ -137,7 +145,7 @@
 					return;
 				}
 				if(!this.agree) {
-					mui.toast('请阅读《彩钢精英》个人师傅签约规则，并同意！');
+					mui.toast('请阅读《彩钢精英》个人师傅认证规则，并同意！');
 					return;
 				}
 				var that = this;
@@ -200,8 +208,11 @@
 				indicators: false, // 是否显示滚动条
 				deceleration: mui.os.ios ? 0.003 : 0.0009
 			});
-			mui('.mui-numbox').numbox();
-			var that = this;
+			mui('.mui-scroll-wrapper.declarationWindow').scroll({
+				bounce: true,
+				indicators: false, // 是否显示滚动条
+				deceleration: mui.os.ios ? 0.003 : 0.0009
+			});
 		},
 		components: {
 			upload
@@ -342,11 +353,11 @@
 		bottom: 10%;
 		left: 5%;
 		right: 5%;
-		padding: 15px 12px;
 		z-index: 12;
 		opacity: 1;
 		background-color: #ffffff;
 		border: solid 1px #d7d7d7;
+		width: 90%;
 	}
 	
 	.declarationWindow h4 {
@@ -365,13 +376,14 @@
 		line-height: 25px;
 	}
 	
-	.declarationWindow p:last-of-type {
+	.declarationWindow p.bottom {
 		text-indent: 0;
 		position: absolute;
 		left: 0;
-		bottom: 15px;
+		bottom: 10px;
 		text-align: center;
 		width: 100%;
+		z-index: 1;
 	}
 	
 	.declarationWindow p a {
@@ -381,6 +393,7 @@
 		border: solid 1px #26c6da;
 		border-radius: 5px;
 		color: #26c6da;
+		background-color: #fff;
 	}
 	
 	.authmanagerPerson .inputRow.declare {
@@ -403,5 +416,9 @@
 	
 	.center {
 		text-align: center;
+	}
+	
+	.declarationWindow .mui-scroll {
+		padding: 15px 12px 50px 12px;
 	}
 </style>

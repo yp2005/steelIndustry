@@ -305,7 +305,7 @@
 	}
 	
 	.bottom .bleft {
-		width: 75%%;
+		width: 75%;
 		padding-left: 10px;
 		float: left;
 	}
@@ -324,7 +324,7 @@
 	}
 	
 	.bottom .bright {
-		width: 25%%;
+		width: 25%;
 		float: left;
 	}
 	

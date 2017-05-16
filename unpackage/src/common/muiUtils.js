@@ -100,7 +100,7 @@ const openWindow = (url, id, options) => {
 		setTimeout(function() {
 			// 去掉关闭动画
 			closWebview();
-		}, 1100);
+		}, 2000);
 	}
 	//	setTimeout(function() {
 	//		popGestureEvent(gotoPage);
