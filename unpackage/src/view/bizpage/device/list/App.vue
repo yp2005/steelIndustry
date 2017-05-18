@@ -352,7 +352,7 @@
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
 							that.storeList = data.result.storeList || [];
 							for(var store of that.storeList) {
-								store.shopSignPictures = data.result.imgServer + store.shopSignPictures;
+								store.shopSignPictures = data.result.imgServer + 'small_' + store.shopSignPictures;
 							}
 						} else {
 							mui.toast(data.erroCode + '：' + data.erroMsg);
@@ -408,7 +408,7 @@
 								return;
 							}
 							for(var store of data.result.storeList || []) {
-								store.shopSignPictures = data.result.imgServer + store.shopSignPictures;
+								store.shopSignPictures = data.result.imgServer + 'small_' + store.shopSignPictures;
 							}
 							that.storeList = that.storeList.concat(data.result.storeList || []);
 						} else {

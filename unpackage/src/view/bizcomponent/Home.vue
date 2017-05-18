@@ -233,13 +233,13 @@
 							}
 							if(that.homeData.hotStore && that.homeData.hotStore.length > 0) {
 								for(var store of that.homeData.hotStore) {
-									store.shopSignPictures = data.result.imgServer + store.shopSignPictures;
+									store.shopSignPictures = data.result.imgServer + 'small_' + store.shopSignPictures;
 								}
 								that.storeList = that.homeData.hotStore;
 							}
 							if(that.homeData.hotWork && that.homeData.hotWork.length > 0) {
 								for(var work of that.homeData.hotWork) {
-									work.imgName = work.imgName ? (data.result.imgServer + work.imgName) : '1';
+									work.imgName = work.imgName ? (data.result.imgServer + 'small_' +  work.imgName) : '1';
 								}
 								that.workList = that.homeData.hotWork;
 							}

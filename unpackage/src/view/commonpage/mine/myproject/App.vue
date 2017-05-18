@@ -48,7 +48,7 @@
 								return;
 							}
 							for(var project of that.projectList) {
-								project.picture = project.pictures.length > 0 ? project.pictures[0] : '1';
+								project.picture = project.pictures.length > 0 ? that.dealPicture(project.pictures[0]) : '1';
 								switch(project.state) {
 									case 0:
 										project.stateValue = '草稿';
@@ -74,11 +74,16 @@
 				});
 			} else {
 				for(var project of that.projectList) {
-					project.picture = project.pictures.length > 0 ? project.pictures[0] : '1';
+					project.picture = project.pictures.length > 0 ? that.dealPicture(project.pictures[0]) : '1';
 				}
 			}
 		},
 		methods: {
+			dealPicture(pic) {
+				var fileName = pic.substring(pic.lastIndexOf('/') + 1, pic.length);
+				var path = pic.substring(0, pic.lastIndexOf('/'));
+				return path + '/small_' + fileName;
+			},
 			releaseProject() {
 				muiUtils.openWindow('../../bizpage/release/project.html', '../../bizpage/release/project.html', {
 					isClose: true
@@ -91,7 +96,8 @@
 					}
 				});
 			},
-			updateState(event, project, state) {
+			updateState(event, index, state) {
+				var project = this.projectList[index];
 				var that = this;
 				muiUtils.muiAjax(api.APIS.project.updateProjectState, {
 					data: JSON.stringify({
@@ -118,7 +124,10 @@
 									project.stateValue = '审核不通过';
 									break;
 							}
-							project = JSON.parse(JSON.stringify(project));
+							that.projectList.splice(index, 1);
+							that.$nextTick(function() {
+								that.projectList.splice(index, 0, project);
+							});
 						} else {
 							mui.toast(data.erroCode + '：' + data.erroMsg);
 						}

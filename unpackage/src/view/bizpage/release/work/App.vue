@@ -255,7 +255,13 @@
 				data.state = state;
 				delete data.stateValue;
 				delete data.picture;
-				data.dueTime = new Date(this.dueTime + ' 00:00:00').getTime();
+				var time = this.dueTime;
+				if(time.indexOf('00:00:00') == -1) {
+					time = time + ' 00:00:00';
+				}
+				time = time.replace(/-/g, ':').replace(' ', ':');
+				time = time.split(':');
+				data.dueTime = new Date(time[0], (time[1] - 1), time[2], time[3], time[4], time[5]).getTime();
 				data.provinceId = this.address.provinceid;
 				data.provinceName = this.address.province;
 				data.cityId = this.address.cityid;

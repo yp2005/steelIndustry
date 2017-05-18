@@ -243,7 +243,7 @@
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
 							var projectList = data.result.projectList || [];
 							for(var project of projectList) {
-								project.imgName = project.imgName ? (data.result.imgServer + project.imgName) : '1';
+								project.imgName = project.imgName ? (data.result.imgServer + 'small_' + project.imgName) : '1';
 							}
 							that.projectList = projectList;
 						} else {
@@ -284,7 +284,7 @@
 								return;
 							}
 							for(var project of data.result.projectList || []) {
-								project.imgName = project.imgName ? (data.result.imgServer + project.imgName) : '1';
+								project.imgName = project.imgName ? (data.result.imgServer + 'small_' + project.imgName) : '1';
 							}
 							that.projectList = that.projectList.concat(data.result.projectList || []);
 						} else {

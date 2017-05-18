@@ -342,7 +342,7 @@
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
 							var masterList = data.result.masterCardList || [];
 							for(var master of masterList) {
-								master.imgName = master.imgName ? (data.result.imgServer + master.imgName) : '1';
+								master.imgName = master.imgName ? (data.result.imgServer + 'small_' + master.imgName) : '1';
 							}
 							that.masterList = masterList;
 						} else {
@@ -399,7 +399,7 @@
 								return;
 							}
 							for(var master of data.result.masterCardList || []) {
-								master.imgName = master.imgName ? (data.result.imgServer + master.imgName) : '1';
+								master.imgName = master.imgName ? (data.result.imgServer + 'small_' + master.imgName) : '1';
 							}
 							that.masterList = that.masterList.concat(data.result.masterCardList || []);
 						} else {

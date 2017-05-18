@@ -81,7 +81,7 @@
 	/*eslint-disable camelcase*/
 	var upload_empty = require('../../static/img/upload_empty.jpg');
 	//var empty = require('../../static/img/empty.png');
-	var img_size = 500;
+	var img_size = 100;
 
 	var isCutG = true;
 	export default {
@@ -292,19 +292,20 @@
 			exitConfirmImg() {
 				$('#confirmImgDiv_' + this.dataid).css('display', 'none');
 				$('#confirmImg_' + this.dataid).attr('src', '');
+				files = [];
 			},
 			confirmImg() {
 				var $image = $('#confirmImg_' + this.dataid);
 				var readyimg_path = $image.attr('src');
-
+				console.log('=============' + this.dataid)
 				if(readyimg_path !== '') {
 					files.push({
 						name: 'uploadkey0',
 						path: readyimg_path
 					});
 				}
+				console.log('=============' + readyimg_path + '   ' + JSON.stringify(files))
 
-				// 用户头像上传单独处理
 				let container = null;
 				let index = this.uploadIndex;
 				this['uploadImagePath' + index] = readyimg_path;
@@ -316,9 +317,54 @@
 					}).show()) {
 					simulateLoading(container, 0);
 				}
-				this.uploadImage(this.pictures, this.callback);
-				$('#confirmImgDiv_' + this.dataid).css('display', 'none');
-				$('#confirmImg_' + this.dataid).attr('src', '');
+				var that = this;
+				for(var file of files) {
+					var localurl = file.path;
+					console.log(localurl)
+					var fileName = localurl.substring(localurl.lastIndexOf('/') + 1, localurl.length);
+					var relativePath = '_doc/camera/small' + fileName;
+					var dstlocalurl = plus.io.convertLocalFileSystemURL(relativePath);
+					plus.io.resolveLocalFileSystemURL(relativePath, function(entry) {
+						entry.file(function(file) {
+							var size = file.size / 1024;
+							log.log('zip file size :' + size);
+						}, function(e) {});
+						// 文件存在
+						if(dstlocalurl.indexOf('file://') == -1) {
+							dstlocalurl = 'file://' + dstlocalurl;
+						}
+						files.push({
+							name: 'uploadkey1',
+							path: dstlocalurl
+						});
+						that.uploadImage(that.pictures, that.callback);
+						$('#confirmImgDiv_' + that.dataid).css('display', 'none');
+						$('#confirmImg_' + that.dataid).attr('src', '');
+					}, function(e) {
+						// 文件不存在
+						plus.zip.compressImage({
+							src: localurl,
+							dst: dstlocalurl,
+							width: '150px',
+							height: '150px'
+						}, function(event) { // 压缩成功，使用压缩后的图片
+							log.log('camera zip image path:' + event.target);
+							log.log('zip file size :' + event.size);
+							dstlocalurl = event.target;
+							if(dstlocalurl.indexOf('file://') == -1) {
+								dstlocalurl = 'file://' + dstlocalurl;
+							}
+							files.push({
+								name: 'uploadkey1',
+								path: dstlocalurl
+							});
+							that.uploadImage(that.pictures, that.callback);
+							$('#confirmImgDiv_' + that.dataid).css('display', 'none');
+							$('#confirmImg_' + that.dataid).attr('src', '');
+						}, function(error) {});
+					});
+					break;
+				}
 			},
 			// 上传图片
 			uploadImage: function(pictures, callback) {
@@ -371,6 +417,7 @@
 				}
 				log.log('开始上传...');
 				task.start();
+				files = [];
 			}
 		}
 	};
@@ -413,29 +460,26 @@
 							log.log('file size :' + size);
 							if(size > img_size) {
 								// 大于指定大小，进行压缩
-								var dstlocalurl = localurl.replace('.jpg', '_1.jpg');
+								var fileName = localurl.substring(localurl.lastIndexOf('/') + 1, localurl.length);
+								var relativePath = '_doc/camera/zip' + fileName;
+								var dstlocalurl = plus.io.convertLocalFileSystemURL(relativePath);
 								plus.zip.compressImage({
 									src: localurl,
 									dst: dstlocalurl,
-									width: '50%' // 缩小到原来的50%
-								}, function() { // 压缩成功，使用压缩后的图片
-									log.log('camera zip image path:' + dstlocalurl);
-									localurl = dstlocalurl;
-									// 打印图片大小
-									plus.io.resolveLocalFileSystemURL(localurl, function(entry) {
-										entry.file(function(file) {
-											var size = file.size / 1024 + 'kb';
-											log.log('zip file size :' + size);
-										}, function(e) {});
-									});
-
-									$('#readyimg_' + id).attr('src', localurl);
-									confirmImg(localurl, id);
+									quality: '50'
+								}, function(event) { // 压缩成功，使用压缩后的图片
+									log.log('camera zip image path:' + event.target);
+									log.log('zip file size :' + event.size);
+									dstlocalurl = event.target;
+									if(dstlocalurl.indexOf('file://') == -1) {
+										dstlocalurl = 'file://' + dstlocalurl;
+									}
+									$('#readyimg_' + id).attr('src', dstlocalurl);
+									confirmImg(dstlocalurl, id);
 									mui('#picture').popover('toggle');
 								}, function(error) { // 压缩失败，使用压缩前的图片
 									log.log('camera zip compress error!!!' + error.stack);
 									$('#readyimg_' + id).attr('src', localurl);
-									// files.push({name:"uploadkey0",path:localurl});
 									confirmImg(localurl, id);
 									mui('#picture').popover('toggle');
 								});
@@ -455,37 +499,32 @@
 							log.log('file size :' + size);
 							if(size > img_size) {
 								// 大于指定大小，进行压缩
-								var dstlocalurl = localurl.replace('.jpg', '_1.jpg');
+								var fileName = localurl.substring(localurl.lastIndexOf('/') + 1, localurl.length);
+								var relativePath = '_doc/camera/zip' + fileName;
+								var dstlocalurl = plus.io.convertLocalFileSystemURL(relativePath);
 								plus.zip.compressImage({
 									src: localurl,
 									dst: dstlocalurl,
-									width: '50%' // 缩小到原来的50%
-								}, function() { // 压缩成功，使用压缩后的图片
-									log.log('camera zip image path:' + dstlocalurl);
-									localurl = dstlocalurl;
-									// 打印图片大小
-									plus.io.resolveLocalFileSystemURL(localurl, function(entry) {
-										entry.file(function(file) {
-											var size = file.size / 1024 + 'kb';
-											log.log('zip file size :' + size);
-										}, function(e) {});
-									});
-
-									$('#readyimg_' + id).attr('src', localurl);
-									// files.push({name:"uploadkey0",path:localurl});
+									quality: '50'
+								}, function(event) { // 压缩成功，使用压缩后的图片
+									log.log('camera zip image path:' + event.target);
+									log.log('zip file size :' + event.size);
+									dstlocalurl = event.target;
+									if(dstlocalurl.indexOf('file://') == -1) {
+										dstlocalurl = 'file://' + dstlocalurl;
+									}
+									$('#readyimg_' + id).attr('src', dstlocalurl);
 									cutImg(id, cropperratio);
 									mui('#picture').popover('toggle');
 								}, function(error) { // 压缩失败，使用压缩前的图片
 									log.log('camera zip compress error!!!' + error.stack);
 									$('#readyimg_' + id).attr('src', localurl);
-									// files.push({name:"uploadkey0",path:localurl});
 									cutImg(id, cropperratio);
 									mui('#picture').popover('toggle');
 								});
 							} else {
 								// 小于指定大小，不用压缩
 								$('#readyimg_' + id).attr('src', localurl);
-								// files.push({name:"uploadkey0",path:localurl});
 								cutImg(id, cropperratio);
 								mui('#picture').popover('toggle');
 							}
@@ -512,8 +551,10 @@
 						log.log('file size :' + size);
 						if(size > img_size) {
 							// 大于指定大小，进行压缩
-							var relativePath = '_doc/camera/' + path.substring(path.lastIndexOf('/') + 1, path.length);
+							var fileName = path.substring(path.lastIndexOf('/') + 1, path.length);
+							var relativePath = '_doc/zip' + fileName;
 							var dstlocalurl = plus.io.convertLocalFileSystemURL(relativePath);
+							log.log('dstlocalurl:' + dstlocalurl);
 							// 判断压缩的图片是否存在，存在不再压缩
 							plus.io.resolveLocalFileSystemURL(relativePath, function(entry) {
 								entry.file(function(file) {
@@ -521,35 +562,31 @@
 									log.log('zip file size :' + size);
 								}, function(e) {});
 								// 文件存在
-								// files.push({name:"uploadkey0",path:dstlocalurl});
+								if(dstlocalurl.indexOf('file://') == -1) {
+									dstlocalurl = 'file://' + dstlocalurl;
+								}
 								$('#readyimg_' + id).attr('src', dstlocalurl);
 								confirmImg(dstlocalurl, id);
 								mui('#picture').popover('toggle');
 							}, function(e) {
 								// 文件不存在
-								var dstlocalurl = plus.io.convertLocalFileSystemURL(relativePath);
-								log.log('dstlocalurl:' + dstlocalurl);
 								plus.zip.compressImage({
 									src: path,
 									dst: dstlocalurl,
-									width: '50%'
-								}, function() {
+									quality: '50'
+								}, function(event) {
 									// 压缩成功，使用压缩后的图片
+									dstlocalurl = event.target;
+									if(dstlocalurl.indexOf('file://') == -1) {
+										dstlocalurl = 'file://' + dstlocalurl;
+									}
 									log.log('camera zip image path:' + dstlocalurl);
-									// 打印图片大小
-									plus.io.resolveLocalFileSystemURL(dstlocalurl, function(entry) {
-										entry.file(function(file) {
-											var size = file.size / 1024;
-											log.log('zip file size :' + size);
-										}, function(e) {});
-									});
-									// files.push({name:"uploadkey0",path:dstlocalurl});
+									log.log('zip file size :' + event.size);
 									$('#readyimg_' + id).attr('src', dstlocalurl);
 									confirmImg(dstlocalurl, id);
 									mui('#picture').popover('toggle');
 								}, function(error) { // 压缩失败，使用压缩前的图片
 									log.log('camera zip compress error!!!' + error.stack);
-									// files.push({name:"uploadkey0",path:path});
 									$('#readyimg_' + id).attr('src', path);
 									confirmImg(path, id);
 									mui('#picture').popover('toggle');
@@ -571,7 +608,8 @@
 						log.log('file size :' + size);
 						if(size > img_size) {
 							// 大于指定大小，进行压缩
-							var relativePath = '_doc/camera/' + path.substring(path.lastIndexOf('/') + 1, path.length);
+							var fileName = path.substring(path.lastIndexOf('/') + 1, path.length);
+							var relativePath = '_doc/zip' + fileName;
 							var dstlocalurl = plus.io.convertLocalFileSystemURL(relativePath);
 							// 判断压缩的图片是否存在，存在不再压缩
 							plus.io.resolveLocalFileSystemURL(relativePath, function(entry) {
@@ -580,29 +618,26 @@
 									log.log('zip file size :' + size);
 								}, function(e) {});
 								// 文件存在
-								// files.push({name:"uploadkey0",path:dstlocalurl});
+								if(dstlocalurl.indexOf('file://') == -1) {
+									dstlocalurl = 'file://' + dstlocalurl;
+								}
 								$('#readyimg_' + id).attr('src', dstlocalurl);
 								cutImg(id, cropperratio);
 								mui('#picture').popover('toggle');
-							}, function(e) {
+							}, function(event) {
 								// 文件不存在
-								var dstlocalurl = plus.io.convertLocalFileSystemURL(relativePath);
-								log.log('dstlocalurl:' + dstlocalurl);
 								plus.zip.compressImage({
 									src: path,
 									dst: dstlocalurl,
-									width: '50%'
+									quality: '50'
 								}, function() {
 									// 压缩成功，使用压缩后的图片
-									log.log('camera zip image path:' + dstlocalurl);
-									// 打印图片大小
-									plus.io.resolveLocalFileSystemURL(dstlocalurl, function(entry) {
-										entry.file(function(file) {
-											var size = file.size / 1024;
-											log.log('zip file size :' + size);
-										}, function(e) {});
-									});
-									// files.push({name:"uploadkey0",path:dstlocalurl});
+									log.log('camera zip image path:' + event.target);
+									log.log('zip file size :' + event.size);
+									dstlocalurl = event.target;
+									if(dstlocalurl.indexOf('file://') == -1) {
+										dstlocalurl = 'file://' + dstlocalurl;
+									}
 									$('#readyimg_' + id).attr('src', dstlocalurl);
 									cutImg(id, cropperratio);
 									mui('#picture').popover('toggle');

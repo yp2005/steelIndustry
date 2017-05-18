@@ -202,7 +202,7 @@
 							switch(type) {
 								case 0:
 									for(var master of data.result.masterCardList || []) {
-										master.imgName = master.imgName ? (data.result.imgServer + master.imgName) : '1';
+										master.imgName = master.imgName ? (data.result.imgServer + '/small_' + master.imgName) : '1';
 										master.collected = true;
 									}
 									that.masterList = data.result.masterCardList;
@@ -210,7 +210,7 @@
 									break;
 								case 1:
 									for(var work of data.result.workList || []) {
-										work.imgName = work.imgName ? (data.result.imgServer + work.imgName) : '1';
+										work.imgName = work.imgName ? (data.result.imgServer + '/small_' + work.imgName) : '1';
 										work.collected = true;
 									}
 									that.workList = data.result.workList;
@@ -218,7 +218,7 @@
 									break;
 								case 2:
 									for(var store of data.result.storeList || []) {
-										store.shopSignPictures = data.result.imgServer + store.shopSignPictures;
+										store.shopSignPictures = data.result.imgServer + '/small_' + store.shopSignPictures;
 										store.collected = true;
 									}
 									that.storeList = data.result.storeList;
@@ -226,7 +226,7 @@
 									break;
 								case 3:
 									for(var project of data.result.projectList || []) {
-										project.imgName = project.imgName ? (data.result.imgServer + project.imgName) : '1';
+										project.imgName = project.imgName ? (data.result.imgServer + '/small_' + project.imgName) : '1';
 										project.collected = true;
 									}
 									that.projectList = data.result.projectList;

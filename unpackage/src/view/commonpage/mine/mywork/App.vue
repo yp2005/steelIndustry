@@ -9,9 +9,9 @@
 					<p>{{employmentDemand.updateTime}}</p>
 					<p>{{employmentDemand.stateValue}}</p>
 					<p>
-						<a v-if="employmentDemand.state === 0" @tap="updateState($event, employmentDemand, 2)" href="javascript:void(0)">提交</a>
+						<a v-if="employmentDemand.state === 0" @tap="updateState($event, $index, 2)" href="javascript:void(0)">提交</a>
 						<a v-if="employmentDemand.state !== 2" @tap="edit($event, employmentDemand)" href="javascript:void(0)">编辑</a>
-						<a v-if="employmentDemand.state === 1 || employmentDemand.state === 2" @tap="updateState($event, employmentDemand, 0)" href="javascript:void(0)" class="red">撤销</a>
+						<a v-if="employmentDemand.state === 1 || employmentDemand.state === 2" @tap="updateState($event, $index, 0)" href="javascript:void(0)" class="red">撤销</a>
 						<a v-if="employmentDemand.state === 0 || employmentDemand.state === 3" @tap="delete($event, $index)" href="javascript:void(0)" class="red">删除</a>
 					</p>
 				</div>
@@ -49,7 +49,7 @@
 								return;
 							}
 							for(var employmentDemand of that.employmentDemandList) {
-								employmentDemand.picture = employmentDemand.pictures.length > 0 ? employmentDemand.pictures[0] : '1';
+								employmentDemand.picture = employmentDemand.pictures.length > 0 ? that.dealPicture(employmentDemand.pictures[0]) : '1';
 								switch(employmentDemand.state) {
 									case 0:
 										employmentDemand.stateValue = '草稿';
@@ -75,11 +75,16 @@
 				});
 			} else {
 				for(var employmentDemand of that.employmentDemandList) {
-					employmentDemand.picture = employmentDemand.pictures.length > 0 ? employmentDemand.pictures[0] : '1';
+					employmentDemand.picture = employmentDemand.pictures.length > 0 ? that.dealPicture(employmentDemand.pictures[0]) : '1';
 				}
 			}
 		},
 		methods: {
+			dealPicture(pic) {
+				var fileName = pic.substring(pic.lastIndexOf('/') + 1, pic.length);
+				var path = pic.substring(0, pic.lastIndexOf('/'));
+				return path + '/small_' + fileName;
+			},
 			releaseEmploymentDemand() {
 				muiUtils.openWindow('../../bizpage/release/work.html', '../../bizpage/release/work.html', {
 					isClose: true
@@ -92,7 +97,8 @@
 					}
 				});
 			},
-			updateState(event, employmentDemand, state) {
+			updateState(event, index, state) {
+				var employmentDemand = this.employmentDemandList[index];
 				var that = this;
 				muiUtils.muiAjax(api.APIS.employmentDemand.updateEmploymentDemandState, {
 					data: JSON.stringify({
@@ -119,7 +125,10 @@
 									employmentDemand.stateValue = '审核不通过';
 									break;
 							}
-							employmentDemand = JSON.parse(JSON.stringify(employmentDemand));
+							that.employmentDemandList.splice(index, 1);
+							that.$nextTick(function() {
+								that.employmentDemandList.splice(index, 0, employmentDemand);
+							});
 						} else {
 							mui.toast(data.erroCode + '：' + data.erroMsg);
 						}

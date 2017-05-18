@@ -39,7 +39,7 @@
 		created() {
 			var that = this;
 			if(this.masterCard) {
-				this.picture = this.masterCard.pictures.length > 0 ? this.masterCard.pictures[0] : (this.userInfo.avatar || '1');
+				this.picture = this.masterCard.pictures.length > 0 ? this.dealPicture(this.masterCard.pictures[0]) : (this.userInfo.avatar || '1');
 				return;
 			}
 			muiUtils.muiAjax(api.APIS.masterCard.getMasterCard, {
@@ -65,7 +65,7 @@
 								that.masterCard.stateValue = '审核不通过';
 								break;
 						}
-						that.picture = that.masterCard.pictures.length > 0 ? that.masterCard.pictures[0] : (that.userInfo.avatar || '1');
+						that.picture = that.masterCard.pictures.length > 0 ? that.dealPicture(that.masterCard.pictures[0]) : (that.userInfo.avatar || '1');
 					} else {
 						mui.toast(data.erroCode + '：' + data.erroMsg);
 					}
@@ -76,6 +76,11 @@
 			});
 		},
 		methods: {
+			dealPicture(pic) {
+				var fileName = pic.substring(pic.lastIndexOf('/') + 1, pic.length);
+				var path = pic.substring(0, pic.lastIndexOf('/'));
+				return path + '/small_' + fileName;
+			},
 			releaseCard() {
 				muiUtils.openWindow('../../bizpage/release/card.html', '../../bizpage/release/card.html', {
 					isClose: true

@@ -344,7 +344,7 @@
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
 							var workList = data.result.employmentDemandList || [];
 							for(var work of workList) {
-								work.imgName = work.imgName ? (data.result.imgServer + work.imgName) : '1';
+								work.imgName = work.imgName ? (data.result.imgServer + 'small_' + work.imgName) : '1';
 							}
 							that.workList = workList;
 						} else {
@@ -401,7 +401,7 @@
 								return;
 							}
 							for(var work of data.result.employmentDemandList || []) {
-								work.imgName = work.imgName ? (data.result.imgServer + work.imgName) : '1';
+								work.imgName = work.imgName ? (data.result.imgServer + 'small_' + work.imgName) : '1';
 							}
 							that.workList = that.workList.concat(data.result.employmentDemandList || []);
 						} else {

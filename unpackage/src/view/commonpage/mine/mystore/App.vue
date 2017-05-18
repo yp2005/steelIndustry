@@ -46,7 +46,7 @@
 							if(!that.store) {
 								return;
 							}
-							that.picture = that.store.imgServer + that.store.shopSignPictures;
+							that.picture = that.store.imgServer + '/small_' + that.store.shopSignPictures;
 							switch(that.store.state) {
 								case 0:
 									that.store.stateValue = '草稿';
@@ -71,7 +71,7 @@
 				});
 			}
 			else {
-				that.picture = that.store.imgServer + that.store.shopSignPictures;
+				that.picture = that.store.imgServer + '/small_' + that.store.shopSignPictures;
 			}
 		},
 		methods: {
