@@ -228,10 +228,10 @@
 									that.masterList = data.result.masterCardList || [];
 									break;
 								case 1:
-									for(var work of data.result.workList || []) {
+									for(var work of data.result.employmentDemandList || []) {
 										work.imgName = work.imgName ? (data.result.imgServer + work.imgName) : '1';
 									}
-									that.workList = data.result.workList || [];
+									that.workList = data.result.employmentDemandList || [];
 									break;
 								case 2:
 									for(var store of data.result.storeList || []) {
@@ -305,14 +305,14 @@
 									that.masterList = that.masterList.concat(data.result.masterCardList);
 									break;
 								case 1:
-									if(!data.result.workList || data.result.workList.length === 0) {
+									if(!data.result.employmentDemandList || data.result.employmentDemandList.length === 0) {
 										that.pullrefresh.endPullUpToRefresh(true);
 										return;
 									}
-									for(var work of data.result.workList || []) {
+									for(var work of data.result.employmentDemandList || []) {
 										work.imgName = work.imgName ? (data.result.imgServer + work.imgName) : '1';
 									}
-									that.workList = that.workList.concat(data.result.workList);
+									that.workList = that.workList.concat(data.result.employmentDemandList);
 									break;
 								case 2:
 									if(!data.result.storeList || data.result.storeList.length === 0) {
