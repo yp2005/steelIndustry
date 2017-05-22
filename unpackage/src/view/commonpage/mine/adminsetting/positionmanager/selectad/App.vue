@@ -7,7 +7,7 @@
 					<p class="mui-ellipsis">{{ad.title}}</p>
 					<p>{{ad.linkType == 'innerLink' ? '内部链接' : (ad.linkType == 'outerLink' ? '外部链接' : '广告联盟')}}</p>
 					<p>
-						<a href="javascript:void(0)" @tap="edit(ad)">编辑</a>
+						<a href="javascript:void(0)" @tap="edit($index, $event)">编辑</a>
 					</p>
 				</div>
 				<span v-show="ad.selected" class="mui-icon mui-icon-checkmarkempty"></span>
@@ -31,12 +31,13 @@
 			return {
 				pullrefresh: null,
 				adList: [],
+				adListBak: [],
 				selectedNum: 0,
 				position: plus.webview.currentWebview().position
 			};
 		},
 		created: function() {
-			this.getData();
+			this.getData(true);
 		},
 		methods: {
 			save() {
@@ -60,15 +61,17 @@
 					this.selectedNum--;
 				}
 			},
-			edit(ad) {
+			edit(index, e) {
+				var ad = this.adListBak[index];
 				muiUtils.openWindow('../../commonpage/advertisingmanager/editadvertising.html', '../../commonpage/advertisingmanager/editadvertising.html', {
 					extras: {
 						ad: ad,
 						fromPage: '../../commonpage/positionmanager/selectad.html'
 					}
 				});
+				e.stopPropagation();
 			},
-			getData() {
+			getData(loading) {
 				var that = this;
 				muiUtils.muiAjax(api.APIS.advertisement.getAdList, {
 					dataType: "json",
@@ -81,8 +84,12 @@
 					success: function(data) {
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
 							var adList = data.result.adList || [];
-							for(var ad of adList) {
+							that.adListBak = JSON.parse(JSON.stringify(adList));
+							for(var ad of that.adListBak ) {
 								ad.img = ad.img ? (data.result.imgServer + ad.img) : '1';
+							}
+							for(var ad of adList) {
+								ad.img = ad.img ? (data.result.imgServer + '/small_' + ad.img) : '1';
 								ad.selected = false;
 							}
 							that.adList = adList;
@@ -97,7 +104,7 @@
 						that.pullrefresh.refresh(true);
 						mui.toast('服务器或网络异常，请稍后重试。')
 					},
-					loading: false
+					loading: loading
 				});
 			},
 			loadMore() {
@@ -116,11 +123,18 @@
 								that.pullrefresh.endPullUpToRefresh(true);
 								return;
 							}
-							for(var ad of data.result.adList || []) {
+							var adList = data.result.adList || [];
+							var adListBak = JSON.parse(JSON.stringify(adList));
+							for(var ad of adListBak) {
 								ad.img = ad.img ? (data.result.imgServer + ad.img) : '1';
 								ad.selected = false;
 							}
-							that.adList = that.adList.concat(data.result.adList || []);
+							that.adListBak = that.adListBak.concat(adListBak);
+							for(var ad of adList) {
+								ad.img = ad.img ? (data.result.imgServer + '/small_' + ad.img) : '1';
+								ad.selected = false;
+							}
+							that.adList = that.adList.concat(adList);
 						} else {
 							mui.toast(data.erroCode + '：' + data.erroMsg);
 						}
@@ -147,7 +161,7 @@
 					auto: false,
 					offset: 50,
 					callback: function() {
-						that.getData();
+						that.getData(false);
 					}
 				},
 				up: {
@@ -158,7 +172,7 @@
 				}
 			});
 			window.addEventListener('getData', function(e) {
-				that.getData();
+				that.getData(true);
 			});
 		}
 	};

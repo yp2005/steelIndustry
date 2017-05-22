@@ -7,7 +7,7 @@
 					<p class="mui-ellipsis">{{ad.title}}</p>
 					<p>{{ad.linkType == 'innerLink' ? '内部链接' : (ad.linkType == 'outerLink' ? '外部链接' : '广告联盟')}}</p>
 					<p>
-						<a href="javascript:void(0)" @tap="edit(ad)">编辑</a>
+						<a href="javascript:void(0)" @tap="edit($index)">编辑</a>
 						<a href="javascript:void(0)" @tap="delete($index)">删除</a>
 					</p>
 				</div>
@@ -26,14 +26,16 @@
 		data: function() {
 			return {
 				pullrefresh: null,
-				adList: []
+				adList: [],
+				adListBak: []
 			};
 		},
 		created: function() {
-			this.getData();
+			this.getData(true);
 		},
 		methods: {
-			edit(ad) {
+			edit(index) {
+				var ad = this.adListBak[index];
 				muiUtils.openWindow('../../commonpage/advertisingmanager/editadvertising.html', '../../commonpage/advertisingmanager/editadvertising.html', {
 					extras: {
 						ad: ad,
@@ -64,7 +66,7 @@
 					}
 				});
 			},
-			getData() {
+			getData(loading) {
 				var that = this;
 				muiUtils.muiAjax(api.APIS.advertisement.getAdList, {
 					dataType: "json",
@@ -77,8 +79,12 @@
 					success: function(data) {
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
 							var adList = data.result.adList || [];
-							for(var ad of adList) {
+							that.adListBak = JSON.parse(JSON.stringify(adList));
+							for(var ad of that.adListBak) {
 								ad.img = ad.img ? (data.result.imgServer + ad.img) : '1';
+							}
+							for(var ad of adList) {
+								ad.img = ad.img ? (data.result.imgServer + '/small_' + ad.img) : '1';
 							}
 							that.adList = adList;
 						} else {
@@ -92,7 +98,7 @@
 						that.pullrefresh.refresh(true);
 						mui.toast('服务器或网络异常，请稍后重试。')
 					},
-					loading: false
+					loading: loading
 				});
 			},
 			loadMore() {
@@ -111,10 +117,16 @@
 								that.pullrefresh.endPullUpToRefresh(true);
 								return;
 							}
-							for(var ad of data.result.adList || []) {
+							var adList = data.result.adList || [];
+							var adListBak = JSON.parse(JSON.stringify(data.result.adList || []));
+							for(var ad of adListBak) {
 								ad.img = ad.img ? (data.result.imgServer + ad.img) : '1';
 							}
-							that.adList = that.adList.concat(data.result.adList || []);
+							that.adListBak = that.adListBak.concat(adListBak);
+							for(var ad of adList) {
+								ad.img = ad.img ? (data.result.imgServer + '/small_' + ad.img) : '1';
+							}
+							that.adList = that.adList.concat(adList);
 						} else {
 							mui.toast(data.erroCode + '：' + data.erroMsg);
 						}
@@ -141,7 +153,7 @@
 					auto: false,
 					offset: 50,
 					callback: function() {
-						that.getData();
+						that.getData(false);
 					}
 				},
 				up: {
@@ -152,7 +164,7 @@
 				}
 			});
 			window.addEventListener('getData', function(e) {
-				that.getData();
+				that.getData(true);
 			});
 		}
 	};

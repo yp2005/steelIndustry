@@ -59,25 +59,30 @@
 		methods: {
 			shenhe(state) {
 				var that = this;
-				muiUtils.muiAjax(api.APIS.enterpriseCertification.updateEnterpriseCertificationState, {
-					data: JSON.stringify({
-						userId: that.userId,
-						state: state,
-					}),
-					contentType: 'application/json',
-					dataType: "json",
-					type: "post",
-					success: function(data) {
-						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
-							mui.toast(state == 1 ? '已审核通过！' : '已拒绝审核通过！');
-							mui.fire(plus.webview.getWebviewById('../../commonpage/adminsetting/usermanager.html'), 'updateUserInfo');
-							mui.back();
-						} else {
-							mui.toast(data.erroCode + '：' + data.erroMsg);
-						}
-					},
-					error: function(xhr, type, errorThrown) {
-						mui.toast('服务器或网络异常，请稍后重试。');
+				var btnArray = ['取消', '确定'];
+				mui.confirm(state == 1 ? '确认通过审核？' : '确认拒绝审核通过？', '操作提示', btnArray, function(e) {
+					if(e.index == 1) {
+						muiUtils.muiAjax(api.APIS.enterpriseCertification.updateEnterpriseCertificationState, {
+							data: JSON.stringify({
+								userId: that.userId,
+								state: state,
+							}),
+							contentType: 'application/json',
+							dataType: "json",
+							type: "post",
+							success: function(data) {
+								if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+									mui.toast(state == 1 ? '已审核通过！' : '已拒绝审核通过！');
+									mui.fire(plus.webview.getWebviewById('../../commonpage/adminsetting/usermanager.html'), 'updateUserInfo');
+									mui.back();
+								} else {
+									mui.toast(data.erroCode + '：' + data.erroMsg);
+								}
+							},
+							error: function(xhr, type, errorThrown) {
+								mui.toast('服务器或网络异常，请稍后重试。');
+							}
+						});
 					}
 				});
 			}

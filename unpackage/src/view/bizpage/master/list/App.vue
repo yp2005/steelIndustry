@@ -205,11 +205,11 @@
 			plus.geolocation.getCurrentPosition(function(position) {
 				that.lng = position.coords.longitude || 1;
 				that.lat = position.coords.latitude || 1;
-				that.getData();
+				that.getData(true);
 			}, function(e) {
 				that.lng = 1;
 				that.lat = 1;
-				that.getData();
+				that.getData(true);
 			}, {
 				provider: 'baidu',
 				timeout: 8000
@@ -302,10 +302,7 @@
 					}
 				});
 			},
-			doSearch: function() {
-				this.getData();
-			},
-			getData() {
+			getData(loading) {
 				var typeIds = [];
 				if(this.type.value > 0) {
 					if(this.type.child.value) {
@@ -356,7 +353,7 @@
 						that.pullrefresh.refresh(true);
 						mui.toast('服务器或网络异常，请稍后重试。')
 					},
-					loading: false
+					loading: loading
 				});
 			},
 			loadMore() {
@@ -454,22 +451,22 @@
 		},
 		watch: {
 			searchValue: function() {
-				this.getData();
+				this.getData(true);
 			},
 			'type.value': function() {
-				this.getData();
+				this.getData(true);
 			},
 			'sortType.value': function() {
-				this.getData();
+				this.getData(true);
 			},
 			'address.provinceid': function() {
-				this.getData();
+				this.getData(true);
 			},
 			'address.cityid': function() {
-				this.getData();
+				this.getData(true);
 			},
 			'address.countyid': function() {
-				this.getData();
+				this.getData(true);
 			}
 		},
 		components: {
@@ -488,7 +485,7 @@
 					auto: false,
 					offset: 50,
 					callback: function() {
-						that.getData();
+						that.getData(false);
 					}
 				},
 				up: {

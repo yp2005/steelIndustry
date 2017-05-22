@@ -1,10 +1,11 @@
 <template>
 	<div class="releasemanager">
 		<p class="conditions">
-			<a href="javascript: void(0)" class="{{filterType == 0 ? 'filterActive':''}}" @tap="getData(0)">师傅名片</a>
-			<a href="javascript: void(0)" class="{{filterType == 1 ? 'filterActive':''}}" @tap="getData(1)">用工需求</a>
-			<a href="javascript: void(0)" class="{{filterType == 2 ? 'filterActive':''}}" @tap="getData(2)">店铺</a>
-			<a href="javascript: void(0)" class="{{filterType == 3 ? 'filterActive':''}}" @tap="getData(3)">工程</a>
+			<a href="javascript: void(0)" class="{{filterType == 0 ? 'filterActive':''}}" @tap="getData(0, true)">师傅名片</a>
+			<a href="javascript: void(0)" class="{{filterType == 1 ? 'filterActive':''}}" @tap="getData(1, true)">用工需求</a>
+			<a href="javascript: void(0)" class="{{filterType == 2 ? 'filterActive':''}}" @tap="getData(2, true)">店铺</a>
+			<a href="javascript: void(0)" class="{{filterType == 3 ? 'filterActive':''}}" @tap="getData(3, true)">工程</a>
+			<a href="javascript: void(0)" class="picker" @tap="selectState">{{state.text}}</a>
 		</p>
 		<div id="scroll" class="mui-scroll-wrapper">
 			<div id="pullrefresh" class="mui-scroll">
@@ -19,8 +20,8 @@
 								<img v-else src="../../../../../static/img/mine/noshimingrenzheng.svg">
 							</p>
 							<p>
-								<a href="javascript:void(0)" @tap="shenhe($index, 1, 0, $event)">通过</a>
-								<a class="butongguo" href="javascript:void(0)" @tap="shenhe($index, 3, 0, $event)">不通过</a>
+								<a href="javascript:void(0)" v-if="state.value != 1" @tap="shenhe($index, 1, 0, $event)">通过</a>
+								<a class="butongguo" href="javascript:void(0)" v-if="state.value != 3" @tap="shenhe($index, 3, 0, $event)">不通过</a>
 								<span class="mui-pull-right">...</span>
 							</p>
 						</div>
@@ -40,8 +41,8 @@
 								<img v-else src="../../../../../static/img/mine/noqiyerenzheng.svg">
 							</p>
 							<p>
-								<a href="javascript:void(0)" @tap="shenhe($index, 1, 1, $event)">通过</a>
-								<a class="butongguo" href="javascript:void(0)" @tap="shenhe($index, 3, 1, $event)">不通过</a>
+								<a href="javascript:void(0)" v-if="state.value != 1" @tap="shenhe($index, 1, 1, $event)">通过</a>
+								<a class="butongguo" href="javascript:void(0)" v-if="state.value != 3" @tap="shenhe($index, 3, 1, $event)">不通过</a>
 								<span class="mui-pull-right">...</span>
 							</p>
 						</div>
@@ -61,8 +62,8 @@
 								<img v-else src="../../../../../static/img/mine/noqiyerenzheng.svg">
 							</p>
 							<p>
-								<a href="javascript:void(0)" @tap="shenhe($index, 1, 2, $event)">通过</a>
-								<a class="butongguo" href="javascript:void(0)" @tap="shenhe($index, 3, 2, $event)">不通过</a>
+								<a href="javascript:void(0)" v-if="state.value != 1" @tap="shenhe($index, 1, 2, $event)">通过</a>
+								<a class="butongguo" href="javascript:void(0)" v-if="state.value != 3" @tap="shenhe($index, 3, 2, $event)">不通过</a>
 								<span class="mui-pull-right">...</span>
 							</p>
 						</div>
@@ -82,8 +83,8 @@
 								<img v-else src="../../../../../static/img/mine/noqiyerenzheng.svg">
 							</p>
 							<p>
-								<a href="javascript:void(0)" @tap="shenhe($index, 1, 3, $event)">通过</a>
-								<a class="butongguo" href="javascript:void(0)" @tap="shenhe($index, 3, 3, $event)">不通过</a>
+								<a href="javascript:void(0)" v-if="state.value != 1" @tap="shenhe($index, 1, 3, $event)">通过</a>
+								<a class="butongguo" href="javascript:void(0)" v-if="state.value != 3" @tap="shenhe($index, 3, 3, $event)">不通过</a>
 								<span class="mui-pull-right">...</span>
 							</p>
 						</div>
@@ -105,6 +106,19 @@
 	} from 'common/cityData';
 	export default {
 		data: function() {
+			var statePicker = new mui.PopPicker({
+				layer: 1
+			});
+			statePicker.setData([{
+				value: 2,
+				text: '待审核',
+			}, {
+				value: 3,
+				text: '未通过',
+			}, {
+				value: 1,
+				text: '已通过',
+			}]);
 			return {
 				filterType: 0,
 				masterList: [],
@@ -112,12 +126,26 @@
 				storeList: [],
 				projectList: [],
 				pullrefresh: null,
+				statePicker: statePicker,
+				state: {
+					value: 2,
+					text: '待审核',
+				}
 			};
 		},
 		created: function() {
-			this.getData(0, false);
+			this.getData(0, true);
 		},
 		methods: {
+			selectState() {
+				var that = this;
+				this.statePicker.show(function(items) {
+					that.state = {
+						text: items[0].text,
+						value: items[0].value
+					}
+				});
+			},
 			gotoMasterDetail(userId) {
 				muiUtils.openWindow('../../bizpage/master/masterinfo.html', '../../bizpage/master/masterinfo.html', {
 					extras: {
@@ -148,49 +176,54 @@
 			},
 			shenhe(index, state, type, e) {
 				var that = this;
-				var url = '';
-				var dataList;
-				switch(type) {
-					case 0:
-						url = api.APIS.masterCard.updateMasterCardState;
-						dataList = that.masterList;
-						break;
-					case 1:
-						url = api.APIS.employmentDemand.updateEmploymentDemandState;
-						dataList = that.workList;
-						break;
-					case 2:
-						url = api.APIS.store.updateStoreState;
-						dataList = that.storeList;
-						break;
-					case 3:
-						url = api.APIS.project.updateProjectState;
-						dataList = that.projectList;
-						break;
-				}
-				muiUtils.muiAjax(url, {
-					dataType: "json",
-					contentType: 'application/json',
-					type: "post",
-					data: JSON.stringify({
-						id: dataList[index].id,
-						state: state
-					}),
-					success: function(data) {
-						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
-							mui.toast(state == 1 ? '已通过审核！' : '已不通过审核！');
-							dataList.splice(index, 1);
-						} else {
-							mui.toast(data.erroCode + '：' + data.erroMsg);
+				var btnArray = ['取消', '确定'];
+				mui.confirm(state == 1 ? '确认通过审核？' : '确认不通过审核？', '操作提示', btnArray, function(e) {
+					if(e.index == 1) {
+						var url = '';
+						var dataList;
+						switch(type) {
+							case 0:
+								url = api.APIS.masterCard.updateMasterCardState;
+								dataList = that.masterList;
+								break;
+							case 1:
+								url = api.APIS.employmentDemand.updateEmploymentDemandState;
+								dataList = that.workList;
+								break;
+							case 2:
+								url = api.APIS.store.updateStoreState;
+								dataList = that.storeList;
+								break;
+							case 3:
+								url = api.APIS.project.updateProjectState;
+								dataList = that.projectList;
+								break;
 						}
-					},
-					error: function(xhr, type, errorThrown) {
-						mui.toast('服务器或网络异常，请稍后重试。');
+						muiUtils.muiAjax(url, {
+							dataType: "json",
+							contentType: 'application/json',
+							type: "post",
+							data: JSON.stringify({
+								id: dataList[index].id,
+								state: state
+							}),
+							success: function(data) {
+								if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+									mui.toast(state == 1 ? '已通过审核！' : '已不通过审核！');
+									dataList.splice(index, 1);
+								} else {
+									mui.toast(data.erroCode + '：' + data.erroMsg);
+								}
+							},
+							error: function(xhr, type, errorThrown) {
+								mui.toast('服务器或网络异常，请稍后重试。');
+							}
+						});
 					}
 				});
 				e.stopPropagation();
 			},
-			getData(type) {
+			getData(type, loading) {
 				var that = this;
 				this.filterType = type;
 				var url = '';
@@ -216,7 +249,7 @@
 						rowStartNumber: 0,
 						rowCount: 10,
 						sortType: 0,
-						state: 2
+						state: that.state.value
 					}),
 					success: function(data) {
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
@@ -256,7 +289,8 @@
 						that.pullrefresh.endPullDownToRefresh();
 						that.pullrefresh.refresh(true);
 						mui.toast('服务器或网络异常，请稍后重试。')
-					}
+					},
+					loading: loading
 				});
 			},
 			loadMore(type) {
@@ -289,7 +323,7 @@
 						rowStartNumber: rowStartNumber,
 						rowCount: 10,
 						sortType: 0,
-						state: 2
+						state: that.state.value
 					}),
 					success: function(data) {
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
@@ -347,6 +381,11 @@
 				});
 			}
 		},
+		watch: {
+			'state.value': function() {
+				this.getData(this.filterType, true);
+			}
+		},
 		ready: function() {
 			var deceleration = mui.os.ios ? 0.003 : 0.0009;
 			mui('.mui-scroll-wrapper').scroll({
@@ -360,7 +399,7 @@
 					auto: false,
 					offset: 50,
 					callback: function() {
-						that.getData(that.filterType);
+						that.getData(that.filterType, false);
 					}
 				},
 				up: {
@@ -390,14 +429,28 @@
 	
 	.releasemanager .conditions a {
 		color: #000;
-		width: 23%;
+		width: 19%;
 		position: relative;
 	}
 	
 	.releasemanager .conditions a:nth-child(1),
 	.releasemanager .conditions a:nth-child(2),
-	.releasemanager .conditions a:nth-child(3) {
+	.releasemanager .conditions a:nth-child(3),
+	.releasemanager .conditions a:nth-child(4) {
 		border-right: solid 1px #ddd;
+	}
+	
+	.releasemanager .conditions a.picker:after {
+		content: "";
+		position: absolute;
+		width: 4px;
+		height: 4px;
+		margin-left: 5px;
+		top: 10px;
+		box-sizing: border-box;
+		border-top: 4px solid #aaa;
+		border-right: 4px solid transparent;
+		border-left: 4px solid transparent;
 	}
 	
 	.filterActive {

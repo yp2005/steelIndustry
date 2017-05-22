@@ -297,15 +297,12 @@
 			confirmImg() {
 				var $image = $('#confirmImg_' + this.dataid);
 				var readyimg_path = $image.attr('src');
-				console.log('=============' + this.dataid)
 				if(readyimg_path !== '') {
 					files.push({
 						name: 'uploadkey0',
 						path: readyimg_path
 					});
 				}
-				console.log('=============' + readyimg_path + '   ' + JSON.stringify(files))
-
 				let container = null;
 				let index = this.uploadIndex;
 				this['uploadImagePath' + index] = readyimg_path;
@@ -320,7 +317,6 @@
 				var that = this;
 				for(var file of files) {
 					var localurl = file.path;
-					console.log(localurl)
 					var fileName = localurl.substring(localurl.lastIndexOf('/') + 1, localurl.length);
 					var relativePath = '_doc/camera/small' + fileName;
 					var dstlocalurl = plus.io.convertLocalFileSystemURL(relativePath);

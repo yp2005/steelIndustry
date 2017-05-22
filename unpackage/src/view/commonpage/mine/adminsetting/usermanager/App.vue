@@ -11,7 +11,7 @@
 		<div class="mui-scroll-wrapper">
 			<div id="pullrefresh" class="mui-scroll">
 				<div class="oneUser" v-for="user in userList" @tap="open('../../commonpage/usermanager/userDetail.html', user.id, $event)">
-					<img :src="user.avatar || '1'" />
+					<img :src="user.avatar" />
 					<div class="userInfo">
 						<p class="mui-ellipsis">{{user.userName || user.mobileNumber}}</p>
 						<p>最后登录时间：{{user.latestLoginTime}}</p>
@@ -86,30 +86,35 @@
 			};
 		},
 		created() {
-			this.getData();
+			this.getData(true);
 		},
 		methods: {
 			fenghao(index, state, e) {
 				var that = this;
-				muiUtils.muiAjax(api.APIS.user.updateUserState, {
-					data: JSON.stringify({
-						id: that.userList[index].id,
-						state: state
-					}),
-					contentType: 'application/json',
-					dataType: "json",
-					type: "post",
-					success: function(data) {
-						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
-							mui.toast(state == 1 ? '已解封成功！' : '已封号成功！');
-							that.userList[index].state = state;
-							that.userList.$set(index, JSON.parse(JSON.stringify(that.userList[index])))
-						} else {
-							mui.toast(data.erroCode + '：' + data.erroMsg);
-						}
-					},
-					error: function(xhr, type, errorThrown) {
-						mui.toast('服务器或网络异常，请稍后重试。');
+				var btnArray = ['取消', '确定'];
+				mui.confirm(state == 1 ? '确认解封？' : '确认封号？', '操作提示', btnArray, function(e) {
+					if(e.index == 1) {
+						muiUtils.muiAjax(api.APIS.user.updateUserState, {
+							data: JSON.stringify({
+								id: that.userList[index].id,
+								state: state
+							}),
+							contentType: 'application/json',
+							dataType: "json",
+							type: "post",
+							success: function(data) {
+								if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+									mui.toast(state == 1 ? '已解封成功！' : '已封号成功！');
+									that.userList[index].state = state;
+									that.userList.$set(index, JSON.parse(JSON.stringify(that.userList[index])))
+								} else {
+									mui.toast(data.erroCode + '：' + data.erroMsg);
+								}
+							},
+							error: function(xhr, type, errorThrown) {
+								mui.toast('服务器或网络异常，请稍后重试。');
+							}
+						});
 					}
 				});
 				e.stopPropagation();
@@ -135,10 +140,7 @@
 					that.sortType = items[0];
 				});
 			},
-			doSearch: function() {
-				this.getData();
-			},
-			getData() {
+			getData(loading) {
 				var data = {
 					rowStartNumber: 0,
 					rowCount: 10,
@@ -148,8 +150,7 @@
 				if(this.state.value > 0) {
 					if(this.state.value == 1) {
 						data.realNameAuthentication = 2;
-					}
-					else if(this.state.value == 2) {
+					} else if(this.state.value == 2) {
 						data.enterpriseCertification = 2;
 					}
 				}
@@ -165,6 +166,8 @@
 								for(var user of data.result.userList) {
 									if(user.avatar) {
 										user.avatar = data.result.imgServer + user.avatar;
+									} else {
+										user.avatar = '1';
 									}
 								}
 							}
@@ -182,7 +185,7 @@
 						that.pullrefresh.refresh(true);
 						mui.toast('服务器或网络异常，请稍后重试。');
 					},
-					loading: false
+					loading: loading
 				});
 			},
 			loadMore() {
@@ -195,8 +198,7 @@
 				if(this.state.value > 0) {
 					if(this.state.value == 1) {
 						data.realNameAuthentication = 2;
-					}
-					else if(this.state.value == 2) {
+					} else if(this.state.value == 2) {
 						data.enterpriseCertification = 2;
 					}
 				}
@@ -215,6 +217,8 @@
 							for(var user of data.result.userList) {
 								if(user.avatar) {
 									user.avatar = data.result.imgServer + user.avatar;
+								} else {
+									user.avatar = '1';
 								}
 							}
 							that.userList = that.userList.concat(data.result.userList);
@@ -235,13 +239,13 @@
 		},
 		watch: {
 			searchValue: function() {
-				this.getData();
+				this.getData(true);
 			},
 			'state.value': function() {
-				this.getData();
+				this.getData(true);
 			},
 			'sortType.value': function() {
-				this.getData();
+				this.getData(true);
 			},
 		},
 		ready: function() {
@@ -257,7 +261,7 @@
 					auto: false,
 					offset: 50,
 					callback: function() {
-						that.getData();
+						that.getData(false);
 					}
 				},
 				up: {
@@ -268,7 +272,7 @@
 				}
 			});
 			window.addEventListener('updateUserInfo', function() {
-				that.getData();
+				that.getData(true);
 			});
 		}
 	};

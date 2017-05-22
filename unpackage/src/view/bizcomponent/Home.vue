@@ -189,7 +189,7 @@
 					error: function(xhr, type, errorThrown) {}
 				});
 			},
-			getData() {
+			getData(loading) {
 				var that = this;
 				muiUtils.muiAjax(api.APIS.common.homeData, {
 					contentType: 'application/json',
@@ -219,8 +219,7 @@
 									}
 								}
 								that.imageDatas = imageDatas;
-							}
-							else {
+							} else {
 								that.imageDatas = that.imageDatasDefault;
 							}
 							if(that.homeData.systemNotice && that.homeData.systemNotice.length > 0) {
@@ -230,6 +229,11 @@
 									messages.push(endMsg);
 								}
 								that.messages = messages;
+							} else {
+								that.messages = [{
+									title: '暂无公告',
+									content: ''
+								}];
 							}
 							if(that.homeData.hotStore && that.homeData.hotStore.length > 0) {
 								for(var store of that.homeData.hotStore) {
@@ -237,11 +241,17 @@
 								}
 								that.storeList = that.homeData.hotStore;
 							}
+							else {
+								that.storeList = [];
+							}
 							if(that.homeData.hotWork && that.homeData.hotWork.length > 0) {
 								for(var work of that.homeData.hotWork) {
-									work.imgName = work.imgName ? (data.result.imgServer + 'small_' +  work.imgName) : '1';
+									work.imgName = work.imgName ? (data.result.imgServer + 'small_' + work.imgName) : '1';
 								}
 								that.workList = that.homeData.hotWork;
+							}
+							else {
+								that.workList = [];
 							}
 						} else {
 							mui.toast(data.erroCode + '：' + data.erroMsg);
@@ -253,7 +263,8 @@
 						that.pullrefresh.endPullDownToRefresh();
 						that.pullrefresh.refresh(true);
 						mui.toast('服务器或网络异常，请稍后重试。')
-					}
+					},
+					loading: loading
 				});
 			}
 		},
@@ -284,14 +295,14 @@
 					auto: false,
 					offset: 50,
 					callback: function() {
-						that.getData();
+						that.getData(false);
 					}
 				},
 				up: {
 					callback: false
 				}
 			});
-			that.getData();
+			that.getData(true);
 		}
 	};
 </script>

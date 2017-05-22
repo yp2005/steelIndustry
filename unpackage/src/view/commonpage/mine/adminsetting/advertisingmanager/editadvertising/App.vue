@@ -113,6 +113,9 @@
 							if(!that.advertStore) {
 								mui.toast('店铺不存在，可能已被用户删除，请从新选择！');
 							}
+							else {
+								that.advertStore.shopSignPictures = that.advertStore.imgServer + '/small_' + that.advertStore.shopSignPictures;
+							}
 						} else {
 							mui.toast(data.erroCode + '：' + data.erroMsg);
 						}

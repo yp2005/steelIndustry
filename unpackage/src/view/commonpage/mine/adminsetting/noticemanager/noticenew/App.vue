@@ -4,7 +4,7 @@
 			<div class="title">公告信息</div>
 			<div class="inputRow"><label>标题</label><input type="text" v-model="notice.title" placeholder="请输入公告标题(必填)"></div>
 			<div class="inputRow textarea">
-				<label>详细地址</label>
+				<label>公告内容</label>
 				<textarea id="textarea" placeholder="请输入公告内容(必填)" v-model="notice.content" @input="textAreaInput"></textarea>
 			</div>
 			<div class="bottomBtn">

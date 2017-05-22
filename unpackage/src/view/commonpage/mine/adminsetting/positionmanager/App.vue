@@ -146,13 +146,13 @@
 				success: function(data) {
 					if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
 						for(var ad of data.result.homePage || []) {
-							ad.img = data.result.imgServer + ad.img;
+							ad.img = data.result.imgServer + '/small_' + ad.img;
 						}
 						for(var ad of data.result.listPage || []) {
-							ad.img = data.result.imgServer + ad.img;
+							ad.img = data.result.imgServer + '/small_' + ad.img;
 						}
 						for(var ad of data.result.detailPage || []) {
-							ad.img = data.result.imgServer + ad.img;
+							ad.img = data.result.imgServer + '/small_' + ad.img;
 						}
 						that.homePage = data.result.homePage || [];
 						that.listPage = data.result.listPage || [];
