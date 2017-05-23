@@ -33,7 +33,8 @@
 				adList: [],
 				adListBak: [],
 				selectedNum: 0,
-				position: plus.webview.currentWebview().position
+				position: plus.webview.currentWebview().position,
+				imgServer: ''
 			};
 		},
 		created: function() {
@@ -66,7 +67,8 @@
 				muiUtils.openWindow('../../commonpage/advertisingmanager/editadvertising.html', '../../commonpage/advertisingmanager/editadvertising.html', {
 					extras: {
 						ad: ad,
-						fromPage: '../../commonpage/positionmanager/selectad.html'
+						fromPage: '../../commonpage/positionmanager/selectad.html',
+						imgServer: this.imgServer
 					}
 				});
 				e.stopPropagation();
@@ -83,6 +85,7 @@
 					}),
 					success: function(data) {
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							that.imgServer = data.result.imgServer;
 							var adList = data.result.adList || [];
 							that.adListBak = JSON.parse(JSON.stringify(adList));
 							for(var ad of that.adListBak ) {

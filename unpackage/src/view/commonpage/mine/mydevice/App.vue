@@ -1,24 +1,24 @@
 <template>
-	<div class="mui-scroll-wrapper myproject">
+	<div class="mui-scroll-wrapper mydevice">
 		<div class="mui-scroll">
-			<div class="oneRow" v-for="project in projectList" @tap="gotoDetail(project)">
-				<img :src="project.picture" />
+			<div class="oneRow" v-for="device in deviceList" @tap="gotoDetail(device)">
+				<img :src="device.picture" />
 				<div class="rowRight">
-					<p class="mui-ellipsis">{{project.projectName}}</p>
-					<p>{{project.companyName}}</p>
-					<p>{{project.updateTime}}</p>
-					<p>{{project.stateValue}}</p>
+					<p class="mui-ellipsis">{{device.deviceName}}</p>
+					<p>{{device.deviceType}}</p>
+					<p>{{device.updateTime}}</p>
+					<p>{{device.stateValue}}</p>
 					<p>
-						<a v-if="project.state === 0" @tap="updateState($event, $index, 2)" href="javascript:void(0)">提交</a>
-						<a v-if="project.state !== 2" @tap="edit($event, project)" href="javascript:void(0)">编辑</a>
-						<a v-if="project.state === 1 || project.state === 2" @tap="updateState($event, $index, 0)" href="javascript:void(0)" class="red">撤销</a>
-						<a v-if="project.state === 0 || project.state === 3" @tap="delete($event, $index)" href="javascript:void(0)" class="red">删除</a>
+						<a v-if="device.state === 0" @tap="updateState($event, $index, 2)" href="javascript:void(0)">提交</a>
+						<a v-if="device.state !== 2" @tap="edit($event, device)" href="javascript:void(0)">编辑</a>
+						<a v-if="device.state === 1 || device.state === 2" @tap="updateState($event, $index, 0)" href="javascript:void(0)" class="red">撤销</a>
+						<a v-if="device.state === 0 || device.state === 3" @tap="delete($event, $index)" href="javascript:void(0)" class="red">删除</a>
 					</p>
 				</div>
 			</div>
 		</div>
-		<p class="noProject" v-show="!projectList || projectList.length === 0">
-			<a href="javascript:void(0)" @tap="releaseProject">发布工程</a>
+		<p class="noDevice" v-show="!deviceList || deviceList.length === 0">
+			<a href="javascript:void(0)" @tap="releaseDevice">发布设备</a>
 		</p>
 	</div>
 </template>
@@ -31,37 +31,40 @@
 		data: function() {
 			return {
 				userInfo: cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.USER_INFO),
-				projectList: plus.webview.currentWebview().projectList,
+				deviceList: plus.webview.currentWebview().deviceList,
 				picture: '1'
 			};
 		},
 		created() {
 			var that = this;
-			if(!this.projectList) {
-				muiUtils.muiAjax(api.APIS.project.getUserProject, {
+			if(!this.deviceList) {
+				muiUtils.muiAjax(api.APIS.device.getUserDevice, {
 					dataType: "json",
 					type: "get",
 					success: function(data) {
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
-							that.projectList = data.result.projectList;
-							if(!that.projectList) {
+							that.deviceList = data.result.deviceList;
+							if(!that.deviceList) {
 								return;
 							}
-							for(var project of that.projectList) {
-								project.picture = project.pictures.length > 0 ? that.dealPicture(project.pictures[0]) : '1';
-								switch(project.state) {
+							for(var device of that.deviceList) {
+								device.picture = device.pictures.length > 0 ? that.dealPicture(device.pictures[0]) : '1';
+								switch(device.state) {
 									case 0:
-										project.stateValue = '草稿';
+										device.stateValue = '草稿';
 										break;
 									case 1:
-										project.stateValue = '通过审核';
+										device.stateValue = '通过审核';
 										break;
 									case 2:
-										project.stateValue = '审核中';
+										device.stateValue = '审核中';
 										break;
 									case 3:
-										project.stateValue = '审核不通过';
+										device.stateValue = '审核不通过';
 										break;
+								}
+								if(device.deviceTypes && device.deviceTypes.length) {
+									device.deviceType = device.deviceTypes[0].typeName;
 								}
 							}
 						} else {
@@ -73,8 +76,11 @@
 					}
 				});
 			} else {
-				for(var project of that.projectList) {
-					project.picture = project.pictures.length > 0 ? that.dealPicture(project.pictures[0]) : '1';
+				for(var device of that.deviceList) {
+					device.picture = device.pictures.length > 0 ? that.dealPicture(device.pictures[0]) : '1';
+					if(device.deviceTypes && device.deviceTypes.length) {
+						device.deviceType = device.deviceTypes[0].typeName;
+					}
 				}
 			}
 		},
@@ -84,24 +90,24 @@
 				var path = pic.substring(0, pic.lastIndexOf('/'));
 				return path + '/small_' + fileName;
 			},
-			releaseProject() {
-				muiUtils.openWindow('../../bizpage/release/project.html', '../../bizpage/release/project.html', {
+			releaseDevice() {
+				muiUtils.openWindow('../../bizpage/release/device.html', '../../bizpage/release/device.html', {
 					isClose: true
 				});
 			},
-			gotoDetail: function(project) {
-				muiUtils.openWindow('../../bizpage/project/projectinfo.html', '../../bizpage/project/projectinfo.html', {
+			gotoDetail: function(device) {
+				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', '../../bizpage/device/deviceinfo.html', {
 					extras: {
-						project: project
+						device: device
 					}
 				});
 			},
 			updateState(event, index, state) {
-				var project = this.projectList[index];
+				var device = this.deviceList[index];
 				var that = this;
-				muiUtils.muiAjax(api.APIS.project.updateProjectState, {
+				muiUtils.muiAjax(api.APIS.device.updateDeviceState, {
 					data: JSON.stringify({
-						id: project.id,
+						id: device.id,
 						state: state
 					}),
 					contentType: 'application/json',
@@ -109,24 +115,24 @@
 					type: "post",
 					success: function(data) {
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
-							project.state = state;
+							device.state = state;
 							switch(state) {
 								case 0:
-									project.stateValue = '草稿';
+									device.stateValue = '草稿';
 									break;
 								case 1:
-									project.stateValue = '通过审核';
+									device.stateValue = '通过审核';
 									break;
 								case 2:
-									project.stateValue = '审核中';
+									device.stateValue = '审核中';
 									break;
 								case 3:
-									project.stateValue = '审核不通过';
+									device.stateValue = '审核不通过';
 									break;
 							}
-							that.projectList.splice(index, 1);
+							that.deviceList.splice(index, 1);
 							that.$nextTick(function() {
-								that.projectList.splice(index, 0, project);
+								that.deviceList.splice(index, 0, device);
 							});
 						} else {
 							mui.toast(data.erroCode + '：' + data.erroMsg);
@@ -138,12 +144,12 @@
 				});
 				event.stopPropagation();
 			},
-			edit(event, project) {
-				muiUtils.openWindow('../../bizpage/release/project.html', '../../bizpage/release/project.html', {
+			edit(event, device) {
+				muiUtils.openWindow('../../bizpage/release/device.html', '../../bizpage/release/device.html', {
 					isValidLogin: true,
 					isClose: true,
 					extras: {
-						project: project
+						device: device
 					}
 				});
 				event.stopPropagation();
@@ -151,14 +157,14 @@
 			delete(event, index) {
 				var btnArray = ['取消', '确定'];
 				var that = this;
-				mui.confirm('确认删除工程？', '操作提示', btnArray, function(e) {
+				mui.confirm('确认删除设备？', '操作提示', btnArray, function(e) {
 					if(e.index == 1) {
-						muiUtils.muiAjax(api.APIS.project.deleteProject + '?id=' + that.projectList[index].id, {
+						muiUtils.muiAjax(api.APIS.device.deleteDevice + '?id=' + that.deviceList[index].id, {
 							dataType: "json",
 							type: "delete",
 							success: function(data) {
 								if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
-									that.projectList.splice(index, 1);
+									that.deviceList.splice(index, 1);
 								} else {
 									mui.toast(data.erroCode + '：' + data.erroMsg);
 								}
@@ -173,7 +179,7 @@
 			}
 		},
 		ready() {
-			mui('.mui-scroll-wrapper.myproject').scroll({
+			mui('.mui-scroll-wrapper.mydevice').scroll({
 				bounce: true,
 				indicators: false, // 是否显示滚动条
 				deceleration: mui.os.ios ? 0.003 : 0.0009
@@ -182,7 +188,7 @@
 	};
 </script>
 <style>
-	.myproject {
+	.mydevice {
 		position: absolute;
 		top: 45px;
 		bottom: 0;
@@ -247,7 +253,7 @@
 		color: #777;
 	}
 	
-	.noProject {
+	.noDevice {
 		line-height: 30px;
 		margin-top: -15px;
 		position: absolute;
@@ -257,7 +263,7 @@
 		text-align: center;
 	}
 	
-	.noProject a {
+	.noDevice a {
 		padding: 0 15px;
 		color: #26c6da;
 		border: solid 1px #26c6da;

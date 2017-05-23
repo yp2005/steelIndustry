@@ -148,7 +148,7 @@
 									if(ad.linkType === 'innerLink') {
 										imageDatas.push({
 											banner_img_url: data.result.imgServer + ad.img,
-											banner_url: ad.storeId,
+											banner_url: ad.deviceId,
 											banner_name: ad.title,
 											banner_order: ad.id,
 											linkType: 'innerLink'
@@ -173,7 +173,7 @@
 								if(ad.linkType === 'innerLink') {
 									imageDatas.push({
 										banner_img_url: data.result.imgServer + ad.img,
-										banner_url: ad.storeId,
+										banner_url: ad.deviceId,
 										banner_name: ad.title,
 										banner_order: ad.id,
 										linkType: 'innerLink'
@@ -200,15 +200,15 @@
 		methods: {
 			bannerTap(item) {
 				if(item.linkType == 'innerLink') {
-					this.gotoStoreDetail(item.banner_url);
+					this.gotoDeviceDetail(item.banner_url);
 				} else if(item.linkType == 'outerLink') {
 					plus.runtime.openURL(item.banner_url);
 				}
 			},
-			gotoStoreDetail(userId) {
+			gotoDeviceDetail(id) {
 				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', '../../bizpage/device/deviceinfo.html', {
 					extras: {
-						userId: userId
+						deviceId: id
 					}
 				});
 			},

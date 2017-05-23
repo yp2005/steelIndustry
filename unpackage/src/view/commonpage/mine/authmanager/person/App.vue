@@ -95,6 +95,7 @@
 			var pictures2 = [];
 			var pictures3 = [];
 			var pictures4 = [];
+			var imgServer = '';
 			if(data) {
 				id = data.id;
 				name = data.realName;
@@ -103,6 +104,7 @@
 				pictures2.push(data.imgServer + data.cardPictureReverse);
 				pictures3.push(data.imgServer + data.handCardPicture);
 				pictures4.push(data.imgServer + data.fullFacePicture);
+				imgServer = data.imgServer;
 			}
 			return {
 				id: id,
@@ -115,7 +117,8 @@
 				isCut: false,
 				authStep: 0,
 				disStatement: false,
-				agree: false
+				agree: false,
+				imgServer: imgServer
 			};
 		},
 		methods: {
@@ -161,16 +164,16 @@
 					data.id = that.id;
 				}
 				if(data.cardPictureObverse.indexOf('http') == 0) {
-					data.cardPictureObverse = data.cardPictureObverse.substring(data.cardPictureObverse.lastIndexOf('/') + 1);
+					data.cardPictureObverse = data.cardPictureObverse.substring(data.cardPictureObverse.indexOf(this.imgServer) + this.imgServer.length);
 				}
 				if(data.cardPictureReverse.indexOf('http') == 0) {
-					data.cardPictureReverse = data.cardPictureReverse.substring(data.cardPictureReverse.lastIndexOf('/') + 1);
+					data.cardPictureReverse = data.cardPictureReverse.substring(data.cardPictureReverse.indexOf(this.imgServer) + this.imgServer.length);
 				}
 				if(data.handCardPicture.indexOf('http') == 0) {
-					data.handCardPicture = data.handCardPicture.substring(data.handCardPicture.lastIndexOf('/') + 1);
+					data.handCardPicture = data.handCardPicture.substring(data.handCardPicture.indexOf(this.imgServer) + this.imgServer.length);
 				}
 				if(data.fullFacePicture.indexOf('http') == 0) {
-					data.fullFacePicture = data.fullFacePicture.substring(data.fullFacePicture.lastIndexOf('/') + 1);
+					data.fullFacePicture = data.fullFacePicture.substring(data.fullFacePicture.indexOf(this.imgServer) + this.imgServer.length);
 				}
 				muiUtils.muiAjax(api.APIS.realNameAuthentication.saveRealNameAuthentication, {
 					data: JSON.stringify(data),

@@ -152,7 +152,7 @@
 			delete(event, index) {
 				var btnArray = ['取消', '确定'];
 				var that = this;
-				mui.confirm('确认删除店铺？', '操作提示', btnArray, function(e) {
+				mui.confirm('确认删除用工需求？', '操作提示', btnArray, function(e) {
 					if(e.index == 1) {
 						muiUtils.muiAjax(api.APIS.employmentDemand.deleteEmploymentDemand + '?id=' + that.employmentDemandList[index].id, {
 							dataType: "json",

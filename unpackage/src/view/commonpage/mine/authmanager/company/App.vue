@@ -74,6 +74,7 @@
 			var data = plus.webview.currentWebview().data;
 			var enterpriseInfo;
 			var id;
+			var imgServer = '';
 			if(data) {
 				id = data.id;
 				enterpriseInfo = {
@@ -82,23 +83,21 @@
 					license: []
 				};
 				enterpriseInfo.license.push(data.imgServer + data.license);
+				imgServer = data.imgServer;
 			}
-			console.log(JSON.stringify(enterpriseInfo))
 			return {
 				enterpriseInfo: enterpriseInfo || {
 					legalPersonName: '',
 					companyName: '',
 					license: []
 				},
+				imgServer: imgServer,
 				isCut: false,
 				authStep: 0,
 				disStatement: false,
 				agree: false,
 				id: id
 			};
-		},
-		created: function() {
-
 		},
 		methods: {
 			stepNext(step) {
@@ -128,7 +127,7 @@
 					data.id = that.id;
 				}
 				if(data.license.indexOf('http') == 0) {
-					data.license = data.license.substring(data.license.lastIndexOf('/') + 1);
+					data.license = data.license.substring(data.license.indexOf(this.imgServer) + this.imgServer.length);
 				}
 				muiUtils.muiAjax(api.APIS.enterpriseCertification.saveEnterpriseCertification, {
 					data: JSON.stringify(data),

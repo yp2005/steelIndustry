@@ -36,26 +36,26 @@
 			</div>
 
 			<p class="title">设备推荐</p>
-			<div class="oneStore" v-for="store in storeList" @tap="gotoStoreDetail(store.userId)">
-				<img :src="store.shopSignPictures" />
-				<div class="storeInfo">
-					<p class="mui-ellipsis">{{store.storeName}}</p>
-					<p>{{store.address}}</p>
+			<div class="oneDevice" v-for="device in deviceList" @tap="gotoDeviceDetail(device.userId)">
+				<img :src="device.imgName" />
+				<div class="deviceInfo">
+					<p class="mui-ellipsis">{{device.deviceName}}</p>
+					<p>{{device.address}}</p>
 					<p>
-						<img v-show="store.realNameAuthentication == 1" src="../../static/img/mine/shimingrenzheng.svg">
+						<img v-show="device.realNameAuthentication == 1" src="../../static/img/mine/shimingrenzheng.svg">
 						<img v-else src="../../static/img/mine/noshimingrenzheng.svg">
-						<img v-show="store.enterpriseCertification == 1" src="../../static/img/mine/qiyerenzheng.svg">
+						<img v-show="device.enterpriseCertification == 1" src="../../static/img/mine/qiyerenzheng.svg">
 						<img v-else src="../../static/img/mine/noqiyerenzheng.svg">
 					</p>
 					<p>
-						<a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
+						<a href="javascript:void(0)">订购设备</a><span class="mui-pull-right">...</span></p>
 				</div>
 			</div>
-			<p class="noData" v-show="!storeList || storeList.length === 0" class="noData">暂无数据</p>
+			<p class="noData" v-show="!deviceList || deviceList.length === 0" class="noData">暂无数据</p>
 			<p class="title">热门岗位</p>
 			<div class="oneWork" v-for="work in workList" @tap="gotoWorkDetail(work.id)">
 				<img :src="work.imgName" />
-				<div class="workStore">
+				<div class="workInfo">
 					<p class="mui-ellipsis">{{work.demandTitle}}</p>
 					<p>{{work.createTime}}<span class="mui-pull-right">{{work.address}}</span></p>
 					<p>
@@ -95,7 +95,7 @@
 					content: ''
 				}],
 				homeData: {},
-				storeList: [],
+				deviceList: [],
 				workList: []
 			};
 		},
@@ -118,15 +118,15 @@
 			},
 			bannerTap(item) {
 				if(item.linkType == 'innerLink') {
-					this.gotoStoreDetail(item.banner_url);
+					this.gotoDeviceDetail(item.banner_url);
 				} else if(item.linkType == 'outerLink') {
 					plus.runtime.openURL(item.banner_url);
 				}
 			},
-			gotoStoreDetail(userId) {
+			gotoDeviceDetail(id) {
 				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', '../../bizpage/device/deviceinfo.html', {
 					extras: {
-						userId: userId
+						deviceId: id
 					}
 				});
 			},
@@ -203,7 +203,7 @@
 									if(ad.linkType === 'innerLink') {
 										imageDatas.push({
 											banner_img_url: data.result.imgServer + ad.img,
-											banner_url: ad.storeId,
+											banner_url: ad.deviceId,
 											banner_name: ad.title,
 											banner_order: ad.id,
 											linkType: 'innerLink'
@@ -235,14 +235,14 @@
 									content: ''
 								}];
 							}
-							if(that.homeData.hotStore && that.homeData.hotStore.length > 0) {
-								for(var store of that.homeData.hotStore) {
-									store.shopSignPictures = data.result.imgServer + 'small_' + store.shopSignPictures;
+							if(that.homeData.hotDevice && that.homeData.hotDevice.length > 0) {
+								for(var device of that.homeData.hotDevice) {
+									device.imgName = device.imgName ? (data.result.imgServer + 'small_' + device.imgName) : '1';
 								}
-								that.storeList = that.homeData.hotStore;
+								that.deviceList = that.homeData.hotDevice;
 							}
 							else {
-								that.storeList = [];
+								that.deviceList = [];
 							}
 							if(that.homeData.hotWork && that.homeData.hotWork.length > 0) {
 								for(var work of that.homeData.hotWork) {
@@ -530,44 +530,44 @@
 		height: 100%;
 	}
 	
-	.oneStore {
+	.oneDevice {
 		padding: 10px;
 		background-color: #fff;
 		margin-bottom: 2px;
 	}
 	
-	.oneStore img {
+	.oneDevice img {
 		float: left;
 		width: 106px;
 		height: 106px;
 	}
 	
-	.oneStore .storeInfo {
+	.oneDevice .deviceInfo {
 		padding-left: 116px;
 		min-height: 80px;
 	}
 	
-	.oneStore .storeInfo p {
+	.oneDevice .deviceInfo p {
 		font-size: 13px;
 	}
 	
-	.oneStore .storeInfo p:nth-child(1) {
+	.oneDevice .deviceInfo p:nth-child(1) {
 		color: #000;
 		font-size: 14px;
 	}
 	
-	.oneStore .storeInfo p:nth-child(3) {
+	.oneDevice .deviceInfo p:nth-child(3) {
 		overflow: hidden;
 		padding: 5px 0;
 	}
 	
-	.oneStore .storeInfo p:nth-child(3) img {
+	.oneDevice .deviceInfo p:nth-child(3) img {
 		width: 19px;
 		height: 19px;
 		margin-right: 4px;
 	}
 	
-	.oneStore .storeInfo p:nth-child(4) a {
+	.oneDevice .deviceInfo p:nth-child(4) a {
 		color: #fff;
 		background-color: #26c6da;
 		line-height: 1;
@@ -576,7 +576,7 @@
 		margin: 5px 0;
 	}
 	
-	.oneStore .storeInfo p:nth-child(4) span {
+	.oneDevice .deviceInfo p:nth-child(4) span {
 		line-height: 1;
 		margin-top: 4px;
 		font-size: 19px;
@@ -596,32 +596,32 @@
 		height: 106px;
 	}
 	
-	.oneWork .workStore {
+	.oneWork .workInfo {
 		padding-left: 116px;
 		min-height: 80px;
 	}
 	
-	.oneWork .workStore p {
+	.oneWork .workInfo p {
 		font-size: 13px;
 	}
 	
-	.oneWork .workStore p:nth-child(1) {
+	.oneWork .workInfo p:nth-child(1) {
 		color: #000;
 		font-size: 14px;
 	}
 	
-	.oneWork .workStore p:nth-child(3) {
+	.oneWork .workInfo p:nth-child(3) {
 		overflow: hidden;
 		padding: 5px 0;
 	}
 	
-	.oneWork .workStore p:nth-child(3) img {
+	.oneWork .workInfo p:nth-child(3) img {
 		width: 19px;
 		height: 19px;
 		margin-right: 4px;
 	}
 	
-	.oneWork .workStore p:nth-child(4) a {
+	.oneWork .workInfo p:nth-child(4) a {
 		color: #fff;
 		background-color: #26c6da;
 		line-height: 1;
@@ -630,7 +630,7 @@
 		margin: 5px 0;
 	}
 	
-	.oneWork .workStore p:nth-child(4) span {
+	.oneWork .workInfo p:nth-child(4) span {
 		line-height: 1;
 		margin-top: 4px;
 		font-size: 19px;

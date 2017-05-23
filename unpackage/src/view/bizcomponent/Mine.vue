@@ -27,10 +27,10 @@
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
-				<li class="mui-table-view-cell" @tap="open('../../commonpage/mine/mystore.html')">
+				<li class="mui-table-view-cell" @tap="open('../../commonpage/mine/mydevice.html')">
 					<p>
-						<img src="../../static/img/mine/mystore.svg" />
-						<span>我的店铺</span>
+						<img src="../../static/img/mine/mydevice.svg" />
+						<span>我的设备</span>
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>

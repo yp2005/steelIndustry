@@ -27,7 +27,8 @@
 			return {
 				pullrefresh: null,
 				adList: [],
-				adListBak: []
+				adListBak: [],
+				imgServer: ''
 			};
 		},
 		created: function() {
@@ -39,7 +40,8 @@
 				muiUtils.openWindow('../../commonpage/advertisingmanager/editadvertising.html', '../../commonpage/advertisingmanager/editadvertising.html', {
 					extras: {
 						ad: ad,
-						fromPage: '../../commonpage/adminsetting/advertisingmanager.html'
+						fromPage: '../../commonpage/adminsetting/advertisingmanager.html',
+						imgServer: this.imgServer
 					}
 				});
 			},
@@ -80,6 +82,7 @@
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
 							var adList = data.result.adList || [];
 							that.adListBak = JSON.parse(JSON.stringify(adList));
+							that.imgServer = data.result.imgServer;
 							for(var ad of that.adListBak) {
 								ad.img = ad.img ? (data.result.imgServer + ad.img) : '1';
 							}

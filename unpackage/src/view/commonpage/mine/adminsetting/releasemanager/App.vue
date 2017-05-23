@@ -3,7 +3,7 @@
 		<p class="conditions">
 			<a href="javascript: void(0)" class="{{filterType == 0 ? 'filterActive':''}}" @tap="getData(0, true)">师傅名片</a>
 			<a href="javascript: void(0)" class="{{filterType == 1 ? 'filterActive':''}}" @tap="getData(1, true)">用工需求</a>
-			<a href="javascript: void(0)" class="{{filterType == 2 ? 'filterActive':''}}" @tap="getData(2, true)">店铺</a>
+			<a href="javascript: void(0)" class="{{filterType == 2 ? 'filterActive':''}}" @tap="getData(2, true)">设备</a>
 			<a href="javascript: void(0)" class="{{filterType == 3 ? 'filterActive':''}}" @tap="getData(3, true)">工程</a>
 			<a href="javascript: void(0)" class="picker" @tap="selectState">{{state.text}}</a>
 		</p>
@@ -50,15 +50,15 @@
 					<p class="noData" v-show="!workList || workList.length === 0" class="noData">暂无数据</p>
 				</template>
 				<template v-if="filterType == 2">
-					<div class="oneStore" v-for="store in storeList" @tap="gotoStoreDetail(store.userId)">
-						<img :src="store.shopSignPictures" />
-						<div class="storeInfo">
-							<p class="mui-ellipsis">{{store.storeName}}</p>
-							<p>{{store.address}}</p>
+					<div class="oneDevice" v-for="device in deviceList" @tap="gotoDeviceDetail(device.id)">
+						<img :src="device.imgName" />
+						<div class="deviceInfo">
+							<p class="mui-ellipsis">{{device.deviceName}}</p>
+							<p>{{device.address}}</p>
 							<p>
-								<img v-show="store.realNameAuthentication == 1" src="../../../../../static/img/mine/shimingrenzheng.svg">
+								<img v-show="device.realNameAuthentication == 1" src="../../../../../static/img/mine/shimingrenzheng.svg">
 								<img v-else src="../../../../../static/img/mine/noshimingrenzheng.svg">
-								<img v-show="store.enterpriseCertification == 1" src="../../../../../static/img/mine/qiyerenzheng.svg">
+								<img v-show="device.enterpriseCertification == 1" src="../../../../../static/img/mine/qiyerenzheng.svg">
 								<img v-else src="../../../../../static/img/mine/noqiyerenzheng.svg">
 							</p>
 							<p>
@@ -68,7 +68,7 @@
 							</p>
 						</div>
 					</div>
-					<p class="noData" v-show="!storeList || storeList.length === 0" class="noData">暂无数据</p>
+					<p class="noData" v-show="!deviceList || deviceList.length === 0" class="noData">暂无数据</p>
 				</template>
 				<template v-if="filterType == 3">
 					<div class="oneProject" v-for="project in projectList" @tap="gotoProjectDetail(project.id)">
@@ -123,7 +123,7 @@
 				filterType: 0,
 				masterList: [],
 				workList: [],
-				storeList: [],
+				deviceList: [],
 				projectList: [],
 				pullrefresh: null,
 				statePicker: statePicker,
@@ -160,10 +160,10 @@
 					}
 				});
 			},
-			gotoStoreDetail(userId) {
+			gotoDeviceDetail(id) {
 				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', '../../bizpage/device/deviceinfo.html', {
 					extras: {
-						userId: userId
+						deviceId: id
 					}
 				});
 			},
@@ -191,8 +191,8 @@
 								dataList = that.workList;
 								break;
 							case 2:
-								url = api.APIS.store.updateStoreState;
-								dataList = that.storeList;
+								url = api.APIS.device.updateDeviceState;
+								dataList = that.deviceList;
 								break;
 							case 3:
 								url = api.APIS.project.updateProjectState;
@@ -235,7 +235,7 @@
 						url = api.APIS.employmentDemand.getEmploymentDemandList;
 						break;
 					case 2:
-						url = api.APIS.store.getStoreList;
+						url = api.APIS.device.getDeviceList;
 						break;
 					case 3:
 						url = api.APIS.project.getProjectList;
@@ -267,10 +267,10 @@
 									that.workList = data.result.employmentDemandList || [];
 									break;
 								case 2:
-									for(var store of data.result.storeList || []) {
-										store.shopSignPictures = data.result.imgServer + '/small_' + store.shopSignPictures;
+									for(var device of data.result.deviceList || []) {
+										device.imgName = device.imgName ? (data.result.imgServer + '/small_' + device.imgName) : '1';
 									}
-									that.storeList = data.result.storeList || [];
+									that.deviceList = data.result.deviceList || [];
 									break;
 								case 3:
 									for(var project of data.result.projectList || []) {
@@ -307,8 +307,8 @@
 						rowStartNumber = that.workList.length;
 						break;
 					case 2:
-						url = api.APIS.store.getStoreList;
-						rowStartNumber = that.storeList.length;
+						url = api.APIS.device.getDeviceList;
+						rowStartNumber = that.deviceList.length;
 						break;
 					case 3:
 						url = api.APIS.project.getProjectList;
@@ -349,14 +349,14 @@
 									that.workList = that.workList.concat(data.result.employmentDemandList);
 									break;
 								case 2:
-									if(!data.result.storeList || data.result.storeList.length === 0) {
+									if(!data.result.deviceList || data.result.deviceList.length === 0) {
 										that.pullrefresh.endPullUpToRefresh(true);
 										return;
 									}
-									for(var store of data.result.storeList || []) {
-										store.shopSignPictures = data.result.imgServer + '/small_' + store.shopSignPictures;
+									for(var device of data.result.deviceList || []) {
+										device.imgName = device.imgName ? (data.result.imgServer + '/small_' + device.imgName) : '1';
 									}
-									that.storeList = that.storeList.concat(data.result.storeList);
+									that.deviceList = that.deviceList.concat(data.result.deviceList);
 									break;
 								case 3:
 									if(!data.result.projectList || data.result.projectList.length === 0) {
@@ -526,44 +526,44 @@
 		color: #777;
 	}
 	
-	.oneStore {
+	.oneDevice {
 		padding: 10px;
 		background-color: #fff;
 		margin-bottom: 8px;
 	}
 	
-	.oneStore img {
+	.oneDevice img {
 		float: left;
 		width: 106px;
 		height: 106px;
 	}
 	
-	.oneStore .storeInfo {
+	.oneDevice .deviceInfo {
 		padding-left: 116px;
 		min-height: 80px;
 	}
 	
-	.oneStore .storeInfo p {
+	.oneDevice .deviceInfo p {
 		font-size: 13px;
 	}
 	
-	.oneStore .storeInfo p:nth-child(1) {
+	.oneDevice .deviceInfo p:nth-child(1) {
 		color: #000;
 		font-size: 14px;
 	}
 	
-	.oneStore .storeInfo p:nth-child(3) {
+	.oneDevice .deviceInfo p:nth-child(3) {
 		overflow: hidden;
 		padding: 5px 0;
 	}
 	
-	.oneStore .storeInfo p:nth-child(3) img {
+	.oneDevice .deviceInfo p:nth-child(3) img {
 		width: 19px;
 		height: 19px;
 		margin-right: 4px;
 	}
 	
-	.oneStore .storeInfo p:nth-child(4) a {
+	.oneDevice .deviceInfo p:nth-child(4) a {
 		color: #fff;
 		background-color: #26c6da;
 		line-height: 1;
@@ -572,7 +572,7 @@
 		margin: 5px 0;
 	}
 	
-	.oneStore .storeInfo p:nth-child(4) span {
+	.oneDevice .deviceInfo p:nth-child(4) span {
 		line-height: 1;
 		margin-top: 4px;
 		font-size: 19px;
@@ -695,7 +695,7 @@
 	.oneMaster .masterInfo p:nth-child(4) a.butongguo,
 	.oneProject .projectInfo p:nth-child(4) a.butongguo,
 	.oneWork .workInfo p:nth-child(4) a.butongguo,
-	.oneStore .storeInfo p:nth-child(4) a.butongguo {
+	.oneDevice .deviceInfo p:nth-child(4) a.butongguo {
 		margin-left: 12px;
 		color: red;
 		border: solid 1px red;

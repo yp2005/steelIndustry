@@ -8,7 +8,7 @@ const API_ROOT = 'http://123.57.10.162:2793/' + API_VERSION;
 const USER = '/user';
 const SETTING = '/settings';
 const COLLECTION = '/collection';
-const STORE = '/store';
+const DEVICE = '/device';
 const PROJECT = '/project';
 const MASTER = '/masterCard';
 const EMPLOYMENTDEMAND = '/employmentDemand';
@@ -46,19 +46,19 @@ const APIS = {
 		getMasterCards:　API_ROOT + COLLECTION + '/getMasterCards',
 		getEmploymentDemands:　API_ROOT + COLLECTION + '/getEmploymentDemands',
 		getProjects:　API_ROOT + COLLECTION + '/getProjects',
-		getStores:　API_ROOT + COLLECTION + '/getStores',
+		getDevices:　API_ROOT + COLLECTION + '/getDevices',
 		deleteCollection:　API_ROOT + COLLECTION + '/deleteCollection',
 		addCollection:　API_ROOT + COLLECTION + '/addCollection'
 	},
 	
-	store: {
-		getStore: API_ROOT + STORE + '/getStore',
-		getStoreByUserId: API_ROOT + STORE + '/getStoreByUserId',
-		getStoreList: API_ROOT + STORE + '/getStoreList',
-		saveStore: API_ROOT + STORE + '/saveStore',
-		updateStoreCt: API_ROOT + STORE + '/updateStoreCt',
-		updateStoreState: API_ROOT + STORE + '/updateStoreState',
-		deleteStore: API_ROOT + STORE + '/deleteStore',
+	device: {
+		getUserDevice: API_ROOT + DEVICE + '/getUserDevice',
+		getDeviceById: API_ROOT + DEVICE + '/getDeviceById',
+		getDeviceList: API_ROOT + DEVICE + '/getDeviceList',
+		saveDevice: API_ROOT + DEVICE + '/saveDevice',
+		updateDeviceCt: API_ROOT + DEVICE + '/updateDeviceCt',
+		updateDeviceState: API_ROOT + DEVICE + '/updateDeviceState',
+		deleteDevice: API_ROOT + DEVICE + '/deleteDevice',
 	},
 	
 	project: {

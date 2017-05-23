@@ -1,4 +1,4 @@
-/** * @file 店铺列表主组件 * @Author yupeng * @private */
+/** * @file 设备列表主组件 * @Author yupeng * @private */
 
 <template>
 	<div class="deviceList">
@@ -14,23 +14,23 @@
 					<imageslider v-if="adType == 'loopImg'" :images="imageDatas" :item-tap="bannerTap" :indicator-display="indicatorDisplay"></imageslider>
 					<template v-if="adType == 'alliance'">{{{allianceCode}}}</template>
 				</div>
-				<div class="oneStore" v-for="store in storeList" @tap="gotoDetail(store)">
-					<img :src="store.shopSignPictures" />
-					<div class="storeInfo">
-						<p class="mui-ellipsis">{{store.storeName}}</p>
-						<p>{{store.address}}</p>
+				<div class="oneDevice" v-for="device in deviceList" @tap="gotoDetail(device)">
+					<img :src="device.imgName" />
+					<div class="deviceInfo">
+						<p class="mui-ellipsis">{{device.deviceName}}</p>
+						<p>{{device.address}}</p>
 						<p>
-							<img v-show="store.realNameAuthentication == 1" src="../../../../static/img/mine/shimingrenzheng.svg">
+							<img v-show="device.realNameAuthentication == 1" src="../../../../static/img/mine/shimingrenzheng.svg">
 							<img v-else src="../../../../static/img/mine/noshimingrenzheng.svg">
-							<img v-show="store.enterpriseCertification == 1" src="../../../../static/img/mine/qiyerenzheng.svg">
+							<img v-show="device.enterpriseCertification == 1" src="../../../../static/img/mine/qiyerenzheng.svg">
 							<img v-else src="../../../../static/img/mine/noqiyerenzheng.svg">
-							<span class="mui-pull-right">距离：{{store.distance}}KM</span>
+							<span class="mui-pull-right">距离：{{device.distance}}KM</span>
 						</p>
 						<p>
-							<a href="javascript:void(0)">进入店铺</a><span class="mui-pull-right">...</span></p>
+							<a href="javascript:void(0)">订购设备</a><span class="mui-pull-right">...</span></p>
 					</div>
 				</div>
-				<p v-show="!storeList || storeList.length === 0" class="noData">暂无数据</p>
+				<p v-show="!deviceList || deviceList.length === 0" class="noData">暂无数据</p>
 			</div>
 		</div>
 	</div>
@@ -169,7 +169,7 @@
 				text: '距离',
 			}]);
 			return {
-				selectStore: plus.webview.currentWebview().selectStore,
+				selectDevice: plus.webview.currentWebview().selectDevice,
 				cityPicker: cityPicker,
 				typePicker: typePicker,
 				typeData: typeData,
@@ -193,7 +193,7 @@
 					text: '默认排序',
 				},
 				pullrefresh: null,
-				storeList: [],
+				deviceList: [],
 				lng: undefined,
 				lat: undefined,
 				adType: 'oneImg',
@@ -235,7 +235,7 @@
 									if(ad.linkType === 'innerLink') {
 										imageDatas.push({
 											banner_img_url: data.result.imgServer + ad.img,
-											banner_url: ad.storeId,
+											banner_url: ad.deviceId,
 											banner_name: ad.title,
 											banner_order: ad.id,
 											linkType: 'innerLink'
@@ -260,7 +260,7 @@
 								if(ad.linkType === 'innerLink') {
 									imageDatas.push({
 										banner_img_url: data.result.imgServer + ad.img,
-										banner_url: ad.storeId,
+										banner_url: ad.deviceId,
 										banner_name: ad.title,
 										banner_order: ad.id,
 										linkType: 'innerLink'
@@ -287,29 +287,25 @@
 		methods: {
 			bannerTap(item) {
 				if(item.linkType == 'innerLink') {
-					this.gotoStoreDetail(item.banner_url);
+					this.gotoDeviceDetail(item.banner_url);
 				} else if(item.linkType == 'outerLink') {
 					plus.runtime.openURL(item.banner_url);
 				}
 			},
-			gotoStoreDetail(userId) {
+			gotoDeviceDetail(id) {
 				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', '../../bizpage/device/deviceinfo.html', {
 					extras: {
-						userId: userId
+						deviceId: id
 					}
 				});
 			},
-			gotoDetail: function(store) {
-				if(this.selectStore) {
+			gotoDetail: function(device) {
+				if(this.selectDevice) {
 					var fromPage = plus.webview.getWebviewById('../../commonpage/advertisingmanager/editadvertising.html');
-					mui.fire(fromPage, 'advertising_storepick', { store: store });
+					mui.fire(fromPage, 'advertising_devicepick', { device: device });
 					mui.back();
 				} else {
-					muiUtils.openWindow('../../bizpage/device/deviceinfo.html', '../../bizpage/device/deviceinfo.html', {
-						extras: {
-							userId: store.userId
-						}
-					});
+					this.gotoDeviceDetail(device.id);
 				}
 			},
 			getData(loading) {
@@ -329,7 +325,7 @@
 					}
 				}
 				var that = this;
-				muiUtils.muiAjax(api.APIS.store.getStoreList, {
+				muiUtils.muiAjax(api.APIS.device.getDeviceList, {
 					dataType: "json",
 					contentType: 'application/json',
 					type: "post",
@@ -347,9 +343,9 @@
 					}),
 					success: function(data) {
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
-							that.storeList = data.result.storeList || [];
-							for(var store of that.storeList) {
-								store.shopSignPictures = data.result.imgServer + 'small_' + store.shopSignPictures;
+							that.deviceList = data.result.deviceList || [];
+							for(var device of that.deviceList) {
+								device.imgName = device.imgName ? (data.result.imgServer + 'small_' + device.imgName) : '1';
 							}
 						} else {
 							mui.toast(data.erroCode + '：' + data.erroMsg);
@@ -382,12 +378,12 @@
 					}
 				}
 				var that = this;
-				muiUtils.muiAjax(api.APIS.store.getStoreList, {
+				muiUtils.muiAjax(api.APIS.device.getDeviceList, {
 					dataType: "json",
 					contentType: 'application/json',
 					type: "post",
 					data: JSON.stringify({
-						rowStartNumber: this.storeList.length,
+						rowStartNumber: this.deviceList.length,
 						rowCount: 10,
 						keyword: this.searchValue,
 						provinceId: this.address.provinceid,
@@ -400,14 +396,14 @@
 					}),
 					success: function(data) {
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
-							if(!data.result.storeList || data.result.storeList.length === 0) {
+							if(!data.result.deviceList || data.result.deviceList.length === 0) {
 								that.pullrefresh.endPullUpToRefresh(true);
 								return;
 							}
-							for(var store of data.result.storeList || []) {
-								store.shopSignPictures = data.result.imgServer + 'small_' + store.shopSignPictures;
+							for(var device of data.result.deviceList || []) {
+								device.imgName = device.imgName ? (data.result.imgServer + 'small_' + device.imgName) : '1';
 							}
-							that.storeList = that.storeList.concat(data.result.storeList || []);
+							that.deviceList = that.deviceList.concat(data.result.deviceList || []);
 						} else {
 							mui.toast(data.erroCode + '：' + data.erroMsg);
 						}
@@ -560,44 +556,44 @@
 		height: 120px;
 	}
 	
-	.oneStore {
+	.oneDevice {
 		padding: 10px;
 		background-color: #fff;
 		margin-bottom: 8px;
 	}
 	
-	.oneStore img {
+	.oneDevice img {
 		float: left;
 		width: 106px;
 		height: 106px;
 	}
 	
-	.oneStore .storeInfo {
+	.oneDevice .deviceInfo {
 		padding-left: 116px;
 		min-height: 80px;
 	}
 	
-	.oneStore .storeInfo p {
+	.oneDevice .deviceInfo p {
 		font-size: 13px;
 	}
 	
-	.oneStore .storeInfo p:nth-child(1) {
+	.oneDevice .deviceInfo p:nth-child(1) {
 		color: #000;
 		font-size: 14px;
 	}
 	
-	.oneStore .storeInfo p:nth-child(3) {
+	.oneDevice .deviceInfo p:nth-child(3) {
 		overflow: hidden;
 		padding: 5px 0;
 	}
 	
-	.oneStore .storeInfo p:nth-child(3) img {
+	.oneDevice .deviceInfo p:nth-child(3) img {
 		width: 19px;
 		height: 19px;
 		margin-right: 4px;
 	}
 	
-	.oneStore .storeInfo p:nth-child(4) a {
+	.oneDevice .deviceInfo p:nth-child(4) a {
 		color: #fff;
 		background-color: #26c6da;
 		line-height: 1;
@@ -606,7 +602,7 @@
 		margin: 5px 0;
 	}
 	
-	.oneStore .storeInfo p:nth-child(4) span {
+	.oneDevice .deviceInfo p:nth-child(4) span {
 		line-height: 1;
 		margin-top: 4px;
 		font-size: 19px;

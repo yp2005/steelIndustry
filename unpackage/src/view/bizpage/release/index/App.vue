@@ -31,10 +31,10 @@
 					</div>
 				</div>
 				<div>
-					<div class="store" @tap="open('../../bizpage/release/store.html')">
+					<div class="device" @tap="open('../../bizpage/release/device.html')">
 						<div>
-							<p><img src="../../../../static/img/release/store.svg"></p>
-							<p>发布设备店铺</p>
+							<p><img src="../../../../static/img/release/device.svg"></p>
+							<p>发布设备</p>
 							<p>好设备不愁卖</p>
 						</div>
 					</div>
@@ -105,33 +105,36 @@
 							mui.toast('服务器或网络异常，请稍后重试。')
 						}
 					});
-				} else if(url === '../../bizpage/release/store.html') {
-					muiUtils.muiAjax(api.APIS.store.getStore, {
+				} else if(url === '../../bizpage/release/device.html') {
+					muiUtils.muiAjax(api.APIS.device.getUserDevice, {
 						dataType: "json",
 						type: "get",
 						success: function(data) {
 							if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
-								if(data.result) {
-									var store = data.result;
-									switch(store.state) {
-										case 0:
-											store.stateValue = '草稿';
-											break;
-										case 1:
-											store.stateValue = '通过审核';
-											break;
-										case 2:
-											store.stateValue = '审核中';
-											break;
-										case 3:
-											store.stateValue = '审核不通过';
-											break;
+								if(data.result && data.result.deviceList.length >= 10) {
+									mui.toast('您最多发布十个设备！');
+									var deviceList = data.result.deviceList;
+									for(device of deviceList) {
+										switch(device.state) {
+											case 0:
+												device.stateValue = '草稿';
+												break;
+											case 1:
+												device.stateValue = '通过审核';
+												break;
+											case 2:
+												device.stateValue = '审核中';
+												break;
+											case 3:
+												device.stateValue = '审核不通过';
+												break;
+										}
 									}
-									muiUtils.openWindow('../../commonpage/mine/mystore.html', '../../commonpage/mine/mystore.html', {
+									muiUtils.openWindow('../../commonpage/mine/mydevice.html', '../../commonpage/mine/mydevice.html', {
 										isValidLogin: true,
 										isClose: false,
 										extras: {
-											store: store
+											deviceList: deviceList
 										}
 									});
 								} else {
@@ -293,7 +296,7 @@
 	.mingpian,
 	.project,
 	.worker,
-	.store,
+	.device,
 	.more {
 		border-radius: 10px;
 		position: relative;
@@ -302,7 +305,7 @@
 	.mingpian div,
 	.project div,
 	.worker div,
-	.store div,
+	.device div,
 	.more div {
 		width: 100%;
 		position: absolute;
@@ -321,7 +324,7 @@
 	.mingpian div p,
 	.project div p,
 	.worker div p,
-	.store div p,
+	.device div p,
 	.more div p {
 		text-align: center;
 		color: #fff;
@@ -340,7 +343,7 @@
 	.mingpian div p:nth-child(2),
 	.project div p:nth-child(2),
 	.worker div p:nth-child(2),
-	.store div p:nth-child(2) {
+	.device div p:nth-child(2) {
 		font-size: 18px;
 		line-height: 27px;
 		padding-top: 5px;
@@ -349,14 +352,14 @@
 	.mingpian div p:nth-child(3),
 	.project div p:nth-child(3),
 	.worker div p:nth-child(3),
-	.store div p:nth-child(3) {
+	.device div p:nth-child(3) {
 		font-size: 13px;
 		line-height: 1;
 	}
 	
 	.project div img,
 	.worker div img,
-	.store div img,
+	.device div img,
 	.more div img {
 		width: 40px;
 		height: 40px;
@@ -396,7 +399,7 @@
 		background-color: #21cf90;
 	}
 	
-	.store {
+	.device {
 		width: 100%;
 		height: 100%;
 		background-color: #6490ff;

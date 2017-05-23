@@ -20,23 +20,23 @@
 				</div>
 				<div v-show="linkType.value == 'innerLink'" class="inputRow">
 					<div>
-						<div v-if="advertStore" class="oneStore" @tap="gotoDetail(advertStore.userId)">
-							<img :src="advertStore.shopSignPictures" />
-							<div class="storeInfo">
-								<p class="mui-ellipsis">{{advertStore.storeName}}</p>
-								<p>{{advertStore.address || ((advertStore.provinceName || '') + ' ' + (advertStore.cityName || '') + ' ' + (advertStore.countyName || '') + ' ' + (advertStore.street || ''))}}</p>
+						<div v-if="advertDevice" class="oneDevice" @tap="gotoDetail(advertDevice.userId)">
+							<img :src="advertDevice.imgName" />
+							<div class="deviceInfo">
+								<p class="mui-ellipsis">{{advertDevice.deviceName}}</p>
+								<p>{{advertDevice.address || ((advertDevice.provinceName || '') + ' ' + (advertDevice.cityName || '') + ' ' + (advertDevice.countyName || '') + ' ' + (advertDevice.street || ''))}}</p>
 								<p>
-									<img v-show="advertStore.realNameAuthentication == 1" src="../../../../../../static/img/mine/shimingrenzheng.svg">
+									<img v-show="advertDevice.realNameAuthentication == 1" src="../../../../../../static/img/mine/shimingrenzheng.svg">
 									<img v-else src="../../../../../../static/img/mine/noshimingrenzheng.svg">
-									<img v-show="advertStore.enterpriseCertification == 1" src="../../../../../../static/img/mine/qiyerenzheng.svg">
+									<img v-show="advertDevice.enterpriseCertification == 1" src="../../../../../../static/img/mine/qiyerenzheng.svg">
 									<img v-else src="../../../../../../static/img/mine/noqiyerenzheng.svg">
 								</p>
 								<p>
-									<a href="javascript:void(0)" @tap="selectStore($event)">重新选择</a><span class="mui-pull-right">...</span></p>
+									<a href="javascript:void(0)" @tap="selectDevice($event)">重新选择</a><span class="mui-pull-right">...</span></p>
 							</div>
 						</div>
-						<div v-else class="advertising_storepick" @tap="selectStore">
-							<a href="javascript:void(0)">请选择店铺</a>
+						<div v-else class="advertising_devicepick" @tap="selectDevice">
+							<a href="javascript:void(0)">请选择设备</a>
 						</div>
 					</div>
 				</div>
@@ -67,7 +67,7 @@
 			}]);
 			var ad = plus.webview.currentWebview().ad;
 			var id = undefined;
-			var storeId = undefined;
+			var deviceId = undefined;
 			var title = '';
 			var pictures = [];
 			var linkType = {
@@ -77,7 +77,7 @@
 			var advertUrl = '';
 			if(ad) {
 				id = ad.id;
-				storeId = ad.storeId;
+				deviceId = ad.deviceId;
 				title = ad.title;
 				pictures.push(ad.img);
 				if(ad.linkType == 'outerLink') {
@@ -89,32 +89,33 @@
 				}
 			}
 			return {
+				imgServer: plus.webview.currentWebview().imgServer || '',
 				linkTypePicker: linkTypePicker,
 				id: id,
-				storeId: storeId,
+				deviceId: deviceId,
 				title: title,
 				pictures: pictures,
 				isCut: false,
 				linkType: linkType,
 				advertUrl: advertUrl,
-				advertStore: null,
+				advertDevice: null,
 				fromPage: plus.webview.currentWebview().fromPage
 			};
 		},
 		created() {
 			var that = this;
 			if(this.id && this.linkType.value == 'innerLink') {
-				muiUtils.muiAjax(api.APIS.store.getStoreByUserId + '?userId=' + that.storeId, {
+				muiUtils.muiAjax(api.APIS.device.getDeviceById + '?id=' + that.deviceId, {
 					dataType: "json",
 					type: "get",
 					success: function(data) {
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
-							that.advertStore = data.result;
-							if(!that.advertStore) {
-								mui.toast('店铺不存在，可能已被用户删除，请从新选择！');
+							that.advertDevice = data.result;
+							if(!that.advertDevice) {
+								mui.toast('设备不存在，可能已被用户删除，请从新选择！');
 							}
 							else {
-								that.advertStore.shopSignPictures = that.advertStore.imgServer + '/small_' + that.advertStore.shopSignPictures;
+								that.advertDevice.imgName = that.advertDevice.imgServer + '/small_' + that.advertDevice.imgName;
 							}
 						} else {
 							mui.toast(data.erroCode + '：' + data.erroMsg);
@@ -133,10 +134,10 @@
 					that.linkType = items[0];
 				});
 			},
-			selectStore(e) {
+			selectDevice(e) {
 				muiUtils.openWindow('../../bizpage/device/list.html', '../../bizpage/device/list.html', {
 					extras: {
-						selectStore: true
+						selectDevice: true
 					}
 				});
 				e && e.stopPropagation();
@@ -165,8 +166,8 @@
 					mui.toast('请上传广告图片！');
 					return;
 				}
-				if(this.linkType.value == 'innerLink' && !this.advertStore) {
-					mui.toast('请选择店铺！');
+				if(this.linkType.value == 'innerLink' && !this.advertDevice) {
+					mui.toast('请选择设备！');
 					return;
 				}
 				if(this.linkType.value == 'outerLink' && !this.advertUrl) {
@@ -179,10 +180,10 @@
 					img: this.pictures[0]
 				};
 				if(data.img.indexOf('http') == 0) {
-					data.img = data.img.substring(data.img.lastIndexOf('/') + 1);
+					data.img = data.img.substring(data.img.indexOf(this.imgServer) + this.imgServer.length);
 				}
 				if(this.linkType.value == 'innerLink') {
-					data.storeId = this.advertStore.userId;
+					data.deviceId = this.advertDevice.userId;
 				}
 				if(this.linkType.value == 'outerLink') {
 					data.url = this.advertUrl;
@@ -219,8 +220,8 @@
 				deceleration: mui.os.ios ? 0.003 : 0.0009
 			});
 			var that = this;
-			window.addEventListener('advertising_storepick', function(e) {
-				that.advertStore = e.detail.store;
+			window.addEventListener('advertising_devicepick', function(e) {
+				that.advertDevice = e.detail.device;
 			});
 		},
 		components: {
@@ -305,43 +306,43 @@
 		border-radius: 3px;
 	}
 	
-	.oneStore {
+	.oneDevice {
 		background-color: #fff;
 	}
 	
-	.oneStore img {
+	.oneDevice img {
 		float: left;
 		width: 106px;
 		height: 106px;
 	}
 	
-	.oneStore .storeInfo {
+	.oneDevice .deviceInfo {
 		padding-left: 116px;
 		min-height: 80px;
 		line-height: 21px;
 	}
 	
-	.oneStore .storeInfo p {
+	.oneDevice .deviceInfo p {
 		font-size: 13px;
 	}
 	
-	.oneStore .storeInfo p:nth-child(1) {
+	.oneDevice .deviceInfo p:nth-child(1) {
 		color: #000;
 		font-size: 14px;
 	}
 	
-	.oneStore .storeInfo p:nth-child(3) {
+	.oneDevice .deviceInfo p:nth-child(3) {
 		overflow: hidden;
 		padding: 5px 0;
 	}
 	
-	.oneStore .storeInfo p:nth-child(3) img {
+	.oneDevice .deviceInfo p:nth-child(3) img {
 		width: 19px;
 		height: 19px;
 		margin-right: 4px;
 	}
 	
-	.oneStore .storeInfo p:nth-child(4) a {
+	.oneDevice .deviceInfo p:nth-child(4) a {
 		color: #26c6da;
 		line-height: 1;
 		padding: 5px 8px;
@@ -350,7 +351,7 @@
 		border: 1px solid #26c6da;
 	}
 	
-	.oneStore .storeInfo p:nth-child(4) span {
+	.oneDevice .deviceInfo p:nth-child(4) span {
 		line-height: 1;
 		margin-top: 4px;
 		font-size: 19px;
@@ -358,12 +359,12 @@
 		color: #777;
 	}
 	
-	.advertising_storepick {
+	.advertising_devicepick {
 		border: 1px solid #ccc;
 		text-align: center;
 	}
 	
-	.advertising_storepick a {
+	.advertising_devicepick a {
 		margin: 10px;
 		font-size: 20px;
 	}

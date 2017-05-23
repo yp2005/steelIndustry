@@ -1,64 +1,66 @@
 <template>
 	<div class="mui-scroll-wrapper deviceInfo">
 		<div class="mui-scroll">
-			<div>
-				<imageslider sliderid="store-slider" :images="storeImageDatas"></imageslider>
-			</div>
-			<div class="shop-data-box">
-				<ul class="shop-data-list  am-list">
+			<div class="context">
+				<ul class="mui-table-view mui-table-view-chevron">
 					<li class="mui-table-view-cell">
-						<p class="storeName">{{store.storeName}}</p>
-					</li>
-					<li class="mui-table-view-cell">
-						<p @tap="shoucang">
-							<span>{{store.deviceTypesDis}}</span>
-							<span v-show="store.isCollected == 1" class="jxddicon icon-shoucangxuanzhong"></span>
-							<span v-else class="jxddicon icon-shoucang1"></span>
+						<p class="jieshao">
+							<span class="title">{{deviceInfo.deviceName}}</span>
+							<span @tap="shoucang" v-show="deviceInfo.isCollected == 1" class="jxddicon icon-shoucangxuanzhong"></span>
+							<span @tap="shoucang" v-else class="jxddicon icon-shoucang1"></span>
 						</p>
 					</li>
 					<li class="mui-table-view-cell">
-						<p @tap="positioning">
-							<span class="jxddicon icon-weizhi2"></span>
-							<span class="text-context">{{(address.province || '') + ' ' + (address.city || '') + ' ' + (address.district || '') + ' ' + (address.street || '')}}</span>
-							<span class="jxddicon icon-jinru32"></span>
-						</p>
+						<label>设备类型</label>
+						<span class="info-text">{{deviceInfo.deviceTypesDis}}</span>
 					</li>
-					<li class="mui-table-view-cell telphone" @tap="callTel">
+					<li class="mui-table-view-cell">
+						<label>发布时间</label>
+						<span class="info-text">{{deviceInfo.updateTime}}</span>
+					</li>
+					<li class="mui-table-view-cell">
+						<label>厂商名称</label>
+						<span class="info-text">{{deviceInfo.companyName}}</span>
+					</li>
+					<li class="mui-table-view-cell">
+						<label>厂商地址</label>
+						<span @tap="positioning" class="address info-text">{{(address.province || '') + ' ' + (address.city || '') + ' ' + (address.district || '') + ' ' + (address.street || '')}}</span>
+						<span @tap="positioning" class="jxddicon icon-weizhi2 address-dingwei"></span>
+					</li>
+				</ul>
+				<ul class="mui-table-view mui-table-view-chevron shifu">
+					<li class="mui-table-view-cell">
+						<img class="mui-media-object mui-pull-left head-img" id="head-img" :src="picture">
+						<p class="master-name">{{deviceInfo.contact}}</p>
+						<div class="yuyue">
+							<p class="counts">{{deviceInfo.callTimes}}</p>
+							<p>咨询人次</p>
+						</div>
+						<div class="views">
+							<p class="counts">{{deviceInfo.browseVolume}}</p>
+							<p>浏览量</p>
+						</div>
+						<span class="mui-icon mui-icon-phone" @tap="callTel" ></span>
+					</li>
+				</ul>
+				<ul class="mui-table-view shifu">
+					<li class="mui-table-view-cell">
+						<label>工作介绍</label>
+					</li>
+					<li class="mui-table-view-cell">
+						<span class="description">{{deviceInfo.description}}</span>
+					</li>
+					<li class="mui-table-view-cell master-images">
+						<template v-for="img in deviceInfo.pictures">
+							<img :src="img">
+						</template>
+					</li>
+					<li class="mui-table-view-cell">
 						<p>
-							<span class="mui-icon mui-icon-phone"></span>
-							<span class="text-context" v-show="isShared === 1 && shareSwitch === 1">{{store.mobileNumber}}</span>
-							<span class="text-context" v-else>电话咨询</span>
-							<span class="jxddicon icon-jinru32"></span>
+							<span class="tishi">温馨提示（联系时请说明是在“彩钢精英”上看到的）</span>
 						</p>
 					</li>
 				</ul>
-				<div class="description">
-					<p>店铺介绍<span class="mui-pull-right">浏览量：{{store.browseVolume}}</span></p>
-					<p>{{store.description}}</p>
-				</div>
-				<div class="aboveWords">
-					<p class="goods" @tap="allGoods">
-						<span class="bendian">本店商品</span>
-						<span class="mui-pull-right">查看全部<span class="mui-icon mui-icon-forward"></span></span>
-					</p>
-					<ul class="mui-table-view mui-grid-view columns4 goods-list">
-						<template v-for="img in productPictures">
-							<li @tap="itemtap" class="mui-table-view-cell mui-media mui-col-xs-6">
-								<a class="{{$index%2==0?'one':''}}">
-									<img class="mui-media-object" :src="img">
-								</a>
-							</li>
-						</template>
-					</ul>
-				</div>
-				<div class="bottomInfo">
-					<p class="goods">
-						<span class="tishi">温馨提示（联系时请说明是在“彩钢精英”上看到的）</span>
-					</p>
-					<p class="fabu">
-						<a @tap="open">我要发布店铺<i id="box"></i></a>
-					</p>
-				</div>
 				<div class="list-ad-two">
 					<img v-if="adType == 'oneImg'" :src="imageDatas[0].banner_img_url" @tap="bannerTap(imageDatas[0])">
 					<imageslider v-if="adType == 'loopImg'" sliderid="ad-slider" :images="imageDatas" :item-tap="bannerTap" :indicator-display="indicatorDisplay"></imageslider>
@@ -78,6 +80,7 @@
 
 <script>
 	import muiUtils from 'common/muiUtils';
+	import log from 'common/logUtils';
 	import api from 'api';
 	import CONSTS from 'common/consts';
 	import cacheUtils from 'common/cacheUtils';
@@ -86,18 +89,18 @@
 		data: function() {
 			var shareSwitch = cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPSETTINGS).shareSwitch;
 			var userInfo = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.USER_INFO) || {};
-			var store = plus.webview.currentWebview().store;
+			var deviceInfo = plus.webview.currentWebview().device;
 			return {
 				showShare: false,
 				isShared: userInfo.isShared || 0,
 				userInfo: userInfo,
 				shareSwitch: shareSwitch,
 				shares: {},
-				store: store,
-				storeImageDatas: [],
+				deviceInfo: deviceInfo,
 				address: {},
-				userId: plus.webview.currentWebview().userId,
+				picture: '',
 				appVersionInfo: cacheUtils.localStorage(CONSTS.SYSTEM).getObject(CONSTS.APPVERSIONINFO),
+				id: plus.webview.currentWebview().deviceId,
 				adType: 'oneImg',
 				imageDatas: [{
 					banner_img_url: require('static/img/listPageBanner.jpg'),
@@ -108,15 +111,17 @@
 		},
 		created: function() {
 			var that = this;
-			if(this.store) {
+			if(this.deviceInfo) {
+				this.picture = this.deviceInfo.pictures.length > 0 ? this.deviceInfo.pictures[0] : (this.userInfo.avatar || '1');
 				this.dealData();
 			} else {
-				muiUtils.muiAjax(api.APIS.store.getStoreByUserId + '?userId=' + that.userId, {
+				muiUtils.muiAjax(api.APIS.device.getDeviceById + '?id=' + that.id, {
 					dataType: "json",
 					type: "get",
 					success: function(data) {
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
-							that.store = data.result;
+							that.deviceInfo = data.result;
+							that.picture = that.deviceInfo.pictures.length > 0 ? that.deviceInfo.pictures[0] : '1';
 							that.dealData();
 						} else {
 							mui.toast(data.erroCode + '：' + data.erroMsg);
@@ -144,7 +149,7 @@
 									if(ad.linkType === 'innerLink') {
 										imageDatas.push({
 											banner_img_url: data.result.imgServer + ad.img,
-											banner_url: ad.storeId,
+											banner_url: ad.deviceId,
 											banner_name: ad.title,
 											banner_order: ad.id,
 											linkType: 'innerLink'
@@ -169,7 +174,7 @@
 								if(ad.linkType === 'innerLink') {
 									imageDatas.push({
 										banner_img_url: data.result.imgServer + ad.img,
-										banner_url: ad.storeId,
+										banner_url: ad.deviceId,
 										banner_name: ad.title,
 										banner_order: ad.id,
 										linkType: 'innerLink'
@@ -196,137 +201,38 @@
 		methods: {
 			bannerTap(item) {
 				if(item.linkType == 'innerLink') {
-					this.gotoStoreDetail(item.banner_url);
+					this.gotoDeviceDetail(item.banner_url);
 				} else if(item.linkType == 'outerLink') {
 					plus.runtime.openURL(item.banner_url);
 				}
 			},
-			gotoStoreDetail(userId) {
+			gotoDeviceDetail(id) {
 				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', '../../bizpage/device/deviceinfo.html', {
 					extras: {
-						userId: userId
+						deviceId: id
 					}
 				});
 			},
 			dealData() {
-				var imgs = [this.store.imgServer + this.store.shopSignPictures].concat(this.store.environmentPictures.concat(this.store.productPictures));
-				if(this.store.productPictures.length > 4) {
-					this.productPictures = this.store.productPictures.slice(0, 4);
-				}
-				var imageDatas = [];
-				for(var i = 0; i < imgs.length; i++) {
-					imageDatas.push({
-						"banner_img_url": imgs[i],
-						"gc_id_1": i,
-						"banner_order": i
-					});
-				}
-				this.storeImageDatas = imageDatas;
-				this.store.deviceTypesDis = '';
-				for(var dt of this.store.deviceTypes) {
-					if(!this.store.deviceTypesDis) {
-						this.store.deviceTypesDis = dt.typeName;
+				this.deviceInfo.deviceTypesDis = '';
+				for(var wt of this.deviceInfo.deviceTypes) {
+					if(!this.deviceInfo.deviceTypesDis) {
+						this.deviceInfo.deviceTypesDis = wt.typeName;
 					} else {
-						this.store.deviceTypesDis += '、' + dt.typeName;
+						this.deviceInfo.deviceTypesDis += '、' + wt.typeName;
 					}
 				}
 				var address = {};
-				address.provinceid = this.store.provinceId;
-				address.province = this.store.provinceName;
-				address.cityid = this.store.cityId;
-				address.city = this.store.cityName;
-				address.districtid = this.store.countyId;
-				address.district = this.store.countyName;
-				address.street = this.store.street;
-				address.lng = this.store.lng;
-				address.lat = this.store.lat;
+				address.provinceid = this.deviceInfo.provinceId;
+				address.province = this.deviceInfo.provinceName;
+				address.cityid = this.deviceInfo.cityId;
+				address.city = this.deviceInfo.cityName;
+				address.districtid = this.deviceInfo.countyId;
+				address.district = this.deviceInfo.countyName;
+				address.street = this.deviceInfo.street;
+				address.lng = this.deviceInfo.lng;
+				address.lat = this.deviceInfo.lat;
 				this.address = address;
-			},
-			open: function() {
-				cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.LOGIN_FORWORD, {
-					id: '../../bizpage/device/deviceinfo.html',
-					url: '../../bizpage/device/deviceinfo.html'
-				});
-				//判断是否登录，没登录需要打开登录页面，登录了查看是否已经发布店铺，发布了就打开店铺，显示店铺管理页面，没法发就跳转发布店铺页面
-				muiUtils.loginValid(this.forwordPublishPage);
-			},
-			forwordPublishPage: function() {
-				muiUtils.muiAjax(api.APIS.store.getStore, {
-					dataType: "json",
-					type: "get",
-					success: function(data) {
-						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
-							if(data.result) {
-								var store = data.result;
-								switch(store.state) {
-									case 0:
-										store.stateValue = '草稿';
-										break;
-									case 1:
-										store.stateValue = '通过审核';
-										break;
-									case 2:
-										store.stateValue = '审核中';
-										break;
-									case 3:
-										store.stateValue = '审核不通过';
-										break;
-								}
-								muiUtils.openWindow('../../commonpage/mine/mystore.html', '../../commonpage/mine/mystore.html', {
-									isValidLogin: true,
-									isClose: true,
-									extras: {
-										store: store
-									}
-								});
-							} else {
-								muiUtils.openWindow('../../bizpage/release/store.html', '../../bizpage/release/store.html', {
-									isValidLogin: true,
-									isClose: true
-								});
-							}
-						} else {
-							mui.toast(data.erroCode + '：' + data.erroMsg);
-						}
-					},
-					error: function(xhr, type, errorThrown) {
-						mui.toast('服务器或网络异常，请稍后重试。');
-					}
-				});
-			},
-			shoucang() {
-				cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.LOGIN_FORWORD, {
-					id: '../../bizpage/device/deviceinfo.html',
-					url: '../../bizpage/device/deviceinfo.html'
-				});
-				muiUtils.loginValid(this.doShoucang);
-			},
-			doShoucang() {
-				if(this.userInfo.id === this.store.userId) {
-					mui.toast('这是您自己的店铺！');
-					return;
-				}
-				var that = this;
-				var url = this.store.isCollected == 1 ? api.APIS.collection.deleteCollection : api.APIS.collection.addCollection;
-				muiUtils.muiAjax(url, {
-					data: {
-						type: 'store',
-						collectId: this.store.id
-					},
-					dataType: "json",
-					type: "post",
-					success: function(data) {
-						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
-							mui.toast(that.store.isCollected == 1 ? '已取消收藏' : '收藏成功！');
-							that.store.isCollected = that.store.isCollected == 1 ? 0 : 1;
-						} else {
-							mui.toast(data.erroCode + '：' + data.erroMsg);
-						}
-					},
-					error: function(xhr, type, errorThrown) {
-						mui.toast('服务器或网络异常，请稍后重试。')
-					}
-				});
 			},
 			positioning: function() {
 				muiUtils.openWindow('../../commonpage/map/selectaddress.html', '../../commonpage/map/selectaddress.html', {
@@ -336,7 +242,7 @@
 					}
 				});
 			},
-			callTel: function() {
+			callTel: function(number) {
 				cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.LOGIN_FORWORD, {
 					id: '../../bizpage/device/deviceinfo.html',
 					url: '../../bizpage/device/deviceinfo.html'
@@ -347,8 +253,8 @@
 				var that = this;
 				this.userInfo = cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).getObject(CONSTS.USER_INFO);
 				this.isShared = this.userInfo.isShared;
-				if(this.userInfo.id === this.store.userId) {
-					mui.toast('这是您自己的店铺！');
+				if(this.userInfo.id === this.deviceInfo.userId) {
+					mui.toast('这是您自己的发布的设备信息！');
 					return;
 				}
 				if(this.shareSwitch === 1 && this.isShared !== 1) {
@@ -359,8 +265,8 @@
 						}
 					});
 				} else {
-					plus.device.dial(this.store.mobileNumber, false);
-					muiUtils.muiAjax(api.APIS.store.updateStoreCt + '?id=' + that.store.id, {
+					plus.device.dial(this.deviceInfo.mobileNumber, false);
+					muiUtils.muiAjax(api.APIS.device.updateDeviceCt + '?id=' + that.deviceInfo.id, {
 						dataType: "json",
 						type: "post",
 						success: function(data) {},
@@ -372,7 +278,7 @@
 				var url = mui.os.ios ? this.appVersionInfo.iOS.url : this.appVersionInfo.Android.url;
 				var msg = {
 					title: '彩钢精英',
-					content: "《彩钢精英》助你招工、找工作、找设备、找工程，行业交流，急你所需！",
+					content: "《彩钢精英》助你招工、找工作、找设备、找工程，行业交流，急你所需！\n" + url,
 					href: url
 				};
 				var that = this;
@@ -448,49 +354,40 @@
 					}
 				});
 			},
-			allGoods: function(item) {
-				muiUtils.openWindow('../../bizpage/device/allGoods.html', {
-					extras: {
-						'imageDatas': this.store.productPictures
+			shoucang() {
+				cacheUtils.localStorage(CONSTS.PREFIX_LOGIN).setObject(CONSTS.LOGIN_FORWORD, {
+					id: '../../bizpage/device/deviceinfo.html',
+					url: '../../bizpage/device/deviceinfo.html'
+				});
+				muiUtils.loginValid(this.doShoucang);
+			},
+			doShoucang() {
+				if(this.userInfo.id === this.deviceInfo.userId) {
+					mui.toast('这是您自己的发布的设备信息！');
+					return;
+				}
+				var that = this;
+				var url = this.deviceInfo.isCollected == 1 ? api.APIS.collection.deleteCollection : api.APIS.collection.addCollection;
+				muiUtils.muiAjax(url, {
+					data: {
+						type: 'device',
+						collectId: this.deviceInfo.id
+					},
+					dataType: "json",
+					type: "post",
+					success: function(data) {
+						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
+							mui.toast(that.deviceInfo.isCollected == 1 ? '已取消收藏' : '收藏成功！');
+							that.deviceInfo.isCollected = that.deviceInfo.isCollected == 1 ? 0 : 1;
+						} else {
+							mui.toast(data.erroCode + '：' + data.erroMsg);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('服务器或网络异常，请稍后重试。')
 					}
 				});
-			},
-			storeManage: function() {
-				let url = '../../bizpage/device/editstore.html';
-				muiUtils.openWindow(url, {
-					extras: {
-						id: this.store.id,
-						status: this.store.status
-					}
-				});
-			},
-			//			gotoStorePage: function() {
-			//				let url = '';
-			//				let id = '';
-			//				let params = {};
-			//				if(this.store.status === -1) { // 店铺预览
-			//					url = '../../bizpage/device/storemanage.html';
-			//					id = 'storemanage_preview';
-			//					params = {
-			//						isPreview: true,
-			//						isStoreManage: true,
-			//						isClose: true,
-			//						createNew: true,
-			//						id: this.store.id,
-			//						status: this.store.status
-			//					}
-			//				} else { // 店铺管理
-			//					url = '../../bizpage/device/editstore.html';
-			//					params = {
-			//						id: this.store.id,
-			//						status: this.store.status
-			//					}
-			//				}
-			//
-			//				muiUtils.openWindow(url, id || url, {
-			//					extras: params
-			//				});
-			//			}
+			}
 		},
 		ready: function() {
 			var deceleration = mui.os.ios ? 0.003 : 0.0009;
@@ -530,111 +427,147 @@
 		top: 45px;
 		bottom: 0;
 		width: 100%;
+		font-size: 16px;
 	}
 	
-	.mui-slider {
-		height: 256px;
-		background-color: #fff;
+	#head-img {
+		border-radius: 50%;
+	}
+	
+	.mui-media {
+		height: 82px;
+	}
+	
+	.mui-table-view .mui-media-object {
+		line-height: 62px;
+		max-width: 62px;
+		width: 62px;
+		height: 62px;
+	}
+	
+	.mui-table-view .mui-media-body {
+		overflow: hidden;
+		padding-top: 15px;
+	}
+	
+	.mui-table-view {
 		margin-bottom: 7px;
 	}
 	
-	.mui-slider .mui-slider-group .mui-slider-item img {
-		height: 256px;
+	.mui-table-view-cell label {
+		font-size: 16px;
+		color: #8f8f94;
+		float: left;
 	}
 	
-	.text-context {
-		padding: 0 20px;
+	.mui-table-view-cell p.master-name {
+		color: #222;
+		margin-bottom: 10px;
+		font-size: 16px;
+		padding-left: 95px;
 	}
 	
-	.mui-table-view-cell:after {
-		left: 5px;
+	.master-age {
+		margin: 0 10px;
 	}
 	
-	.jxddicon {
+	.mui-ellipsis {
+		font-size: 12px;
+		margin-top: 3px;
+	}
+	
+	.mui-ellipsis .jxddicon {
+		color: rgb(38, 198, 218);
+	}
+	
+	.shifu .mui-table-view-cell:after {
+		height: 0;
+	}
+	
+	.mui-table-view-chevron .mui-table-view-cell {
+		padding-right: 0;
+	}
+	
+	.yuyue {
+		width: 30%;
+		float: left;
+		text-align: center;
+	}
+	
+	.views {
+		width: 30%;
+		float: left;
+		border-left: 1px solid #D7D7D7;
+		text-align: center;
+	}
+	
+	.counts {
+		color: #000;
+	}
+	
+	.mui-table-view-cell .mui-icon-phone {
 		position: absolute;
-		top: 10px;
-		right: 13px;
-		padding: 0 0 20px 20px;
-		color: #C9C9C9;
-		font-size: 24px;
+		top: 2px;
+		right: 0;
+		line-height: 90px;
+		padding: 0 18px;
+		background-color: #26d0ca;
+		color: #fff;
+		font-size: 35px;
+	}
+	
+	.mui-table-view-cell .yuyue-btn {
+		background-color: rgb(38, 198, 218);
+		color: #fff;
+		float: right;
+		width: 40%;
+		margin-right: 20px;
+		padding: 10px 15px;
+		border-radius: 5px;
+		position: relative;
+	}
+	
+	.master-images img {
+		padding: 10px;
+		width: 100%;
+	}
+	
+	.jieshao {
+		font-size: 17px;
+		color: #000;
+	}
+	
+	.title {
+		padding-right: 30px;
 	}
 	
 	.icon-shoucang1,
 	.icon-shoucangxuanzhong {
-		color: #FA4747;
-	}
-	
-	.icon-weizhi2 {
+		font-size: 25px;
+		color: #E41A1A;
 		position: absolute;
 		top: 12px;
-		left: -10px;
-		padding: 0 0 20px 20px;
-		color: #0D80CC;
-		font-size: 26px;
+		right: 15px;
 	}
 	
-	.mui-icon-phone {
-		position: absolute;
-		top: 10px;
-		left: -10px;
-		padding: 0 0 20px 20px;
-		color: #0D80CC;
-		font-size: 24px;
-	}
-	
-	.store-title:after .mui-table-view-cell.telphone:after {
-		height: 1px;
-	}
-	
-	.jieshao-title:after {
-		font-size: 16px;
-	}
-	
-	.jieshao-title {
-		padding-top: 11px;
-	}
-	
-	.jieshao:after {
-		height: 20px;
-		left: 0;
-		background-color: #ddd;
-	}
-	
-	.jieshao p {
-		color: #000;
-		padding-bottom: 15px;
-	}
-	
-	.jieshao-title p {
-		margin-left: 15px;
-	}
-	
-	.jieshao-title span {
-		float: right;
-		padding-right: 15px;
-	}
-	
-	.goods .bendian {
-		color: #222;
-	}
-	
-	.aboveWords {
-		padding: 10px;
-		background-color: #fff;
-		margin-bottom: 7px;
-	}
-	
-	.goods-list a {
-		padding-bottom: 5px !important;
-		padding-right: 1px !important;
-	}
-	
-	.goods-list .one {
-		padding-right: 5px !important;
+	.info-text {
+		width: 75%;
+		float: left;
+		margin-left: 10px;
+		padding-right: 20px;
 	}
 	
 	.tishi {
 		color: #f82f48;
+	}
+	
+	.jxddicon.address-dingwei {
+		position: absolute;
+		top: 12px;
+		right: 10px;
+		padding: 0 0 20px 20px;
+		color: #0D80CC;
+		font-size: 26px;
 	}
 	
 	.fabu {
@@ -659,55 +592,6 @@
 		position: absolute;
 		top: 5px;
 		margin-left: 5px;
-	}
-	
-	.list-ad-two {
-		background-color: #f3f5f7;
-		height: 120px;
-	}
-	
-	.list-ad-two img {
-		width: 100%;
-		height: 120px;
-	}
-	
-	.store-manage-btn {
-		background-color: #fff;
-		color: rgb(38, 198, 218);
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		margin-bottom: 0;
-		border: none;
-		padding: 0;
-		height: 50px;
-		line-height: 50px;
-		box-shadow: none;
-		border-radius: 0;
-		text-align: center;
-		z-index: 2;
-	}
-	
-	.error-div {
-		text-align: center;
-		margin-top: 40vh;
-	}
-	
-	.error-div p {
-		margin-bottom: 10px;
-		font-size: 18px;
-	}
-	
-	.error-div a {
-		color: #fff;
-		background-color: rgb(38, 198, 218);
-		border-radius: 3px;
-		text-align: center;
-		margin: 0 auto;
-		padding: 5px 15px;
-		font-size: 16px;
-		width: 100px;
 	}
 	
 	.share {
@@ -747,23 +631,17 @@
 	}
 	
 	.description {
-		background-color: #fff;
-		margin-bottom: 7px;
-		padding: 15px;
-	}
-	
-	.description p {
 		white-space: pre-wrap;
 	}
 	
-	.description p:first-child {
-		line-height: 21px;
-		margin-bottom: 10px;
-		color: #222;
+	.list-ad-two {
+		background-color: #f3f5f7;
+		height: 120px;
 	}
 	
-	.description p:nth-child(2) {
-		color: #666;
+	.list-ad-two img {
+		width: 100%;
+		height: 120px;
 	}
 	
 	.list-ad-two .mui-slider {
@@ -772,24 +650,5 @@
 	
 	.list-ad-two .mui-slider .mui-slider-group .mui-slider-item img {
 		height: 120px;
-	}
-	
-	.storeName {
-		color: #222;
-		font-size: 15px;
-	}
-	
-	.shop-data-list,
-	.bottomInfo {
-		background-color: #fff;
-		margin-bottom: 7px;
-	}
-	
-	.bottomInfo {
-		padding: 15px;
-	}
-	
-	.bottomInfo p:first-child {
-		padding-bottom: 10px;
 	}
 </style>

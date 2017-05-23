@@ -23,6 +23,10 @@
 						<span class="info-text">{{workInfo.workerTypesDis}}</span>
 					</li>
 					<li class="mui-table-view-cell">
+						<label>公司名称</label>
+						<span class="info-text">{{workInfo.companyName}}</span>
+					</li>
+					<li class="mui-table-view-cell">
 						<label>干活地点</label>
 						<span @tap="positioning" class="address info-text">{{(address.province || '') + ' ' + (address.city || '') + ' ' + (address.district || '') + ' ' + (address.street || '')}}</span>
 						<span @tap="positioning" class="jxddicon icon-weizhi2 address-dingwei"></span>
@@ -55,7 +59,7 @@
 							<img :src="img">
 						</template>
 					</li>
-					<li class="mui-table-view-cell store-title">
+					<li class="mui-table-view-cell">
 						<p>
 							<span class="tishi">温馨提示（联系时请说明是在“彩钢精英”上看到的）</span>
 						</p>
@@ -110,11 +114,11 @@
 			}
 		},
 		created: function() {
+			var that = this;
 			if(this.workInfo) {
 				this.picture = this.workInfo.pictures.length > 0 ? this.workInfo.pictures[0] : (this.userInfo.avatar || '1');
 				this.dealData();
 			} else {
-				var that = this;
 				muiUtils.muiAjax(api.APIS.employmentDemand.getEmploymentDemandById + '?id=' + that.id, {
 					dataType: "json",
 					type: "get",
@@ -149,7 +153,7 @@
 									if(ad.linkType === 'innerLink') {
 										imageDatas.push({
 											banner_img_url: data.result.imgServer + ad.img,
-											banner_url: ad.storeId,
+											banner_url: ad.deviceId,
 											banner_name: ad.title,
 											banner_order: ad.id,
 											linkType: 'innerLink'
@@ -174,7 +178,7 @@
 								if(ad.linkType === 'innerLink') {
 									imageDatas.push({
 										banner_img_url: data.result.imgServer + ad.img,
-										banner_url: ad.storeId,
+										banner_url: ad.deviceId,
 										banner_name: ad.title,
 										banner_order: ad.id,
 										linkType: 'innerLink'
@@ -201,15 +205,15 @@
 		methods: {
 			bannerTap(item) {
 				if(item.linkType == 'innerLink') {
-					this.gotoStoreDetail(item.banner_url);
+					this.gotoDeviceDetail(item.banner_url);
 				} else if(item.linkType == 'outerLink') {
 					plus.runtime.openURL(item.banner_url);
 				}
 			},
-			gotoStoreDetail(userId) {
+			gotoDeviceDetail(id) {
 				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', '../../bizpage/device/deviceinfo.html', {
 					extras: {
-						userId: userId
+						deviceId: id
 					}
 				});
 			},

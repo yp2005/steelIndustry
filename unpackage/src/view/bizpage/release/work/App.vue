@@ -280,7 +280,7 @@
 				}
 				for(var i = 0; i < data.pictures.length; i++) {
 					if(data.pictures[i].indexOf('http') != -1) {
-						data.pictures[i] = data.pictures[i].substring(data.pictures[i].lastIndexOf('/') + 1);
+						data.pictures[i] = data.pictures[i].substring(data.pictures[i].indexOf(this.workInfo.imgServer) + this.workInfo.imgServer.length);
 					}
 				}
 				muiUtils.muiAjax(api.APIS.employmentDemand.saveEmploymentDemand, {

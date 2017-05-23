@@ -12,7 +12,7 @@ var router = new VueRouter();
 var HeaderVue = Vue.extend(vheader);
 var header = new HeaderVue({
 	propsData: {
-		title: '店铺详情',
+		title: '设备详情',
         hdstyle: {
             back: {
                 display: true

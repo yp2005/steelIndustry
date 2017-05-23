@@ -2344,7 +2344,8 @@
 					"dist/commonpage/login/index.html",
 					"dist/commonpage/mine/myproject.html",
 					"dist/bizpage/device/deviceinfo.html",
-					"dist/commonpage/noticemanager/noticedetail.html"
+					"dist/commonpage/noticemanager/noticedetail.html",
+					"dist/commonpage/mine/mydevice.html"
 				],
 				"priority": 0
 			},
@@ -2390,7 +2391,8 @@
 					"dist/static/css/pull_to_refresh.css"
 				],
 				"refer": [
-					"dist/bizpage/device/deviceinfo.html"
+					"dist/bizpage/device/deviceinfo.html",
+					"dist/commonpage/search/searchpage.html"
 				],
 				"priority": 0
 			},
@@ -2415,7 +2417,10 @@
 					"dist/bizpage/release/store.html",
 					"dist/bizpage/release/work.html",
 					"dist/bizpage/release/project.html",
-					"dist/commonpage/mine/mycard.html"
+					"dist/commonpage/mine/mycard.html",
+					"dist/commonpage/mine/mystore.html",
+					"dist/commonpage/login/index.html",
+					"dist/bizpage/release/device.html"
 				],
 				"priority": 0
 			},
@@ -2949,7 +2954,18 @@
 					"dist/static/js/mui.poppicker.js",
 					"dist/static/js/mui.picker.js",
 					"dist/static/js/bizpage/release/work.js",
-					"dist/static/css/mui.picker.css"
+					"dist/static/css/mui.picker.css",
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/vendors.dll.js"
 				],
 				"refer": [
 					"dist/commonpage/select/type.html",
@@ -3523,7 +3539,8 @@
 					"dist/static/css/pull_to_refresh.css"
 				],
 				"refer": [
-					"dist/bizpage/project/projectinfo.html"
+					"dist/bizpage/project/projectinfo.html",
+					"dist/bizpage/release/project.html"
 				],
 				"priority": 0
 			},
@@ -3610,9 +3627,87 @@
 			"dist/commonpage/positionmanager/selectad.html": {
 				"resources": [
 					"dist/static/js/commonpage/positionmanager/selectad.js",
-					"dist/static/css/commonpage/positionmanager/selectad.css"
+					"dist/static/css/commonpage/positionmanager/selectad.css",
+					"dist/static/js/mui.pullToRefresh.material.js",
+					"dist/static/js/mui.pullToRefresh.js",
+					"dist/static/css/pull_to_refresh.css",
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js"
 				],
-				"refer": [],
+				"refer": [
+					"dist/commonpage/advertisingmanager/editadvertising.html"
+				],
+				"priority": 0
+			},
+			"dist/bizpage/release/device.html": {
+				"resources": [
+					"dist/static/css/jxdd.css",
+					"dist/static/css/iconfont.css",
+					"dist/static/js/bizpage/release/device.js",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/css/bizpage/release/device.css",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js",
+					"dist/static/fonts/jxdd.ttf"
+				],
+				"refer": [
+					"dist/commonpage/map/selectaddress.html",
+					"dist/commonpage/mine/mydevice.html"
+				],
+				"priority": 0
+			},
+			"dist/commonpage/mine/mydevice.html": {
+				"resources": [
+					"dist/static/css/commonpage/mine/mydevice.css",
+					"dist/static/js/mui.pullToRefresh.material.js",
+					"dist/static/css/iconfont.css",
+					"dist/static/css/jxdd.css",
+					"dist/static/js/commonpage/mine/mydevice.js",
+					"dist/static/fonts/jxdd.ttf",
+					"dist/vendorUtils.dll.js",
+					"dist/static/js/vendors.js",
+					"dist/vendorVue.dll.js",
+					"dist/static/js/mui.picker.js",
+					"dist/static/css/jxddadd.css",
+					"dist/static/css/mui.min.css",
+					"dist/static/js/mui.js",
+					"dist/static/css/mui.picker.css",
+					"dist/static/css/override_mui.css",
+					"dist/vendorMui.dll.js",
+					"dist/static/js/mui.pullToRefresh.js",
+					"dist/static/css/mui.poppicker.css",
+					"dist/static/js/mui.poppicker.js",
+					"dist/vendors.dll.js",
+					"dist/static/css/pull_to_refresh.css"
+				],
+				"refer": [
+					"dist/bizpage/release/device.html",
+					"dist/bizpage/device/deviceinfo.html"
+				],
 				"priority": 0
 			}
 		},

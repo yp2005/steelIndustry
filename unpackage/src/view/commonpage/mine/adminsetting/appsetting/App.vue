@@ -11,8 +11,8 @@
 						</div>
 					</li>
 					<li class="mui-table-view-cell">
-						<span class="userSwitchSpan">店铺审核</span>
-						<div class="mui-switch {{appSetting.isCheckStore == 1 ? 'mui-active' : ''}}">
+						<span class="userSwitchSpan">设备审核</span>
+						<div class="mui-switch {{appSetting.isCheckDevice == 1 ? 'mui-active' : ''}}">
 							<div class="mui-switch-handle" @tap="changeSwitch(1)"></div>
 						</div>
 					</li>
@@ -65,7 +65,7 @@
 						this.appSetting.shareSwitch = this.appSetting.shareSwitch == 0 ? 1 : 0;
 						break;
 					case 1:
-						this.appSetting.isCheckStore = this.appSetting.isCheckStore == 0 ? 1 : 0;
+						this.appSetting.isCheckDevice = this.appSetting.isCheckDevice == 0 ? 1 : 0;
 						break;
 					case 2:
 						this.appSetting.isCheckProject = this.appSetting.isCheckProject == 0 ? 1 : 0;

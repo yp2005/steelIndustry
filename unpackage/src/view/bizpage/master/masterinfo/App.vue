@@ -1,5 +1,5 @@
 <template>
-	<div class="mui-scroll-wrapper masterinfo" style="bottom: {{isStoreManage ? '50px' : '0'}}">
+	<div class="mui-scroll-wrapper masterinfo">
 		<div class="mui-scroll">
 			<div class="context">
 				<ul class="mui-table-view mui-table-view-chevron shifu">
@@ -62,7 +62,7 @@
 							<img :src="picture">
 						</template>
 					</li>
-					<li class="mui-table-view-cell store-title">
+					<li class="mui-table-view-cell">
 						<p>
 							<span class="tishi">温馨提示（联系时请说明是在“彩钢精英”上看到的）</span>
 						</p>
@@ -117,11 +117,11 @@
 			};
 		},
 		created: function() {
+			var that = this;
 			if(this.master) {
 				this.picture = this.master.pictures.length > 0 ? this.master.pictures[0] : (this.userInfo.avatar || '1');
 				this.dealData();
 			} else {
-				var that = this;
 				muiUtils.muiAjax(api.APIS.masterCard.getMasterCardByUserId + '?userId=' + that.userId, {
 					dataType: "json",
 					type: "get",
@@ -156,7 +156,7 @@
 									if(ad.linkType === 'innerLink') {
 										imageDatas.push({
 											banner_img_url: data.result.imgServer + ad.img,
-											banner_url: ad.storeId,
+											banner_url: ad.deviceId,
 											banner_name: ad.title,
 											banner_order: ad.id,
 											linkType: 'innerLink'
@@ -181,7 +181,7 @@
 								if(ad.linkType === 'innerLink') {
 									imageDatas.push({
 										banner_img_url: data.result.imgServer + ad.img,
-										banner_url: ad.storeId,
+										banner_url: ad.deviceId,
 										banner_name: ad.title,
 										banner_order: ad.id,
 										linkType: 'innerLink'
@@ -208,15 +208,15 @@
 		methods: {
 			bannerTap(item) {
 				if(item.linkType == 'innerLink') {
-					this.gotoStoreDetail(item.banner_url);
+					this.gotoDeviceDetail(item.banner_url);
 				} else if(item.linkType == 'outerLink') {
 					plus.runtime.openURL(item.banner_url);
 				}
 			},
-			gotoStoreDetail(userId) {
+			gotoDeviceDetail(id) {
 				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', '../../bizpage/device/deviceinfo.html', {
 					extras: {
-						userId: userId
+						deviceId: id
 					}
 				});
 			},
