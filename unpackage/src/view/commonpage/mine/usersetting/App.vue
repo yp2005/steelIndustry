@@ -10,6 +10,8 @@
 	                                </span>
 					</a>
 				</li>
+			</ul>
+			<ul class="mui-table-view mui-table-view-chevron">
 				<li class="mui-table-view-cell">
 					<a class="jxddicon icon-jinru32">登录账号<span class="mui-pull-right userinfo_span2" @tap="open('../../commonpage/usersetting/editPhone.html')">{{userInfo.mobileNumber}}</span></a>
 				</li>
@@ -37,8 +39,8 @@
 					<a class="jxddicon icon-jinru32">公司地址<span class="mui-pull-right userinfo_span2 mui-ellipsis" @tap="open('../../commonpage/usersetting/editCompany.html')">{{userInfo.companyAddress || '请设置'}}</span></a>
 				</li>
 			</ul>
+			<a class="fixOneLabelBf04e30" href="javascript:void(0);" @tap="signout">退出登录</a>
 		</div>
-		<a class="fixOneLabelBf04e30" href="javascript:void(0);" @tap="signout">退出登录</a>
 </template>
 
 <script>
@@ -126,6 +128,11 @@
 	
 	.mui-table-view-chevron:first-child {
 		margin-top: 45px;
+		z-index: 101;
+	}
+	
+	.mui-table-view-chevron:first-child:after {
+		height: 0;
 	}
 	
 	.mui-table-view.first-ul:before {
@@ -178,14 +185,15 @@
 	.fixOneLabelBf04e30 {
 		background-color: #FFF;
 		color: #26c6da;
-		z-index: -1;
+		position: absolute;
 	}
 	
 	#head {
 		line-height: 75px;
 	}
 	
-	.mui-scroll-wrapper {
+	.mui-scroll {
 		padding-bottom: 49px;
+		min-height: 100%;
 	}
 </style>
