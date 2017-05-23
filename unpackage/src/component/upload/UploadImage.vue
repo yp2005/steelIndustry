@@ -346,7 +346,7 @@
 						}, function(event) { // 压缩成功，使用压缩后的图片
 							log.log('camera zip image path:' + event.target);
 							log.log('zip file size :' + event.size);
-							dstlocalurl = event.target;
+							dstlocalurl = event.target || dstlocalurl;
 							if(dstlocalurl.indexOf('file://') == -1) {
 								dstlocalurl = 'file://' + dstlocalurl;
 							}
@@ -462,11 +462,11 @@
 								plus.zip.compressImage({
 									src: localurl,
 									dst: dstlocalurl,
-									quality: '50'
+									quality: size > 1024 ? '20' : '50'
 								}, function(event) { // 压缩成功，使用压缩后的图片
 									log.log('camera zip image path:' + event.target);
 									log.log('zip file size :' + event.size);
-									dstlocalurl = event.target;
+									dstlocalurl = event.target || dstlocalurl;
 									if(dstlocalurl.indexOf('file://') == -1) {
 										dstlocalurl = 'file://' + dstlocalurl;
 									}
@@ -501,11 +501,11 @@
 								plus.zip.compressImage({
 									src: localurl,
 									dst: dstlocalurl,
-									quality: '50'
+									quality: size > 1024 ? '20' : '50'
 								}, function(event) { // 压缩成功，使用压缩后的图片
 									log.log('camera zip image path:' + event.target);
 									log.log('zip file size :' + event.size);
-									dstlocalurl = event.target;
+									dstlocalurl = event.target || dstlocalurl;
 									if(dstlocalurl.indexOf('file://') == -1) {
 										dstlocalurl = 'file://' + dstlocalurl;
 									}
@@ -569,10 +569,10 @@
 								plus.zip.compressImage({
 									src: path,
 									dst: dstlocalurl,
-									quality: '50'
+									quality: size > 1024 ? '20' : '50'
 								}, function(event) {
 									// 压缩成功，使用压缩后的图片
-									dstlocalurl = event.target;
+									dstlocalurl = event.target || dstlocalurl;
 									if(dstlocalurl.indexOf('file://') == -1) {
 										dstlocalurl = 'file://' + dstlocalurl;
 									}
@@ -625,12 +625,12 @@
 								plus.zip.compressImage({
 									src: path,
 									dst: dstlocalurl,
-									quality: '50'
+									quality: size > 1024 ? '20' : '50'
 								}, function() {
 									// 压缩成功，使用压缩后的图片
 									log.log('camera zip image path:' + event.target);
 									log.log('zip file size :' + event.size);
-									dstlocalurl = event.target;
+									dstlocalurl = event.target || dstlocalurl;
 									if(dstlocalurl.indexOf('file://') == -1) {
 										dstlocalurl = 'file://' + dstlocalurl;
 									}
