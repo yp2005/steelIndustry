@@ -35,6 +35,11 @@
 			this.getData(true);
 		},
 		methods: {
+			dealPicture(pic) {
+				var fileName = pic.substring(pic.lastIndexOf('/') + 1, pic.length);
+				var path = pic.substring(0, pic.lastIndexOf('/'));
+				return path + '/small_' + fileName;
+			},
 			edit(index) {
 				var ad = this.adListBak[index];
 				muiUtils.openWindow('../../commonpage/advertisingmanager/editadvertising.html', '../../commonpage/advertisingmanager/editadvertising.html', {
@@ -87,7 +92,7 @@
 								ad.img = ad.img ? (data.result.imgServer + ad.img) : '1';
 							}
 							for(var ad of adList) {
-								ad.img = ad.img ? (data.result.imgServer + '/small_' + ad.img) : '1';
+								ad.img = ad.img ? (data.result.imgServer + that.dealPicture(ad.img)) : '1';
 							}
 							that.adList = adList;
 						} else {
@@ -127,7 +132,7 @@
 							}
 							that.adListBak = that.adListBak.concat(adListBak);
 							for(var ad of adList) {
-								ad.img = ad.img ? (data.result.imgServer + '/small_' + ad.img) : '1';
+								ad.img = ad.img ? (data.result.imgServer + that.dealPicture(ad.img)) : '1';
 							}
 							that.adList = that.adList.concat(adList);
 						} else {

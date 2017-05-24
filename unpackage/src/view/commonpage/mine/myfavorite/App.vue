@@ -121,6 +121,11 @@
 			this.favoriteFilter(0, false);
 		},
 		methods: {
+			dealPicture(pic) {
+				var fileName = pic.substring(pic.lastIndexOf('/') + 1, pic.length);
+				var path = pic.substring(0, pic.lastIndexOf('/'));
+				return path + '/small_' + fileName;
+			},
 			shoucang(type, item, e) {
 				var that = this;
 				var url = item.collected ? api.APIS.collection.deleteCollection : api.APIS.collection.addCollection;
@@ -202,7 +207,7 @@
 							switch(type) {
 								case 0:
 									for(var master of data.result.masterCardList || []) {
-										master.imgName = master.imgName ? (data.result.imgServer + '/small_' + master.imgName) : '1';
+										master.imgName = master.imgName ? (data.result.imgServer + that.dealPicture(master.imgName)) : '1';
 										master.collected = true;
 									}
 									that.masterList = data.result.masterCardList;
@@ -210,7 +215,7 @@
 									break;
 								case 1:
 									for(var work of data.result.workList || []) {
-										work.imgName = work.imgName ? (data.result.imgServer + '/small_' + work.imgName) : '1';
+										work.imgName = work.imgName ? (data.result.imgServer + that.dealPicture(work.imgName)) : '1';
 										work.collected = true;
 									}
 									that.workList = data.result.workList;
@@ -218,7 +223,7 @@
 									break;
 								case 2:
 									for(var device of data.result.deviceList || []) {
-										device.imgName = device.imgName ? (data.result.imgServer + '/small_' + device.imgName) : '1';
+										device.imgName = device.imgName ? (data.result.imgServer + that.dealPicture(device.imgName)) : '1';
 										device.collected = true;
 									}
 									that.deviceList = data.result.deviceList;
@@ -226,7 +231,7 @@
 									break;
 								case 3:
 									for(var project of data.result.projectList || []) {
-										project.imgName = project.imgName ? (data.result.imgServer + '/small_' + project.imgName) : '1';
+										project.imgName = project.imgName ? (data.result.imgServer + that.dealPicture(project.imgName)) : '1';
 										project.collected = true;
 									}
 									that.projectList = data.result.projectList;

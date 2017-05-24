@@ -41,6 +41,11 @@
 			this.getData(true);
 		},
 		methods: {
+			dealPicture(pic) {
+				var fileName = pic.substring(pic.lastIndexOf('/') + 1, pic.length);
+				var path = pic.substring(0, pic.lastIndexOf('/'));
+				return path + '/small_' + fileName;
+			},
 			save() {
 				var adverts = [];
 				for(var ad of this.adList) {
@@ -92,7 +97,7 @@
 								ad.img = ad.img ? (data.result.imgServer + ad.img) : '1';
 							}
 							for(var ad of adList) {
-								ad.img = ad.img ? (data.result.imgServer + '/small_' + ad.img) : '1';
+								ad.img = ad.img ? (data.result.imgServer + that.dealPicture(ad.img)) : '1';
 								ad.selected = false;
 							}
 							that.adList = adList;
@@ -134,7 +139,7 @@
 							}
 							that.adListBak = that.adListBak.concat(adListBak);
 							for(var ad of adList) {
-								ad.img = ad.img ? (data.result.imgServer + '/small_' + ad.img) : '1';
+								ad.img = ad.img ? (data.result.imgServer + that.dealPicture(ad.img)) : '1';
 								ad.selected = false;
 							}
 							that.adList = that.adList.concat(adList);

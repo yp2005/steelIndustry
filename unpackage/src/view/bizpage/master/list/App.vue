@@ -281,6 +281,11 @@
 			});
 		},
 		methods: {
+			dealPicture(pic) {
+				var fileName = pic.substring(pic.lastIndexOf('/') + 1, pic.length);
+				var path = pic.substring(0, pic.lastIndexOf('/'));
+				return path + '/small_' + fileName;
+			},
 			bannerTap(item) {
 				if(item.linkType == 'innerLink') {
 					this.gotoDeviceDetail(item.banner_url);
@@ -339,7 +344,7 @@
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
 							var masterList = data.result.masterCardList || [];
 							for(var master of masterList) {
-								master.imgName = master.imgName ? (data.result.imgServer + 'small_' + master.imgName) : '1';
+								master.imgName = master.imgName ? (data.result.imgServer + that.dealPicture(master.imgName)) : '1';
 							}
 							that.masterList = masterList;
 						} else {
@@ -396,7 +401,7 @@
 								return;
 							}
 							for(var master of data.result.masterCardList || []) {
-								master.imgName = master.imgName ? (data.result.imgServer + 'small_' + master.imgName) : '1';
+								master.imgName = master.imgName ? (data.result.imgServer + that.dealPicture(master.imgName)) : '1';
 							}
 							that.masterList = that.masterList.concat(data.result.masterCardList || []);
 						} else {

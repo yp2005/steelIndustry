@@ -198,6 +198,11 @@
 			});
 		},
 		methods: {
+			dealPicture(pic) {
+				var fileName = pic.substring(pic.lastIndexOf('/') + 1, pic.length);
+				var path = pic.substring(0, pic.lastIndexOf('/'));
+				return path + '/small_' + fileName;
+			},
 			bannerTap(item) {
 				if(item.linkType == 'innerLink') {
 					this.gotoDeviceDetail(item.banner_url);
@@ -240,7 +245,7 @@
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
 							var projectList = data.result.projectList || [];
 							for(var project of projectList) {
-								project.imgName = project.imgName ? (data.result.imgServer + 'small_' + project.imgName) : '1';
+								project.imgName = project.imgName ? (data.result.imgServer + that.dealPicture(project.imgName)) : '1';
 							}
 							that.projectList = projectList;
 						} else {
@@ -281,7 +286,7 @@
 								return;
 							}
 							for(var project of data.result.projectList || []) {
-								project.imgName = project.imgName ? (data.result.imgServer + 'small_' + project.imgName) : '1';
+								project.imgName = project.imgName ? (data.result.imgServer + that.dealPicture(project.imgName)) : '1';
 							}
 							that.projectList = that.projectList.concat(data.result.projectList || []);
 						} else {

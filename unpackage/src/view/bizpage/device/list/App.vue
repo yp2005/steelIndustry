@@ -285,6 +285,11 @@
 			});
 		},
 		methods: {
+			dealPicture(pic) {
+				var fileName = pic.substring(pic.lastIndexOf('/') + 1, pic.length);
+				var path = pic.substring(0, pic.lastIndexOf('/'));
+				return path + '/small_' + fileName;
+			},
 			bannerTap(item) {
 				if(item.linkType == 'innerLink') {
 					this.gotoDeviceDetail(item.banner_url);
@@ -345,7 +350,7 @@
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
 							that.deviceList = data.result.deviceList || [];
 							for(var device of that.deviceList) {
-								device.imgName = device.imgName ? (data.result.imgServer + 'small_' + device.imgName) : '1';
+								device.imgName = device.imgName ? (data.result.imgServer + that.dealPicture(device.imgName)) : '1';
 							}
 						} else {
 							mui.toast(data.erroCode + '：' + data.erroMsg);
@@ -401,7 +406,7 @@
 								return;
 							}
 							for(var device of data.result.deviceList || []) {
-								device.imgName = device.imgName ? (data.result.imgServer + 'small_' + device.imgName) : '1';
+								device.imgName = device.imgName ? (data.result.imgServer + that.dealPicture(device.imgName)) : '1';
 							}
 							that.deviceList = that.deviceList.concat(data.result.deviceList || []);
 						} else {

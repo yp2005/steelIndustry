@@ -137,6 +137,11 @@
 			this.getData(0, true);
 		},
 		methods: {
+			dealPicture(pic) {
+				var fileName = pic.substring(pic.lastIndexOf('/') + 1, pic.length);
+				var path = pic.substring(0, pic.lastIndexOf('/'));
+				return path + '/small_' + fileName;
+			},
 			selectState() {
 				var that = this;
 				this.statePicker.show(function(items) {
@@ -256,25 +261,25 @@
 							switch(type) {
 								case 0:
 									for(var master of data.result.masterCardList || []) {
-										master.imgName = master.imgName ? (data.result.imgServer + '/small_' + master.imgName) : '1';
+										master.imgName = master.imgName ? (data.result.imgServer + that.dealPicture(master.imgName)) : '1';
 									}
 									that.masterList = data.result.masterCardList || [];
 									break;
 								case 1:
 									for(var work of data.result.employmentDemandList || []) {
-										work.imgName = work.imgName ? (data.result.imgServer + '/small_' + work.imgName) : '1';
+										work.imgName = work.imgName ? (data.result.imgServer + that.dealPicture(work.imgName)) : '1';
 									}
 									that.workList = data.result.employmentDemandList || [];
 									break;
 								case 2:
 									for(var device of data.result.deviceList || []) {
-										device.imgName = device.imgName ? (data.result.imgServer + '/small_' + device.imgName) : '1';
+										device.imgName = device.imgName ? (data.result.imgServer + that.dealPicture(device.imgName)) : '1';
 									}
 									that.deviceList = data.result.deviceList || [];
 									break;
 								case 3:
 									for(var project of data.result.projectList || []) {
-										project.imgName = project.imgName ? (data.result.imgServer + '/small_' + project.imgName) : '1';
+										project.imgName = project.imgName ? (data.result.imgServer + that.dealPicture(project.imgName)) : '1';
 									}
 									that.projectList = data.result.projectList || [];
 									break;
@@ -334,7 +339,7 @@
 										return;
 									}
 									for(var master of data.result.masterCardList || []) {
-										master.imgName = master.imgName ? (data.result.imgServer + '/small_' + master.imgName) : '1';
+										master.imgName = master.imgName ? (data.result.imgServer + that.dealPicture(master.imgName)) : '1';
 									}
 									that.masterList = that.masterList.concat(data.result.masterCardList);
 									break;
@@ -344,7 +349,7 @@
 										return;
 									}
 									for(var work of data.result.employmentDemandList || []) {
-										work.imgName = work.imgName ? (data.result.imgServer + '/small_' + work.imgName) : '1';
+										work.imgName = work.imgName ? (data.result.imgServer + that.dealPicture(work.imgName)) : '1';
 									}
 									that.workList = that.workList.concat(data.result.employmentDemandList);
 									break;
@@ -354,7 +359,7 @@
 										return;
 									}
 									for(var device of data.result.deviceList || []) {
-										device.imgName = device.imgName ? (data.result.imgServer + '/small_' + device.imgName) : '1';
+										device.imgName = device.imgName ? (data.result.imgServer + that.dealPicture(device.imgName)) : '1';
 									}
 									that.deviceList = that.deviceList.concat(data.result.deviceList);
 									break;
@@ -364,7 +369,7 @@
 										return;
 									}
 									for(var project of data.result.projectList || []) {
-										project.imgName = project.imgName ? (data.result.imgServer + '/small_' + project.imgName) : '1';
+										project.imgName = project.imgName ? (data.result.imgServer + that.dealPicture(project.imgName)) : '1';
 									}
 									that.projectList = that.projectList.concat(data.result.projectList);
 									break;

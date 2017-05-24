@@ -20,7 +20,7 @@
 				</div>
 				<div v-show="linkType.value == 'innerLink'" class="inputRow">
 					<div>
-						<div v-if="advertDevice" class="oneDevice" @tap="gotoDetail(advertDevice.userId)">
+						<div v-if="advertDevice" class="oneDevice" @tap="gotoDetail(advertDevice.id)">
 							<img :src="advertDevice.imgName" />
 							<div class="deviceInfo">
 								<p class="mui-ellipsis">{{advertDevice.deviceName}}</p>
@@ -115,7 +115,7 @@
 								mui.toast('设备不存在，可能已被用户删除，请从新选择！');
 							}
 							else {
-								that.advertDevice.imgName = that.advertDevice.imgServer + '/small_' + that.advertDevice.imgName;
+								that.advertDevice.imgName = that.advertDevice.pictures && that.advertDevice.pictures.length > 0 ? (that.dealPicture(that.advertDevice.pictures[0])) : '1';
 							}
 						} else {
 							mui.toast(data.erroCode + '：' + data.erroMsg);
@@ -128,6 +128,11 @@
 			}
 		},
 		methods: {
+			dealPicture(pic) {
+				var fileName = pic.substring(pic.lastIndexOf('/') + 1, pic.length);
+				var path = pic.substring(0, pic.lastIndexOf('/'));
+				return path + '/small_' + fileName;
+			},
 			selectLinkType() {
 				var that = this;
 				this.linkTypePicker.show(function(items) {
@@ -142,10 +147,10 @@
 				});
 				e && e.stopPropagation();
 			},
-			gotoDetail: function(userId) {
+			gotoDetail: function(id) {
 				muiUtils.openWindow('../../bizpage/device/deviceinfo.html', '../../bizpage/device/deviceinfo.html', {
 					extras: {
-						userId: userId
+						deviceId: id
 					}
 				});
 			},

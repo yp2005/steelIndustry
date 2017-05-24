@@ -146,13 +146,13 @@
 				success: function(data) {
 					if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
 						for(var ad of data.result.homePage || []) {
-							ad.img = data.result.imgServer + '/small_' + ad.img;
+							ad.img = data.result.imgServer + that.dealPicture(ad.img);
 						}
 						for(var ad of data.result.listPage || []) {
-							ad.img = data.result.imgServer + '/small_' + ad.img;
+							ad.img = data.result.imgServer + that.dealPicture(ad.img);
 						}
 						for(var ad of data.result.detailPage || []) {
-							ad.img = data.result.imgServer + '/small_' + ad.img;
+							ad.img = data.result.imgServer + that.dealPicture(ad.img);
 						}
 						that.homePage = data.result.homePage || [];
 						that.listPage = data.result.listPage || [];
@@ -170,6 +170,11 @@
 			});
 		},
 		methods: {
+			dealPicture(pic) {
+				var fileName = pic.substring(pic.lastIndexOf('/') + 1, pic.length);
+				var path = pic.substring(0, pic.lastIndexOf('/'));
+				return path + '/small_' + fileName;
+			},
 			selectListPageAdType: function() {
 				var that = this;
 				this.listPagePicker.show(function(items) {

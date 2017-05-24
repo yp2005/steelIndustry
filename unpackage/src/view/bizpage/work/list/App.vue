@@ -283,6 +283,11 @@
 			});
 		},
 		methods: {
+			dealPicture(pic) {
+				var fileName = pic.substring(pic.lastIndexOf('/') + 1, pic.length);
+				var path = pic.substring(0, pic.lastIndexOf('/'));
+				return path + '/small_' + fileName;
+			},
 			bannerTap(item) {
 				if(item.linkType == 'innerLink') {
 					this.gotoDeviceDetail(item.banner_url);
@@ -341,7 +346,7 @@
 						if(data.erroCode === CONSTS.ERROR_CODE.SUCCESS) {
 							var workList = data.result.employmentDemandList || [];
 							for(var work of workList) {
-								work.imgName = work.imgName ? (data.result.imgServer + 'small_' + work.imgName) : '1';
+								work.imgName = work.imgName ? (data.result.imgServer + that.dealPicture(work.imgName)) : '1';
 							}
 							that.workList = workList;
 						} else {
@@ -398,7 +403,7 @@
 								return;
 							}
 							for(var work of data.result.employmentDemandList || []) {
-								work.imgName = work.imgName ? (data.result.imgServer + 'small_' + work.imgName) : '1';
+								work.imgName = work.imgName ? (data.result.imgServer + that.dealPicture(work.imgName)) : '1';
 							}
 							that.workList = that.workList.concat(data.result.employmentDemandList || []);
 						} else {

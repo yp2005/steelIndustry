@@ -36,7 +36,7 @@
 			</div>
 
 			<p class="title">设备推荐</p>
-			<div class="oneDevice" v-for="device in deviceList" @tap="gotoDeviceDetail(device.userId)">
+			<div class="oneDevice" v-for="device in deviceList" @tap="gotoDeviceDetail(device.id)">
 				<img :src="device.imgName" />
 				<div class="deviceInfo">
 					<p class="mui-ellipsis">{{device.deviceName}}</p>
@@ -189,6 +189,11 @@
 					error: function(xhr, type, errorThrown) {}
 				});
 			},
+			dealPicture(pic) {
+				var fileName = pic.substring(pic.lastIndexOf('/') + 1, pic.length);
+				var path = pic.substring(0, pic.lastIndexOf('/'));
+				return path + '/small_' + fileName;
+			},
 			getData(loading) {
 				var that = this;
 				muiUtils.muiAjax(api.APIS.common.homeData, {
@@ -237,7 +242,7 @@
 							}
 							if(that.homeData.hotDevice && that.homeData.hotDevice.length > 0) {
 								for(var device of that.homeData.hotDevice) {
-									device.imgName = device.imgName ? (data.result.imgServer + 'small_' + device.imgName) : '1';
+									device.imgName = device.imgName ? (data.result.imgServer + that.dealPicture(device.imgName)) : '1';
 								}
 								that.deviceList = that.homeData.hotDevice;
 							}
@@ -246,7 +251,7 @@
 							}
 							if(that.homeData.hotWork && that.homeData.hotWork.length > 0) {
 								for(var work of that.homeData.hotWork) {
-									work.imgName = work.imgName ? (data.result.imgServer + 'small_' + work.imgName) : '1';
+									work.imgName = work.imgName ? (data.result.imgServer + that.dealPicture(work.imgName)) : '1';
 								}
 								that.workList = that.homeData.hotWork;
 							}
