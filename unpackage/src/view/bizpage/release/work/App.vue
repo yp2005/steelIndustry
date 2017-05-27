@@ -306,11 +306,11 @@
 			}
 		},
 		ready: function() {
-			mui('.mui-scroll-wrapper.releaseWork').scroll({
-				bounce: true,
-				indicators: false, // 是否显示滚动条
-				deceleration: mui.os.ios ? 0.003 : 0.0009
-			});
+//			mui('.mui-scroll-wrapper.releaseWork').scroll({
+//				bounce: true,
+//				indicators: false, // 是否显示滚动条
+//				deceleration: mui.os.ios ? 0.003 : 0.0009
+//			});
 			var that = this;
 			window.addEventListener('typeDataSelected', function(e) {
 				var typeDataSelected = e.detail.typeDataSelected;
@@ -340,6 +340,8 @@
 		top: 45px;
 		bottom: 0;
 		width: 100%;
+		overflow-x: hidden;
+		overflow-y: auto;
 	}
 	
 	.releaseWork input,

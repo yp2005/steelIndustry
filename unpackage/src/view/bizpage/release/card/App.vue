@@ -138,6 +138,58 @@
 					text: '其他',
 				}]
 			}];
+			for(var cityData of cityData3Lev) {
+				for(var cityC of cityData.children) {;
+					cityC.children.unshift({
+						value: cityC.value,
+						area_parent_id: cityC.value,
+						text: '全' + cityC.text,
+						area_sort: 0,
+						area_deep: 3,
+						description: null
+					});
+				}
+				cityData.children.unshift({
+					value: -1,
+					area_parent_id: cityData.value,
+					text: '全' + cityData.text,
+					area_sort: 0,
+					area_deep: 2,
+					description: null,
+					children: [{
+						value: cityData.value,
+						area_parent_id: -1,
+						text: '全' + cityData.text,
+						area_sort: 0,
+						area_deep: 3,
+						description: null
+					}]
+				});
+			}
+			cityData3Lev.unshift({
+				value: -1,
+				area_parent_id: 0,
+				text: '全国',
+				area_sort: 0,
+				area_deep: 1,
+				description: null,
+				children: [{
+					value: -1,
+					area_parent_id: -1,
+					text: '全国',
+					area_sort: 0,
+					area_deep: 2,
+					description: null,
+					children: [{
+						value: -1,
+						area_parent_id: -1,
+						text: '全国',
+						area_sort: 0,
+						area_deep: 3,
+						description: null
+					}]
+				}]
+			});
 			var cityData = cityData3Lev;
 			if(masterCard) {
 				for(var wt of masterCard.workerTypes) {
@@ -164,6 +216,20 @@
 						}
 					}
 				}
+				if(!masterCard.serviceArea || masterCard.serviceArea.length === 0) {
+					masterCard.serviceArea = [{
+						areaId: -1,
+						areaNname: '全国',
+						parentAreaPageUse: {
+							areaId: -1,
+							areaNname: '全国',
+							parentAreaPageUse: {
+								areaId: -1,
+								areaNname: '全国'
+							}
+						}
+					}];
+				}
 				for(var sa of masterCard.serviceArea) {
 					cityDataSelected.push({
 						value: sa.areaId,
@@ -175,10 +241,26 @@
 						cityDataDis += ',' + sa.areaNname;
 					}
 					if(!city) {
-						city = {
-							province: sa.parentAreaPageUse.parentAreaPageUse.areaNname,
-							city: sa.parentAreaPageUse.areaNname
-						};
+						if(sa.parentAreaPageUse && sa.parentAreaPageUse.parentAreaPageUse) {
+							city = {
+								province: sa.parentAreaPageUse.parentAreaPageUse.areaNname,
+								city: sa.parentAreaPageUse.areaNname
+							};
+						}
+						else if(sa.parentAreaPageUse) {
+							city = {
+								province: sa.parentAreaPageUse.areaNname,
+								city: sa.areaNname
+							};
+							cityDataDis = '全' + sa.areaNname;
+						}
+						else {
+							city = {
+								province: sa.areaNname,
+								city: ''
+							};
+							cityDataDis = '全' + sa.areaNname;
+						}
 					}
 				}
 				for(var cd of cityData) {
@@ -188,7 +270,6 @@
 							cd3.selected = false;
 							for(var cds of cityDataSelected) {
 								if(cds.value === cd3.value) {
-									console.log()
 									cd3.selected = true;
 									cd.selectedNum++;
 									break;
@@ -326,7 +407,7 @@
 					});
 				}
 				for(var area of this.cityDataSelected) {
-					data.serviceArea.push({
+					area.value != -1 && data.serviceArea.push({
 						areaId: area.value,
 						areaNname: area.text
 					});
@@ -359,11 +440,11 @@
 			}
 		},
 		ready: function() {
-			mui('.mui-scroll-wrapper.releaseCard').scroll({
-				bounce: true,
-				indicators: false, // 是否显示滚动条
-				deceleration: mui.os.ios ? 0.003 : 0.0009
-			});
+//			mui('.mui-scroll-wrapper.releaseCard').scroll({
+//				bounce: true,
+//				indicators: false, // 是否显示滚动条
+//				deceleration: mui.os.ios ? 0.003 : 0.0009
+//			});
 			mui('.mui-numbox').numbox();
 			var that = this;
 			window.addEventListener('typeDataSelected', function(e) {
@@ -409,6 +490,8 @@
 		top: 45px;
 		bottom: 0;
 		width: 100%;
+		overflow-x: hidden;
+		overflow-y: auto;
 	}
 	
 	.releaseCard input,

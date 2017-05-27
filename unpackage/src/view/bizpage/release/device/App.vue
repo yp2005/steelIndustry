@@ -268,11 +268,11 @@
 			}
 		},
 		ready: function() {
-			mui('.mui-scroll-wrapper.releaseDevice').scroll({
-				bounce: true,
-				indicators: false, // 是否显示滚动条
-				deceleration: mui.os.ios ? 0.003 : 0.0009
-			});
+//			mui('.mui-scroll-wrapper.releaseDevice').scroll({
+//				bounce: true,
+//				indicators: false, // 是否显示滚动条
+//				deceleration: mui.os.ios ? 0.003 : 0.0009
+//			});
 			var that = this;
 			window.addEventListener('addressSelected', function(e) {
 				that.address = e.detail.address;
@@ -289,6 +289,8 @@
 		top: 45px;
 		bottom: 0;
 		width: 100%;
+		overflow-x: hidden;
+		overflow-y: auto;
 	}
 	
 	.releaseDevice input,

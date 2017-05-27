@@ -19,7 +19,7 @@
 					<div class="deep3" v-for="type2 in typeData[curIndex].children">
 						<p>{{type2.text}}</p>
 						<div v-for="type3 in type2.children" class="{{$index%2 === 0 ? 'leftDiv' : 'rightDiv'}}">
-							<a class="{{type3.selected ? 'active' : ''}}" href="javascript:void(0)" @tap="select(typeData[curIndex], type3)">{{type3.text}}</a>
+							<a class="{{type3.selected ? 'active' : ''}}" href="javascript:void(0)" @tap="select(typeData[curIndex], type3, type2)">{{type3.text}}</a>
 						</div>
 					</div>
 				</template>
@@ -96,7 +96,7 @@
 				}
 				this.curIndex = index;
 			},
-			select(type1, type2) {
+			select(type1, type2, type3) {
 				if(!type2.selected && this.typeName !== '区域' && this.selectedNum >= this.selectNumLim) {
 					mui.toast('您最多可选择' + this.selectNumLim + '个' + this.typeName + '！');
 					return;
@@ -104,6 +104,16 @@
 				if(!type2.selected && this.typeName === '区域' && this.typeDataSelected.length > 0 && type2.area_parent_id !== this.typeDataSelected[0].area_parent_id) {
 					mui.toast('您不能选择跨城市的区域！');
 					return;
+				}
+				if(!type2.selected && this.typeName === '区域' && this.typeDataSelected.length > 0) {
+					if(this.typeDataSelected.length == 1 && this.typeDataSelected[0].value == type3.value) {
+						mui.toast('您已选择' + this.typeDataSelected[0].text + '！');
+						return;
+					}
+					else if(type2.value == type3.value) {
+						mui.toast('您已选择其他区域，不能选择' + type2.text + '！');
+						return;
+					}
 				}
 				type2.selected ? type1.selectedNum-- : type1.selectedNum++;
 				type2.selected ? this.selectedNum-- : this.selectedNum++;

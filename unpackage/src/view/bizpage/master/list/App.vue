@@ -67,6 +67,14 @@
 					description: null
 				});
 			}
+			cityData3Lev.unshift({
+				value: -1,
+				area_parent_id: 0,
+				text: '全国',
+				area_sort: 0,
+				area_deep: 1,
+				description: null
+			});
 			cityPicker.setData(cityData3Lev);
 
 			var typePicker = new mui.PopPicker({
