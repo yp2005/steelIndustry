@@ -25,11 +25,6 @@
 				<p>本人手持身份证的照片</p>
 				<img :src="pictures3" class="personAuthImg">
 			</div>
-			<div class="title"></div>
-			<div class="inputRow">
-				<p>本人正面照</p>
-				<img :src="pictures4" class="personAuthImg">
-			</div>
 			<div class="bottomBtn">
 				<a href="javascript:void(0)" @tap="shenhe(1)">审核通过</a>
 				<a href="javascript:void(0)" @tap="shenhe(3)">审核不通过</a>
@@ -51,8 +46,7 @@
 				cardId: '',
 				pictures1: '', //身份证正面
 				pictures2: '', //身份证反面
-				pictures3: '', //手持身份证照片
-				pictures4: '', //本人正面照
+				pictures3: '' //手持身份证照片
 			};
 		},
 		created() {
@@ -67,7 +61,6 @@
 						that.pictures1 = data.result.imgServer + data.result.cardPictureObverse;
 						that.pictures2 = data.result.imgServer + data.result.cardPictureReverse;
 						that.pictures3 = data.result.imgServer + data.result.handCardPicture;
-						that.pictures4 = data.result.imgServer + data.result.fullFacePicture;
 					} else {
 						mui.toast(data.erroCode + '：' + data.erroMsg);
 					}

@@ -11,24 +11,19 @@
 					<div class="inputRow"><label>姓名</label><input v-model="name" type="text" placeholder="请输入您的真实姓名"></div>
 					<div class="inputRow"><label>身份证号</label><input v-model="cardId" type="text" placeholder="请输入您的身份证号"></div>
 					<div class="inputRow">
-						<p>请上传身份证正面(必填)</p>
+						<p>请上传身份证正面(必填，请确保身份证信息清晰可见)</p>
 						<upload :is-cut="isCut" :pictures.sync="pictures1" :imagecount="1" dataid="sfz_zhengmian"></upload>
-						<img src="../../../../../static/img/mine/szfzhengmian.jpg" />
+						<img src="../../../../../static/img/mine/szfzhengmian.jpg" data-preview-src="" data-preview-group="1" />
 					</div>
 					<div class="inputRow">
-						<p>请上传身份证反面(必填)</p>
+						<p>请上传身份证反面(必填，请确保身份证信息清晰可见)</p>
 						<upload :is-cut="isCut" :pictures.sync="pictures2" :imagecount="1" dataid="sfz_fanmian"></upload>
-						<img src="../../../../../static/img/mine/sfzfanmian.jpg" />
+						<img src="../../../../../static/img/mine/sfzfanmian.jpg" data-preview-src="" data-preview-group="2" />
 					</div>
 					<div class="inputRow">
-						<p>请上传1张本人手持身份证的照片(必填)</p>
+						<p>请上传1张本人手持身份证的照片(必填，请确保五官清晰，露出手臂；手指无遮挡，身份证信息清晰可见。)</p>
 						<upload :is-cut="isCut" :pictures.sync="pictures3" :imagecount="1" dataid="sfz_shouchi"></upload>
-						<img src="../../../../../static/img/mine/shouchi.jpg" />
-					</div>
-					<div class="inputRow">
-						<p>请上传1张本人正面照(必填)</p>
-						<upload :is-cut="isCut" :pictures.sync="pictures4" :imagecount="1" dataid="benren_zhengmian"></upload>
-						<img src="../../../../../static/img/mine/zhengmian.jpg" />
+						<img src="../../../../../static/img/mine/shouchi.jpg" data-preview-src="" data-preview-group="3" />
 					</div>
 					<div class="inputRow declare">
 						<input v-model="agree" type="checkbox" /><span>我阅读并同意</span>
@@ -85,6 +80,9 @@
 	import CONSTS from 'common/consts';
 	import upload from 'component/upload/UploadImage';
 	import cacheUtils from 'common/cacheUtils';
+	import zoom from 'static/js/mui.zoom.js';
+	import previewimage from 'static/js/mui.previewimage.js';
+	import 'static/css/imgpreview.css';
 	export default {
 		data: function() {
 			var data = plus.webview.currentWebview().data;
@@ -94,7 +92,6 @@
 			var pictures1 = [];
 			var pictures2 = [];
 			var pictures3 = [];
-			var pictures4 = [];
 			var imgServer = '';
 			if(data) {
 				id = data.id;
@@ -103,7 +100,6 @@
 				pictures1.push(data.imgServer + data.cardPictureObverse);
 				pictures2.push(data.imgServer + data.cardPictureReverse);
 				pictures3.push(data.imgServer + data.handCardPicture);
-				pictures4.push(data.imgServer + data.fullFacePicture);
 				imgServer = data.imgServer;
 			}
 			return {
@@ -113,7 +109,6 @@
 				pictures1: pictures1, //身份证正面
 				pictures2: pictures2, //身份证反面
 				pictures3: pictures3, //手持身份证照片
-				pictures4: pictures4, //本人正面照
 				isCut: false,
 				authStep: 0,
 				disStatement: false,
@@ -143,10 +138,6 @@
 					mui.toast('请上传手持身份证照片！');
 					return;
 				}
-				if(this.pictures4.length == 0) {
-					mui.toast('请上传本人正面照！');
-					return;
-				}
 				if(!this.agree) {
 					mui.toast('请阅读《彩钢精英》个人师傅认证规则，并同意！');
 					return;
@@ -157,8 +148,7 @@
 					cardId: that.cardId,
 					cardPictureObverse: that.pictures1[0],
 					cardPictureReverse: that.pictures2[0],
-					handCardPicture: that.pictures3[0],
-					fullFacePicture: that.pictures4[0]
+					handCardPicture: that.pictures3[0]
 				};
 				if(that.id) {
 					data.id = that.id;
@@ -171,9 +161,6 @@
 				}
 				if(data.handCardPicture.indexOf('http') == 0) {
 					data.handCardPicture = data.handCardPicture.substring(data.handCardPicture.indexOf(this.imgServer) + this.imgServer.length);
-				}
-				if(data.fullFacePicture.indexOf('http') == 0) {
-					data.fullFacePicture = data.fullFacePicture.substring(data.fullFacePicture.indexOf(this.imgServer) + this.imgServer.length);
 				}
 				muiUtils.muiAjax(api.APIS.realNameAuthentication.saveRealNameAuthentication, {
 					data: JSON.stringify(data),
@@ -216,6 +203,7 @@
 				indicators: false, // 是否显示滚动条
 				deceleration: mui.os.ios ? 0.003 : 0.0009
 			});
+			mui.previewImage();
 		},
 		components: {
 			upload
@@ -413,8 +401,13 @@
 	.inputRow>img {
 		position: absolute;
 		height: 80px;
-		top: 47px;
 		right: 45px;
+		bottom: 19px;
+	}
+	
+	.inputRow>p {
+		line-height: 18px;
+		padding-bottom: 5px;
 	}
 	
 	.center {

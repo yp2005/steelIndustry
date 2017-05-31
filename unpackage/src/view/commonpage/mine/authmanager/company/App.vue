@@ -13,7 +13,7 @@
 					<div class="inputRow">
 						<p>请上传企业营业执照</p>
 						<upload :is-cut="isCut" :pictures.sync="enterpriseInfo.license" :imagecount="1"></upload>
-						<img src="../../../../../static/img/mine/license.jpg" />
+						<img src="../../../../../static/img/mine/license.jpg" data-preview-src="" data-preview-group="1" />
 					</div>
 					<div class="inputRow declare">
 						<input v-model="agree" type="checkbox" /><span>我阅读并同意</span>
@@ -69,6 +69,9 @@
 	import CONSTS from 'common/consts';
 	import upload from 'component/upload/UploadImage';
 	import cacheUtils from 'common/cacheUtils';
+	import zoom from 'static/js/mui.zoom.js';
+	import previewimage from 'static/js/mui.previewimage.js';
+	import 'static/css/imgpreview.css';
 	export default {
 		data: function() {
 			var data = plus.webview.currentWebview().data;
@@ -169,6 +172,7 @@
 				indicators: false, // 是否显示滚动条
 				deceleration: mui.os.ios ? 0.003 : 0.0009
 			});
+			mui.previewImage();
 		},
 		components: {
 			upload
@@ -366,8 +370,13 @@
 	.inputRow>img {
 		position: absolute;
 		height: 80px;
-		top: 47px;
+		bottom: 19px;
 		right: 45px;
+	}
+	
+	.inputRow>p {
+		line-height: 18px;
+		padding-bottom: 5px;
 	}
 	
 	.center {
