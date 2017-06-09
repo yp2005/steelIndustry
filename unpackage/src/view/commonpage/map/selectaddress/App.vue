@@ -110,12 +110,14 @@
 						district: items[2].text,
 						districtid: items[2].value,
 						street: ''
-					}
+					};
 					plus.maps.Map.geocode(that.address.province + that.address.city + that.address.district, {
 						city: that.address.city
 					}, function(event) {
 						that.map.setCenter(event.coord);
 						that.marker.setPoint(event.coord);
+						that.address.lng = event.coord.getLng();
+						that.address.lat = event.coord.getLat();
 					}, function(e) {});
 				});
 			},
