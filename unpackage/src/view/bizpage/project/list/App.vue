@@ -15,7 +15,7 @@
 					<img :src="project.imgName" />
 					<div class="projectInfo">
 						<p class="mui-ellipsis">{{project.projectName}}</p>
-						<p>{{project.createTime}}<span class="mui-pull-right">{{project.address}}</span></p>
+						<p>{{project.createTime}}<span class="mui-pull-right mui-ellipsis address">{{project.address}}</span></p>
 						<p>
 							<img v-show="project.realNameAuthentication == 1" src="../../../../static/img/mine/shimingrenzheng.svg">
 							<img v-else src="../../../../static/img/mine/noshimingrenzheng.svg">
@@ -490,5 +490,9 @@
 	
 	.mui-slider {
 		height: 120px;
+	}
+	
+	.address {
+		max-width: 100px;
 	}
 </style>

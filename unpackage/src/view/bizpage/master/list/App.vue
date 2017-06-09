@@ -18,7 +18,7 @@
 					<img :src="master.imgName" />
 					<div class="masterInfo">
 						<p class="mui-ellipsis">{{master.cardTitle}}</p>
-						<p><span class="mui-ellipsis worktype">{{master.workerTypes}}</span><span class="mui-pull-right mui-ellipsis area">{{master.serviceArea}}</span></p>
+						<p><span class="mui-ellipsis worktype">{{master.workerTypes}}</span><span class="mui-pull-right mui-ellipsis area">{{master.serviceArea || '全国'}}</span></p>
 						<p>
 							<img v-show="master.realNameAuthentication == 1" src="../../../../static/img/mine/shimingrenzheng.svg">
 							<img v-else src="../../../../static/img/mine/noshimingrenzheng.svg">

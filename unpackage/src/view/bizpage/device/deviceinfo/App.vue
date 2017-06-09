@@ -41,13 +41,13 @@
 							<p>浏览量</p>
 						</div>
 						<span class="mui-icon mui-icon-phone" @tap="callTel" ></span>
+						<span class="point"></span>
+						<p class="pointTip">点此电话联系</p>
 					</li>
 				</ul>
-				<span class="point"></span>
-				<p class="pointTip">点此电话联系</p>
 				<ul class="mui-table-view shifu">
 					<li class="mui-table-view-cell">
-						<label>工作介绍</label>
+						<label>设备介绍</label>
 					</li>
 					<li class="mui-table-view-cell">
 						<span class="description">{{deviceInfo.description}}</span>
@@ -655,18 +655,19 @@
 	}
 	
 	.point {
-		position: fixed;
+		position: absolute;
 		line-height: 1;
-		top: 300px;
-		right: 20px;
+		top: 20px;
+		right: 62px;
 		z-index: 999;
+		-webkit-transform: rotate(110deg);
 	}
 	
 	.pointTip {
-		position: fixed;
+		position: absolute;
 		line-height: 1;
-		top: 325px;
-		right: 5px;
+		top: 8px;
+		right: 81px;
 		z-index: 999;
 		color: #ffffff;
 		background-color: #f86934;
