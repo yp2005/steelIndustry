@@ -47,6 +47,8 @@
 						<span class="mui-icon mui-icon-phone" @tap="callTel" ></span>
 					</li>
 				</ul>
+				<span class="point"></span>
+				<p class="pointTip">点此电话联系</p>
 				<ul class="mui-table-view shifu">
 					<li class="mui-table-view-cell">
 						<label>工作介绍</label>
@@ -654,5 +656,33 @@
 	
 	.list-ad-two .mui-slider .mui-slider-group .mui-slider-item img {
 		height: 120px;
+	}
+	
+	.point {
+		position: fixed;
+		line-height: 1;
+		top: 342px;
+		right: 20px;
+		z-index: 999;
+	}
+	
+	.pointTip {
+		position: fixed;
+		line-height: 1;
+		top: 367px;
+		right: 5px;
+		z-index: 999;
+		color: #ffffff;
+		background-color: #f86934;
+		padding: 3px 5px;
+		border-radius: 8px;
+	}
+	
+	.point:after {
+		content: "";
+		box-sizing: border-box;
+		border-bottom: 8px solid #f86934;
+		border-right: 5px solid transparent;
+		border-left: 5px solid transparent;
 	}
 </style>
