@@ -188,7 +188,7 @@
 					data.img = data.img.substring(data.img.indexOf(this.imgServer) + this.imgServer.length);
 				}
 				if(this.linkType.value == 'innerLink') {
-					data.deviceId = this.advertDevice.userId;
+					data.deviceId = this.advertDevice.id;
 				}
 				if(this.linkType.value == 'outerLink') {
 					data.url = this.advertUrl;

@@ -4,7 +4,7 @@
 const API_VERSION = 'v10'; //API版本v10表示1.0版本，后续，11 12 往后递增
 						   //app存在多个版本并存的情况所有API也会有多个版本并存的情况
 						   //不同版本区分开避免数据和代码逻辑不一致的问题
-const API_ROOT = 'http://123.57.10.162:2793/' + API_VERSION;
+const API_ROOT = 'http://www.cgjixie.com/' + API_VERSION;
 const USER = '/user';
 const SETTING = '/settings';
 const COLLECTION = '/collection';
