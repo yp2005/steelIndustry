@@ -19,13 +19,13 @@ var header = new HeaderVue({
             title: {
                 display: true
             },
-            rightIconButton:{
-            	display: true,
-            	iconClass: 'mui-icon mui-icon-plusempty',
-            	text: '',
-            	onClick: function(_this){
-					muiUtils.openWindow('../../commonpage/noticemanager/noticenew.html', '../../commonpage/noticemanager/noticenew.html');
-            	}
+            rightIconButton: {
+                display: true,
+                iconClass: 'mui-icon mui-icon-plusempty',
+                text: '',
+                onClick: function(_this) {
+                    muiUtils.openWindow('../../commonpage/noticemanager/noticenew.html', '../../commonpage/noticemanager/noticenew.html');
+                }
             }
         }
     },

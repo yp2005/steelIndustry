@@ -465,7 +465,6 @@
 					that.city = e.detail.city;
 					that.cityDataSelected = typeDataSelected;
 					that.cityDataDis = '';
-					that.city = e.detail.city;
 					for(var cd of that.cityDataSelected) {
 						if(that.cityDataDis === '') {
 							that.cityDataDis += cd.text;
