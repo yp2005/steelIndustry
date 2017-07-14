@@ -10,7 +10,7 @@
 					<span>{{userInfo.mobileNumber}}</span>
 					<!--<span class="gold">金币<img src="../../static/img/mine/gold.svg">: 5000 </span>-->
 				</p>
-				<p>积分: {{userInfo.points}}</p>
+				<!--<p>积分: {{userInfo.points}}</p>-->
 				<span v-show="userInfo.isAdmin == 1" class="jxddicon icon-shezhi44" @tap="open('../../commonpage/mine/adminsetting.html')"></span>
 				<div class="authinfo">
 					<img v-if="userInfo.realNameAuthentication === 1" src="../../static/img/mine/shimingrenzheng.svg">
@@ -48,7 +48,7 @@
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
 				</li>
-				<li class="mui-table-view-cell" @tap="gotoMyTiezi">
+				<!--<li class="mui-table-view-cell" @tap="gotoMyTiezi">
 					<p>
 						<img src="../../static/img/mine/tiezi.svg" />
 						<span>我的帖子</span>
@@ -61,7 +61,7 @@
 						<span>我的回复</span>
 						<span class="jxddicon icon-jinru32"></span>
 					</p>
-				</li>
+				</li>-->
 				<li class="mui-table-view-cell" @tap="open('../../commonpage/mine/myfavorite.html')">
 					<p>
 						<img src="../../static/img/mine/mycollection.svg" />
@@ -294,7 +294,7 @@
 	.header {
 		padding: 10px 13px 20px 13px;
 		width: 100%;
-		height: 175px;
+		height: 160px;
 		background-color: #767a92;
 		position: relative;
 	}
@@ -422,15 +422,15 @@
 	}
 	
 	.mui-table-view.content-list,
-	.mui-table-view.content-list .mui-table-view-cell:nth-child(7) {
+	.mui-table-view.content-list .mui-table-view-cell:nth-child(5) {
 		margin-bottom: 8px;
 	}
 	
-	.mui-table-view.content-list .mui-table-view-cell:nth-child(7):after {
+	.mui-table-view.content-list .mui-table-view-cell:nth-child(5):after {
 		left: 0px;
 	}
 	
-	.mui-table-view.content-list .mui-table-view-cell:nth-child(8):before {
+	.mui-table-view.content-list .mui-table-view-cell:nth-child(6):before {
 		content: '';
 		position: absolute;
 		left: 0;

@@ -30,9 +30,9 @@ let hrefes = [{
 	text: '首页',
 	icon: 'icon-shouye'
 }, {
-	href: '/community',
-	text: '论坛',
-	icon: 'icon-community'
+	href: '/release',
+	text: '发布',
+	icon: 'icon-qingchusousuo'
 }, {
 	href: '/calculator',
 	text: '计算器',
@@ -86,7 +86,8 @@ let footer = new FootVue({
 		hrefes: hrefes,
 		typeclass: typeclass,
 		showHeader: showHeader,
-		index: index
+		index: index,
+		centerPlus: false
 	},
 	el: 'vnav',
 	watch: {
